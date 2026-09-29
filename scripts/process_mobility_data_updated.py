@@ -247,25 +247,29 @@ for m in ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT']:
 
 # =========================================================================
 # 8. DAY OF WEEK PROFILE (SENIN - MINGGU)
+# Rata-rata Volume Harian Nasional per Hari dalam Seminggu
 # =========================================================================
-df_clean['dow'] = pd.to_datetime(df_clean['tanggal']).dt.day_name()
+daily_mode_df = df_clean.groupby(['tanggal', 'moda'])['total_penumpang'].sum().unstack(fill_value=0)
+daily_mode_df['TOTAL'] = daily_mode_df.sum(axis=1)
+daily_mode_df['dow'] = pd.to_datetime(daily_mode_df.index).day_name()
+
 dow_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 dow_names = {'Monday': 'Senin', 'Tuesday': 'Selasa', 'Wednesday': 'Rabu', 'Thursday': 'Kamis', 'Friday': 'Jumat', 'Saturday': 'Sabtu', 'Sunday': 'Minggu'}
 
-dow_pnp = df_clean.groupby(['dow', 'moda'])['total_penumpang'].mean().unstack(fill_value=0)
+dow_pnp = daily_mode_df.groupby('dow')[['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT', 'TOTAL']].mean()
+
 dow_summary = []
 for d in dow_order:
     if d in dow_pnp.index:
         row = dow_pnp.loc[d]
-        tot = int(row.sum())
         dow_summary.append({
             'dow': dow_names[d],
-            'UDARA': round(float(row.get('UDARA', 0))),
-            'KA': round(float(row.get('KA', 0))),
-            'BUS': round(float(row.get('BUS', 0))),
-            'ASDP': round(float(row.get('ASDP', 0))),
-            'LAUT': round(float(row.get('LAUT', 0))),
-            'TOTAL': tot
+            'UDARA': round(float(row['UDARA'])),
+            'KA': round(float(row['KA'])),
+            'BUS': round(float(row['BUS'])),
+            'ASDP': round(float(row['ASDP'])),
+            'LAUT': round(float(row['LAUT'])),
+            'TOTAL': round(float(row['TOTAL']))
         })
 
 # =========================================================================
