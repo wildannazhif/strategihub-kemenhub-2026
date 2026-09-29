@@ -290,7 +290,7 @@ def generate_dashboard():
           Data baseline dihitung langsung dari data mentah StrategiHub Kemenhub 2026: <code class="px-1 py-0.5 rounded bg-white dark:bg-slate-800 text-[10px] font-mono text-indigo-600 dark:text-indigo-300 border border-slate-200 dark:border-slate-700">strategihub_multimoda_2026.csv</code> (18,3 MB, mencakup transaksi harian 1.088 simpul prasarana).
         </p>
         <p class="text-[11px] text-slate-600 dark:text-slate-300">
-          Angka baseline penumpang harian (<code class="font-mono">pnpDay</code>) dan armada (<code class="font-mono">armDay</code>) diambil dari <strong>periode Posko Puncak Nasional (16 Hari Arus Mudik & Balik Lebaran 2026)</strong>, kemudian <strong>dibagi 16 hari</strong> untuk memperoleh rata-rata beban harian puncak riil:
+          Angka baseline penumpang harian (<code class="font-mono">pnpDay</code>) dan armada (<code class="font-mono">armDay</code>) diambil dari <strong>periode Posko Puncak Nasional (17 Hari Arus Mudik & Balik Lebaran 2026: 13–29 Maret 2026, dengan Hari H pada 21 Maret 2026)</strong>, kemudian <strong>dibagi 17 hari</strong> untuk memperoleh rata-rata beban harian puncak riil:
         </p>
         <div class="text-[10px] font-mono bg-white dark:bg-slate-900 p-2 rounded border border-slate-200 dark:border-slate-800 space-y-1">
           <div>• <strong>Pelabuhan Merak:</strong> 1.412.249 pnp / 16 = <strong>88.266 pnp/h</strong> (188 trip kapal/h)</div>
@@ -762,11 +762,12 @@ def generate_dashboard():
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                Pilih Tanggal Spesifik Angkutan Lebaran 2026 (H-8 s.d. H+15)
+                Pilih Tanggal Spesifik Angkutan Lebaran 2026 (H-8 s.d. H+8 • 13 - 29 Maret 2026)
               </h3>
-              <p class="text-[11px] text-slate-500">Klik salah satu tanggal untuk menginspeksi rincian volume 5 moda operasional</p>
+              <p class="text-[11px] text-slate-500">Klik salah satu tanggal untuk menginspeksi rincian volume 5 moda operasional (Hari H: 21 Maret 2026)</p>
             </div>
             <div class="flex items-center gap-3 text-xs">
+              <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Hari H (21 Mar)</span>
               <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-rose-600"></span> Puncak Balik</span>
               <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-purple-600"></span> Puncak Mudik</span>
             </div>
@@ -810,7 +811,7 @@ def generate_dashboard():
               <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
                 Dinamika Harian 5 Moda Angkutan Lebaran 2026
               </h3>
-              <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">27 Hari Pengamatan</span>
+              <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">17 Hari Pengamatan (H-8 s.d. H+8)</span>
             </div>
 
             <div class="relative w-full h-[320px] mt-3">
@@ -844,11 +845,11 @@ def generate_dashboard():
                 <tr>
                   <th class="py-2.5 px-3">Moda Transportasi</th>
                   <th class="py-2.5 px-3">Baseline Normal (Feb)</th>
-                  <th class="py-2.5 px-3 text-purple-700 dark:text-purple-400">Puncak Mudik (18 Mar)</th>
+                  <th class="py-2.5 px-3 text-purple-700 dark:text-purple-400">Puncak Mudik (18 Mar / H-3)</th>
                   <th class="py-2.5 px-3 text-purple-700 dark:text-purple-400">Lonjakan (%)</th>
-                  <th class="py-2.5 px-3 text-rose-700 dark:text-rose-400">Puncak Balik 1 (24 Mar)</th>
+                  <th class="py-2.5 px-3 text-rose-700 dark:text-rose-400">Puncak Balik 1 (24 Mar / H+3)</th>
                   <th class="py-2.5 px-3 text-rose-700 dark:text-rose-400">Lonjakan (%)</th>
-                  <th class="py-2.5 px-3">Puncak Balik 2 (29 Mar)</th>
+                  <th class="py-2.5 px-3">Puncak Balik 2 (29 Mar / H+8)</th>
                   <th class="py-2.5 px-3">Lonjakan (%)</th>
                 </tr>
               </thead>
@@ -1835,7 +1836,7 @@ const setGlobalMetric = setTimelineMetric;
 // ---------------------------------------------------------------
 function getFilteredTimelineData() {{
   const all = DATA.daily_timeline;
-  if (currentTimelineRange === 'lebaran') return all.filter(d => d.date >= '2026-03-10' && d.date <= '2026-04-05');
+  if (currentTimelineRange === 'lebaran') return all.filter(d => d.date >= '2026-03-13' && d.date <= '2026-03-29');
   if (currentTimelineRange === 'libur_sekolah') return all.filter(d => d.date >= '2026-06-15' && d.date <= '2026-07-15');
   if (currentTimelineRange === 'tahun_baru') return all.filter(d => d.date >= '2026-01-01' && d.date <= '2026-01-15');
   return all;
@@ -1942,7 +1943,7 @@ function setTimelineFilter(rangeKey, btn) {{
 
   const labelMap = {{
     'all': '1 Jan 2026 - 29 Sep 2026 (272 Hari)',
-    'lebaran': '10 Mar 2026 - 5 Apr 2026 (27 Hari)',
+    'lebaran': '13 Mar 2026 - 29 Mar 2026 (17 Hari)',
     'libur_sekolah': '15 Jun 2026 - 15 Jul 2026 (31 Hari)',
     'tahun_baru': '1 Jan 2026 - 15 Jan 2026 (15 Hari)'
   }};
@@ -2031,7 +2032,16 @@ function selectLebaranDate(dateStr) {{
   const day = DATA.lebaran_daily.find(d => d.date === dateStr);
   if (!day) return;
 
-  document.getElementById('insp-tag').innerText = day.tag;
+  const tagEl = document.getElementById('insp-tag');
+  tagEl.innerText = day.tag;
+  if (day.is_h_day) {{
+    tagEl.className = 'px-2 py-0.5 rounded font-bold text-xs bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800';
+  }} else if (day.is_peak_balik1 || day.is_peak_mudik || day.is_peak_balik2) {{
+    tagEl.className = 'px-2 py-0.5 rounded font-bold text-xs bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-800';
+  }} else {{
+    tagEl.className = 'px-2 py-0.5 rounded font-bold text-xs bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700';
+  }}
+
   document.getElementById('insp-phase').innerText = day.desc;
   document.getElementById('insp-date').innerText = day.date;
   document.getElementById('insp-summary').innerText = `Total Penumpang: ${{numFmt(day.TOTAL)}} • Total Armada: ${{numFmt(day.arm_TOTAL)}} Trip/Flight`;
@@ -2066,16 +2076,26 @@ function renderLebaranWorkspace() {{
 
   const strip = document.getElementById('lebaran-scrubber');
   strip.innerHTML = '';
-  DATA.lebaran_daily.forEach(d => {{
+  DATA.lebaran_daily.forEach((d, idx) => {{
     const btn = document.createElement('button');
-    const isPeak = d.is_peak_balik1 || d.is_peak_mudik;
-    btn.className = `shrink-0 text-left px-2.5 py-1.5 rounded border text-xs transition-all ${{
-      isPeak 
-        ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200 font-semibold' 
-        : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-400'
-    }}`;
+    const isPeak = d.is_peak_balik1 || d.is_peak_mudik || d.is_peak_balik2;
+    const isHDay = d.is_h_day;
+    let tagShort = d.tag.startsWith('Hari H') ? 'HARI H' : d.tag.split(' ')[0];
+
+    let btnClass = 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-400';
+    let tagColor = 'text-slate-500';
+
+    if (isHDay) {{
+      btnClass = 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 font-bold';
+      tagColor = 'text-emerald-700 dark:text-emerald-300 font-bold';
+    }} else if (isPeak) {{
+      btnClass = 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200 font-semibold';
+      tagColor = 'text-rose-700 dark:text-rose-400';
+    }}
+
+    btn.className = `shrink-0 text-left px-2.5 py-1.5 rounded border text-xs transition-all ${{btnClass}}`;
     btn.innerHTML = `
-      <div class="text-[9px] uppercase tracking-wider text-slate-500">${{d.tag.split(' ')[0]}}</div>
+      <div class="text-[9px] uppercase tracking-wider ${{tagColor}}">${{tagShort}}</div>
       <div class="text-xs font-bold num-mono">${{(d.TOTAL/1e6).toFixed(2)}}M</div>
       <div class="text-[9px] text-slate-400 num-mono">${{d.date.substring(5)}}</div>
     `;
@@ -2086,7 +2106,9 @@ function renderLebaranWorkspace() {{
     }};
     strip.appendChild(btn);
   }});
-  selectLebaranDate('2026-03-24');
+  selectLebaranDate('2026-03-21');
+  const hBtn = strip.children[8]; // 2026-03-21 is index 8
+  if (hBtn) hBtn.classList.add('ring-2', 'ring-kemenhub-800', 'dark:ring-blue-500');
 
   const isDark = document.documentElement.classList.contains('dark');
   const ctxLine = document.getElementById('chartLebaranLineCanvas').getContext('2d');
@@ -2094,7 +2116,7 @@ function renderLebaranWorkspace() {{
   chartLebaranLine = new Chart(ctxLine, {{
     type: 'line',
     data: {{
-      labels: ld.map(d => d.date.substring(5) + ' (' + d.tag.split(' ')[0] + ')'),
+      labels: ld.map(d => d.date.substring(5) + ' (' + (d.tag.startsWith('Hari H') ? 'Hari H' : d.tag.split(' ')[0]) + ')'),
       datasets: [
         {{ label: 'Total', data: ld.map(d => d.TOTAL), borderColor: isDark ? '#ffffff' : '#0f172a', borderWidth: 2, pointRadius: 2, tension: 0.15 }},
         {{ label: 'Udara', data: ld.map(d => d.UDARA), borderColor: COLOR.UDARA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
@@ -2150,8 +2172,9 @@ function renderLebaranWorkspace() {{
     data: {{
       labels: labelsSurge,
       datasets: [
-        {{ label: 'Mudik 18 Mar (%)', data: modas.map(m => DATA.surge_summary[m].surge_mudik_pct), backgroundColor: '#9333ea', borderRadius: 3 }},
-        {{ label: 'Balik 24 Mar (%)', data: modas.map(m => DATA.surge_summary[m].surge_balik1_pct), backgroundColor: '#0284c7', borderRadius: 3 }},
+        {{ label: 'Mudik 18 Mar / H-3 (%)', data: modas.map(m => DATA.surge_summary[m].surge_mudik_pct), backgroundColor: '#9333ea', borderRadius: 3 }},
+        {{ label: 'Balik 24 Mar / H+3 (%)', data: modas.map(m => DATA.surge_summary[m].surge_balik1_pct), backgroundColor: '#0284c7', borderRadius: 3 }},
+        {{ label: 'Balik 29 Mar / H+8 (%)', data: modas.map(m => DATA.surge_summary[m].surge_balik2_pct), backgroundColor: '#f43f5e', borderRadius: 3 }},
       ]
     }},
     options: {{

@@ -25,7 +25,7 @@ baseline_feb_avg = feb_normal['TOTAL'].mean()
 print(f"Normal baseline February daily average: {baseline_feb_avg:,.0f} passengers/day")
 
 # Calculate Day-of-Week multipliers across the whole clean non-lebaran period
-non_lebaran = df_hist[~((df_hist['date_dt'] >= '2026-03-10') & (df_hist['date_dt'] <= '2026-04-05'))].copy()
+non_lebaran = df_hist[~((df_hist['date_dt'] >= '2026-03-13') & (df_hist['date_dt'] <= '2026-03-29'))].copy()
 dow_avg = non_lebaran.groupby(non_lebaran['date_dt'].dt.dayofweek)['TOTAL'].mean()
 overall_mean = non_lebaran['TOTAL'].mean()
 dow_factors = (dow_avg / overall_mean).to_dict()

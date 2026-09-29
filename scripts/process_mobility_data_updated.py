@@ -112,36 +112,28 @@ for m in months:
     })
 
 # =========================================================================
-# 4. PERIODE KHUSUS LEBARAN (10 MAR - 05 APR 2026)
+# =========================================================================
+# 4. PERIODE KHUSUS LEBARAN (13 MAR - 29 MAR 2026 • 17 HARI)
+# Hari H: 21 Maret 2026 (Sabtu) - Hari Raya Idul Fitri (Tanpa H1/H2)
 # =========================================================================
 lebaran_phase = {
-    '2026-03-10': ('Pra-Mudik Awal', 'Normal'),
-    '2026-03-11': ('Pra-Mudik', 'Normal'),
-    '2026-03-12': ('H-8', 'Mulai Bergerak'),
-    '2026-03-13': ('H-7', 'Awal Lonjakan Mudik'),
-    '2026-03-14': ('H-6 (Sabtu)', 'Arus Mudik Tinggi'),
-    '2026-03-15': ('H-5 (Minggu)', 'Arus Mudik Tinggi'),
-    '2026-03-16': ('H-4 (Senin)', 'Arus Mudik Tinggi'),
-    '2026-03-17': ('H-3 (Selasa)', 'Arus Mudik Sangat Padat'),
-    '2026-03-18': ('H-2 (Rabu)', '★ PUNCAK ARUS MUDIK (2,26M)'),
-    '2026-03-19': ('H-1 (Kamis)', 'Malam Takbiran'),
-    '2026-03-20': ('H1 Lebaran (Jumat)', 'Hari Raya Idul Fitri (Drop)'),
-    '2026-03-21': ('H2 Lebaran (Sabtu)', 'Silaturahmi Lokal'),
-    '2026-03-22': ('H+1 (Minggu)', 'Awal Arus Balik'),
+    '2026-03-13': ('H-8', 'Awal Masa Posko Angkutan Lebaran'),
+    '2026-03-14': ('H-7 (Sabtu)', 'Awal Arus Mudik Akhir Pekan'),
+    '2026-03-15': ('H-6 (Minggu)', 'Arus Mudik Akhir Pekan'),
+    '2026-03-16': ('H-5 (Senin)', 'Arus Mudik Mulai Meningkat'),
+    '2026-03-17': ('H-4 (Selasa)', 'Arus Mudik Padat'),
+    '2026-03-18': ('H-3 (Rabu)', '★ PUNCAK ARUS MUDIK (2,26M)'),
+    '2026-03-19': ('H-2 (Kamis)', 'Arus Mudik Lanjutan'),
+    '2026-03-20': ('H-1 (Jumat)', 'Malam Takbiran'),
+    '2026-03-21': ('Hari H (Sabtu)', 'Hari Raya Idul Fitri 1447 H'),
+    '2026-03-22': ('H+1 (Minggu)', 'Silaturahmi & Awal Arus Balik'),
     '2026-03-23': ('H+2 (Senin)', 'Arus Balik Tinggi'),
     '2026-03-24': ('H+3 (Selasa)', '★★ PUNCAK TERTINGGI TAHUN 2026 (2,42M)'),
-    '2026-03-25': ('H+4 (Rabu)', 'Puncak Bus (556k) / Balik Gel. 1'),
-    '2026-03-26': ('H+5 (Kamis)', 'Arus Balik Masih Tinggi'),
-    '2026-03-27': ('H+6 (Jumat)', 'Arus Balik Melandai'),
-    '2026-03-28': ('H+7 (Sabtu)', 'Awal Balik Gelombang 2'),
-    '2026-03-29': ('H+8 (Minggu)', '★ PUNCAK BALIK GELOMBANG 2 (1,84M)'),
-    '2026-03-30': ('H+9 (Senin)', 'Mulai Normalisasi'),
-    '2026-03-31': ('H+10 (Selasa)', 'Pasca Lebaran'),
-    '2026-04-01': ('H+11', 'Pasca Lebaran'),
-    '2026-04-02': ('H+12', 'Pasca Lebaran'),
-    '2026-04-03': ('H+13', 'Pasca Lebaran'),
-    '2026-04-04': ('H+14', 'Pasca Lebaran Akhir Pekan'),
-    '2026-04-05': ('H+15', 'Penutupan Posko Nasional Lebaran'),
+    '2026-03-25': ('H+4 (Rabu)', 'Arus Balik Masih Tinggi (2,35M)'),
+    '2026-03-26': ('H+5 (Kamis)', 'Arus Balik Berlanjut (2,21M)'),
+    '2026-03-27': ('H+6 (Jumat)', 'Arus Balik Gelombang Akhir Pekan (2,17M)'),
+    '2026-03-28': ('H+7 (Sabtu)', 'Arus Balik Akhir Pekan (2,28M)'),
+    '2026-03-29': ('H+8 (Minggu)', '★ PUNCAK BALIK GELOMBANG 2 & PENUTUPAN (2,33M)'),
 }
 
 lebaran_daily = []
@@ -155,6 +147,7 @@ for entry in daily_timeline:
         item['is_peak_mudik'] = (d == '2026-03-18')
         item['is_peak_balik1'] = (d == '2026-03-24')
         item['is_peak_balik2'] = (d == '2026-03-29')
+        item['is_h_day'] = (d == '2026-03-21')
         lebaran_daily.append(item)
 
 # =========================================================================
@@ -230,7 +223,7 @@ for m in ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT']:
 # =========================================================================
 # 7. REGISTRI TOP HUBS (PEAK LEBARAN VS YTD)
 # =========================================================================
-peak_slice = df_clean[df_clean['tanggal'].between('2026-03-10', '2026-04-05')]
+peak_slice = df_clean[df_clean['tanggal'].between('2026-03-13', '2026-03-29')]
 
 top_hubs_peak = {}
 top_hubs_ytd = {}
