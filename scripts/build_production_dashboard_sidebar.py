@@ -198,7 +198,7 @@ def generate_dashboard():
           <button onclick="toggleExplanationSidebar(true)" class="w-full mt-2.5 flex items-center justify-between px-2.5 py-2 rounded-md text-xs font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800/80 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-all text-left group shadow-xs">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse shrink-0"></span>
-              <span class="truncate">📘 Metodologi Kepadatan</span>
+              <span class="truncate">📘 Informasi Dashboard</span>
             </div>
             <span class="text-[9px] px-1.5 py-0.2 rounded bg-indigo-600 text-white font-mono uppercase">Info</span>
           </button>
@@ -248,11 +248,11 @@ def generate_dashboard():
   </aside>
 
   <!-- ============================================================= -->
-  <!-- SIDEBAR METODOLOGI & STANDAR KEPADATAN SIMPUL (DRAWER)        -->
+  <!-- SIDEBAR INFORMASI & KAMUS RUMUS DASHBOARD (DRAWER)             -->
   <!-- ============================================================= -->
   <div id="backdrop-penjelasan" onclick="toggleExplanationSidebar(false)" class="fixed inset-0 bg-slate-900/40 dark:bg-slate-950/70 z-50 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-  <aside id="sidebar-penjelasan-kepadatan" class="fixed top-0 bottom-0 right-0 z-50 w-full sm:w-[500px] lg:w-[540px] bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
+  <aside id="sidebar-penjelasan-kepadatan" class="fixed top-0 bottom-0 right-0 z-50 w-full sm:w-[540px] lg:w-[600px] bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
     
     <!-- Sidebar Header -->
     <div class="h-16 px-5 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 shrink-0 bg-slate-50/70 dark:bg-slate-800/40">
@@ -262,10 +262,10 @@ def generate_dashboard():
         </div>
         <div class="truncate">
           <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight truncate">
-            Metodologi & Kamus Kepadatan Simpul
+            Informasi & Kamus Rumus Dashboard
           </h3>
           <p class="text-[10px] text-slate-500 font-sans truncate">
-            Standar Pengukuran Beban, Rasio Armada, & Tolok Ukur Padat Simpul Kemenhub
+            Kamus Lengkap Formula Matematis, Integritas Data, Metodologi Kepadatan & Proyeksi
           </p>
         </div>
       </div>
@@ -275,37 +275,163 @@ def generate_dashboard():
       </button>
     </div>
 
-    <!-- Scrollable Body with Clean Typography -->
-    <div class="p-5 space-y-5 overflow-y-auto flex-1 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-sans">
+    <!-- Scrollable Body with Clean Typography & Complete Math Formulas -->
+    <div class="p-5 space-y-6 overflow-y-auto flex-1 text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-sans">
       
-      <!-- Box 1: Sumber Data Riil StrategiHub -->
-      <div class="bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/60 rounded-lg p-3.5 space-y-2">
+      <!-- Box 1: Sumber Data & Integritas Dataset -->
+      <div class="bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/60 rounded-lg p-4 space-y-2.5">
         <div class="flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
           <h4 class="text-xs font-bold text-indigo-900 dark:text-indigo-200 uppercase tracking-tight">
-            1. Dari Mana Sumber Datanya?
+            1. Sumber Data & Integritas Dataset
           </h4>
         </div>
         <p class="text-[11px] text-slate-600 dark:text-slate-300">
-          Data baseline dihitung langsung dari data mentah StrategiHub Kemenhub 2026: <code class="px-1 py-0.5 rounded bg-white dark:bg-slate-800 text-[10px] font-mono text-indigo-600 dark:text-indigo-300 border border-slate-200 dark:border-slate-700">strategihub_multimoda_2026.csv</code> (18,3 MB, mencakup transaksi harian 1.088 simpul prasarana).
+          Seluruh angka di dashboard bersumber dari data operasional <strong>StrategiHub PUSDATIN Kemenhub 2026</strong> (<code class="px-1 py-0.5 rounded bg-white dark:bg-slate-800 text-[10px] font-mono text-indigo-600 dark:text-indigo-300 border border-slate-200 dark:border-slate-700">strategihub_multimoda_2026.csv</code>, 18,3 MB).
         </p>
-        <p class="text-[11px] text-slate-600 dark:text-slate-300">
-          Angka baseline penumpang harian (<code class="font-mono">pnpDay</code>) dan armada (<code class="font-mono">armDay</code>) diambil dari <strong>periode Posko Puncak Nasional (17 Hari Arus Mudik & Balik Lebaran 2026: 13–29 Maret 2026, dengan Hari H pada 21 Maret 2026)</strong>, kemudian <strong>dibagi 17 hari</strong> untuk memperoleh rata-rata beban harian puncak riil:
-        </p>
-        <div class="text-[10px] font-mono bg-white dark:bg-slate-900 p-2 rounded border border-slate-200 dark:border-slate-800 space-y-1">
-          <div>• <strong>Pelabuhan Merak:</strong> 1.412.249 pnp / 16 = <strong>88.266 pnp/h</strong> (188 trip kapal/h)</div>
-          <div>• <strong>Pelabuhan Bakauheni:</strong> 1.561.165 pnp / 16 = <strong>97.573 pnp/h</strong> (195 trip kapal/h)</div>
-          <div>• <strong>Stasiun Pasar Senen:</strong> 889.656 pnp / 16 = <strong>55.604 pnp/h</strong> (149 trip KA/h)</div>
-          <div>• <strong>Bandara Ngurah Rai:</strong> 1.656.062 pnp / 16 = <strong>103.504 pnp/h</strong> (641 flight/h)</div>
+        <div class="text-[11px] space-y-1 bg-white dark:bg-slate-900 p-2.5 rounded border border-slate-200 dark:border-slate-800">
+          <div>• <strong>Total Baris Bersih:</strong> <span class="font-mono font-bold text-slate-900 dark:text-white">209.964 baris</span> (tervalidasi dari 211.361 baris log mentah).</div>
+          <div>• <strong>Periode Operasional:</strong> 1 Januari 2026 s.d. 29 September 2026 (<span class="font-mono font-bold">272 Hari</span>).</div>
+          <div>• <strong>Cakupan Simpul:</strong> <span class="font-mono font-bold">1.208 simpul prasarana</span> (1.014 simpul berkoordinat valid, 194 simpul tanpa koordinat dipertahankan tanpa fabrikasi data).</div>
+          <div>• <strong>Aturan Pembersihan:</strong> Baris duplikat identik dihapus (<code class="font-mono">keep=first</code>), sedangkan duplikat transaksi pada tanggal/simpul yang sama diagregasi dengan fungsi penjumlahan (<code class="font-mono">SUM</code>).</div>
         </div>
       </div>
 
-      <!-- Box 2: Tahu Padat atau Engga Dari Mana? (3 Tolok Ukur) -->
+      <!-- Box 2: Rumus Metrik Dasar (Total Penumpang & Armada) -->
+      <div class="space-y-3">
+        <div class="border-b border-slate-200 dark:border-slate-800 pb-2 flex items-center justify-between">
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+            2. Rumus Metrik Dasar (Total Penumpang & Armada)
+          </h4>
+          <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300">Agregat</span>
+        </div>
+        <p class="text-[11px] text-slate-600 dark:text-slate-300">
+          Setiap transaksi simpul prasarana mencatat pergerakan dua arah (kedatangan dan keberangkatan).
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] font-mono">
+          <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 p-2.5 rounded space-y-1">
+            <div class="font-bold text-slate-900 dark:text-white font-sans text-xs">Total Penumpang Simpul / Harian:</div>
+            <div class="text-indigo-600 dark:text-indigo-400 font-bold">P_total = P_datang + P_berangkat</div>
+            <div class="text-slate-500 text-[9px] font-sans">Menjumlahkan penumpang tiba dan penumpang naik.</div>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 p-2.5 rounded space-y-1">
+            <div class="font-bold text-slate-900 dark:text-white font-sans text-xs">Total Armada Beroperasi:</div>
+            <div class="text-indigo-600 dark:text-indigo-400 font-bold">A_total = A_datang + A_berangkat</div>
+            <div class="text-slate-500 text-[9px] font-sans">Menghitung trip/penerbangan yang dilayani.</div>
+          </div>
+        </div>
+        <div class="p-2.5 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] font-mono">
+          <div><strong>Rata-rata Penumpang Harian Nasional:</strong></div>
+          <div class="text-slate-800 dark:text-slate-200 mt-0.5">P_avg = (∑ P_total) / 272 Hari = 371.890.120 / 272 = <strong>1.367.243 pnp/hari</strong></div>
+        </div>
+      </div>
+
+      <!-- Box 3: Rumus Load Factor (Rasio Beban Armada P/A) -->
+      <div class="space-y-3">
+        <div class="border-b border-slate-200 dark:border-slate-800 pb-2 flex items-center justify-between">
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+            3. Rumus Load Factor Proxy (Rasio Penumpang per Armada P/A)
+          </h4>
+          <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300">P/A Ratio</span>
+        </div>
+        <p class="text-[11px] text-slate-600 dark:text-slate-300">
+          Load Factor dihitung sebagai proksi intensitas okupansi fisik rata-rata per satu satuan pergerakan armada:
+        </p>
+        <div class="p-2.5 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] font-mono space-y-1">
+          <div class="text-indigo-600 dark:text-indigo-400 font-bold text-xs">Load Factor (P/A) = Total Penumpang / Total Trip Armada</div>
+          <div class="text-slate-500 text-[10px] font-sans">
+            Satuan: Penumpang/Flight (Udara), Penumpang/Trip KA (Kereta Api), Penumpang/Trip Bus (Bus AKAP), Penumpang/Trip Kapal (ASDP & Laut).
+          </div>
+        </div>
+        <div class="p-2.5 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] font-mono space-y-1">
+          <div class="font-bold text-slate-900 dark:text-white font-sans text-xs">Delta Pertumbuhan Load Factor:</div>
+          <div class="text-rose-600 dark:text-rose-400 font-bold">ΔLF (%) = [(LF_puncak - LF_baseline) / LF_baseline] × 100%</div>
+        </div>
+      </div>
+
+      <!-- Box 4: Rumus Pangsa Pasar Moda (Modal Share) -->
+      <div class="space-y-3">
+        <div class="border-b border-slate-200 dark:border-slate-800 pb-2 flex items-center justify-between">
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            4. Rumus Pangsa Pasar Antar-Moda (Modal Share %)
+          </h4>
+          <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300">Modal Share</span>
+        </div>
+        <p class="text-[11px] text-slate-600 dark:text-slate-300">
+          Proporsi kontribusi volume penumpang moda tertentu terhadap total mobilitas multimoda pada suatu periode (bulan atau hari):
+        </p>
+        <div class="p-2.5 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] font-mono space-y-1">
+          <div class="text-emerald-600 dark:text-emerald-400 font-bold">Modal Share_moda (%) = (Penumpang_moda / Total_Penumpang_Multimoda) × 100%</div>
+          <div class="text-slate-500 text-[10px] font-sans">
+            Total Penumpang Multimoda = P_Udara + P_KA + P_Bus + P_ASDP + P_Laut.
+          </div>
+        </div>
+      </div>
+
+      <!-- Box 5: Rumus Periode Lebaran & Angka Lonjakan (Surge %) -->
+      <div class="space-y-3">
+        <div class="border-b border-slate-200 dark:border-slate-800 pb-2 flex items-center justify-between">
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            5. Rumus Analisis Puncak Lebaran & Lonjakan (Surge %)
+          </h4>
+          <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300">Surge %</span>
+        </div>
+        <p class="text-[11px] text-slate-600 dark:text-slate-300">
+          Periode Posko Nasional Angkutan Lebaran 2026 berlangsung selama <strong>17 Hari (13 Maret s.d. 29 Maret 2026)</strong> dengan <strong>Hari H tunggal pada 21 Maret 2026</strong>.
+        </p>
+        <div class="space-y-2 text-[10px] font-mono">
+          <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 p-2.5 rounded space-y-1">
+            <div class="font-bold text-slate-900 dark:text-white font-sans text-xs">A. Baseline Normal (Februari 2026):</div>
+            <div class="text-indigo-600 dark:text-indigo-400 font-bold">P̄_Feb = (∑ P_Februari) / 28 Hari = 1.188.888 pnp/hari</div>
+            <div class="text-slate-500 text-[9px] font-sans">Bulan Februari digunakan sebagai acuan normal karena bebas libur panjang nasional.</div>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 p-2.5 rounded space-y-1">
+            <div class="font-bold text-slate-900 dark:text-white font-sans text-xs">B. Persentase Lonjakan (Surge %):</div>
+            <div class="text-rose-600 dark:text-rose-400 font-bold">Surge (%) = [(Volume_Puncak - P̄_Feb) / P̄_Feb] × 100%</div>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 p-2.5 rounded space-y-1">
+            <div class="font-bold text-slate-900 dark:text-white font-sans text-xs">C. Penomoran Hari Posko Lebaran (Relatif Hari H):</div>
+            <div class="text-slate-800 dark:text-slate-200 font-bold">ΔHari = Tanggal - 21 Maret 2026</div>
+            <div class="text-slate-600 dark:text-slate-400 text-[9px] font-sans">
+              Jika Δ &lt; 0 &rarr; <strong>H-|Δ|</strong> (contoh: 18 Mar &rarr; H-3 Mudik).<br>
+              Jika Δ = 0 &rarr; <strong>Hari H</strong> (21 Mar, Hari Raya Idul Fitri 1447 H).<br>
+              Jika Δ &gt; 0 &rarr; <strong>H+|Δ|</strong> (contoh: 24 Mar &rarr; H+3 Balik 1; 29 Mar &rarr; H+8 Balik 2).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Box 6: Rumus Profil Musiman Mingguan (Day-of-Week Seasonality) -->
+      <div class="space-y-3">
+        <div class="border-b border-slate-200 dark:border-slate-800 pb-2 flex items-center justify-between">
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            6. Rumus Profil Musiman Mingguan (Day of Week Index)
+          </h4>
+          <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300">DOW Index</span>
+        </div>
+        <p class="text-[11px] text-slate-600 dark:text-slate-300">
+          Mengukur ritme mobilitas mingguan masyarakat pada hari kerja vs akhir pekan di luar masa libur ekstrem:
+        </p>
+        <div class="p-2.5 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] font-mono space-y-1">
+          <div class="text-amber-600 dark:text-amber-400 font-bold">Rata-rata Hari d: P̄_d = (∑ P_d) / N_d</div>
+          <div class="text-amber-600 dark:text-amber-400 font-bold">Indeks Musiman (S_d) = P̄_d / P̄_keseluruhan</div>
+          <div class="text-slate-500 text-[9px] font-sans mt-1">
+            Urutan Mobilitas: Minggu (1,108x) &gt; Jumat (1,038x) &gt; Sabtu (1,018x) &gt; Senin (1,002x) &gt; Kamis (0,965x) &gt; Rabu (0,941x) &gt; Selasa (0,928x).
+          </div>
+        </div>
+      </div>
+
+      <!-- Box 7: Standar 3 Tolok Ukur Kepadatan Simpul Prasarana -->
       <div class="space-y-3.5">
         <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
           <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-            2. Tahu Simpul Padat atau Tidak Dari Mana? (3 Tolok Ukur)
+            7. Standar 3 Tolok Ukur Kepadatan Simpul Prasarana
           </h4>
           <p class="text-[11px] text-slate-500 mt-0.5">Penentuan status beban simpul prasarana menggunakan 3 parameter terintegrasi:</p>
         </div>
@@ -321,9 +447,9 @@ def generate_dashboard():
             Membandingkan rasio hari normal vs hari puncak:
           </p>
           <ul class="text-[11px] space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-300">
-            <li><strong>Pelabuhan Bakauheni (ASDP):</strong> Hari normal 206 pnp/kapal &rarr; saat puncak melonjak jadi <strong class="text-rose-600 dark:text-rose-400 font-mono">614 pnp/kapal</strong> (naik hampir 3x lipat). Kapal beroperasi desak-desakan dan kantong parkir pelabuhan meluber.</li>
-            <li><strong>Stasiun Pasar Senen (KA):</strong> Hari normal 247 pnp/KA &rarr; saat puncak melonjak jadi <strong class="text-rose-600 dark:text-rose-400 font-mono">357 pnp/KA</strong>. Okupansi gerbong mencapai 100% penuh.</li>
-            <li><strong>Bandara Ngurah Rai Bali (Udara):</strong> Hari normal 156 pnp/flight &rarr; saat puncak naik jadi <strong class="text-sky-600 dark:text-sky-400 font-mono">165+ pnp/flight</strong>. Dari kapasitas 180 kursi pesawat A320/B737, kursi terisi >92–95%.</li>
+            <li><strong>Pelabuhan Bakauheni (ASDP):</strong> Normal 206 pnp/kapal &rarr; saat puncak melonjak jadi <strong class="text-rose-600 dark:text-rose-400 font-mono">614 pnp/kapal</strong> (naik hampir 3x lipat).</li>
+            <li><strong>Stasiun Pasar Senen (KA):</strong> Normal 247 pnp/KA &rarr; saat puncak melonjak jadi <strong class="text-rose-600 dark:text-rose-400 font-mono">357 pnp/KA</strong> (okupansi 100% penuh).</li>
+            <li><strong>Bandara Ngurah Rai Bali (Udara):</strong> Normal 156 pnp/flight &rarr; saat puncak <strong class="text-sky-600 dark:text-sky-400 font-mono">165+ pnp/flight</strong> (kursi terisi >92–95%).</li>
           </ul>
         </div>
 
@@ -334,7 +460,7 @@ def generate_dashboard():
             <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300">Surge %</span>
           </div>
           <p class="text-[11px] text-slate-600 dark:text-slate-300">
-            Rumus: <code class="font-mono font-bold text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-700 px-1 rounded">Lonjakan (%) = [(Volume Puncak - Volume Normal) / Volume Normal] &times; 100%</code>.
+            Rumus: <code class="font-mono font-bold text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-700 px-1 rounded">Lonjakan (%) = [(Volume Puncak - Volume Normal) / Volume Normal] × 100%</code>.
           </p>
           <div class="overflow-x-auto rounded border border-slate-200 dark:border-slate-700">
             <table class="w-full text-left text-[11px] font-sans">
@@ -362,9 +488,9 @@ def generate_dashboard():
                   <td class="p-1.5">Purabaya (+49%), Batam Center (+59%)</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold text-emerald-600 dark:text-emerald-400">🟢 Stabil / Normal (<65%)</td>
-                  <td class="p-1.5 font-mono">< +25%</td>
-                  <td class="p-1.5">Simpul non-wisata / Pelni rute timur</td>
+                  <td class="p-1.5 font-bold text-emerald-600 dark:text-emerald-400">🟢 Stabil / Normal (&lt;65%)</td>
+                  <td class="p-1.5 font-mono">&lt; +25%</td>
+                  <td class="p-1.5">Simpul kepulauan perintis / non-wisata</td>
                 </tr>
               </tbody>
             </table>
@@ -377,125 +503,66 @@ def generate_dashboard():
             C. Batas Kapasitas Fisik Prasarana (Physical Bottlenecks)
           </div>
           <div class="space-y-1.5 text-[11px] text-slate-600 dark:text-slate-300">
-            <div>
-              • <strong>Pelabuhan ASDP (Merak & Bakauheni):</strong> Batasnya adalah kapasitas kantong parkir buffer zone dermaga dan waktu bongkar muat (port time). Kedatangan kendaraan > kapasitas sandar kapal memicu antrean 4–6 jam meluber ke jalan tol.
-            </div>
-            <div>
-              • <strong>Stasiun Kereta Api (Pasar Senen):</strong> Batasnya adalah kapasitas tempat duduk gerbong KA. Okupansi 100% berarti tiket ludes terjual; penumpang tidak bisa terangkut tanpa pengerahan KLB KA tambahan.
-            </div>
-            <div>
-              • <strong>Bandara Udara (Ngurah Rai DPS):</strong> Batasnya adalah utilisasi slot penerbangan di runway (mencapai 98% kapasitas maksimal) dan ketersediaan parking stand pesawat. Memicu kenaikan harga tiket ke batas TBA.
-            </div>
-            <div>
-              • <strong>Terminal Bus (Purabaya Surabaya):</strong> Batasnya adalah waktu tunggu penumpang di ruang tunggu keberangkatan yang meningkat dari 15 menit ke ~45 menit.
-            </div>
+            <div>• <strong>Pelabuhan ASDP (Merak & Bakauheni):</strong> Kapasitas kantong parkir buffer zone dermaga dan waktu bongkar muat (port time). Kedatangan kendaraan melebihi kapasitas sandar memicu antrean 4–6 jam.</div>
+            <div>• <strong>Stasiun KA (Pasar Senen):</strong> Kapasitas kursi gerbong KA (100% okupansi tiket ludes terjual).</div>
+            <div>• <strong>Bandara (Ngurah Rai DPS):</strong> Utilisasi slot runway mencapai 98% dan keterbatasan parking stand.</div>
+            <div>• <strong>Terminal Bus (Purabaya):</strong> Waktu tunggu ruang keberangkatan melonjak dari 15 menit ke ~45 menit.</div>
           </div>
         </div>
       </div>
 
-      <!-- Box 3: Tabel Komparasi Data Riil Normal vs Puncak -->
-      <div class="space-y-2">
-        <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-          3. Tabel Komparasi Data Riil StrategiHub (Normal vs Puncak)
-        </h4>
-        <div class="overflow-x-auto rounded border border-slate-200 dark:border-slate-700">
-          <table class="w-full text-left text-[10px] font-mono">
-            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold">
-              <tr>
-                <th class="p-1.5 font-sans">Simpul Prasarana</th>
-                <th class="p-1.5 text-right">Normal (Pnp)</th>
-                <th class="p-1.5 text-right">Puncak (Pnp)</th>
-                <th class="p-1.5 text-right">Rasio Normal</th>
-                <th class="p-1.5 text-right">Rasio Puncak</th>
-                <th class="p-1.5 text-center font-sans">Lonjakan</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              <tr>
-                <td class="p-1.5 font-sans font-semibold">Pelabuhan Merak</td>
-                <td class="p-1.5 text-right">25.218</td>
-                <td class="p-1.5 text-right font-bold text-rose-600">48.460</td>
-                <td class="p-1.5 text-right">69,0</td>
-                <td class="p-1.5 text-right font-bold text-rose-600">106,4</td>
-                <td class="p-1.5 text-center font-bold text-rose-600">+92,2%</td>
-              </tr>
-              <tr>
-                <td class="p-1.5 font-sans font-semibold">Pelabuhan Bakauheni</td>
-                <td class="p-1.5 text-right">22.988</td>
-                <td class="p-1.5 text-right font-bold text-rose-600">67.958</td>
-                <td class="p-1.5 text-right">206,0</td>
-                <td class="p-1.5 text-right font-bold text-rose-600">614,5</td>
-                <td class="p-1.5 text-center font-bold text-rose-600">+195,6%</td>
-              </tr>
-              <tr>
-                <td class="p-1.5 font-sans font-semibold">Stasiun Pasar Senen</td>
-                <td class="p-1.5 text-right">16.744</td>
-                <td class="p-1.5 text-right font-bold text-rose-600">31.466</td>
-                <td class="p-1.5 text-right">247,1</td>
-                <td class="p-1.5 text-right font-bold text-rose-600">357,1</td>
-                <td class="p-1.5 text-center font-bold text-rose-600">+87,9%</td>
-              </tr>
-              <tr>
-                <td class="p-1.5 font-sans font-semibold">Stasiun Gambir</td>
-                <td class="p-1.5 text-right">15.650</td>
-                <td class="p-1.5 text-right">24.449</td>
-                <td class="p-1.5 text-right">130,6</td>
-                <td class="p-1.5 text-right">165,9</td>
-                <td class="p-1.5 text-center text-amber-600 font-semibold">+56,2%</td>
-              </tr>
-              <tr>
-                <td class="p-1.5 font-sans font-semibold">Stasiun Yogyakarta</td>
-                <td class="p-1.5 text-right">18.959</td>
-                <td class="p-1.5 text-right">30.626</td>
-                <td class="p-1.5 text-right">92,2</td>
-                <td class="p-1.5 text-right">122,3</td>
-                <td class="p-1.5 text-center text-amber-600 font-semibold">+61,5%</td>
-              </tr>
-              <tr>
-                <td class="p-1.5 font-sans font-semibold">Bandara Ngurah Rai</td>
-                <td class="p-1.5 text-right">58.152</td>
-                <td class="p-1.5 text-right">66.151</td>
-                <td class="p-1.5 text-right">156,2</td>
-                <td class="p-1.5 text-right font-bold text-sky-600">164,3</td>
-                <td class="p-1.5 text-center font-semibold text-sky-600">Slot 98%</td>
-              </tr>
-              <tr>
-                <td class="p-1.5 font-sans font-semibold">Bandara Soekarno Hatta</td>
-                <td class="p-1.5 text-right">141.847</td>
-                <td class="p-1.5 text-right">172.431</td>
-                <td class="p-1.5 text-right">143,7</td>
-                <td class="p-1.5 text-right">154,9</td>
-                <td class="p-1.5 text-center text-sky-600 font-semibold">+21,6%</td>
-              </tr>
-              <tr>
-                <td class="p-1.5 font-sans font-semibold">Terminal Purabaya</td>
-                <td class="p-1.5 text-right">21.845</td>
-                <td class="p-1.5 text-right">32.595</td>
-                <td class="p-1.5 text-right">16,4</td>
-                <td class="p-1.5 text-right">20,2</td>
-                <td class="p-1.5 text-center text-yellow-600 font-semibold">+49,2%</td>
-              </tr>
-            </tbody>
-          </table>
+      <!-- Box 8: Rumus Model Prediktif Time Series Nataru 2026/2027 -->
+      <div class="space-y-3">
+        <div class="border-b border-slate-200 dark:border-slate-800 pb-2 flex items-center justify-between">
+          <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+            8. Rumus Model Prediktif Time Series & Akurasi Nataru
+          </h4>
+          <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300">Holt-Winters</span>
+        </div>
+        <div class="p-3 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] font-mono space-y-2">
+          <div class="font-bold text-indigo-700 dark:text-indigo-300 text-xs">Formulasi Model:</div>
+          <div class="bg-white dark:bg-slate-900 p-2 rounded border border-slate-200 dark:border-slate-800">
+            ŷ_{{t+h}} = (ℓ_t + ∑ φ^i b_t) × s_{{t+h-m(k+1)}} × ∏ W_shock
+          </div>
+          <div class="text-slate-500 text-[10px] font-sans">
+            • <strong>ℓ_t (Level)</strong> & <strong>b_t (Damped Trend)</strong> dengan parameter peredam tren φ = 0,98 untuk mencegah over-ekstrapolasi.<br>
+            • <strong>s (Multiplicative Seasonality)</strong> dengan siklus m = 7 hari.<br>
+            • <strong>W_shock (Kalender Event Shock)</strong> dikalibrasi dari elastisitas lonjakan empiris libur nasional.<br>
+            • <strong>Rentang Keyakinan 95%:</strong> CI_95% = ŷ_t ± 1,96 × RMSE.
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[10px] font-mono">
+          <div class="p-2 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <div class="font-bold text-slate-900 dark:text-white">MAPE = 6,53%</div>
+            <div class="text-[9px] text-slate-500 font-sans mt-0.5">MAPE = (100%/n) ∑ |(y - ŷ)/y|</div>
+          </div>
+          <div class="p-2 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <div class="font-bold text-slate-900 dark:text-white">RMSE = 94.259</div>
+            <div class="text-[9px] text-slate-500 font-sans mt-0.5">RMSE = √[(1/n) ∑ (y - ŷ)²]</div>
+          </div>
+          <div class="p-2 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <div class="font-bold text-slate-900 dark:text-white">MAE = 77.117</div>
+            <div class="text-[9px] text-slate-500 font-sans mt-0.5">MAE = (1/n) ∑ |y - ŷ|</div>
+          </div>
         </div>
       </div>
 
-      <!-- Box 4: Formula Matematis Simulasi Tambahan Armada -->
+      <!-- Box 9: Formula Matematis Simulasi Tambahan Armada -->
       <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-3.5 space-y-2">
         <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          4. Formula Matematis Simulasi Tambahan Armada
+          9. Formula Matematis Simulasi Tambahan Armada Simpul
         </h4>
         <div class="space-y-1.5 text-[11px] font-mono text-slate-700 dark:text-slate-300">
           <div class="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-            <strong>Tambahan Armada (Trip/h)</strong> = Armada_Baseline &times; (Persentase / 100)
+            <strong>Tambahan Armada (Trip/h)</strong> = Armada_Baseline × (Persentase / 100)
           </div>
           <div class="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-            <strong>Kapasitas Terbuka (Pnp)</strong> = Penumpang_Baseline &times; (Persentase / 100)
+            <strong>Kapasitas Terbuka (Pnp)</strong> = Penumpang_Baseline × (Persentase / 100)
           </div>
           <div class="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-            <strong>Beban Kesibukan Baru (%)</strong> = Beban_Awal / (1 + Persentase / 100)
+            <strong>Tingkat Kepadatan Baru (%)</strong> = Beban_Awal / (1 + Persentase / 100)
           </div>
         </div>
       </div>
@@ -515,8 +582,8 @@ def generate_dashboard():
 
   </aside>
 
-  <!-- Floating Action Button for Metodologi Sidebar -->
-  <button onclick="toggleExplanationSidebar(true)" class="fixed bottom-6 right-6 z-40 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2 border border-indigo-400 group">
+  <!-- Floating Action Button for Dashboard Information Sidebar -->
+  <button onclick="toggleExplanationSidebar(true)" class="fixed bottom-6 right-6 z-40 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2 border border-indigo-400 group" title="Buka Informasi & Kamus Rumus Dashboard">
     <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
     <span class="hidden sm:inline">📘 Metodologi Kepadatan</span>
     <span class="sm:hidden">📘 Metode</span>
@@ -546,10 +613,10 @@ def generate_dashboard():
 
       <div class="flex items-center gap-3 shrink-0">
         <!-- Button Buka Sidebar Metodologi Kepadatan -->
-        <button onclick="toggleExplanationSidebar(true)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-indigo-300 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-xs font-semibold shadow-xs transition-all" title="Buka Sidebar Metodologi Kepadatan">
+        <button onclick="toggleExplanationSidebar(true)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-indigo-300 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-xs font-semibold shadow-xs transition-all" title="Buka Informasi & Kamus Rumus Dashboard">
           <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-          <span class="hidden sm:inline">Metodologi Kepadatan</span>
-          <span class="sm:hidden">Metode</span>
+          <span class="hidden sm:inline">Informasi Dashboard</span>
+          <span class="sm:hidden">Info</span>
         </button>
 
         <!-- Dark/Light Theme Toggle -->
@@ -574,7 +641,10 @@ def generate_dashboard():
               <span class="text-xs text-slate-500 font-medium">penumpang</span>
             </div>
             <div class="text-[11px] text-slate-500 mt-1 num-mono">
-              Rata-rata: <span class="font-semibold text-slate-700 dark:text-slate-300">1.367.060</span> pnp/hari (272 hari)
+              Rata-rata: <span class="font-semibold text-slate-700 dark:text-slate-300">1.367.243</span> pnp/hari (272 hari)
+            </div>
+            <div class="text-[10px] text-slate-400 font-mono mt-0.5">
+              Rumus: ∑ (P_datang + P_berangkat)
             </div>
           </div>
 
@@ -591,6 +661,9 @@ def generate_dashboard():
             <div class="text-[11px] text-slate-500 mt-1 num-mono">
               24 Mar 2026 (H+3 Balik) • <span class="font-semibold text-rose-600 dark:text-rose-400">+103,2%</span> vs normal
             </div>
+            <div class="text-[10px] text-slate-400 font-mono mt-0.5">
+              Rumus: Max(P_harian) 2026 (H+3 Balik)
+            </div>
           </div>
 
           <!-- Metric 3: Mudik Peak -->
@@ -604,7 +677,10 @@ def generate_dashboard():
               <span class="text-xs text-slate-500 font-medium">penumpang</span>
             </div>
             <div class="text-[11px] text-slate-500 mt-1 num-mono">
-              18 Mar 2026 (H-2 Mudik) • <span class="font-semibold text-purple-700 dark:text-purple-400">+90,0%</span> vs normal
+              18 Mar 2026 (H-3 Mudik) • <span class="font-semibold text-purple-700 dark:text-purple-400">+90,0%</span> vs normal
+            </div>
+            <div class="text-[10px] text-slate-400 font-mono mt-0.5">
+              Rumus: Max Mudik(P_harian) (H-3 Mudik)
             </div>
           </div>
 
@@ -619,6 +695,9 @@ def generate_dashboard():
             </div>
             <div class="text-[11px] text-slate-500 mt-1 num-mono">
               Pesawat, Kereta, Bus, Feri, Kapal Laut
+            </div>
+            <div class="text-[10px] text-slate-400 font-mono mt-0.5">
+              Rumus: ∑ (Trip Datang + Trip Berangkat)
             </div>
           </div>
 
@@ -649,6 +728,14 @@ def generate_dashboard():
               <p id="timeline-chart-desc" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Volume harian agregat penumpang: Udara, Kereta Api, Bus AKAP, Penyeberangan ASDP, dan Laut (01 Jan s.d. 29 Sep 2026)
               </p>
+              <!-- Formula Badge Tab 1 -->
+              <div class="mt-2.5 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-[10px]">📐 RUMUS</span>
+                  <span class="font-mono text-slate-800 dark:text-slate-200"><strong>P_total(t)</strong> = ∑ (P_datang + P_berangkat) 5 moda | <strong>A_total(t)</strong> = ∑ (Trip Datang + Trip Berangkat)</span>
+                </div>
+                <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Lihat Info Lengkap &rarr;</button>
+              </div>
             </div>
 
             <!-- Controls: Metrik Switcher (Pindah ke tempat yang berubah) & Active Range Label -->
@@ -724,6 +811,14 @@ def generate_dashboard():
                 <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Senin - Minggu</span>
               </div>
 
+              <div class="my-2 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 font-mono font-bold text-[10px]">📐 RUMUS DOW</span>
+                  <span class="font-mono text-slate-800 dark:text-slate-200"><strong>P̄_hari</strong> = (∑ P_hari) / N_hari | <strong>Indeks Musiman (S_d)</strong> = P̄_hari / P̄_nasional</span>
+                </div>
+                <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Info &rarr;</button>
+              </div>
+
               <div class="relative w-full h-[220px] mt-3">
                 <canvas id="chartDOWCanvas"></canvas>
               </div>
@@ -771,6 +866,15 @@ def generate_dashboard():
               <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-rose-600"></span> Puncak Balik</span>
               <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-purple-600"></span> Puncak Mudik</span>
             </div>
+          </div>
+
+          <!-- Formula Note Scrubber -->
+          <div class="my-1.5 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-1.5 py-0.2 rounded bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 font-mono font-bold text-[10px]">📐 RUMUS FASE</span>
+              <span class="font-mono text-slate-800 dark:text-slate-200"><strong>Hari Posko</strong> = Tanggal - 21 Mar 2026 (H-8 s.d. H+8 • 17 Hari) | <strong>Hari H</strong> = 21 Mar (Tunggal)</span>
+            </div>
+            <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Buka Kamus Rumus &rarr;</button>
           </div>
 
           <!-- Scrubber Buttons Strip -->
@@ -839,6 +943,14 @@ def generate_dashboard():
             <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Unit: Penumpang</span>
           </div>
 
+          <div class="my-2 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 font-mono font-bold text-[10px]">📐 RUMUS SURGE</span>
+              <span class="font-mono text-slate-800 dark:text-slate-200"><strong>Surge %</strong> = [(Volume_Puncak - P̄_Februari) / P̄_Februari] × 100% | <strong>P̄_Feb</strong> = ∑ P_Feb / 28 hari</span>
+            </div>
+            <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Info &rarr;</button>
+          </div>
+
           <div class="overflow-x-auto mt-3">
             <table class="w-full text-left text-xs">
               <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
@@ -876,6 +988,14 @@ def generate_dashboard():
                 <p class="text-[11px] text-slate-500">Pergeseran proporsi mobilitas 5 moda dari Januari sampai dengan September 2026</p>
               </div>
               <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Satuan: % Total</span>
+            </div>
+
+            <div class="my-2 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 font-mono font-bold text-[10px]">📐 RUMUS MODAL SHARE</span>
+                <span class="font-mono text-slate-800 dark:text-slate-200"><strong>Pangsa Moda (%)</strong> = (Penumpang_Moda / Total_Penumpang_Multimoda) × 100%</span>
+              </div>
+              <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Info &rarr;</button>
             </div>
 
             <div class="relative w-full h-[320px] mt-3">
@@ -925,6 +1045,14 @@ def generate_dashboard():
             Tabel Persentase Pangsa Pasar Bulanan (%)
           </h3>
 
+          <div class="my-2 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 font-mono font-bold text-[10px]">📐 RUMUS SURGE</span>
+              <span class="font-mono text-slate-800 dark:text-slate-200"><strong>Surge %</strong> = [(Volume_Puncak - P̄_Februari) / P̄_Februari] × 100% | <strong>P̄_Feb</strong> = ∑ P_Feb / 28 hari</span>
+            </div>
+            <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Info &rarr;</button>
+          </div>
+
           <div class="overflow-x-auto mt-3">
             <table class="w-full text-left text-xs">
               <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
@@ -960,6 +1088,14 @@ def generate_dashboard():
                 <p class="text-[11px] text-slate-500">Penumpang per trip armada pada kondisi Normal vs Puncak Arus Mudik vs Puncak Arus Balik</p>
               </div>
               <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Satuan: Pnp / Armada</span>
+            </div>
+
+            <div class="my-2 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-[10px]">📐 RUMUS LOAD FACTOR</span>
+                <span class="font-mono text-slate-800 dark:text-slate-200"><strong>LF Proxy (P/A)</strong> = Total Penumpang / Total Trip Armada | <strong>ΔLF %</strong> = [(LF_puncak - LF_normal) / LF_normal] × 100%</span>
+              </div>
+              <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Info &rarr;</button>
             </div>
 
             <div class="relative w-full h-[320px] mt-3">

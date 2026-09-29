@@ -30,8 +30,8 @@ Dashboard ini terbagi menjadi **8 Modul Utama** yang dapat diakses melalui menu 
    * **Model Prediktif Time Series:** Menggabungkan tren historis, siklus musiman akhir tahun (*end-of-year seasonal waves*), serta *event shocks* Natal 2026 dan Tahun Baru 2027.
    * **3 Skenario Prediksi:** Moderat (*Baseline*), Optimis (+12% Animo Wisata), dan Konservatif (Antisipasi Cuaca Ekstrem).
    * **Simulasi Kebutuhan Armada Berdasarkan Prasarana / Simpul:** Simulator kebutuhan penambahan kapal feri di pelabuhan (Merak, Bakauheni, Ketapang), kereta api di stasiun (Pasar Senen, Gambir, Yogyakarta), penerbangan di bandara (Ngurah Rai, Soekarno-Hatta), dan bus di terminal (Purabaya).
-   * **Matriks 10 Simpul Prasarana Kritis:** Menampilkan kalkulasi trip tambahan, kapasitas terbuka, dan dampak penguraian antrean lapangan.
-   * **Sidebar Metodologi & Kamus Kepadatan Simpul:** Standar pengukuran beban, 3 tolok ukur kepadatan (Load Factor, Surge %, Batas Fisik), dan formula elastisitas kapasitas.
+   * **Sidebar Informasi & Kamus Rumus Dashboard:** Kompendium formula matematis lengkap untuk seluruh plot grafik, metrik dasar, rasio load factor, modal share, surge rate Lebaran 2026, indeks musiman mingguan, tolok ukur kepadatan simpul, formulasi model prediktif Nataru, hingga simulasi kapasitas armada.
+   * **Rumus Perhitungan di Setiap Plot:** Setiap grafik, tabel, dan kartu KPI dilengkapi badge formula matematis transparan dan tautan rujukan langsung ke Informasi Dashboard.
 
 ---
 
