@@ -820,12 +820,25 @@
           
           <!-- Left (7 Cols): Dense Monthly Data Table -->
           <div class="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
               <div>
                 <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Akumulasi Bulanan per Moda Transportasi</h3>
-                <p class="text-[11px] text-slate-500">Volume pergerakan dari Januari sampai dengan September 2026</p>
+                <p id="monthly-table-subtitle" class="text-[11px] text-slate-500">Volume pergerakan dari Januari sampai dengan September 2026</p>
               </div>
-              <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">9 Bulan</span>
+              <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1.5">
+                  <label for="select-monthly-metric" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Metrik:</label>
+                  <select id="select-monthly-metric" onchange="changeMonthlyMetric(this.value)" class="text-xs font-medium bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-2.5 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer shadow-sm">
+                    <option value="pnp_tot">Total Penumpang</option>
+                    <option value="pnp_brg">Penumpang Berangkat</option>
+                    <option value="pnp_dat">Penumpang Datang</option>
+                    <option value="arm_dat">Armada Datang</option>
+                    <option value="arm_brg">Armada Berangkat</option>
+                    <option value="arm_tot">Total Armada</option>
+                  </select>
+                </div>
+                <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">9 Bulan</span>
+              </div>
             </div>
 
             <div class="overflow-x-auto mt-3">
@@ -850,12 +863,25 @@
           <!-- Right (5 Cols): Day of Week Profile -->
           <div class="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 flex flex-col justify-between">
             <div>
-              <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
                 <div>
                   <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Profil Hari dalam Seminggu</h3>
-                  <p class="text-[11px] text-slate-500">Rata-rata volume penumpang harian (Senin s.d. Minggu)</p>
+                  <p id="dow-chart-subtitle" class="text-[11px] text-slate-500">Rata-rata volume harian (Senin s.d. Minggu)</p>
                 </div>
-                <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Senin - Minggu</span>
+                <div class="flex items-center gap-2">
+                  <div class="flex items-center gap-1.5">
+                    <label for="select-dow-metric" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Metrik:</label>
+                    <select id="select-dow-metric" onchange="changeDowMetric(this.value)" class="text-xs font-medium bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-2.5 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer shadow-sm">
+                      <option value="pnp_tot">Total Penumpang</option>
+                      <option value="pnp_brg">Penumpang Berangkat</option>
+                      <option value="pnp_dat">Penumpang Datang</option>
+                      <option value="arm_dat">Armada Datang</option>
+                      <option value="arm_brg">Armada Berangkat</option>
+                      <option value="arm_tot">Total Armada</option>
+                    </select>
+                  </div>
+                  <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Senin - Minggu</span>
+                </div>
               </div>
 
               <div class="my-2 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
@@ -1993,6 +2019,37 @@ function toggleTheme() {
 let currentMetric = 'pnp'; // 'pnp' (Penumpang) or 'arm' (Armada)
 let currentDirection = 'tot'; // 'tot' (Total/Dua Arah), 'dat' (Datang), 'brg' (Berangkat)
 let activeLebaranDate = '2026-03-21';
+let monthlySelectedMetric = 'pnp_tot';
+let dowSelectedMetric = 'pnp_tot';
+
+const METRIC_CODE_CONFIG = {
+  'pnp_tot': { label: 'Total Penumpang', type: 'pnp', dir: 'Dua Arah', unit: 'penumpang', dowUnit: 'pnp/hari', color: '#0284c7' },
+  'pnp_brg': { label: 'Penumpang Berangkat', type: 'pnp', dir: 'Berangkat', unit: 'penumpang', dowUnit: 'pnp/hari', color: '#0369a1' },
+  'pnp_dat': { label: 'Penumpang Datang', type: 'pnp', dir: 'Datang', unit: 'penumpang', dowUnit: 'pnp/hari', color: '#0ea5e9' },
+  'arm_dat': { label: 'Armada Datang', type: 'arm', dir: 'Datang', unit: 'armada/trip', dowUnit: 'trip/hari', color: '#6366f1' },
+  'arm_brg': { label: 'Armada Berangkat', type: 'arm', dir: 'Berangkat', unit: 'armada/trip', dowUnit: 'trip/hari', color: '#4f46e5' },
+  'arm_tot': { label: 'Total Armada', type: 'arm', dir: 'Dua Arah', unit: 'armada/trip', dowUnit: 'trip/hari', color: '#8b5cf6' }
+};
+
+function getMetricKeyFromCode(code, moda = 'TOTAL') {
+  if (code === 'pnp_tot') return moda;
+  if (code === 'pnp_dat') return 'pdat_' + moda;
+  if (code === 'pnp_brg') return 'pbrg_' + moda;
+  if (code === 'arm_tot') return 'arm_' + moda;
+  if (code === 'arm_dat') return 'adat_' + moda;
+  if (code === 'arm_brg') return 'abrg_' + moda;
+  return moda;
+}
+
+function changeMonthlyMetric(code) {
+  monthlySelectedMetric = code;
+  renderMonthlyTable();
+}
+
+function changeDowMetric(code) {
+  dowSelectedMetric = code;
+  renderDOWWorkspace();
+}
 
 function getMetricKey(moda = 'TOTAL') {
   if (currentMetric === 'pnp') {
@@ -2162,6 +2219,16 @@ function updateDashboardMetricAndDirection() {
   if (badge) {
     badge.innerText = `${isPnp ? 'Volume Penumpang' : 'Armada Beroperasi'} • ${currentDirection === 'dat' ? 'Datang' : currentDirection === 'brg' ? 'Berangkat' : 'Dua Arah'}`;
   }
+  
+  // Sync Tab 1 dropdowns with global selection
+  const globalCode = currentMetric + '_' + currentDirection;
+  monthlySelectedMetric = globalCode;
+  dowSelectedMetric = globalCode;
+  const selMonthly = document.getElementById('select-monthly-metric');
+  if (selMonthly) selMonthly.value = globalCode;
+  const selDow = document.getElementById('select-dow-metric');
+  if (selDow) selDow.value = globalCode;
+
   renderTimelineChart();
   renderMonthlyTable();
   renderDOWWorkspace();
@@ -2316,20 +2383,28 @@ function renderMonthlyTable() {
   if (!tbody) return;
   tbody.innerHTML = '';
   
+  const code = monthlySelectedMetric || (currentMetric + '_' + currentDirection);
+  const cfg = METRIC_CODE_CONFIG[code] || { label: 'Total Penumpang' };
+
   ms.forEach((m) => {
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
     tr.innerHTML = `
       <td class="py-2.5 px-3 font-sans font-medium text-slate-900 dark:text-slate-200">${m.label}</td>
-      <td class="py-2.5 px-3">${numFmt(m[getMetricKey('UDARA')])}</td>
-      <td class="py-2.5 px-3">${numFmt(m[getMetricKey('KA')])}</td>
-      <td class="py-2.5 px-3">${numFmt(m[getMetricKey('BUS')])}</td>
-      <td class="py-2.5 px-3">${numFmt(m[getMetricKey('ASDP')])}</td>
-      <td class="py-2.5 px-3">${numFmt(m[getMetricKey('LAUT')])}</td>
-      <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">${numFmt(m[getMetricKey('TOTAL')])}</td>
+      <td class="py-2.5 px-3">${numFmt(m[getMetricKeyFromCode(code, 'UDARA')])}</td>
+      <td class="py-2.5 px-3">${numFmt(m[getMetricKeyFromCode(code, 'KA')])}</td>
+      <td class="py-2.5 px-3">${numFmt(m[getMetricKeyFromCode(code, 'BUS')])}</td>
+      <td class="py-2.5 px-3">${numFmt(m[getMetricKeyFromCode(code, 'ASDP')])}</td>
+      <td class="py-2.5 px-3">${numFmt(m[getMetricKeyFromCode(code, 'LAUT')])}</td>
+      <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">${numFmt(m[getMetricKeyFromCode(code, 'TOTAL')])}</td>
     `;
     tbody.appendChild(tr);
   });
+
+  const subEl = document.getElementById('monthly-table-subtitle');
+  if (subEl) {
+    subEl.innerText = `Akumulasi ${cfg.label} dari Januari sampai dengan September 2026`;
+  }
 }
 
 function renderDOWWorkspace() {
@@ -2338,8 +2413,10 @@ function renderDOWWorkspace() {
   if (!ctxEl) return;
   const ctx = ctxEl.getContext('2d');
   const isDark = document.documentElement.classList.contains('dark');
-  const isPnp = currentMetric === 'pnp';
-  const dirLabel = currentDirection === 'dat' ? 'Datang' : currentDirection === 'brg' ? 'Berangkat' : 'Dua Arah';
+  
+  const code = dowSelectedMetric || (currentMetric + '_' + currentDirection);
+  const cfg = METRIC_CODE_CONFIG[code] || { label: 'Total Penumpang', type: 'pnp', unit: 'penumpang', dowUnit: 'pnp/hari', color: '#0284c7' };
+  const isPnp = cfg.type === 'pnp';
 
   if (chartDOW) chartDOW.destroy();
   chartDOW = new Chart(ctx, {
@@ -2347,9 +2424,9 @@ function renderDOWWorkspace() {
     data: {
       labels: dow.map(d => d.dow),
       datasets: [{
-        label: `Rata-rata ${isPnp ? 'Penumpang' : 'Armada'} (${dirLabel})`,
-        data: dow.map(d => d[getMetricKey('TOTAL')]),
-        backgroundColor: isPnp ? '#0284c7' : '#6366f1',
+        label: `Rata-rata ${cfg.label}`,
+        data: dow.map(d => d[getMetricKeyFromCode(code, 'TOTAL')]),
+        backgroundColor: cfg.color || (isPnp ? '#0284c7' : '#6366f1'),
         borderRadius: 4
       }]
     },
@@ -2360,7 +2437,7 @@ function renderDOWWorkspace() {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: ctx => ` Rata-rata: ${numFmt(ctx.raw)} ${isPnp ? 'pnp/hari' : 'trip/hari'}`
+            label: ctx => ` Rata-rata: ${numFmt(ctx.raw)} ${cfg.dowUnit}`
           }
         }
       },
@@ -2378,6 +2455,11 @@ function renderDOWWorkspace() {
     }
   });
 
+  const subEl = document.getElementById('dow-chart-subtitle');
+  if (subEl) {
+    subEl.innerText = `Rata-rata volume harian (${cfg.label}) - Senin s.d. Minggu`;
+  }
+
   const tbody = document.getElementById('tbody-dow');
   if (!tbody) return;
   tbody.innerHTML = '';
@@ -2386,12 +2468,12 @@ function renderDOWWorkspace() {
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
     tr.innerHTML = `
       <td class="py-2 px-2.5 font-sans font-medium text-slate-900 dark:text-slate-200">${d.dow}</td>
-      <td class="py-2 px-2.5">${numFmt(d[getMetricKey('UDARA')])}</td>
-      <td class="py-2 px-2.5">${numFmt(d[getMetricKey('KA')])}</td>
-      <td class="py-2 px-2.5">${numFmt(d[getMetricKey('BUS')])}</td>
-      <td class="py-2 px-2.5">${numFmt(d[getMetricKey('ASDP')])}</td>
-      <td class="py-2 px-2.5">${numFmt(d[getMetricKey('LAUT')])}</td>
-      <td class="py-2 px-2.5 text-right font-bold text-slate-900 dark:text-white">${numFmt(d[getMetricKey('TOTAL')])}</td>
+      <td class="py-2 px-2.5">${numFmt(d[getMetricKeyFromCode(code, 'UDARA')])}</td>
+      <td class="py-2 px-2.5">${numFmt(d[getMetricKeyFromCode(code, 'KA')])}</td>
+      <td class="py-2 px-2.5">${numFmt(d[getMetricKeyFromCode(code, 'BUS')])}</td>
+      <td class="py-2 px-2.5">${numFmt(d[getMetricKeyFromCode(code, 'ASDP')])}</td>
+      <td class="py-2 px-2.5">${numFmt(d[getMetricKeyFromCode(code, 'LAUT')])}</td>
+      <td class="py-2 px-2.5 text-right font-bold text-slate-900 dark:text-white">${numFmt(d[getMetricKeyFromCode(code, 'TOTAL')])}</td>
     `;
     tbody.appendChild(tr);
   });
