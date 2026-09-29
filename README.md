@@ -1,9 +1,9 @@
 # 🇮🇩 StrategiHub Analytics 2026: Dashboard Mobilitas Nasional & Prediksi Nataru 2026/2027
 
-[![GitHub Pages](https://img.shields.io/badge/Live-GitHub%20Pages-brightgreen?logo=github)](https://wildannazhif.github.io/siasati-kemenhub-2026/)
-[![Status](https://img.shields.io/badge/Status-Production%20Ready-blue)](https://wildannazhif.github.io/siasati-kemenhub-2026/)
-[![Data Source](https://img.shields.io/badge/Source-StrategiHub%20PUSDATIN%20Kemenhub-orange)](https://wildannazhif.github.io/siasati-kemenhub-2026/)
-[![Coverage](https://img.shields.io/badge/Verified%20Rows-209.885%20Baris-success)](https://wildannazhif.github.io/siasati-kemenhub-2026/)
+[![GitHub Pages](https://img.shields.io/badge/Live-GitHub%20Pages-brightgreen?logo=github)](https://wildannazhif.github.io/strategihub-kemenhub-2026/)
+[![Status](https://img.shields.io/badge/Status-Production%20Ready-blue)](https://wildannazhif.github.io/strategihub-kemenhub-2026/)
+[![Data Source](https://img.shields.io/badge/Source-StrategiHub%20PUSDATIN%20Kemenhub-orange)](https://wildannazhif.github.io/strategihub-kemenhub-2026/)
+[![Coverage](https://img.shields.io/badge/Verified%20Rows-209.885%20Baris-success)](https://wildannazhif.github.io/strategihub-kemenhub-2026/)
 
 Dashboard terpadu pemantauan dan analisis mobilitas angkutan penumpang nasional lintas 5 moda transportasi (**✈ Udara, 🚆 Kereta Api, 🚌 Bus AKAP, ⛴ ASDP Feri Penyeberangan, dan 🚢 Transportasi Laut**) berbasis dataset operasional **StrategiHub PUSDATIN Kementerian Perhubungan Republik Indonesia Tahun 2026**.
 
@@ -11,7 +11,7 @@ Dashboard terpadu pemantauan dan analisis mobilitas angkutan penumpang nasional 
 
 ## 🌐 Live Deployment
 Akses langsung dashboard interaktif tanpa instalasi:
-👉 **[https://wildannazhif.github.io/siasati-kemenhub-2026/](https://wildannazhif.github.io/siasati-kemenhub-2026/)**
+👉 **[https://wildannazhif.github.io/strategihub-kemenhub-2026/](https://wildannazhif.github.io/strategihub-kemenhub-2026/)**
 
 ---
 
@@ -60,8 +60,8 @@ Status kesibukan simpul ditentukan melalui **3 tolok ukur matematis dan operasio
 
 1. **Clone Repository:**
    ```bash
-   git clone https://github.com/wildannazhif/siasati-kemenhub-2026.git
-   cd siasati-kemenhub-2026
+   git clone https://github.com/wildannazhif/strategihub-kemenhub-2026.git
+   cd strategihub-kemenhub-2026
    ```
 
 2. **Jalankan Dashboard:**
