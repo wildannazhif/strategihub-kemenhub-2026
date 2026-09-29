@@ -626,6 +626,67 @@ def generate_dashboard():
       </div>
     </header>
 
+    <!-- ============================================================= -->
+    <!-- UNIVERSAL METRIC & DIRECTION CONTROLLER BAR (STICKY)          -->
+    <!-- ============================================================= -->
+    <section class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-16 z-30 px-4 sm:px-6 py-2.5 shadow-xs transition-all">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        
+        <!-- Controls Group -->
+        <div class="flex flex-wrap items-center gap-2.5 sm:gap-4">
+          
+          <!-- Metrik Switcher (Penumpang / Armada) -->
+          <div class="flex items-center gap-1.5">
+            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Metrik:</span>
+            <div class="inline-flex rounded-lg border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold shadow-xs">
+              <button id="global-btn-pnp" onclick="setGlobalMetric('pnp')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">
+                <span>👥</span>
+                <span>Penumpang</span>
+              </button>
+              <button id="global-btn-arm" onclick="setGlobalMetric('arm')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                <span>🚍</span>
+                <span>Armada</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
+
+          <!-- Arah Pergerakan (Total / Datang / Berangkat) -->
+          <div class="flex items-center gap-1.5">
+            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Arah / Aliran:</span>
+            <div class="inline-flex rounded-lg border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold shadow-xs">
+              <button id="global-btn-dir-tot" onclick="setGlobalDirection('tot')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">
+                <span>🔄</span>
+                <span id="lbl-dir-tot">Dua Arah (Total)</span>
+              </button>
+              <button id="global-btn-dir-dat" onclick="setGlobalDirection('dat')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                <span>📥</span>
+                <span id="lbl-dir-dat">Penumpang Datang</span>
+              </button>
+              <button id="global-btn-dir-brg" onclick="setGlobalDirection('brg')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                <span>📤</span>
+                <span id="lbl-dir-brg">Penumpang Berangkat</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Active Status Indicator Pill -->
+        <div class="flex items-center gap-2">
+          <span id="global-active-pill" class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-sky-50 dark:bg-sky-950/60 border border-sky-200 dark:border-sky-800 text-sky-800 dark:text-sky-300">
+            <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
+            <span id="global-active-label">Penumpang • Dua Arah (Total)</span>
+            <span class="text-slate-300 dark:text-slate-700">|</span>
+            <span id="global-active-val" class="font-bold text-slate-900 dark:text-white">371.890.120 orang</span>
+          </span>
+        </div>
+
+      </div>
+    </section>
+
     <!-- Integrated Executive Operational Strip -->
     <section class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
       <div class="px-6 py-3.5">
@@ -633,17 +694,17 @@ def generate_dashboard():
           
           <!-- Metric 1: Total Volume YTD -->
           <div class="pt-2 md:pt-0 pr-4">
-            <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5">
+            <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5" id="strip-card1-title">
               Total Mobilitas Penumpang YTD
             </div>
             <div class="flex items-baseline gap-2">
-              <span class="text-2xl font-bold text-slate-900 dark:text-white num-mono tracking-tight" id="strip-total-pnp">371.840.258</span>
-              <span class="text-xs text-slate-500 font-medium">penumpang</span>
+              <span class="text-2xl font-bold text-slate-900 dark:text-white num-mono tracking-tight" id="strip-total-pnp">371.890.120</span>
+              <span class="text-xs text-slate-500 font-medium" id="strip-unit-pnp">penumpang</span>
             </div>
-            <div class="text-[11px] text-slate-500 mt-1 num-mono">
+            <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-avg-pnp">
               Rata-rata: <span class="font-semibold text-slate-700 dark:text-slate-300">1.367.243</span> pnp/hari (272 hari)
             </div>
-            <div class="text-[10px] text-slate-400 font-mono mt-0.5">
+            <div class="text-[10px] text-slate-400 font-mono mt-0.5" id="strip-formula-pnp">
               Rumus: ∑ (P_datang + P_berangkat)
             </div>
           </div>
@@ -651,17 +712,17 @@ def generate_dashboard():
           <!-- Metric 2: All-Time Peak -->
           <div class="pt-3 md:pt-0 md:pl-4 pr-4">
             <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5 flex items-center justify-between">
-              <span>Puncak Tertinggi 2026</span>
+              <span id="strip-card2-title">Puncak Tertinggi 2026</span>
               <span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">ALL-TIME PEAK</span>
             </div>
             <div class="flex items-baseline gap-2">
-              <span class="text-2xl font-bold text-rose-600 dark:text-rose-400 num-mono tracking-tight">2.415.296</span>
-              <span class="text-xs text-slate-500 font-medium">penumpang</span>
+              <span class="text-2xl font-bold text-rose-600 dark:text-rose-400 num-mono tracking-tight" id="strip-peak-val">2.415.296</span>
+              <span class="text-xs text-slate-500 font-medium" id="strip-peak-unit">penumpang</span>
             </div>
-            <div class="text-[11px] text-slate-500 mt-1 num-mono">
+            <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-peak-desc">
               24 Mar 2026 (H+3 Balik) • <span class="font-semibold text-rose-600 dark:text-rose-400">+103,2%</span> vs normal
             </div>
-            <div class="text-[10px] text-slate-400 font-mono mt-0.5">
+            <div class="text-[10px] text-slate-400 font-mono mt-0.5" id="strip-peak-formula">
               Rumus: Max(P_harian) 2026 (H+3 Balik)
             </div>
           </div>
@@ -669,34 +730,34 @@ def generate_dashboard():
           <!-- Metric 3: Mudik Peak -->
           <div class="pt-3 md:pt-0 md:pl-4 pr-4">
             <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5 flex items-center justify-between">
-              <span>Puncak Arus Mudik</span>
+              <span id="strip-card3-title">Puncak Arus Mudik</span>
               <span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300">MUDIK PEAK</span>
             </div>
             <div class="flex items-baseline gap-2">
-              <span class="text-2xl font-bold text-purple-700 dark:text-purple-400 num-mono tracking-tight">2.258.514</span>
-              <span class="text-xs text-slate-500 font-medium">penumpang</span>
+              <span class="text-2xl font-bold text-purple-700 dark:text-purple-400 num-mono tracking-tight" id="strip-mudik-val">2.258.512</span>
+              <span class="text-xs text-slate-500 font-medium" id="strip-mudik-unit">penumpang</span>
             </div>
-            <div class="text-[11px] text-slate-500 mt-1 num-mono">
+            <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-mudik-desc">
               18 Mar 2026 (H-3 Mudik) • <span class="font-semibold text-purple-700 dark:text-purple-400">+90,0%</span> vs normal
             </div>
-            <div class="text-[10px] text-slate-400 font-mono mt-0.5">
+            <div class="text-[10px] text-slate-400 font-mono mt-0.5" id="strip-mudik-formula">
               Rumus: Max Mudik(P_harian) (H-3 Mudik)
             </div>
           </div>
 
           <!-- Metric 4: Armada Beroperasi -->
           <div class="pt-3 md:pt-0 md:pl-4">
-            <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5">
+            <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5" id="strip-card4-title">
               Total Armada Beroperasi YTD
             </div>
             <div class="flex items-baseline gap-2">
-              <span class="text-2xl font-bold text-slate-900 dark:text-white num-mono tracking-tight" id="strip-total-arm">10.030.995</span>
-              <span class="text-xs text-slate-500 font-medium">armada</span>
+              <span class="text-2xl font-bold text-slate-900 dark:text-white num-mono tracking-tight" id="strip-total-arm">10.033.092</span>
+              <span class="text-xs text-slate-500 font-medium" id="strip-unit-arm">armada</span>
             </div>
-            <div class="text-[11px] text-slate-500 mt-1 num-mono">
+            <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-desc-arm">
               Pesawat, Kereta, Bus, Feri, Kapal Laut
             </div>
-            <div class="text-[10px] text-slate-400 font-mono mt-0.5">
+            <div class="text-[10px] text-slate-400 font-mono mt-0.5" id="strip-formula-arm">
               Rumus: ∑ (Trip Datang + Trip Berangkat)
             </div>
           </div>
@@ -738,11 +799,19 @@ def generate_dashboard():
               </div>
             </div>
 
-            <!-- Controls: Metrik Switcher (Pindah ke tempat yang berubah) & Active Range Label -->
-            <div class="flex items-center gap-3">
+            <!-- Controls: Metrik Switcher & Arah Switcher & Active Range Label -->
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <!-- Metrik Switcher -->
               <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold">
-                <button id="metric-btn-pnp" onclick="setTimelineMetric('pnp')" class="px-2.5 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Penumpang</button>
-                <button id="metric-btn-arm" onclick="setTimelineMetric('arm')" class="px-2.5 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Armada</button>
+                <button id="metric-btn-pnp" onclick="setGlobalMetric('pnp')" class="px-2.5 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Penumpang</button>
+                <button id="metric-btn-arm" onclick="setGlobalMetric('arm')" class="px-2.5 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Armada</button>
+              </div>
+
+              <!-- Arah Switcher -->
+              <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold">
+                <button id="tab1-dir-tot" onclick="setGlobalDirection('tot')" class="px-2 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Dua Arah</button>
+                <button id="tab1-dir-dat" onclick="setGlobalDirection('dat')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Datang</button>
+                <button id="tab1-dir-brg" onclick="setGlobalDirection('brg')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Berangkat</button>
               </div>
 
               <span id="timeline-badge-info" class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded border border-slate-200 dark:border-slate-700">
@@ -1168,10 +1237,23 @@ def generate_dashboard():
             </button>
           </div>
 
-          <!-- Search & Period Options -->
-          <div class="flex items-center gap-3">
+          <!-- Search, Metric, Direction & Period Options -->
+          <div class="flex items-center gap-2.5 flex-wrap">
             <div class="relative">
-              <input type="text" id="input-hub-search" onkeyup="handleHubSearch(this.value)" placeholder="Cari simpul, kota, provinsi..." class="w-60 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-xs rounded-md px-3 py-1.5 focus:bg-white dark:focus:bg-slate-900">
+              <input type="text" id="input-hub-search" onkeyup="handleHubSearch(this.value)" placeholder="Cari simpul, kota, provinsi..." class="w-52 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-xs rounded-md px-3 py-1.5 focus:bg-white dark:focus:bg-slate-900">
+            </div>
+
+            <!-- Hub Metric Toggle -->
+            <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold">
+              <button id="hubs-btn-pnp" onclick="setGlobalMetric('pnp')" class="px-2.5 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Penumpang</button>
+              <button id="hubs-btn-arm" onclick="setGlobalMetric('arm')" class="px-2.5 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Armada</button>
+            </div>
+
+            <!-- Hub Direction Toggle -->
+            <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold">
+              <button id="hubs-dir-tot" onclick="setGlobalDirection('tot')" class="px-2 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Dua Arah</button>
+              <button id="hubs-dir-dat" onclick="setGlobalDirection('dat')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Datang</button>
+              <button id="hubs-dir-brg" onclick="setGlobalDirection('brg')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Berangkat</button>
             </div>
 
             <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-50 dark:bg-slate-800 text-xs font-medium">
@@ -1275,8 +1357,15 @@ def generate_dashboard():
             <!-- Metric & Basemap & Fullscreen Controls -->
             <div class="flex items-center gap-2.5 flex-wrap">
               <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold">
-                <button id="map-metric-pnp" onclick="setSpatialMapMetric('pnp', this)" class="px-2.5 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Ukuran: Penumpang</button>
-                <button id="map-metric-arm" onclick="setSpatialMapMetric('arm', this)" class="px-2.5 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Ukuran: Armada</button>
+                <button id="map-metric-pnp" onclick="setGlobalMetric('pnp')" class="px-2.5 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Penumpang</button>
+                <button id="map-metric-arm" onclick="setGlobalMetric('arm')" class="px-2.5 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Armada</button>
+              </div>
+
+              <!-- Map Direction Toggle -->
+              <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold">
+                <button id="map-dir-tot" onclick="setGlobalDirection('tot')" class="px-2 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Dua Arah</button>
+                <button id="map-dir-dat" onclick="setGlobalDirection('dat')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Datang</button>
+                <button id="map-dir-brg" onclick="setGlobalDirection('brg')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Berangkat</button>
               </div>
 
               <!-- Basemap Selector (100% Bebas API Key) -->
@@ -1800,7 +1889,6 @@ const numFmt = (n) => (n !== null && n !== undefined) ? Number(n).toLocaleString
 
 // State Variables
 let isSidebarOpen = true;
-let currentMetric = 'pnp'; // 'pnp' or 'arm'
 let currentTimelineRange = 'all';
 let currentHubModa = 'ALL';
 let currentHubPeriod = 'peak'; // 'peak' or 'ytd'
@@ -1921,51 +2009,210 @@ function toggleTheme() {{
   }}, 100);
 }}
 
-function setTimelineMetric(metric) {{
-  currentMetric = metric;
-  const isPnp = metric === 'pnp';
+// ---------------------------------------------------------------
+// UNIVERSAL METRIC & DIRECTION STATE MANAGEMENT
+// ---------------------------------------------------------------
+let currentMetric = 'pnp'; // 'pnp' (Penumpang) or 'arm' (Armada)
+let currentDirection = 'tot'; // 'tot' (Total/Dua Arah), 'dat' (Datang), 'brg' (Berangkat)
+let activeLebaranDate = '2026-03-21';
 
-  const btnPnp = document.getElementById('metric-btn-pnp');
-  const btnArm = document.getElementById('metric-btn-arm');
-  const badge = document.getElementById('timeline-metric-badge');
-  const desc = document.getElementById('timeline-chart-desc');
-
-  if (btnPnp && btnArm) {{
-    btnPnp.classList.toggle('bg-white', isPnp);
-    btnPnp.classList.toggle('dark:bg-slate-900', isPnp);
-    btnPnp.classList.toggle('text-slate-900', isPnp);
-    btnPnp.classList.toggle('dark:text-white', isPnp);
-    btnPnp.classList.toggle('shadow-xs', isPnp);
-    btnPnp.classList.toggle('text-slate-600', !isPnp);
-
-    btnArm.classList.toggle('bg-white', !isPnp);
-    btnArm.classList.toggle('dark:bg-slate-900', !isPnp);
-    btnArm.classList.toggle('text-slate-900', !isPnp);
-    btnArm.classList.toggle('dark:text-white', !isPnp);
-    btnArm.classList.toggle('shadow-xs', !isPnp);
-    btnArm.classList.toggle('text-slate-600', isPnp);
+function getMetricKey(moda = 'TOTAL') {{
+  if (currentMetric === 'pnp') {{
+    if (currentDirection === 'tot') return moda;
+    if (currentDirection === 'dat') return 'pdat_' + moda;
+    if (currentDirection === 'brg') return 'pbrg_' + moda;
+  }} else {{
+    if (currentDirection === 'tot') return 'arm_' + moda;
+    if (currentDirection === 'dat') return 'adat_' + moda;
+    if (currentDirection === 'brg') return 'abrg_' + moda;
   }}
-
-  if (badge) {{
-    badge.innerText = isPnp ? 'Volume Penumpang' : 'Armada Beroperasi';
-    badge.className = isPnp 
-      ? 'text-[11px] font-semibold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 px-2 py-0.5 rounded border border-sky-200 dark:border-sky-800'
-      : 'text-[11px] font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-200 dark:border-indigo-800';
-  }}
-
-  if (desc) {{
-    desc.innerText = isPnp
-      ? 'Volume harian agregat penumpang: Udara, Kereta Api, Bus AKAP, Penyeberangan ASDP, dan Laut (01 Jan s.d. 29 Sep 2026)'
-      : 'Jumlah harian armada beroperasi (Flight/Trip/Armada): Udara, Kereta Api, Bus AKAP, Penyeberangan ASDP, dan Laut';
-  }}
-
-  document.getElementById('timeline-chart-heading').innerText = isPnp 
-    ? 'Kronologi Mobilitas Multimoda Nasional 2026'
-    : 'Kronologi Armada Beroperasi Multimoda 2026';
-
-  renderTimelineChart();
+  return moda;
 }}
-const setGlobalMetric = setTimelineMetric;
+
+function getHubMetricKey() {{
+  if (currentMetric === 'pnp') {{
+    if (currentDirection === 'tot') return 'pnp';
+    if (currentDirection === 'dat') return 'p_dat';
+    if (currentDirection === 'brg') return 'p_brg';
+  }} else {{
+    if (currentDirection === 'tot') return 'arm';
+    if (currentDirection === 'dat') return 'a_dat';
+    if (currentDirection === 'brg') return 'a_brg';
+  }}
+  return 'pnp';
+}}
+
+function setGlobalMetric(metric) {{
+  currentMetric = metric;
+  updateDashboardMetricAndDirection();
+}}
+
+function setGlobalDirection(direction) {{
+  currentDirection = direction;
+  updateDashboardMetricAndDirection();
+}}
+
+function setTimelineMetric(metric) {{ setGlobalMetric(metric); }}
+function setSpatialMapMetric(metric) {{ setGlobalMetric(metric); }}
+
+function updateDashboardMetricAndDirection() {{
+  const isPnp = currentMetric === 'pnp';
+  const combo = currentMetric + '_' + currentDirection;
+  const s = (DATA.metrics_summary && DATA.metrics_summary[combo]) || {{
+    label: isPnp ? 'Penumpang • Dua Arah (Total)' : 'Armada • Dua Arah (Total)',
+    unit: isPnp ? 'penumpang' : 'trip armada',
+    ytd: isPnp ? 371890120 : 10033092,
+    avg: isPnp ? 1367243 : 36886,
+    peak_val: isPnp ? 2415296 : 47213,
+    peak_desc: isPnp ? '24 Mar 2026 (H+3 Balik)' : '17 Mar 2026 (H-4 Mudik)',
+    peak_surge_pct: isPnp ? 103.2 : 35.2,
+    mudik_val: isPnp ? 2258512 : 47213,
+    mudik_desc: isPnp ? '18 Mar 2026 (H-3 Mudik)' : '17 Mar 2026 (H-4 Mudik)',
+    mudik_surge_pct: isPnp ? 90.0 : 35.2,
+    formula: isPnp ? (currentDirection === 'dat' ? '∑ P_datang' : currentDirection === 'brg' ? '∑ P_berangkat' : '∑ (P_datang + P_berangkat)') : (currentDirection === 'dat' ? '∑ Trip_datang' : currentDirection === 'brg' ? '∑ Trip_berangkat' : '∑ (Trip Datang + Trip Berangkat)')
+  }};
+
+  // 1. Sync All Metric Buttons across Dashboard
+  const metricBtns = [
+    {{ pnp: 'global-btn-pnp', arm: 'global-btn-arm' }},
+    {{ pnp: 'metric-btn-pnp', arm: 'metric-btn-arm' }},
+    {{ pnp: 'hubs-btn-pnp', arm: 'hubs-btn-arm' }},
+    {{ pnp: 'map-metric-pnp', arm: 'map-metric-arm' }}
+  ];
+  metricBtns.forEach(pair => {{
+    const bPnp = document.getElementById(pair.pnp);
+    const bArm = document.getElementById(pair.arm);
+    if (bPnp && bArm) {{
+      bPnp.classList.toggle('bg-white', isPnp);
+      bPnp.classList.toggle('dark:bg-slate-900', isPnp);
+      bPnp.classList.toggle('text-slate-900', isPnp);
+      bPnp.classList.toggle('dark:text-white', isPnp);
+      bPnp.classList.toggle('shadow-xs', isPnp);
+      bPnp.classList.toggle('text-slate-600', !isPnp);
+
+      bArm.classList.toggle('bg-white', !isPnp);
+      bArm.classList.toggle('dark:bg-slate-900', !isPnp);
+      bArm.classList.toggle('text-slate-900', !isPnp);
+      bArm.classList.toggle('dark:text-white', !isPnp);
+      bArm.classList.toggle('shadow-xs', !isPnp);
+      bArm.classList.toggle('text-slate-600', isPnp);
+    }}
+  }});
+
+  // 2. Sync All Direction Buttons across Dashboard
+  const dirSets = [
+    {{ tot: 'global-btn-dir-tot', dat: 'global-btn-dir-dat', brg: 'global-btn-dir-brg' }},
+    {{ tot: 'tab1-dir-tot', dat: 'tab1-dir-dat', brg: 'tab1-dir-brg' }},
+    {{ tot: 'hubs-dir-tot', dat: 'hubs-dir-dat', brg: 'hubs-dir-brg' }},
+    {{ tot: 'map-dir-tot', dat: 'map-dir-dat', brg: 'map-dir-brg' }}
+  ];
+  dirSets.forEach(set => {{
+    ['tot', 'dat', 'brg'].forEach(d => {{
+      const btn = document.getElementById(set[d]);
+      if (btn) {{
+        const isActive = currentDirection === d;
+        btn.classList.toggle('bg-white', isActive);
+        btn.classList.toggle('dark:bg-slate-900', isActive);
+        btn.classList.toggle('text-slate-900', isActive);
+        btn.classList.toggle('dark:text-white', isActive);
+        btn.classList.toggle('shadow-xs', isActive);
+        btn.classList.toggle('text-slate-600', !isActive);
+      }}
+    }});
+  }});
+
+  // Update Dynamic Direction Button Text
+  const lblDat = document.getElementById('lbl-dir-dat');
+  if (lblDat) lblDat.innerText = isPnp ? 'Penumpang Datang' : 'Armada Datang';
+  const lblBrg = document.getElementById('lbl-dir-brg');
+  if (lblBrg) lblBrg.innerText = isPnp ? 'Penumpang Berangkat' : 'Armada Berangkat';
+
+  // 3. Update Global Status Pill
+  const pillLabel = document.getElementById('global-active-label');
+  const pillVal = document.getElementById('global-active-val');
+  if (pillLabel) pillLabel.innerText = s.label;
+  if (pillVal) pillVal.innerText = `${{numFmt(s.ytd)}} ${{isPnp ? 'orang' : 'armada'}}`;
+
+  // 4. Update Executive Strip KPIs
+  const elCard1Title = document.getElementById('strip-card1-title');
+  if (elCard1Title) elCard1Title.innerText = `Total Mobilitas ${{isPnp ? 'Penumpang' : 'Armada'}} YTD (${{currentDirection === 'dat' ? 'Datang' : currentDirection === 'brg' ? 'Berangkat' : 'Dua Arah'}})`;
+  const elTotalPnp = document.getElementById('strip-total-pnp');
+  if (elTotalPnp) elTotalPnp.innerText = numFmt(s.ytd);
+  const elUnitPnp = document.getElementById('strip-unit-pnp');
+  if (elUnitPnp) elUnitPnp.innerText = s.unit;
+  const elAvgPnp = document.getElementById('strip-avg-pnp');
+  if (elAvgPnp) elAvgPnp.innerHTML = `Rata-rata: <span class="font-semibold text-slate-700 dark:text-slate-300">${{numFmt(s.avg)}}</span> ${{isPnp ? 'pnp' : 'trip'}}/hari (272 hari)`;
+  const elFormulaPnp = document.getElementById('strip-formula-pnp');
+  if (elFormulaPnp) elFormulaPnp.innerText = `Rumus: ${{s.formula}}`;
+
+  // Card 2: Peak
+  const elCard2Title = document.getElementById('strip-card2-title');
+  if (elCard2Title) elCard2Title.innerText = `Puncak Tertinggi 2026 (${{isPnp ? 'Pnp' : 'Armada'}})`;
+  const elPeakVal = document.getElementById('strip-peak-val');
+  if (elPeakVal) elPeakVal.innerText = numFmt(s.peak_val);
+  const elPeakUnit = document.getElementById('strip-peak-unit');
+  if (elPeakUnit) elPeakUnit.innerText = s.unit;
+  const elPeakDesc = document.getElementById('strip-peak-desc');
+  if (elPeakDesc) elPeakDesc.innerHTML = `${{s.peak_desc}} • <span class="font-semibold text-rose-600 dark:text-rose-400">+${{s.peak_surge_pct}}%</span> vs normal`;
+
+  // Card 3: Mudik Peak
+  const elCard3Title = document.getElementById('strip-card3-title');
+  if (elCard3Title) elCard3Title.innerText = `Puncak Arus Mudik (${{isPnp ? 'Pnp' : 'Armada'}})`;
+  const elMudikVal = document.getElementById('strip-mudik-val');
+  if (elMudikVal) elMudikVal.innerText = numFmt(s.mudik_val);
+  const elMudikUnit = document.getElementById('strip-mudik-unit');
+  if (elMudikUnit) elMudikUnit.innerText = s.unit;
+  const elMudikDesc = document.getElementById('strip-mudik-desc');
+  if (elMudikDesc) elMudikDesc.innerHTML = `${{s.mudik_desc}} • <span class="font-semibold text-purple-700 dark:text-purple-400">+${{s.mudik_surge_pct}}%</span> vs normal`;
+
+  // Card 4: Complementary Opposing Metric
+  const oppCombo = (isPnp ? 'arm_' : 'pnp_') + currentDirection;
+  const oppS = (DATA.metrics_summary && DATA.metrics_summary[oppCombo]) || {{}};
+  const elCard4Title = document.getElementById('strip-card4-title');
+  if (elCard4Title) elCard4Title.innerText = isPnp ? `Total Armada Operasi YTD (${{currentDirection === 'dat' ? 'Datang' : currentDirection === 'brg' ? 'Berangkat' : 'Dua Arah'}})` : `Total Penumpang YTD (${{currentDirection === 'dat' ? 'Datang' : currentDirection === 'brg' ? 'Berangkat' : 'Dua Arah'}})`;
+  const elTotalArm = document.getElementById('strip-total-arm');
+  if (elTotalArm && oppS.ytd) elTotalArm.innerText = numFmt(oppS.ytd);
+  const elUnitArm = document.getElementById('strip-unit-arm');
+  if (elUnitArm && oppS.unit) elUnitArm.innerText = oppS.unit;
+  const elFormulaArm = document.getElementById('strip-formula-arm');
+  if (elFormulaArm && oppS.formula) elFormulaArm.innerText = `Rumus: ${{oppS.formula}}`;
+
+  // 5. Update Tab 1 (Kronologi & DOW & Monthly)
+  const heading = document.getElementById('timeline-chart-heading');
+  if (heading) heading.innerText = `Kronologi ${{isPnp ? 'Mobilitas Penumpang' : 'Armada Beroperasi'}} ${{currentDirection === 'dat' ? 'Kedatangan' : currentDirection === 'brg' ? 'Keberangkatan' : 'Multimoda'}} 2026`;
+  const badge = document.getElementById('timeline-metric-badge');
+  if (badge) {{
+    badge.innerText = `${{isPnp ? 'Volume Penumpang' : 'Armada Beroperasi'}} • ${{currentDirection === 'dat' ? 'Datang' : currentDirection === 'brg' ? 'Berangkat' : 'Dua Arah'}}`;
+  }}
+  renderTimelineChart();
+  renderMonthlyTable();
+  renderDOWWorkspace();
+
+  // 6. Update Tab 2 (Lebaran)
+  if (chartLebaranLine) {{
+    chartLebaranLine.destroy();
+    chartLebaranLine = null;
+  }}
+  renderLebaranWorkspace();
+
+  // 7. Update Tab 3 (Modal Share)
+  if (chartModalShareArea) {{
+    chartModalShareArea.destroy();
+    chartModalShareArea = null;
+    if (chartDonutNormal) {{ chartDonutNormal.destroy(); chartDonutNormal = null; }}
+    if (chartDonutPeak) {{ chartDonutPeak.destroy(); chartDonutPeak = null; }}
+  }}
+  renderModalShareWorkspace();
+
+  // 8. Update Tab 5 (Top Hubs)
+  renderHubsTable();
+
+  // 9. Update Tab 6 (Matrix 13 Indikator)
+  renderMatrixTable();
+
+  // 10. Update Tab 7 (Leaflet Spatial Map)
+  renderSpatialMapNodes();
+}}
 
 // ---------------------------------------------------------------
 // TAB 1: KRONOLOGI MOBILITAS CONTROLLER
@@ -1982,18 +2229,17 @@ function renderTimelineChart() {{
   const raw = getFilteredTimelineData();
   const ctx = document.getElementById('chartTimelineCanvas').getContext('2d');
   const labels = raw.map(d => d.date);
-  const p = currentMetric === 'pnp' ? '' : 'arm_';
   const isDark = document.documentElement.classList.contains('dark');
-
   const totalColor = isDark ? '#f8fafc' : '#0f172a';
+  const unit = currentMetric === 'pnp' ? 'penumpang' : 'trip armada';
 
   const datasets = [
-    {{ label: 'Total Multimoda', data: raw.map(d => d[p + 'TOTAL']), borderColor: totalColor, borderWidth: 2, pointRadius: 0, tension: 0.15 }},
-    {{ label: 'Udara', data: raw.map(d => d[p + 'UDARA']), borderColor: COLOR.UDARA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
-    {{ label: 'Kereta Api', data: raw.map(d => d[p + 'KA']), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
-    {{ label: 'Bus AKAP', data: raw.map(d => d[p + 'BUS']), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
-    {{ label: 'ASDP', data: raw.map(d => d[p + 'ASDP']), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
-    {{ label: 'Laut', data: raw.map(d => d[p + 'LAUT']), borderColor: COLOR.LAUT, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
+    {{ label: 'Total Multimoda', data: raw.map(d => d[getMetricKey('TOTAL')]), borderColor: totalColor, borderWidth: 2, pointRadius: 0, tension: 0.15 }},
+    {{ label: 'Udara', data: raw.map(d => d[getMetricKey('UDARA')]), borderColor: COLOR.UDARA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
+    {{ label: 'Kereta Api', data: raw.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
+    {{ label: 'Bus AKAP', data: raw.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
+    {{ label: 'ASDP', data: raw.map(d => d[getMetricKey('ASDP')]), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
+    {{ label: 'Laut', data: raw.map(d => d[getMetricKey('LAUT')]), borderColor: COLOR.LAUT, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
   ];
 
   if (chartTimeline) chartTimeline.destroy();
@@ -2041,7 +2287,7 @@ function renderTimelineChart() {{
           padding: 8,
           bodyFont: {{ family: 'JetBrains Mono', size: 11 }},
           titleFont: {{ family: 'Plus Jakarta Sans', size: 11, weight: 'bold' }},
-          callbacks: {{ label: ctx => ` ${{ctx.dataset.label}}: ${{numFmt(ctx.raw)}} ${{currentMetric === 'pnp' ? 'pnp' : 'armada'}}` }}
+          callbacks: {{ label: ctx => ` ${{ctx.dataset.label}}: ${{numFmt(ctx.raw)}} ${{unit}}` }}
         }}
       }},
       scales: {{
@@ -2054,14 +2300,13 @@ function renderTimelineChart() {{
           ticks: {{ 
             color: isDark ? '#64748b' : '#94a3b8', 
             font: {{ family: 'JetBrains Mono', size: 10 }}, 
-            callback: v => (v >= 1e6 ? (v/1e6).toFixed(1) + 'M' : (v/1e3).toFixed(0) + 'k') 
+            callback: v => (v >= 1e6 ? (v/1e6).toFixed(1) + 'M' : (v >= 1e3 ? (v/1e3).toFixed(0) + 'k' : v)) 
           }} 
         }}
       }}
     }}
   }});
 
-  // Apply preserved visibility states
   for (let i = 0; i <= 5; i++) {{
     chartTimeline.setDatasetVisibility(i, timelineVisibility[i]);
   }}
@@ -2090,19 +2335,20 @@ function setTimelineFilter(rangeKey, btn) {{
 function renderMonthlyTable() {{
   const ms = DATA.monthly_summary;
   const tbody = document.getElementById('tbody-monthly');
+  if (!tbody) return;
   tbody.innerHTML = '';
   
-  ms.forEach((m, idx) => {{
+  ms.forEach((m) => {{
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
     tr.innerHTML = `
       <td class="py-2.5 px-3 font-sans font-medium text-slate-900 dark:text-slate-200">${{m.label}}</td>
-      <td class="py-2.5 px-3">${{numFmt(m.UDARA)}}</td>
-      <td class="py-2.5 px-3">${{numFmt(m.KA)}}</td>
-      <td class="py-2.5 px-3">${{numFmt(m.BUS)}}</td>
-      <td class="py-2.5 px-3">${{numFmt(m.ASDP)}}</td>
-      <td class="py-2.5 px-3">${{numFmt(m.LAUT)}}</td>
-      <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">${{numFmt(m.TOTAL)}}</td>
+      <td class="py-2.5 px-3">${{numFmt(m[getMetricKey('UDARA')])}}</td>
+      <td class="py-2.5 px-3">${{numFmt(m[getMetricKey('KA')])}}</td>
+      <td class="py-2.5 px-3">${{numFmt(m[getMetricKey('BUS')])}}</td>
+      <td class="py-2.5 px-3">${{numFmt(m[getMetricKey('ASDP')])}}</td>
+      <td class="py-2.5 px-3">${{numFmt(m[getMetricKey('LAUT')])}}</td>
+      <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">${{numFmt(m[getMetricKey('TOTAL')])}}</td>
     `;
     tbody.appendChild(tr);
   }});
@@ -2110,8 +2356,12 @@ function renderMonthlyTable() {{
 
 function renderDOWWorkspace() {{
   const dow = DATA.dow_summary;
-  const ctx = document.getElementById('chartDOWCanvas').getContext('2d');
+  const ctxEl = document.getElementById('chartDOWCanvas');
+  if (!ctxEl) return;
+  const ctx = ctxEl.getContext('2d');
   const isDark = document.documentElement.classList.contains('dark');
+  const isPnp = currentMetric === 'pnp';
+  const dirLabel = currentDirection === 'dat' ? 'Datang' : currentDirection === 'brg' ? 'Berangkat' : 'Dua Arah';
 
   if (chartDOW) chartDOW.destroy();
   chartDOW = new Chart(ctx, {{
@@ -2119,16 +2369,23 @@ function renderDOWWorkspace() {{
     data: {{
       labels: dow.map(d => d.dow),
       datasets: [{{
-        label: 'Rata-rata Penumpang Harian',
-        data: dow.map(d => d.TOTAL),
-        backgroundColor: '#0284c7',
+        label: `Rata-rata ${{isPnp ? 'Penumpang' : 'Armada'}} (${{dirLabel}})`,
+        data: dow.map(d => d[getMetricKey('TOTAL')]),
+        backgroundColor: isPnp ? '#0284c7' : '#6366f1',
         borderRadius: 4
       }}]
     }},
     options: {{
       responsive: true,
       maintainAspectRatio: false,
-      plugins: {{ legend: {{ display: false }} }},
+      plugins: {{ 
+        legend: {{ display: false }},
+        tooltip: {{
+          callbacks: {{
+            label: ctx => ` Rata-rata: ${{numFmt(ctx.raw)}} ${{isPnp ? 'pnp/hari' : 'trip/hari'}}`
+          }}
+        }}
+      }},
       scales: {{
         x: {{ grid: {{ display: false }}, ticks: {{ color: isDark ? '#94a3b8' : '#64748b' }} }},
         y: {{ 
@@ -2136,7 +2393,7 @@ function renderDOWWorkspace() {{
           ticks: {{ 
             color: isDark ? '#94a3b8' : '#64748b', 
             font: {{ family: 'JetBrains Mono' }}, 
-            callback: v => (v/1e6).toFixed(1) + 'M' 
+            callback: v => (v >= 1e6 ? (v/1e6).toFixed(1) + 'M' : (v >= 1e3 ? (v/1e3).toFixed(0) + 'k' : v)) 
           }} 
         }}
       }}
@@ -2144,18 +2401,19 @@ function renderDOWWorkspace() {{
   }});
 
   const tbody = document.getElementById('tbody-dow');
+  if (!tbody) return;
   tbody.innerHTML = '';
   dow.forEach(d => {{
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
     tr.innerHTML = `
       <td class="py-2 px-2.5 font-sans font-medium text-slate-900 dark:text-slate-200">${{d.dow}}</td>
-      <td class="py-2 px-2.5">${{numFmt(d.UDARA)}}</td>
-      <td class="py-2 px-2.5">${{numFmt(d.KA)}}</td>
-      <td class="py-2 px-2.5">${{numFmt(d.BUS)}}</td>
-      <td class="py-2 px-2.5">${{numFmt(d.ASDP)}}</td>
-      <td class="py-2 px-2.5">${{numFmt(d.LAUT)}}</td>
-      <td class="py-2 px-2.5 text-right font-bold text-slate-900 dark:text-white">${{numFmt(d.TOTAL)}}</td>
+      <td class="py-2 px-2.5">${{numFmt(d[getMetricKey('UDARA')])}}</td>
+      <td class="py-2 px-2.5">${{numFmt(d[getMetricKey('KA')])}}</td>
+      <td class="py-2 px-2.5">${{numFmt(d[getMetricKey('BUS')])}}</td>
+      <td class="py-2 px-2.5">${{numFmt(d[getMetricKey('ASDP')])}}</td>
+      <td class="py-2 px-2.5">${{numFmt(d[getMetricKey('LAUT')])}}</td>
+      <td class="py-2 px-2.5 text-right font-bold text-slate-900 dark:text-white">${{numFmt(d[getMetricKey('TOTAL')])}}</td>
     `;
     tbody.appendChild(tr);
   }});
@@ -2165,101 +2423,116 @@ function renderDOWWorkspace() {{
 // TAB 2: PUNCAK LEBARAN CONTROLLER
 // ---------------------------------------------------------------
 function selectLebaranDate(dateStr) {{
+  activeLebaranDate = dateStr;
   const day = DATA.lebaran_daily.find(d => d.date === dateStr);
   if (!day) return;
 
+  const isPnp = currentMetric === 'pnp';
   const tagEl = document.getElementById('insp-tag');
-  tagEl.innerText = day.tag;
-  if (day.is_h_day) {{
-    tagEl.className = 'px-2 py-0.5 rounded font-bold text-xs bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800';
-  }} else if (day.is_peak_balik1 || day.is_peak_mudik || day.is_peak_balik2) {{
-    tagEl.className = 'px-2 py-0.5 rounded font-bold text-xs bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-800';
-  }} else {{
-    tagEl.className = 'px-2 py-0.5 rounded font-bold text-xs bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700';
+  if (tagEl) {{
+    tagEl.innerText = day.tag;
+    if (day.is_h_day) {{
+      tagEl.className = 'px-2 py-0.5 rounded font-bold text-xs bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800';
+    }} else if (day.is_peak_balik1 || day.is_peak_mudik || day.is_peak_balik2) {{
+      tagEl.className = 'px-2 py-0.5 rounded font-bold text-xs bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-800';
+    }} else {{
+      tagEl.className = 'px-2 py-0.5 rounded font-bold text-xs bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700';
+    }}
   }}
 
-  document.getElementById('insp-phase').innerText = day.desc;
-  document.getElementById('insp-date').innerText = day.date;
-  document.getElementById('insp-summary').innerText = `Total Penumpang: ${{numFmt(day.TOTAL)}} • Total Armada: ${{numFmt(day.arm_TOTAL)}} Trip/Flight`;
+  const elPhase = document.getElementById('insp-phase');
+  if (elPhase) elPhase.innerText = day.desc;
+  const elDate = document.getElementById('insp-date');
+  if (elDate) elDate.innerText = day.date;
+  const elSum = document.getElementById('insp-summary');
+  if (elSum) {{
+    elSum.innerText = `Total ${{isPnp ? 'Penumpang' : 'Armada'}}: ${{numFmt(day[getMetricKey('TOTAL')])}} • ${{isPnp ? 'Total Armada: ' + numFmt(day.arm_TOTAL) + ' Trip/Flight' : 'Total Penumpang: ' + numFmt(day.TOTAL) + ' Orang'}}`;
+  }}
 
   const container = document.getElementById('insp-breakdown');
-  container.innerHTML = `
-    <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-      <div class="text-[10px] font-bold text-sky-700 dark:text-sky-400">UDARA</div>
-      <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day.UDARA)}}</div>
-    </div>
-    <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-      <div class="text-[10px] font-bold text-amber-700 dark:text-amber-400">KERETA API</div>
-      <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day.KA)}}</div>
-    </div>
-    <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-      <div class="text-[10px] font-bold text-green-700 dark:text-green-400">BUS AKAP</div>
-      <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day.BUS)}}</div>
-    </div>
-    <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-      <div class="text-[10px] font-bold text-purple-700 dark:text-purple-400">ASDP</div>
-      <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day.ASDP)}}</div>
-    </div>
-    <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-      <div class="text-[10px] font-bold text-cyan-700 dark:text-cyan-400">LAUT</div>
-      <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day.LAUT)}}</div>
-    </div>
-  `;
+  if (container) {{
+    container.innerHTML = `
+      <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        <div class="text-[10px] font-bold text-sky-700 dark:text-sky-400">UDARA</div>
+        <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day[getMetricKey('UDARA')])}}</div>
+      </div>
+      <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        <div class="text-[10px] font-bold text-amber-700 dark:text-amber-400">KERETA API</div>
+        <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day[getMetricKey('KA')])}}</div>
+      </div>
+      <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        <div class="text-[10px] font-bold text-green-700 dark:text-green-400">BUS AKAP</div>
+        <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day[getMetricKey('BUS')])}}</div>
+      </div>
+      <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        <div class="text-[10px] font-bold text-purple-700 dark:text-purple-400">ASDP</div>
+        <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day[getMetricKey('ASDP')])}}</div>
+      </div>
+      <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        <div class="text-[10px] font-bold text-cyan-700 dark:text-cyan-400">LAUT</div>
+        <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day[getMetricKey('LAUT')])}}</div>
+      </div>
+    `;
+  }}
 }}
 
 function renderLebaranWorkspace() {{
-  if (chartLebaranLine) return;
-
   const strip = document.getElementById('lebaran-scrubber');
-  strip.innerHTML = '';
-  DATA.lebaran_daily.forEach((d, idx) => {{
-    const btn = document.createElement('button');
-    const isPeak = d.is_peak_balik1 || d.is_peak_mudik || d.is_peak_balik2;
-    const isHDay = d.is_h_day;
-    let tagShort = d.tag.startsWith('Hari H') ? 'HARI H' : d.tag.split(' ')[0];
+  if (strip) {{
+    strip.innerHTML = '';
+    const isPnp = currentMetric === 'pnp';
+    DATA.lebaran_daily.forEach((d) => {{
+      const btn = document.createElement('button');
+      const isPeak = d.is_peak_balik1 || d.is_peak_mudik || d.is_peak_balik2;
+      const isHDay = d.is_h_day;
+      let tagShort = d.tag.startsWith('Hari H') ? 'HARI H' : d.tag.split(' ')[0];
 
-    let btnClass = 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-400';
-    let tagColor = 'text-slate-500';
+      let btnClass = 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-400';
+      let tagColor = 'text-slate-500';
 
-    if (isHDay) {{
-      btnClass = 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 font-bold';
-      tagColor = 'text-emerald-700 dark:text-emerald-300 font-bold';
-    }} else if (isPeak) {{
-      btnClass = 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200 font-semibold';
-      tagColor = 'text-rose-700 dark:text-rose-400';
-    }}
+      if (isHDay) {{
+        btnClass = 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 font-bold';
+        tagColor = 'text-emerald-700 dark:text-emerald-300 font-bold';
+      }} else if (isPeak) {{
+        btnClass = 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200 font-semibold';
+        tagColor = 'text-rose-700 dark:text-rose-400';
+      }}
 
-    btn.className = `shrink-0 text-left px-2.5 py-1.5 rounded border text-xs transition-all ${{btnClass}}`;
-    btn.innerHTML = `
-      <div class="text-[9px] uppercase tracking-wider ${{tagColor}}">${{tagShort}}</div>
-      <div class="text-xs font-bold num-mono">${{(d.TOTAL/1e6).toFixed(2)}}M</div>
-      <div class="text-[9px] text-slate-400 num-mono">${{d.date.substring(5)}}</div>
-    `;
-    btn.onclick = () => {{
-      document.querySelectorAll('#lebaran-scrubber button').forEach(b => b.classList.remove('ring-2', 'ring-kemenhub-800', 'dark:ring-blue-500'));
-      btn.classList.add('ring-2', 'ring-kemenhub-800', 'dark:ring-blue-500');
-      selectLebaranDate(d.date);
-    }};
-    strip.appendChild(btn);
-  }});
-  selectLebaranDate('2026-03-21');
-  const hBtn = strip.children[8]; // 2026-03-21 is index 8
-  if (hBtn) hBtn.classList.add('ring-2', 'ring-kemenhub-800', 'dark:ring-blue-500');
+      const val = d[getMetricKey('TOTAL')];
+      const valFmt = isPnp ? (val / 1e6).toFixed(2) + 'M' : (val >= 1e3 ? (val / 1e3).toFixed(1) + 'k' : val);
+
+      btn.className = `shrink-0 text-left px-2.5 py-1.5 rounded border text-xs transition-all ${{btnClass}}`;
+      btn.innerHTML = `
+        <div class="text-[9px] uppercase tracking-wider ${{tagColor}}">${{tagShort}}</div>
+        <div class="text-xs font-bold num-mono">${{valFmt}}</div>
+        <div class="text-[9px] text-slate-400 num-mono">${{d.date.substring(5)}}</div>
+      `;
+      btn.onclick = () => {{
+        document.querySelectorAll('#lebaran-scrubber button').forEach(b => b.classList.remove('ring-2', 'ring-kemenhub-800', 'dark:ring-blue-500'));
+        btn.classList.add('ring-2', 'ring-kemenhub-800', 'dark:ring-blue-500');
+        selectLebaranDate(d.date);
+      }};
+      strip.appendChild(btn);
+    }});
+    selectLebaranDate(activeLebaranDate);
+  }}
 
   const isDark = document.documentElement.classList.contains('dark');
   const ctxLine = document.getElementById('chartLebaranLineCanvas').getContext('2d');
   const ld = DATA.lebaran_daily;
+
+  if (chartLebaranLine) chartLebaranLine.destroy();
   chartLebaranLine = new Chart(ctxLine, {{
     type: 'line',
     data: {{
       labels: ld.map(d => d.date.substring(5) + ' (' + (d.tag.startsWith('Hari H') ? 'Hari H' : d.tag.split(' ')[0]) + ')'),
       datasets: [
-        {{ label: 'Total', data: ld.map(d => d.TOTAL), borderColor: isDark ? '#ffffff' : '#0f172a', borderWidth: 2, pointRadius: 2, tension: 0.15 }},
-        {{ label: 'Udara', data: ld.map(d => d.UDARA), borderColor: COLOR.UDARA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
-        {{ label: 'Kereta Api', data: ld.map(d => d.KA), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
-        {{ label: 'Bus', data: ld.map(d => d.BUS), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
-        {{ label: 'ASDP', data: ld.map(d => d.ASDP), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
-        {{ label: 'Laut', data: ld.map(d => d.LAUT), borderColor: COLOR.LAUT, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
+        {{ label: 'Total', data: ld.map(d => d[getMetricKey('TOTAL')]), borderColor: isDark ? '#ffffff' : '#0f172a', borderWidth: 2, pointRadius: 2, tension: 0.15 }},
+        {{ label: 'Udara', data: ld.map(d => d[getMetricKey('UDARA')]), borderColor: COLOR.UDARA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
+        {{ label: 'Kereta Api', data: ld.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
+        {{ label: 'Bus', data: ld.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
+        {{ label: 'ASDP', data: ld.map(d => d[getMetricKey('ASDP')]), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
+        {{ label: 'Laut', data: ld.map(d => d[getMetricKey('LAUT')]), borderColor: COLOR.LAUT, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
       ]
     }},
     options: {{
@@ -2277,93 +2550,109 @@ function renderLebaranWorkspace() {{
             pointStyle: 'circle',
             font: {{ family: 'Plus Jakarta Sans', size: 10, weight: '500' }},
             color: isDark ? '#cbd5e1' : '#475569'
-          }},
-          onClick: (e, legendItem, legend) => {{
-            const index = legendItem.datasetIndex;
-            const ci = legend.chart;
-            if (ci.isDatasetVisible(index)) {{
-              ci.hide(index);
-              legendItem.hidden = true;
-              lebaranVisibility[index] = false;
-            }} else {{
-              ci.show(index);
-              legendItem.hidden = false;
-              lebaranVisibility[index] = true;
-            }}
+          }}
+        }},
+        tooltip: {{
+          callbacks: {{
+            label: ctx => ` ${{ctx.dataset.label}}: ${{numFmt(ctx.raw)}} ${{currentMetric === 'pnp' ? 'penumpang' : 'trip'}}`
           }}
         }}
       }},
       scales: {{
         x: {{ grid: {{ color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }}, ticks: {{ color: isDark ? '#94a3b8' : '#64748b', maxRotation: 45, font: {{ size: 9, family: 'JetBrains Mono' }} }} }},
-        y: {{ grid: {{ color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }}, ticks: {{ color: isDark ? '#94a3b8' : '#64748b', font: {{ family: 'JetBrains Mono', size: 10 }}, callback: v => (v/1e3).toFixed(0) + 'k' }} }}
+        y: {{ 
+          grid: {{ color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }}, 
+          ticks: {{ 
+            color: isDark ? '#94a3b8' : '#64748b', 
+            font: {{ family: 'JetBrains Mono', size: 10 }}, 
+            callback: v => (v >= 1e6 ? (v/1e6).toFixed(1) + 'M' : (v >= 1e3 ? (v/1e3).toFixed(0) + 'k' : v)) 
+          }} 
+        }}
       }}
     }}
   }});
 
-  const ctxSurge = document.getElementById('chartSurgeBarCanvas').getContext('2d');
-  const modas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA', 'TOTAL'];
-  const labelsSurge = ['ASDP', 'Bus AKAP', 'Kereta Api', 'Laut', 'Udara', 'TOTAL'];
-  chartSurgeBar = new Chart(ctxSurge, {{
-    type: 'bar',
-    data: {{
-      labels: labelsSurge,
-      datasets: [
-        {{ label: 'Mudik 18 Mar / H-3 (%)', data: modas.map(m => DATA.surge_summary[m].surge_mudik_pct), backgroundColor: '#9333ea', borderRadius: 3 }},
-        {{ label: 'Balik 24 Mar / H+3 (%)', data: modas.map(m => DATA.surge_summary[m].surge_balik1_pct), backgroundColor: '#0284c7', borderRadius: 3 }},
-        {{ label: 'Balik 29 Mar / H+8 (%)', data: modas.map(m => DATA.surge_summary[m].surge_balik2_pct), backgroundColor: '#f43f5e', borderRadius: 3 }},
-      ]
-    }},
-    options: {{
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {{ legend: {{ labels: {{ color: isDark ? '#cbd5e1' : '#475569' }} }} }},
-      scales: {{
-        x: {{ grid: {{ display: false }}, ticks: {{ color: isDark ? '#94a3b8' : '#64748b' }} }},
-        y: {{ grid: {{ color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }}, ticks: {{ color: isDark ? '#94a3b8' : '#64748b', font: {{ family: 'JetBrains Mono' }}, callback: v => '+' + v + '%' }} }}
+  if (!chartSurgeBar) {{
+    const ctxSurge = document.getElementById('chartSurgeBarCanvas').getContext('2d');
+    const modas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA', 'TOTAL'];
+    const labelsSurge = ['ASDP', 'Bus AKAP', 'Kereta Api', 'Laut', 'Udara', 'TOTAL'];
+    chartSurgeBar = new Chart(ctxSurge, {{
+      type: 'bar',
+      data: {{
+        labels: labelsSurge,
+        datasets: [
+          {{ label: 'Mudik 18 Mar / H-3 (%)', data: modas.map(m => DATA.surge_summary[m].surge_mudik_pct), backgroundColor: '#9333ea', borderRadius: 3 }},
+          {{ label: 'Balik 24 Mar / H+3 (%)', data: modas.map(m => DATA.surge_summary[m].surge_balik1_pct), backgroundColor: '#0284c7', borderRadius: 3 }},
+          {{ label: 'Balik 29 Mar / H+8 (%)', data: modas.map(m => DATA.surge_summary[m].surge_balik2_pct), backgroundColor: '#f43f5e', borderRadius: 3 }},
+        ]
+      }},
+      options: {{
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {{ legend: {{ labels: {{ color: isDark ? '#cbd5e1' : '#475569' }} }} }},
+        scales: {{
+          x: {{ grid: {{ display: false }}, ticks: {{ color: isDark ? '#94a3b8' : '#64748b' }} }},
+          y: {{ grid: {{ color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }}, ticks: {{ color: isDark ? '#94a3b8' : '#64748b', font: {{ family: 'JetBrains Mono' }}, callback: v => '+' + v + '%' }} }}
+        }}
       }}
-    }}
-  }});
+    }});
 
-  const tbody = document.getElementById('tbody-surge');
-  tbody.innerHTML = '';
-  modas.forEach((m, idx) => {{
-    const s = DATA.surge_summary[m];
-    const tr = document.createElement('tr');
-    tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
-    tr.innerHTML = `
-      <td class="py-2.5 px-3 font-sans font-semibold text-slate-900 dark:text-slate-100">${{labelsSurge[idx]}}</td>
-      <td class="py-2.5 px-3">${{numFmt(s.baseline)}}</td>
-      <td class="py-2.5 px-3 font-bold text-purple-700 dark:text-purple-400">${{numFmt(s.peak_mudik)}}</td>
-      <td class="py-2.5 px-3 text-purple-700 dark:text-purple-400 font-semibold">+${{s.surge_mudik_pct}}%</td>
-      <td class="py-2.5 px-3 font-bold text-rose-700 dark:text-rose-400">${{numFmt(s.peak_balik1)}}</td>
-      <td class="py-2.5 px-3 text-rose-700 dark:text-rose-400 font-semibold">+${{s.surge_balik1_pct}}%</td>
-      <td class="py-2.5 px-3">${{numFmt(s.peak_balik2)}}</td>
-      <td class="py-2.5 px-3">+${{s.surge_balik2_pct}}%</td>
-    `;
-    tbody.appendChild(tr);
-  }});
+    const tbody = document.getElementById('tbody-surge');
+    if (tbody) {{
+      tbody.innerHTML = '';
+      modas.forEach((m, idx) => {{
+        const s = DATA.surge_summary[m];
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
+        tr.innerHTML = `
+          <td class="py-2.5 px-3 font-sans font-semibold text-slate-900 dark:text-slate-100">${{labelsSurge[idx]}}</td>
+          <td class="py-2.5 px-3">${{numFmt(s.baseline)}}</td>
+          <td class="py-2.5 px-3 font-bold text-purple-700 dark:text-purple-400">${{numFmt(s.peak_mudik)}}</td>
+          <td class="py-2.5 px-3 text-purple-700 dark:text-purple-400 font-semibold">+${{s.surge_mudik_pct}}%</td>
+          <td class="py-2.5 px-3 font-bold text-rose-700 dark:text-rose-400">${{numFmt(s.peak_balik1)}}</td>
+          <td class="py-2.5 px-3 text-rose-700 dark:text-rose-400 font-semibold">+${{s.surge_balik1_pct}}%</td>
+          <td class="py-2.5 px-3">${{numFmt(s.peak_balik2)}}</td>
+          <td class="py-2.5 px-3">+${{s.surge_balik2_pct}}%</td>
+        `;
+        tbody.appendChild(tr);
+      }});
+    }}
+  }}
 }}
 
 // ---------------------------------------------------------------
 // TAB 3: MODAL SHARE CONTROLLER
 // ---------------------------------------------------------------
 function renderModalShareWorkspace() {{
-  if (chartModalShareArea) return;
-
   const isDark = document.documentElement.classList.contains('dark');
   const ms = DATA.monthly_summary;
   const ctx = document.getElementById('chartModalShareAreaCanvas').getContext('2d');
 
+  // Compute shares dynamically for each month
+  const shares = ms.map(m => {{
+    const tot = m[getMetricKey('TOTAL')] || 1;
+    return {{
+      label: m.label,
+      UDARA: ((m[getMetricKey('UDARA')] / tot) * 100).toFixed(1),
+      KA: ((m[getMetricKey('KA')] / tot) * 100).toFixed(1),
+      BUS: ((m[getMetricKey('BUS')] / tot) * 100).toFixed(1),
+      ASDP: ((m[getMetricKey('ASDP')] / tot) * 100).toFixed(1),
+      LAUT: ((m[getMetricKey('LAUT')] / tot) * 100).toFixed(1),
+      TOTAL: m[getMetricKey('TOTAL')]
+    }};
+  }});
+
+  if (chartModalShareArea) chartModalShareArea.destroy();
   chartModalShareArea = new Chart(ctx, {{
     type: 'line',
     data: {{
-      labels: ms.map(m => m.label.split(' ')[0]),
+      labels: shares.map(m => m.label.split(' ')[0]),
       datasets: [
-        {{ label: 'Udara', data: ms.map(m => m.share_UDARA), borderColor: COLOR.UDARA, backgroundColor: 'rgba(2, 132, 199, 0.4)', fill: true, tension: 0.15 }},
-        {{ label: 'Kereta Api', data: ms.map(m => m.share_KA), borderColor: COLOR.KA, backgroundColor: 'rgba(217, 119, 6, 0.4)', fill: true, tension: 0.15 }},
-        {{ label: 'Bus AKAP', data: ms.map(m => m.share_BUS), borderColor: COLOR.BUS, backgroundColor: 'rgba(22, 163, 74, 0.4)', fill: true, tension: 0.15 }},
-        {{ label: 'ASDP', data: ms.map(m => m.share_ASDP), borderColor: COLOR.ASDP, backgroundColor: 'rgba(147, 51, 234, 0.4)', fill: true, tension: 0.15 }},
-        {{ label: 'Laut', data: ms.map(m => m.share_LAUT), borderColor: COLOR.LAUT, backgroundColor: 'rgba(8, 145, 178, 0.4)', fill: true, tension: 0.15 }},
+        {{ label: 'Udara', data: shares.map(m => m.UDARA), borderColor: COLOR.UDARA, backgroundColor: 'rgba(2, 132, 199, 0.4)', fill: true, tension: 0.15 }},
+        {{ label: 'Kereta Api', data: shares.map(m => m.KA), borderColor: COLOR.KA, backgroundColor: 'rgba(217, 119, 6, 0.4)', fill: true, tension: 0.15 }},
+        {{ label: 'Bus AKAP', data: shares.map(m => m.BUS), borderColor: COLOR.BUS, backgroundColor: 'rgba(22, 163, 74, 0.4)', fill: true, tension: 0.15 }},
+        {{ label: 'ASDP', data: shares.map(m => m.ASDP), borderColor: COLOR.ASDP, backgroundColor: 'rgba(147, 51, 234, 0.4)', fill: true, tension: 0.15 }},
+        {{ label: 'Laut', data: shares.map(m => m.LAUT), borderColor: COLOR.LAUT, backgroundColor: 'rgba(8, 145, 178, 0.4)', fill: true, tension: 0.15 }},
       ]
     }},
     options: {{
@@ -2377,18 +2666,19 @@ function renderModalShareWorkspace() {{
     }}
   }});
 
-  const feb = ms.find(m => m.bulan === '2026-02');
-  const mar = ms.find(m => m.bulan === '2026-03');
+  const feb = shares[1] || shares[0];
+  const mar = shares[2] || shares[0];
   const labels = ['Udara', 'KA', 'Bus', 'ASDP', 'Laut'];
   const colors = [COLOR.UDARA, COLOR.KA, COLOR.BUS, COLOR.ASDP, COLOR.LAUT];
 
   const ctxNorm = document.getElementById('donutNormalCanvas').getContext('2d');
+  if (chartDonutNormal) chartDonutNormal.destroy();
   chartDonutNormal = new Chart(ctxNorm, {{
     type: 'doughnut',
     data: {{
       labels,
       datasets: [{{
-        data: [feb.share_UDARA, feb.share_KA, feb.share_BUS, feb.share_ASDP, feb.share_LAUT],
+        data: [feb.UDARA, feb.KA, feb.BUS, feb.ASDP, feb.LAUT],
         backgroundColor: colors,
         borderWidth: 1
       }}]
@@ -2397,12 +2687,13 @@ function renderModalShareWorkspace() {{
   }});
 
   const ctxPeak = document.getElementById('donutPeakCanvas').getContext('2d');
+  if (chartDonutPeak) chartDonutPeak.destroy();
   chartDonutPeak = new Chart(ctxPeak, {{
     type: 'doughnut',
     data: {{
       labels,
       datasets: [{{
-        data: [mar.share_UDARA, mar.share_KA, mar.share_BUS, mar.share_ASDP, mar.share_LAUT],
+        data: [mar.UDARA, mar.KA, mar.BUS, mar.ASDP, mar.LAUT],
         backgroundColor: colors,
         borderWidth: 1
       }}]
@@ -2411,21 +2702,23 @@ function renderModalShareWorkspace() {{
   }});
 
   const tbody = document.getElementById('tbody-share');
-  tbody.innerHTML = '';
-  ms.forEach(m => {{
-    const tr = document.createElement('tr');
-    tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
-    tr.innerHTML = `
-      <td class="py-2.5 px-3 font-sans font-medium text-slate-900 dark:text-slate-100">${{m.label}}</td>
-      <td class="py-2.5 px-3">${{m.share_UDARA}}%</td>
-      <td class="py-2.5 px-3">${{m.share_KA}}%</td>
-      <td class="py-2.5 px-3">${{m.share_BUS}}%</td>
-      <td class="py-2.5 px-3 font-semibold text-purple-700 dark:text-purple-400">${{m.share_ASDP}}%</td>
-      <td class="py-2.5 px-3">${{m.share_LAUT}}%</td>
-      <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">${{numFmt(m.TOTAL)}}</td>
-    `;
-    tbody.appendChild(tr);
-  }});
+  if (tbody) {{
+    tbody.innerHTML = '';
+    shares.forEach(m => {{
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
+      tr.innerHTML = `
+        <td class="py-2.5 px-3 font-sans font-medium text-slate-900 dark:text-slate-100">${{m.label}}</td>
+        <td class="py-2.5 px-3">${{m.UDARA}}%</td>
+        <td class="py-2.5 px-3">${{m.KA}}%</td>
+        <td class="py-2.5 px-3">${{m.BUS}}%</td>
+        <td class="py-2.5 px-3 font-semibold text-purple-700 dark:text-purple-400">${{m.ASDP}}%</td>
+        <td class="py-2.5 px-3">${{m.LAUT}}%</td>
+        <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">${{numFmt(m.TOTAL)}}</td>
+      `;
+      tbody.appendChild(tr);
+    }});
+  }}
 }}
 
 // ---------------------------------------------------------------
@@ -2462,20 +2755,22 @@ function renderLoadFactorWorkspace() {{
   }});
 
   const tbody = document.getElementById('tbody-load-factor');
-  tbody.innerHTML = '';
-  modas.forEach((m, idx) => {{
-    const s = lf[m];
-    const tr = document.createElement('tr');
-    tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
-    tr.innerHTML = `
-      <td class="py-2.5 px-3 font-sans font-semibold text-slate-900 dark:text-slate-100">${{labelsLF[idx]}}</td>
-      <td class="py-2.5 px-3">${{s.baseline_lf}} pnp/arm</td>
-      <td class="py-2.5 px-3 text-purple-700 dark:text-purple-400 font-semibold">${{s.mudik_lf}}</td>
-      <td class="py-2.5 px-3 text-rose-700 dark:text-rose-400 font-semibold">${{s.balik_lf}}</td>
-      <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">+${{s.surge_lf_pct}}%</td>
-    `;
-    tbody.appendChild(tr);
-  }});
+  if (tbody) {{
+    tbody.innerHTML = '';
+    modas.forEach((m, idx) => {{
+      const s = lf[m];
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
+      tr.innerHTML = `
+        <td class="py-2.5 px-3 font-sans font-semibold text-slate-900 dark:text-slate-100">${{labelsLF[idx]}}</td>
+        <td class="py-2.5 px-3">${{s.baseline_lf}} pnp/arm</td>
+        <td class="py-2.5 px-3 text-purple-700 dark:text-purple-400 font-semibold">${{s.mudik_lf}}</td>
+        <td class="py-2.5 px-3 text-rose-700 dark:text-rose-400 font-semibold">${{s.balik_lf}}</td>
+        <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">+${{s.surge_lf_pct}}%</td>
+      `;
+      tbody.appendChild(tr);
+    }});
+  }}
 }}
 
 // ---------------------------------------------------------------
@@ -2523,15 +2818,18 @@ function handleHubSearch(term) {{
 function renderHubsTable() {{
   const source = currentHubPeriod === 'peak' ? DATA.top_hubs_peak : DATA.top_hubs_ytd;
   let list = [];
+  const sortKey = getHubMetricKey();
+  const isPnp = currentMetric === 'pnp';
 
   if (currentHubModa === 'ALL') {{
     Object.keys(source).forEach(m => {{
       source[m].forEach(h => list.push({{ ...h, moda: m }}));
     }});
-    list.sort((a, b) => b.pnp - a.pnp);
+    list.sort((a, b) => (b[sortKey] || 0) - (a[sortKey] || 0));
     list = list.slice(0, 30);
   }} else {{
     list = (source[currentHubModa] || []).map(h => ({{ ...h, moda: currentHubModa }}));
+    list.sort((a, b) => (b[sortKey] || 0) - (a[sortKey] || 0));
   }}
 
   if (currentHubSearchTerm) {{
@@ -2541,9 +2839,13 @@ function renderHubsTable() {{
     );
   }}
 
-  document.getElementById('hub-result-count').innerText = `Menampilkan ${{list.length}} prasarana transportasi`;
+  const resultCount = document.getElementById('hub-result-count');
+  if (resultCount) {{
+    resultCount.innerText = `Menampilkan ${{list.length}} prasarana transportasi (Diurutkan: ${{isPnp ? 'Penumpang' : 'Armada'}} • ${{currentDirection === 'dat' ? 'Datang' : currentDirection === 'brg' ? 'Berangkat' : 'Dua Arah'}})`;
+  }}
 
   const tbody = document.getElementById('tbody-hubs');
+  if (!tbody) return;
   tbody.innerHTML = '';
   
   if (list.length === 0) {{
@@ -2551,13 +2853,18 @@ function renderHubsTable() {{
     return;
   }}
 
-  const maxPnp = list[0].pnp;
+  const maxVal = list[0][sortKey] || 1;
 
   list.forEach((h, idx) => {{
-    const pct = Math.round((h.pnp / maxPnp) * 100);
+    const activeVal = h[sortKey] || 0;
+    const pct = Math.round((activeVal / maxVal) * 100);
     const color = COLOR[h.moda] || '#64748b';
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
+
+    const pnpDisplay = currentDirection === 'dat' ? h.p_dat : (currentDirection === 'brg' ? h.p_brg : h.pnp);
+    const armDisplay = currentDirection === 'dat' ? h.a_dat : (currentDirection === 'brg' ? h.a_brg : h.arm);
+
     tr.innerHTML = `
       <td class="py-2.5 px-3 text-center font-mono font-bold text-slate-400">${{idx + 1}}</td>
       <td class="py-2.5 px-3 font-sans font-semibold text-slate-900 dark:text-slate-100">${{h.nama_prasarana}}</td>
@@ -2567,8 +2874,8 @@ function renderHubsTable() {{
         </span>
       </td>
       <td class="py-2.5 px-3 font-sans text-slate-600 dark:text-slate-300">${{h.provinsi}}</td>
-      <td class="py-2.5 px-3 font-mono font-bold text-slate-900 dark:text-white">${{numFmt(h.pnp)}}</td>
-      <td class="py-2.5 px-3 font-mono text-slate-600 dark:text-slate-400">${{numFmt(h.arm)}}</td>
+      <td class="py-2.5 px-3 font-mono font-bold ${{isPnp ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}}">${{numFmt(pnpDisplay)}}</td>
+      <td class="py-2.5 px-3 font-mono ${{!isPnp ? 'font-bold text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-400'}}">${{numFmt(armDisplay)}}</td>
       <td class="py-2.5 px-3">
         <div class="flex items-center gap-2">
           <div class="flex-1 h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
@@ -2587,6 +2894,7 @@ function renderHubsTable() {{
 // ---------------------------------------------------------------
 function renderMatrixTable() {{
   const tbody = document.getElementById('tbody-matrix');
+  if (!tbody) return;
   tbody.innerHTML = '';
 
   const meta = DATA.meta;
@@ -2595,21 +2903,23 @@ function renderMatrixTable() {{
   const ms = DATA.monthly_summary;
   const mar = ms.find(m => m.bulan === '2026-03') || {{}};
   const feb = ms.find(m => m.bulan === '2026-02') || {{}};
+  const isPnp = currentMetric === 'pnp';
+  const combo = currentMetric + '_' + currentDirection;
+  const s = (DATA.metrics_summary && DATA.metrics_summary[combo]) || {{}};
 
   const rows = [
-    {{ label: '1. Total Penumpang YTD (Org)', u: numFmt(DATA.top_hubs_ytd.UDARA.reduce((a,b)=>a+b.pnp,0)), ka: '83.748.346', bus: '75.683.884', asdp: '43.795.040', laut: '49.638.662', tot: numFmt(meta.total_passengers_ytd) }},
-    {{ label: '2. Total Armada Operasi YTD (Trip)', u: '1.151.589', ka: '1.781.924', bus: '5.949.853', asdp: '317.788', laut: '829.841', tot: numFmt(meta.total_armada_ytd) }},
-    {{ label: '3. Rata-rata Penumpang Harian', u: '437.406', ka: '307.898', bus: '278.250', asdp: '161.011', laut: '182.495', tot: '1.367.060' }},
-    {{ label: '4. Volume Puncak Mudik (18 Mar)', u: numFmt(surge.UDARA.peak_mudik), ka: numFmt(surge.KA.peak_mudik), bus: numFmt(surge.BUS.peak_mudik), asdp: numFmt(surge.ASDP.peak_mudik), laut: numFmt(surge.LAUT.peak_mudik), tot: numFmt(surge.TOTAL.peak_mudik) }},
-    {{ label: '5. Lonjakan Arus Mudik (%)', u: '+' + surge.UDARA.surge_mudik_pct + '%', ka: '+' + surge.KA.surge_mudik_pct + '%', bus: '+' + surge.BUS.surge_mudik_pct + '%', asdp: '+' + surge.ASDP.surge_mudik_pct + '%', laut: '+' + surge.LAUT.surge_mudik_pct + '%', tot: '+' + surge.TOTAL.surge_mudik_pct + '%' }},
-    {{ label: '6. Volume Puncak Balik 1 (24 Mar)', u: numFmt(surge.UDARA.peak_balik1), ka: numFmt(surge.KA.peak_balik1), bus: numFmt(surge.BUS.peak_balik1), asdp: numFmt(surge.ASDP.peak_balik1), laut: numFmt(surge.LAUT.peak_balik1), tot: numFmt(surge.TOTAL.peak_balik1) }},
-    {{ label: '7. Lonjakan Arus Balik 1 (%)', u: '+' + surge.UDARA.surge_balik1_pct + '%', ka: '+' + surge.KA.surge_balik1_pct + '%', bus: '+' + surge.BUS.surge_balik1_pct + '%', asdp: '+' + surge.ASDP.surge_balik1_pct + '%', laut: '+' + surge.LAUT.surge_balik1_pct + '%', tot: '+' + surge.TOTAL.surge_balik1_pct + '%' }},
-    {{ label: '8. Load Factor Normal (Pnp/Arm)', u: lf.UDARA.baseline_lf, ka: lf.KA.baseline_lf, bus: lf.BUS.baseline_lf, asdp: lf.ASDP.baseline_lf, laut: lf.LAUT.baseline_lf, tot: '37,1' }},
-    {{ label: '9. Load Factor Puncak Lebaran', u: lf.UDARA.peak_lf, ka: lf.KA.peak_lf, bus: lf.BUS.peak_lf, asdp: lf.ASDP.peak_lf, laut: lf.LAUT.peak_lf, tot: '52,7' }},
-    {{ label: '10. Pangsa Pasar Normal Feb (%)', u: feb.share_UDARA + '%', ka: feb.share_KA + '%', bus: feb.share_BUS + '%', asdp: feb.share_ASDP + '%', laut: feb.share_LAUT + '%', tot: '100,0%' }},
-    {{ label: '11. Pangsa Pasar Puncak Mar (%)', u: mar.share_UDARA + '%', ka: mar.share_KA + '%', bus: mar.share_BUS + '%', asdp: mar.share_ASDP + '%', laut: mar.share_LAUT + '%', tot: '100,0%' }},
-    {{ label: '12. Jumlah Simpul Terverifikasi', u: '257 Bandara', ka: '193 Stasiun', bus: '215 Terminal', asdp: '276 Pelabuhan', laut: '267 Pelabuhan', tot: '1.208 Simpul' }},
-    {{ label: '13. Simpul Terpadat Nasional', u: 'Soekarno-Hatta (CGK)', ka: 'Yogyakarta (YK)', bus: 'Purboyo Madiun', asdp: 'Bakauheni Lampung', laut: 'Tanjung Perak', tot: 'Multimoda' }},
+    {{ label: `1. Volume ${{s.label || 'Multimoda'}} YTD`, u: numFmt(DATA.top_hubs_ytd.UDARA.reduce((a,b)=>a+(b[getHubMetricKey()]||0),0)), ka: numFmt(DATA.top_hubs_ytd.KA.reduce((a,b)=>a+(b[getHubMetricKey()]||0),0)), bus: numFmt(DATA.top_hubs_ytd.BUS.reduce((a,b)=>a+(b[getHubMetricKey()]||0),0)), asdp: numFmt(DATA.top_hubs_ytd.ASDP.reduce((a,b)=>a+(b[getHubMetricKey()]||0),0)), laut: numFmt(DATA.top_hubs_ytd.LAUT.reduce((a,b)=>a+(b[getHubMetricKey()]||0),0)), tot: numFmt(s.ytd || meta.total_passengers_ytd) }},
+    {{ label: `2. Rata-rata Harian (${{s.unit || 'pnp'}})`, u: numFmt(Math.round((s.ytd || meta.total_passengers_ytd) * 0.325 / 272)), ka: numFmt(Math.round((s.ytd || meta.total_passengers_ytd) * 0.224 / 272)), bus: numFmt(Math.round((s.ytd || meta.total_passengers_ytd) * 0.203 / 272)), asdp: numFmt(Math.round((s.ytd || meta.total_passengers_ytd) * 0.113 / 272)), laut: numFmt(Math.round((s.ytd || meta.total_passengers_ytd) * 0.135 / 272)), tot: numFmt(s.avg || 1367243) }},
+    {{ label: '3. Volume Puncak Mudik (18 Mar)', u: numFmt(surge.UDARA.peak_mudik), ka: numFmt(surge.KA.peak_mudik), bus: numFmt(surge.BUS.peak_mudik), asdp: numFmt(surge.ASDP.peak_mudik), laut: numFmt(surge.LAUT.peak_mudik), tot: numFmt(s.mudik_val || surge.TOTAL.peak_mudik) }},
+    {{ label: '4. Lonjakan Arus Mudik (%)', u: '+' + surge.UDARA.surge_mudik_pct + '%', ka: '+' + surge.KA.surge_mudik_pct + '%', bus: '+' + surge.BUS.surge_mudik_pct + '%', asdp: '+' + surge.ASDP.surge_mudik_pct + '%', laut: '+' + surge.LAUT.surge_mudik_pct + '%', tot: '+' + (s.mudik_surge_pct || surge.TOTAL.surge_mudik_pct) + '%' }},
+    {{ label: '5. Volume Puncak Balik 1 (24 Mar)', u: numFmt(surge.UDARA.peak_balik1), ka: numFmt(surge.KA.peak_balik1), bus: numFmt(surge.BUS.peak_balik1), asdp: numFmt(surge.ASDP.peak_balik1), laut: numFmt(surge.LAUT.peak_balik1), tot: numFmt(s.peak_val || surge.TOTAL.peak_balik1) }},
+    {{ label: '6. Lonjakan Arus Balik 1 (%)', u: '+' + surge.UDARA.surge_balik1_pct + '%', ka: '+' + surge.KA.surge_balik1_pct + '%', bus: '+' + surge.BUS.surge_balik1_pct + '%', asdp: '+' + surge.ASDP.surge_balik1_pct + '%', laut: '+' + surge.LAUT.surge_balik1_pct + '%', tot: '+' + (s.peak_surge_pct || surge.TOTAL.surge_balik1_pct) + '%' }},
+    {{ label: '7. Load Factor Normal (Pnp/Arm)', u: lf.UDARA.baseline_lf, ka: lf.KA.baseline_lf, bus: lf.BUS.baseline_lf, asdp: lf.ASDP.baseline_lf, laut: lf.LAUT.baseline_lf, tot: '37,1' }},
+    {{ label: '8. Load Factor Puncak Lebaran', u: lf.UDARA.peak_lf, ka: lf.KA.peak_lf, bus: lf.BUS.peak_lf, asdp: lf.ASDP.peak_lf, laut: lf.LAUT.peak_lf, tot: '52,7' }},
+    {{ label: '9. Pangsa Pasar Normal Feb (%)', u: feb.share_UDARA + '%', ka: feb.share_KA + '%', bus: feb.share_BUS + '%', asdp: feb.share_ASDP + '%', laut: feb.share_LAUT + '%', tot: '100,0%' }},
+    {{ label: '10. Pangsa Pasar Puncak Mar (%)', u: mar.share_UDARA + '%', ka: mar.share_KA + '%', bus: mar.share_BUS + '%', asdp: mar.share_ASDP + '%', laut: mar.share_LAUT + '%', tot: '100,0%' }},
+    {{ label: '11. Jumlah Simpul Terverifikasi', u: '257 Bandara', ka: '193 Stasiun', bus: '215 Terminal', asdp: '276 Pelabuhan', laut: '267 Pelabuhan', tot: '1.208 Simpul' }},
+    {{ label: '12. Simpul Terpadat Nasional', u: 'Soekarno-Hatta (CGK)', ka: 'Yogyakarta (YK)', bus: 'Purboyo Madiun', asdp: 'Bakauheni Lampung', laut: 'Tanjung Perak', tot: 'Multimoda' }},
   ];
 
   rows.forEach(r => {{
@@ -2642,7 +2952,7 @@ function getBasemapConfig(type, isDark) {{
     }};
   }} else if (type === 'sat') {{
     return {{
-      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}',
+      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{x}}/{{y}}',
       attr: 'Tiles &copy; Esri, Maxar, Earthstar Geographics',
       maxZoom: 17
     }};
@@ -2650,63 +2960,42 @@ function getBasemapConfig(type, isDark) {{
     // ESRI Gray Canvas (Zero API Key, Zero Watermark, Super Clean)
     return {{
       url: isDark 
-        ? 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{{z}}/{{y}}/{{x}}'
-        : 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{{z}}/{{y}}/{{x}}',
+        ? 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{{z}}/{{x}}/{{y}}'
+        : 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{{z}}/{{x}}/{{y}}',
       attr: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
       maxZoom: 16
     }};
   }}
 }}
 
-function setBasemap(type, btn) {{
-  currentBasemap = type;
-  const isDark = document.documentElement.classList.contains('dark');
-  const cfg = getBasemapConfig(type, isDark);
-  if (mapTileLayer) {{
-    mapTileLayer.setUrl(cfg.url);
-  }}
-
-  ['btn-basemap-canvas', 'btn-basemap-osm', 'btn-basemap-sat'].forEach(id => {{
-    const b = document.getElementById(id);
-    if (!b) return;
-    const isAct = b === btn;
-    b.classList.toggle('bg-white', isAct);
-    b.classList.toggle('dark:bg-slate-900', isAct);
-    b.classList.toggle('text-slate-900', isAct);
-    b.classList.toggle('dark:text-white', isAct);
-    b.classList.toggle('font-semibold', isAct);
-    b.classList.toggle('shadow-xs', isAct);
-    b.classList.toggle('text-slate-600', !isAct);
-    b.classList.toggle('dark:text-slate-400', !isAct);
-  }});
-}}
-
 function initSpatialMap() {{
   if (spatialMap) return;
 
   const isDark = document.documentElement.classList.contains('dark');
-  const cfg = getBasemapConfig(currentBasemap, isDark);
+  const baseConfig = getBasemapConfig(currentBasemap, isDark);
 
   spatialMap = L.map('spatialMapCanvas', {{
     center: [-2.2, 117.5],
     zoom: 5,
-    minZoom: 3,
-    maxZoom: 16
+    minZoom: 4,
+    maxZoom: 18,
+    zoomControl: false
   }});
 
-  mapTileLayer = L.tileLayer(cfg.url, {{
-    attribution: cfg.attr,
-    maxZoom: cfg.maxZoom
+  L.control.zoom({{ position: 'bottomright' }}).addTo(spatialMap);
+
+  mapTileLayer = L.tileLayer(baseConfig.url, {{
+    attribution: baseConfig.attr,
+    maxZoom: baseConfig.maxZoom
   }}).addTo(spatialMap);
 
   spatialMarkerGroup = L.layerGroup().addTo(spatialMap);
 
-  // Add custom map legend
   const legend = L.control({{ position: 'bottomleft' }});
   legend.onAdd = function() {{
-    const div = L.DomUtil.create('div', 'p-2.5 rounded-md bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-slate-800 text-[11px] shadow-sm space-y-1');
+    const div = L.DomUtil.create('div', 'p-2.5 rounded-lg bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-slate-200 dark:border-slate-800 text-[11px] font-sans shadow-md space-y-1');
     div.innerHTML = `
-      <div class="font-bold text-slate-800 dark:text-slate-200 text-[10px] uppercase tracking-wider mb-1">Legenda Moda</div>
+      <div class="font-bold text-slate-800 dark:text-slate-200 mb-1">Simpul Multimoda:</div>
       <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-600"></span><span class="text-slate-600 dark:text-slate-300">Udara (257)</span></div>
       <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-600"></span><span class="text-slate-600 dark:text-slate-300">Kereta Api (193)</span></div>
       <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600"></span><span class="text-slate-600 dark:text-slate-300">Bus AKAP (139)</span></div>
@@ -2733,6 +3022,8 @@ function renderSpatialMapNodes() {{
   if (!spatialMarkerGroup) return;
   spatialMarkerGroup.clearLayers();
 
+  const sortKey = getHubMetricKey();
+  const isPnp = currentMetric === 'pnp';
   const nodes = DATA.spatial_nodes.filter(n => {{
     if (!n.has_coords) return false;
     if (currentSpatialModa !== 'ALL' && n.m !== currentSpatialModa) return false;
@@ -2740,7 +3031,7 @@ function renderSpatialMapNodes() {{
   }});
 
   nodes.forEach(n => {{
-    const val = currentSpatialMetric === 'pnp' ? n.pnp : n.arm;
+    const val = n[sortKey] || 0;
     const radius = val > 0 ? Math.max(4.5, Math.min(24, 4.5 + Math.log10(val + 1) * 2.4)) : 4;
     const color = COLOR[n.m] || '#64748b';
 
@@ -2750,57 +3041,41 @@ function renderSpatialMapNodes() {{
       color: '#ffffff',
       weight: 1.5,
       opacity: 0.9,
-      fillOpacity: 0.75
+      fillOpacity: 0.8
     }});
 
-    const pnpTot = n.pnp || 1;
-    const datPct = Math.round((n.p_dat / pnpTot) * 100);
-    const brgPct = 100 - datPct;
-
     const popupHtml = `
-      <div class="p-3 text-xs font-sans min-w-[240px]">
-        <div class="flex items-center justify-between pb-1.5 border-b border-slate-100 dark:border-slate-800">
-          <span class="px-1.5 py-0.5 rounded font-bold text-[10px] text-white" style="background-color: ${{color}}">${{n.m}}</span>
-          <span class="text-[10px] text-slate-400 font-mono">${{n.tipe}}</span>
+      <div class="p-3 text-xs font-sans space-y-2 max-w-[280px]">
+        <div class="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-700 pb-1.5">
+          <span class="font-bold text-slate-900 dark:text-white truncate">${{n.nama}}</span>
+          <span class="px-1.5 py-0.2 rounded text-[10px] font-bold text-white shrink-0" style="background-color: ${{color}}">${{n.m}}</span>
         </div>
-        <div class="font-bold text-sm text-slate-900 dark:text-white mt-1.5">${{n.nama}}</div>
-        <div class="text-[11px] text-slate-500">${{n.p}} • ID: ${{n.id}}</div>
-        
-        <div class="mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
-          <div class="flex justify-between font-mono">
-            <span class="text-slate-500">Total Penumpang:</span>
-            <span class="font-bold text-slate-900 dark:text-white">${{numFmt(n.pnp)}}</span>
+        <div class="text-[11px] text-slate-500">${{n.p}} • Tipe: ${{n.tipe}}</div>
+        <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 space-y-1 text-[11px] font-mono">
+          <div class="flex justify-between ${{sortKey === 'pnp' ? 'font-bold text-indigo-600' : ''}}">
+            <span>Total Penumpang:</span><span>${{numFmt(n.pnp)}}</span>
           </div>
-          <div class="space-y-0.5">
-            <div class="flex justify-between font-mono text-[10px] text-slate-500">
-              <span>Datang: ${{numFmt(n.p_dat)}} (${{datPct}}%)</span>
-              <span>Berangkat: ${{numFmt(n.p_brg)}} (${{brgPct}}%)</span>
-            </div>
-            <div class="w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden flex">
-              <div class="h-full bg-sky-500" style="width: ${{datPct}}%"></div>
-              <div class="h-full bg-amber-500" style="width: ${{brgPct}}%"></div>
-            </div>
+          <div class="flex justify-between ${{sortKey === 'p_dat' ? 'font-bold text-indigo-600' : 'text-slate-500'}}">
+            <span>↳ Pnp Datang:</span><span>${{numFmt(n.p_dat)}}</span>
           </div>
-          <div class="flex justify-between font-mono pt-1">
-            <span class="text-slate-500">Total Armada:</span>
-            <span class="font-bold text-slate-900 dark:text-white">${{numFmt(n.arm)}}</span>
+          <div class="flex justify-between ${{sortKey === 'p_brg' ? 'font-bold text-indigo-600' : 'text-slate-500'}}">
+            <span>↳ Pnp Berangkat:</span><span>${{numFmt(n.p_brg)}}</span>
           </div>
-          <div class="flex justify-between font-mono text-[10px] text-slate-400">
-            <span>Aktifitas Lapor:</span>
-            <span>${{n.days}} Hari</span>
+          <div class="border-t border-slate-200 dark:border-slate-700 pt-1 flex justify-between ${{sortKey === 'arm' ? 'font-bold text-indigo-600' : ''}}">
+            <span>Total Armada:</span><span>${{numFmt(n.arm)}}</span>
           </div>
-        </div>
-
-        <div class="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-800 text-[10px] font-mono text-slate-400">
-          Lat: ${{n.lat}}, Lon: ${{n.lon}}
+          <div class="flex justify-between ${{sortKey === 'a_dat' ? 'font-bold text-indigo-600' : 'text-slate-500'}}">
+            <span>↳ Armada Datang:</span><span>${{numFmt(n.a_dat)}}</span>
+          </div>
+          <div class="flex justify-between ${{sortKey === 'a_brg' ? 'font-bold text-indigo-600' : 'text-slate-500'}}">
+            <span>↳ Armada Berangkat:</span><span>${{numFmt(n.a_brg)}}</span>
+          </div>
         </div>
       </div>
     `;
 
     marker.bindPopup(popupHtml);
-    marker.bindTooltip(`<b>${{n.nama}}</b> (${{n.m}}): ${{numFmt(n.pnp)}} pnp`, {{ direction: 'top' }});
-
-    spatialMarkerGroup.addLayer(marker);
+    marker.addTo(spatialMarkerGroup);
   }});
 }}
 
@@ -2808,37 +3083,27 @@ function filterSpatialModa(moda, btn) {{
   currentSpatialModa = moda;
   document.querySelectorAll('.map-moda-btn').forEach(b => {{
     b.classList.remove('active', 'font-semibold', 'bg-slate-900', 'dark:bg-slate-100', 'text-white', 'dark:text-slate-900', 'shadow-xs');
-    b.classList.add('font-medium', 'text-slate-600', 'dark:text-slate-400', 'bg-slate-100', 'dark:bg-slate-800');
+    b.classList.add('font-medium', 'text-slate-600', 'dark:text-slate-400');
   }});
   btn.classList.add('active', 'font-semibold', 'bg-slate-900', 'dark:bg-slate-100', 'text-white', 'dark:text-slate-900', 'shadow-xs');
-  btn.classList.remove('font-medium', 'text-slate-600', 'dark:text-slate-400', 'bg-slate-100', 'dark:bg-slate-800');
+  btn.classList.remove('font-medium', 'text-slate-600', 'dark:text-slate-400');
   renderSpatialMapNodes();
 }}
 
-function setSpatialMapMetric(metric, btn) {{
-  currentSpatialMetric = metric;
-  const isPnp = metric === 'pnp';
+function setBasemap(type, btn) {{
+  currentBasemap = type;
+  document.querySelectorAll('#btn-basemap-canvas, #btn-basemap-osm, #btn-basemap-sat').forEach(b => {{
+    b.classList.remove('font-semibold', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'shadow-xs');
+    b.classList.add('text-slate-600', 'dark:text-slate-400');
+  }});
+  btn.classList.add('font-semibold', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'shadow-xs');
+  btn.classList.remove('text-slate-600', 'dark:text-slate-400');
 
-  const btnPnp = document.getElementById('map-metric-pnp');
-  const btnArm = document.getElementById('map-metric-arm');
-
-  if (btnPnp && btnArm) {{
-    btnPnp.classList.toggle('bg-white', isPnp);
-    btnPnp.classList.toggle('dark:bg-slate-900', isPnp);
-    btnPnp.classList.toggle('text-slate-900', isPnp);
-    btnPnp.classList.toggle('dark:text-white', isPnp);
-    btnPnp.classList.toggle('shadow-xs', isPnp);
-    btnPnp.classList.toggle('text-slate-600', !isPnp);
-
-    btnArm.classList.toggle('bg-white', !isPnp);
-    btnArm.classList.toggle('dark:bg-slate-900', !isPnp);
-    btnArm.classList.toggle('text-slate-900', !isPnp);
-    btnArm.classList.toggle('dark:text-white', !isPnp);
-    btnArm.classList.toggle('shadow-xs', !isPnp);
-    btnArm.classList.toggle('text-slate-600', isPnp);
+  const isDark = document.documentElement.classList.contains('dark');
+  const cfg = getBasemapConfig(type, isDark);
+  if (mapTileLayer) {{
+    mapTileLayer.setUrl(cfg.url);
   }}
-
-  renderSpatialMapNodes();
 }}
 
 function resetSpatialMap() {{
@@ -2865,16 +3130,14 @@ function toggleMapFullscreen() {{
 
 document.addEventListener('fullscreenchange', () => {{
   const isFs = !!document.fullscreenElement;
-  const txtFs = document.getElementById('txt-map-fs');
-  if (txtFs) {{
-    txtFs.innerText = isFs ? 'Kecilkan' : 'Layar Penuh';
-  }}
+  const txt = document.getElementById('txt-map-fs');
+  if (txt) txt.innerText = isFs ? 'Kecilkan' : 'Layar Penuh';
   setTimeout(() => {{
     if (spatialMap) spatialMap.invalidateSize();
   }}, 150);
 }});
 
-// ---------------------------------------------------------------
+
 // TAB 8: FORECASTING NATARU 2026/2027 CONTROLLER
 // ---------------------------------------------------------------
 let currentForecastScenario = 'moderat';

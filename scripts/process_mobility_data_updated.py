@@ -9,14 +9,8 @@ df = pd.read_csv(raw_csv, low_memory=False)
 
 print(f"Total baris mentah: {len(df):,}")
 
-# =========================================================================
-# 1. CLEANING SESUAI INSTRUKSI USER:
-# - Duplikat sama persis diambil salah satu
-# - Duplikat berbeda di agregat sum
-# - Lat long yang kosong dikosongkan aja dulu
-# =========================================================================
-
-# A. Drop duplikat sama persis (ambil salah satu / keep='first')
+# 1. CLEANING
+# A. Drop duplikat sama persis
 df_dedup = df.drop_duplicates(keep='first').copy()
 print(f"Baris setelah drop duplikat sama persis: {len(df_dedup):,}")
 
@@ -35,53 +29,103 @@ df_clean['total_armada'] = df_clean['armada_datang'] + df_clean['armada_berangka
 
 total_clean_rows = len(df_clean)
 total_passengers_ytd = int(df_clean['total_penumpang'].sum())
+total_pnp_dat_ytd = int(df_clean['penumpang_datang'].sum())
+total_pnp_brg_ytd = int(df_clean['penumpang_berangkat'].sum())
+
 total_armada_ytd = int(df_clean['total_armada'].sum())
+total_arm_dat_ytd = int(df_clean['armada_datang'].sum())
+total_arm_brg_ytd = int(df_clean['armada_berangkat'].sum())
+
 date_min = df_clean['tanggal'].min()
 date_max = df_clean['tanggal'].max()
 days_count = df_clean['tanggal'].nunique()
 
 print(f"Baris bersih final setelah agregasi sum: {total_clean_rows:,}")
-print(f"Total Mobilitas Penumpang YTD: {total_passengers_ytd:,}")
-print(f"Total Armada Beroperasi YTD: {total_armada_ytd:,}")
+print(f"Total Mobilitas Penumpang YTD: {total_passengers_ytd:,} (Datang: {total_pnp_dat_ytd:,}, Berangkat: {total_pnp_brg_ytd:,})")
+print(f"Total Armada Beroperasi YTD: {total_armada_ytd:,} (Datang: {total_arm_dat_ytd:,}, Berangkat: {total_arm_brg_ytd:,})")
 print(f"Rentang Tanggal: {date_min} s/d {date_max} ({days_count} hari)")
 
 # =========================================================================
-# 2. TIMELINE HARIAN (272 HARI)
+# 2. TIMELINE HARIAN (272 HARI) DENGAN METRIK TOTAL, DATANG, BERANGKAT
 # =========================================================================
-daily_pnp = df_clean.groupby(['tanggal', 'moda'])['total_penumpang'].sum().unstack(fill_value=0)
-daily_arm = df_clean.groupby(['tanggal', 'moda'])['total_armada'].sum().unstack(fill_value=0)
-dates = sorted(daily_pnp.index.tolist())
+daily_pnp_tot = df_clean.groupby(['tanggal', 'moda'])['total_penumpang'].sum().unstack(fill_value=0)
+daily_pnp_dat = df_clean.groupby(['tanggal', 'moda'])['penumpang_datang'].sum().unstack(fill_value=0)
+daily_pnp_brg = df_clean.groupby(['tanggal', 'moda'])['penumpang_berangkat'].sum().unstack(fill_value=0)
 
+daily_arm_tot = df_clean.groupby(['tanggal', 'moda'])['total_armada'].sum().unstack(fill_value=0)
+daily_arm_dat = df_clean.groupby(['tanggal', 'moda'])['armada_datang'].sum().unstack(fill_value=0)
+daily_arm_brg = df_clean.groupby(['tanggal', 'moda'])['armada_berangkat'].sum().unstack(fill_value=0)
+
+dates = sorted(daily_pnp_tot.index.tolist())
 daily_timeline = []
+
 for d in dates:
-    p = daily_pnp.loc[d]
-    a = daily_arm.loc[d]
-    tot_p = int(p.sum())
-    tot_a = int(a.sum())
+    p_tot = daily_pnp_tot.loc[d]
+    p_dat = daily_pnp_dat.loc[d]
+    p_brg = daily_pnp_brg.loc[d]
+    a_tot = daily_arm_tot.loc[d]
+    a_dat = daily_arm_dat.loc[d]
+    a_brg = daily_arm_brg.loc[d]
+    
     daily_timeline.append({
         'date': d,
-        'UDARA': int(p.get('UDARA', 0)),
-        'KA': int(p.get('KA', 0)),
-        'BUS': int(p.get('BUS', 0)),
-        'ASDP': int(p.get('ASDP', 0)),
-        'LAUT': int(p.get('LAUT', 0)),
-        'TOTAL': tot_p,
-        'arm_UDARA': int(a.get('UDARA', 0)),
-        'arm_KA': int(a.get('KA', 0)),
-        'arm_BUS': int(a.get('BUS', 0)),
-        'arm_ASDP': int(a.get('ASDP', 0)),
-        'arm_LAUT': int(a.get('LAUT', 0)),
-        'arm_TOTAL': tot_a,
+        # Penumpang Total
+        'UDARA': int(p_tot.get('UDARA', 0)),
+        'KA': int(p_tot.get('KA', 0)),
+        'BUS': int(p_tot.get('BUS', 0)),
+        'ASDP': int(p_tot.get('ASDP', 0)),
+        'LAUT': int(p_tot.get('LAUT', 0)),
+        'TOTAL': int(p_tot.sum()),
+        # Penumpang Datang
+        'pdat_UDARA': int(p_dat.get('UDARA', 0)),
+        'pdat_KA': int(p_dat.get('KA', 0)),
+        'pdat_BUS': int(p_dat.get('BUS', 0)),
+        'pdat_ASDP': int(p_dat.get('ASDP', 0)),
+        'pdat_LAUT': int(p_dat.get('LAUT', 0)),
+        'pdat_TOTAL': int(p_dat.sum()),
+        # Penumpang Berangkat
+        'pbrg_UDARA': int(p_brg.get('UDARA', 0)),
+        'pbrg_KA': int(p_brg.get('KA', 0)),
+        'pbrg_BUS': int(p_brg.get('BUS', 0)),
+        'pbrg_ASDP': int(p_brg.get('ASDP', 0)),
+        'pbrg_LAUT': int(p_brg.get('LAUT', 0)),
+        'pbrg_TOTAL': int(p_brg.sum()),
+        # Armada Total
+        'arm_UDARA': int(a_tot.get('UDARA', 0)),
+        'arm_KA': int(a_tot.get('KA', 0)),
+        'arm_BUS': int(a_tot.get('BUS', 0)),
+        'arm_ASDP': int(a_tot.get('ASDP', 0)),
+        'arm_LAUT': int(a_tot.get('LAUT', 0)),
+        'arm_TOTAL': int(a_tot.sum()),
+        # Armada Datang
+        'adat_UDARA': int(a_dat.get('UDARA', 0)),
+        'adat_KA': int(a_dat.get('KA', 0)),
+        'adat_BUS': int(a_dat.get('BUS', 0)),
+        'adat_ASDP': int(a_dat.get('ASDP', 0)),
+        'adat_LAUT': int(a_dat.get('LAUT', 0)),
+        'adat_TOTAL': int(a_dat.sum()),
+        # Armada Berangkat
+        'abrg_UDARA': int(a_brg.get('UDARA', 0)),
+        'abrg_KA': int(a_brg.get('KA', 0)),
+        'abrg_BUS': int(a_brg.get('BUS', 0)),
+        'abrg_ASDP': int(a_brg.get('ASDP', 0)),
+        'abrg_LAUT': int(a_brg.get('LAUT', 0)),
+        'abrg_TOTAL': int(a_brg.sum()),
     })
 
 # =========================================================================
-# 3. AGREGAT BULANAN (JANUARI - SEPTEMBER 2026)
+# 3. AGREGAT BULANAN
 # =========================================================================
 df_clean['bulan'] = df_clean['tanggal'].str[:7]
-month_pnp = df_clean.groupby(['bulan', 'moda'])['total_penumpang'].sum().unstack(fill_value=0)
-month_arm = df_clean.groupby(['bulan', 'moda'])['total_armada'].sum().unstack(fill_value=0)
-months = sorted(month_pnp.index.tolist())
+m_pnp_tot = df_clean.groupby(['bulan', 'moda'])['total_penumpang'].sum().unstack(fill_value=0)
+m_pnp_dat = df_clean.groupby(['bulan', 'moda'])['penumpang_datang'].sum().unstack(fill_value=0)
+m_pnp_brg = df_clean.groupby(['bulan', 'moda'])['penumpang_berangkat'].sum().unstack(fill_value=0)
 
+m_arm_tot = df_clean.groupby(['bulan', 'moda'])['total_armada'].sum().unstack(fill_value=0)
+m_arm_dat = df_clean.groupby(['bulan', 'moda'])['armada_datang'].sum().unstack(fill_value=0)
+m_arm_brg = df_clean.groupby(['bulan', 'moda'])['armada_berangkat'].sum().unstack(fill_value=0)
+
+months = sorted(m_pnp_tot.index.tolist())
 month_names = {
     '2026-01': 'Januari', '2026-02': 'Februari', '2026-03': 'Maret (Lebaran)',
     '2026-04': 'April', '2026-05': 'Mei', '2026-06': 'Juni (Libur Sek.)',
@@ -90,31 +134,59 @@ month_names = {
 
 monthly_summary = []
 for m in months:
-    p = month_pnp.loc[m]
-    a = month_arm.loc[m]
-    tot_p = int(p.sum())
-    tot_a = int(a.sum())
+    pt = m_pnp_tot.loc[m]
+    pd_ = m_pnp_dat.loc[m]
+    pb = m_pnp_brg.loc[m]
+    at = m_arm_tot.loc[m]
+    ad = m_arm_dat.loc[m]
+    ab = m_arm_brg.loc[m]
+    
+    tot_pt = int(pt.sum())
+    tot_pd = int(pd_.sum())
+    tot_pb = int(pb.sum())
+    tot_at = int(at.sum())
+    tot_ad = int(ad.sum())
+    tot_ab = int(ab.sum())
+
     monthly_summary.append({
         'bulan': m,
         'label': month_names.get(m, m),
-        'UDARA': int(p.get('UDARA', 0)),
-        'KA': int(p.get('KA', 0)),
-        'BUS': int(p.get('BUS', 0)),
-        'ASDP': int(p.get('ASDP', 0)),
-        'LAUT': int(p.get('LAUT', 0)),
-        'TOTAL': tot_p,
-        'TOTAL_ARMADA': tot_a,
-        'share_UDARA': round(float(p.get('UDARA', 0)) / tot_p * 100, 1) if tot_p > 0 else 0,
-        'share_KA': round(float(p.get('KA', 0)) / tot_p * 100, 1) if tot_p > 0 else 0,
-        'share_BUS': round(float(p.get('BUS', 0)) / tot_p * 100, 1) if tot_p > 0 else 0,
-        'share_ASDP': round(float(p.get('ASDP', 0)) / tot_p * 100, 1) if tot_p > 0 else 0,
-        'share_LAUT': round(float(p.get('LAUT', 0)) / tot_p * 100, 1) if tot_p > 0 else 0,
+        # Penumpang Total
+        'UDARA': int(pt.get('UDARA', 0)), 'KA': int(pt.get('KA', 0)), 'BUS': int(pt.get('BUS', 0)), 'ASDP': int(pt.get('ASDP', 0)), 'LAUT': int(pt.get('LAUT', 0)), 'TOTAL': tot_pt,
+        'share_UDARA': round(float(pt.get('UDARA', 0)) / tot_pt * 100, 1) if tot_pt > 0 else 0,
+        'share_KA': round(float(pt.get('KA', 0)) / tot_pt * 100, 1) if tot_pt > 0 else 0,
+        'share_BUS': round(float(pt.get('BUS', 0)) / tot_pt * 100, 1) if tot_pt > 0 else 0,
+        'share_ASDP': round(float(pt.get('ASDP', 0)) / tot_pt * 100, 1) if tot_pt > 0 else 0,
+        'share_LAUT': round(float(pt.get('LAUT', 0)) / tot_pt * 100, 1) if tot_pt > 0 else 0,
+        # Penumpang Datang
+        'pdat_UDARA': int(pd_.get('UDARA', 0)), 'pdat_KA': int(pd_.get('KA', 0)), 'pdat_BUS': int(pd_.get('BUS', 0)), 'pdat_ASDP': int(pd_.get('ASDP', 0)), 'pdat_LAUT': int(pd_.get('LAUT', 0)), 'pdat_TOTAL': tot_pd,
+        'pdat_share_UDARA': round(float(pd_.get('UDARA', 0)) / tot_pd * 100, 1) if tot_pd > 0 else 0,
+        'pdat_share_KA': round(float(pd_.get('KA', 0)) / tot_pd * 100, 1) if tot_pd > 0 else 0,
+        'pdat_share_BUS': round(float(pd_.get('BUS', 0)) / tot_pd * 100, 1) if tot_pd > 0 else 0,
+        'pdat_share_ASDP': round(float(pd_.get('ASDP', 0)) / tot_pd * 100, 1) if tot_pd > 0 else 0,
+        'pdat_share_LAUT': round(float(pd_.get('LAUT', 0)) / tot_pd * 100, 1) if tot_pd > 0 else 0,
+        # Penumpang Berangkat
+        'pbrg_UDARA': int(pb.get('UDARA', 0)), 'pbrg_KA': int(pb.get('KA', 0)), 'pbrg_BUS': int(pb.get('BUS', 0)), 'pbrg_ASDP': int(pb.get('ASDP', 0)), 'pbrg_LAUT': int(pb.get('LAUT', 0)), 'pbrg_TOTAL': tot_pb,
+        'pbrg_share_UDARA': round(float(pb.get('UDARA', 0)) / tot_pb * 100, 1) if tot_pb > 0 else 0,
+        'pbrg_share_KA': round(float(pb.get('KA', 0)) / tot_pb * 100, 1) if tot_pb > 0 else 0,
+        'pbrg_share_BUS': round(float(pb.get('BUS', 0)) / tot_pb * 100, 1) if tot_pb > 0 else 0,
+        'pbrg_share_ASDP': round(float(pb.get('ASDP', 0)) / tot_pb * 100, 1) if tot_pb > 0 else 0,
+        'pbrg_share_LAUT': round(float(pb.get('LAUT', 0)) / tot_pb * 100, 1) if tot_pb > 0 else 0,
+        # Armada Total
+        'arm_UDARA': int(at.get('UDARA', 0)), 'arm_KA': int(at.get('KA', 0)), 'arm_BUS': int(at.get('BUS', 0)), 'arm_ASDP': int(at.get('ASDP', 0)), 'arm_LAUT': int(at.get('LAUT', 0)), 'arm_TOTAL': tot_at, 'TOTAL_ARMADA': tot_at,
+        'arm_share_UDARA': round(float(at.get('UDARA', 0)) / tot_at * 100, 1) if tot_at > 0 else 0,
+        'arm_share_KA': round(float(at.get('KA', 0)) / tot_at * 100, 1) if tot_at > 0 else 0,
+        'arm_share_BUS': round(float(at.get('BUS', 0)) / tot_at * 100, 1) if tot_at > 0 else 0,
+        'arm_share_ASDP': round(float(at.get('ASDP', 0)) / tot_at * 100, 1) if tot_at > 0 else 0,
+        'arm_share_LAUT': round(float(at.get('LAUT', 0)) / tot_at * 100, 1) if tot_at > 0 else 0,
+        # Armada Datang
+        'adat_UDARA': int(ad.get('UDARA', 0)), 'adat_KA': int(ad.get('KA', 0)), 'adat_BUS': int(ad.get('BUS', 0)), 'adat_ASDP': int(ad.get('ASDP', 0)), 'adat_LAUT': int(ad.get('LAUT', 0)), 'adat_TOTAL': tot_ad,
+        # Armada Berangkat
+        'abrg_UDARA': int(ab.get('UDARA', 0)), 'abrg_KA': int(ab.get('KA', 0)), 'abrg_BUS': int(ab.get('BUS', 0)), 'abrg_ASDP': int(ab.get('ASDP', 0)), 'abrg_LAUT': int(ab.get('LAUT', 0)), 'abrg_TOTAL': tot_ab,
     })
 
 # =========================================================================
-# =========================================================================
 # 4. PERIODE KHUSUS LEBARAN (13 MAR - 29 MAR 2026 • 17 HARI)
-# Hari H: 21 Maret 2026 (Sabtu) - Hari Raya Idul Fitri (Tanpa H1/H2)
 # =========================================================================
 lebaran_phase = {
     '2026-03-13': ('H-8', 'Awal Masa Posko Angkutan Lebaran'),
@@ -160,13 +232,13 @@ baseline_arm = feb_daily.groupby('moda')['total_armada'].sum() / 28.0
 total_baseline_pnp = float(baseline_pnp.sum())
 total_baseline_arm = float(baseline_arm.sum())
 
-d_mudik = daily_pnp.loc['2026-03-18']
-d_balik1 = daily_pnp.loc['2026-03-24']
-d_balik2 = daily_pnp.loc['2026-03-29']
+d_mudik = daily_pnp_tot.loc['2026-03-18']
+d_balik1 = daily_pnp_tot.loc['2026-03-24']
+d_balik2 = daily_pnp_tot.loc['2026-03-29']
 
-arm_mudik = daily_arm.loc['2026-03-18']
-arm_balik1 = daily_arm.loc['2026-03-24']
-arm_balik2 = daily_arm.loc['2026-03-29']
+arm_mudik = daily_arm_tot.loc['2026-03-18']
+arm_balik1 = daily_arm_tot.loc['2026-03-24']
+arm_balik2 = daily_arm_tot.loc['2026-03-29']
 
 surge_summary = {}
 for m in ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT']:
@@ -221,7 +293,7 @@ for m in ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT']:
     }
 
 # =========================================================================
-# 7. REGISTRI TOP HUBS (PEAK LEBARAN VS YTD)
+# 7. REGISTRI TOP HUBS (PEAK LEBARAN VS YTD) DENGAN METRIK DIRECTIONAL
 # =========================================================================
 peak_slice = df_clean[df_clean['tanggal'].between('2026-03-13', '2026-03-29')]
 
@@ -229,52 +301,91 @@ top_hubs_peak = {}
 top_hubs_ytd = {}
 
 for m in ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT']:
-    # Peak
+    # Peak (ambil 30 teratas)
     sub_p = peak_slice[peak_slice['moda'] == m]
     top_p = sub_p.groupby(['nama_prasarana', 'provinsi']).agg(
         pnp=('total_penumpang', 'sum'),
-        arm=('total_armada', 'sum')
-    ).reset_index().sort_values(by='pnp', ascending=False).head(10)
+        p_dat=('penumpang_datang', 'sum'),
+        p_brg=('penumpang_berangkat', 'sum'),
+        arm=('total_armada', 'sum'),
+        a_dat=('armada_datang', 'sum'),
+        a_brg=('armada_berangkat', 'sum')
+    ).reset_index().sort_values(by='pnp', ascending=False).head(30)
     top_hubs_peak[m] = top_p.to_dict(orient='records')
 
     # YTD
     sub_y = df_clean[df_clean['moda'] == m]
     top_y = sub_y.groupby(['nama_prasarana', 'provinsi']).agg(
         pnp=('total_penumpang', 'sum'),
-        arm=('total_armada', 'sum')
-    ).reset_index().sort_values(by='pnp', ascending=False).head(10)
+        p_dat=('penumpang_datang', 'sum'),
+        p_brg=('penumpang_berangkat', 'sum'),
+        arm=('total_armada', 'sum'),
+        a_dat=('armada_datang', 'sum'),
+        a_brg=('armada_berangkat', 'sum')
+    ).reset_index().sort_values(by='pnp', ascending=False).head(30)
     top_hubs_ytd[m] = top_y.to_dict(orient='records')
 
 # =========================================================================
-# 8. DAY OF WEEK PROFILE (SENIN - MINGGU)
-# Rata-rata Volume Harian Nasional per Hari dalam Seminggu
+# 8. DAY OF WEEK PROFILE (SENIN - MINGGU) - RATA-RATA HARIAN NASIONAL
 # =========================================================================
-daily_mode_df = df_clean.groupby(['tanggal', 'moda'])['total_penumpang'].sum().unstack(fill_value=0)
-daily_mode_df['TOTAL'] = daily_mode_df.sum(axis=1)
-daily_mode_df['dow'] = pd.to_datetime(daily_mode_df.index).day_name()
+dow_df = pd.DataFrame(daily_timeline).set_index('date')
+dow_df['dow'] = pd.to_datetime(dow_df.index).day_name()
 
 dow_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 dow_names = {'Monday': 'Senin', 'Tuesday': 'Selasa', 'Wednesday': 'Rabu', 'Thursday': 'Kamis', 'Friday': 'Jumat', 'Saturday': 'Sabtu', 'Sunday': 'Minggu'}
 
-dow_pnp = daily_mode_df.groupby('dow')[['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT', 'TOTAL']].mean()
-
 dow_summary = []
 for d in dow_order:
-    if d in dow_pnp.index:
-        row = dow_pnp.loc[d]
+    sub = dow_df[dow_df['dow'] == d]
+    if len(sub) > 0:
         dow_summary.append({
             'dow': dow_names[d],
-            'UDARA': round(float(row['UDARA'])),
-            'KA': round(float(row['KA'])),
-            'BUS': round(float(row['BUS'])),
-            'ASDP': round(float(row['ASDP'])),
-            'LAUT': round(float(row['LAUT'])),
-            'TOTAL': round(float(row['TOTAL']))
+            # Penumpang Total
+            'UDARA': round(float(sub['UDARA'].mean())),
+            'KA': round(float(sub['KA'].mean())),
+            'BUS': round(float(sub['BUS'].mean())),
+            'ASDP': round(float(sub['ASDP'].mean())),
+            'LAUT': round(float(sub['LAUT'].mean())),
+            'TOTAL': round(float(sub['TOTAL'].mean())),
+            # Penumpang Datang
+            'pdat_UDARA': round(float(sub['pdat_UDARA'].mean())),
+            'pdat_KA': round(float(sub['pdat_KA'].mean())),
+            'pdat_BUS': round(float(sub['pdat_BUS'].mean())),
+            'pdat_ASDP': round(float(sub['pdat_ASDP'].mean())),
+            'pdat_LAUT': round(float(sub['pdat_LAUT'].mean())),
+            'pdat_TOTAL': round(float(sub['pdat_TOTAL'].mean())),
+            # Penumpang Berangkat
+            'pbrg_UDARA': round(float(sub['pbrg_UDARA'].mean())),
+            'pbrg_KA': round(float(sub['pbrg_KA'].mean())),
+            'pbrg_BUS': round(float(sub['pbrg_BUS'].mean())),
+            'pbrg_ASDP': round(float(sub['pbrg_ASDP'].mean())),
+            'pbrg_LAUT': round(float(sub['pbrg_LAUT'].mean())),
+            'pbrg_TOTAL': round(float(sub['pbrg_TOTAL'].mean())),
+            # Armada Total
+            'arm_UDARA': round(float(sub['arm_UDARA'].mean())),
+            'arm_KA': round(float(sub['arm_KA'].mean())),
+            'arm_BUS': round(float(sub['arm_BUS'].mean())),
+            'arm_ASDP': round(float(sub['arm_ASDP'].mean())),
+            'arm_LAUT': round(float(sub['arm_LAUT'].mean())),
+            'arm_TOTAL': round(float(sub['arm_TOTAL'].mean())),
+            # Armada Datang
+            'adat_UDARA': round(float(sub['adat_UDARA'].mean())),
+            'adat_KA': round(float(sub['adat_KA'].mean())),
+            'adat_BUS': round(float(sub['adat_BUS'].mean())),
+            'adat_ASDP': round(float(sub['adat_ASDP'].mean())),
+            'adat_LAUT': round(float(sub['adat_LAUT'].mean())),
+            'adat_TOTAL': round(float(sub['adat_TOTAL'].mean())),
+            # Armada Berangkat
+            'abrg_UDARA': round(float(sub['abrg_UDARA'].mean())),
+            'abrg_KA': round(float(sub['abrg_KA'].mean())),
+            'abrg_BUS': round(float(sub['abrg_BUS'].mean())),
+            'abrg_ASDP': round(float(sub['abrg_ASDP'].mean())),
+            'abrg_LAUT': round(float(sub['abrg_LAUT'].mean())),
+            'abrg_TOTAL': round(float(sub['abrg_TOTAL'].mean())),
         })
 
 # =========================================================================
 # 9. EKSTRAKSI SIMPUL SPASIAL (LEAFLET GIS)
-# Sesuai instruksi: "lat long yang kosong dikosongkan aja dulu"
 # =========================================================================
 nodes_df = df_clean.groupby(['moda', 'id_prasarana', 'nama_prasarana', 'provinsi'], as_index=False, dropna=False).agg(
     tipe=('tipe', 'first'),
@@ -306,10 +417,8 @@ for _, r in nodes_df.iterrows():
         try:
             lt = float(lat_str)
             ln = float(lon_str)
-            # Null Island (0, 0)
             if lt == 0 and ln == 0:
                 is_empty = True
-            # Swapped coordinates (lat > 50 & lon < 0 di Indonesia e.g. Haruku/Poka Maluku)
             elif lt > 50 and ln < 0:
                 lat_val = round(ln, 6)
                 lon_val = round(lt, 6)
@@ -350,15 +459,63 @@ for _, r in nodes_df.iterrows():
         'days': int(r['days'])
     })
 
-# Urutkan simpul dari volume tertinggi
 spatial_nodes.sort(key=lambda x: x['pnp'], reverse=True)
 
-print(f"Total simpul prasarana: {len(spatial_nodes):,}")
-print(f"  - Terpetakan dengan koordinat valid: {valid_latlon_count:,}")
-print(f"  - Koordinat kosong (dikosongkan sesuai arahan): {empty_latlon_count:,}")
+# =========================================================================
+# 10. PRE-CALCULATE METRICS SUMMARY FOR ALL 6 COMBINATIONS
+# =========================================================================
+combos = {
+    'pnp_tot': ('total_penumpang', 'Penumpang • Dua Arah (Total)', 'penumpang', '∑ (P_datang + P_berangkat)'),
+    'pnp_dat': ('penumpang_datang', 'Penumpang Datang (Kedatangan)', 'penumpang datang', '∑ P_datang'),
+    'pnp_brg': ('penumpang_berangkat', 'Penumpang Berangkat (Keberangkatan)', 'penumpang berangkat', '∑ P_berangkat'),
+    'arm_tot': ('total_armada', 'Total Armada Beroperasi (Dua Arah)', 'trip armada', '∑ (Trip Datang + Trip Berangkat)'),
+    'arm_dat': ('armada_datang', 'Armada Datang (Kedatangan)', 'trip datang', '∑ Trip_datang'),
+    'arm_brg': ('armada_berangkat', 'Armada Berangkat (Keberangkatan)', 'trip berangkat', '∑ Trip_berangkat'),
+}
+
+metrics_summary = {}
+for code, (col, label, unit, formula) in combos.items():
+    s_daily = df_clean.groupby('tanggal')[col].sum()
+    ytd_val = int(s_daily.sum())
+    avg_val = int(round(s_daily.mean()))
+    
+    # All time peak
+    p_max = int(s_daily.max())
+    d_max = s_daily.idxmax()
+    
+    # Mudik peak (13-20 Mar)
+    mudik_s = s_daily.loc['2026-03-13':'2026-03-20']
+    p_mud = int(mudik_s.max())
+    d_mud = mudik_s.idxmax()
+    
+    # Baseline normal (Februari)
+    feb_avg = float(s_daily.loc['2026-02-01':'2026-02-28'].mean())
+    surge_peak = round((p_max - feb_avg) / feb_avg * 100, 1) if feb_avg > 0 else 0
+    surge_mud = round((p_mud - feb_avg) / feb_avg * 100, 1) if feb_avg > 0 else 0
+    
+    # Date label tags
+    tag_peak = lebaran_phase.get(d_max, ('Puncak', ''))[0]
+    tag_mud = lebaran_phase.get(d_mud, ('Puncak Mudik', ''))[0]
+
+    metrics_summary[code] = {
+        'label': label,
+        'unit': unit,
+        'formula': formula,
+        'ytd': ytd_val,
+        'avg': avg_val,
+        'peak_date': d_max,
+        'peak_val': p_max,
+        'peak_tag': tag_peak,
+        'peak_surge_pct': surge_peak,
+        'mudik_date': d_mud,
+        'mudik_val': p_mud,
+        'mudik_tag': tag_mud,
+        'mudik_surge_pct': surge_mud,
+        'baseline_feb': round(feb_avg)
+    }
 
 # =========================================================================
-# 10. SIMPAN BUNDLE JSON TERLENGKAP
+# 11. SIMPAN BUNDLE JSON TERLENGKAP
 # =========================================================================
 data_bundle = {
     'daily_timeline': daily_timeline,
@@ -370,10 +527,15 @@ data_bundle = {
     'top_hubs_ytd': top_hubs_ytd,
     'dow_summary': dow_summary,
     'spatial_nodes': spatial_nodes,
+    'metrics_summary': metrics_summary,
     'meta': {
         'total_clean_rows': total_clean_rows,
         'total_passengers_ytd': total_passengers_ytd,
         'total_armada_ytd': total_armada_ytd,
+        'total_pnp_dat_ytd': total_pnp_dat_ytd,
+        'total_pnp_brg_ytd': total_pnp_brg_ytd,
+        'total_arm_dat_ytd': total_arm_dat_ytd,
+        'total_arm_brg_ytd': total_arm_brg_ytd,
         'date_min': date_min,
         'date_max': date_max,
         'days_count': days_count,
