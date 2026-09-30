@@ -632,46 +632,22 @@ def generate_dashboard():
     <section class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-16 z-30 px-4 sm:px-6 py-2.5 shadow-xs transition-all">
       <div class="flex flex-wrap items-center justify-between gap-3">
         
-        <!-- Controls Group -->
-        <div class="flex flex-wrap items-center gap-2.5 sm:gap-4">
-          
-          <!-- Metrik Switcher (Penumpang / Armada) -->
-          <div class="flex items-center gap-1.5">
-            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Metrik:</span>
-            <div class="inline-flex rounded-lg border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold shadow-xs">
-              <button id="global-btn-pnp" onclick="setGlobalMetric('pnp')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">
-                <span>👥</span>
-                <span>Penumpang</span>
-              </button>
-              <button id="global-btn-arm" onclick="setGlobalMetric('arm')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
-                <span>🚍</span>
-                <span>Armada</span>
-              </button>
-            </div>
+        <!-- Single Unified Metric & Direction Dropdown ("metrik dan pilihannya 1 aja dibagian atas") -->
+        <div class="flex items-center gap-2.5">
+          <label for="select-global-metric" class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            <span class="text-sm">📊</span>
+            <span>Pilihan Metrik:</span>
+          </label>
+          <div class="relative">
+            <select id="select-global-metric" onchange="setGlobalCombo(this.value)" class="text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 pr-8 text-slate-900 dark:text-white shadow-xs hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer transition-all">
+              <option value="pnp_tot">Total Penumpang</option>
+              <option value="pnp_brg">Penumpang Berangkat</option>
+              <option value="pnp_dat">Penumpang Datang</option>
+              <option value="arm_dat">Armada Datang</option>
+              <option value="arm_brg">Armada Berangkat</option>
+              <option value="arm_tot">Total Armada</option>
+            </select>
           </div>
-
-          <!-- Divider -->
-          <div class="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
-
-          <!-- Arah Pergerakan (Total / Datang / Berangkat) -->
-          <div class="flex items-center gap-1.5">
-            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Arah / Aliran:</span>
-            <div class="inline-flex rounded-lg border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold shadow-xs">
-              <button id="global-btn-dir-tot" onclick="setGlobalDirection('tot')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">
-                <span>🔄</span>
-                <span id="lbl-dir-tot">Dua Arah (Total)</span>
-              </button>
-              <button id="global-btn-dir-dat" onclick="setGlobalDirection('dat')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
-                <span>📥</span>
-                <span id="lbl-dir-dat">Penumpang Datang</span>
-              </button>
-              <button id="global-btn-dir-brg" onclick="setGlobalDirection('brg')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
-                <span>📤</span>
-                <span id="lbl-dir-brg">Penumpang Berangkat</span>
-              </button>
-            </div>
-          </div>
-
         </div>
 
         <!-- Right: Active Status Indicator Pill -->
@@ -779,25 +755,9 @@ def generate_dashboard():
               </p>
             </div>
 
-            <!-- Controls: Metrik Switcher & Arah Switcher & Active Range Label -->
-            <div class="flex items-center gap-2.5 flex-wrap">
-              <!-- Metrik Switcher -->
-              <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold">
-                <button id="metric-btn-pnp" onclick="setGlobalMetric('pnp')" class="px-2.5 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Penumpang</button>
-                <button id="metric-btn-arm" onclick="setGlobalMetric('arm')" class="px-2.5 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Armada</button>
-              </div>
-
-              <!-- Arah Switcher -->
-              <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold">
-                <button id="tab1-dir-tot" onclick="setGlobalDirection('tot')" class="px-2 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Dua Arah</button>
-                <button id="tab1-dir-dat" onclick="setGlobalDirection('dat')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Datang</button>
-                <button id="tab1-dir-brg" onclick="setGlobalDirection('brg')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Berangkat</button>
-              </div>
-
-              <span id="timeline-badge-info" class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded border border-slate-200 dark:border-slate-700">
-                1 Jan 2026 - 29 Sep 2026 (272 Hari)
-              </span>
-            </div>
+            <span id="timeline-badge-info" class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded border border-slate-200 dark:border-slate-700">
+              1 Jan 2026 - 29 Sep 2026 (272 Hari)
+            </span>
           </div>
 
           <!-- Full-Width Chart Canvas -->
@@ -827,20 +787,7 @@ def generate_dashboard():
                 <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Akumulasi Bulanan per Moda Transportasi</h3>
                 <p id="monthly-table-subtitle" class="text-[11px] text-slate-500">Volume pergerakan dari Januari sampai dengan September 2026</p>
               </div>
-              <div class="flex items-center gap-2">
-                <div class="flex items-center gap-1.5">
-                  <label for="select-monthly-metric" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Metrik:</label>
-                  <select id="select-monthly-metric" onchange="changeMonthlyMetric(this.value)" class="text-xs font-medium bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-2.5 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer shadow-sm">
-                    <option value="pnp_tot">Total Penumpang</option>
-                    <option value="pnp_brg">Penumpang Berangkat</option>
-                    <option value="pnp_dat">Penumpang Datang</option>
-                    <option value="arm_dat">Armada Datang</option>
-                    <option value="arm_brg">Armada Berangkat</option>
-                    <option value="arm_tot">Total Armada</option>
-                  </select>
-                </div>
-                <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">9 Bulan</span>
-              </div>
+              <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700">9 Bulan (Jan - Sep)</span>
             </div>
 
             <div class="overflow-x-auto mt-3">
@@ -870,20 +817,7 @@ def generate_dashboard():
                   <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Profil Hari dalam Seminggu</h3>
                   <p id="dow-chart-subtitle" class="text-[11px] text-slate-500">Rata-rata volume harian (Senin s.d. Minggu)</p>
                 </div>
-                <div class="flex items-center gap-2">
-                  <div class="flex items-center gap-1.5">
-                    <label for="select-dow-metric" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Metrik:</label>
-                    <select id="select-dow-metric" onchange="changeDowMetric(this.value)" class="text-xs font-medium bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-2.5 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer shadow-sm">
-                      <option value="pnp_tot">Total Penumpang</option>
-                      <option value="pnp_brg">Penumpang Berangkat</option>
-                      <option value="pnp_dat">Penumpang Datang</option>
-                      <option value="arm_dat">Armada Datang</option>
-                      <option value="arm_brg">Armada Berangkat</option>
-                      <option value="arm_tot">Total Armada</option>
-                    </select>
-                  </div>
-                  <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Senin - Minggu</span>
-                </div>
+                <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700">Senin - Minggu</span>
               </div>
 
               <div class="relative w-full h-[220px] mt-3">
@@ -2037,14 +1971,38 @@ function getHubMetricKey() {{
   return 'pnp';
 }}
 
+function setGlobalCombo(comboVal) {{
+  if (!comboVal) return;
+  const parts = comboVal.split('_');
+  currentMetric = parts[0];
+  currentDirection = parts[1];
+  monthlySelectedMetric = comboVal;
+  dowSelectedMetric = comboVal;
+  updateDashboardMetricAndDirection();
+}}
+
 function setGlobalMetric(metric) {{
   currentMetric = metric;
+  const combo = currentMetric + '_' + currentDirection;
+  monthlySelectedMetric = combo;
+  dowSelectedMetric = combo;
   updateDashboardMetricAndDirection();
 }}
 
 function setGlobalDirection(direction) {{
   currentDirection = direction;
+  const combo = currentMetric + '_' + currentDirection;
+  monthlySelectedMetric = combo;
+  dowSelectedMetric = combo;
   updateDashboardMetricAndDirection();
+}}
+
+function changeMonthlyMetric(metricVal) {{
+  setGlobalCombo(metricVal);
+}}
+
+function changeDowMetric(metricVal) {{
+  setGlobalCombo(metricVal);
 }}
 
 function setTimelineMetric(metric) {{ setGlobalMetric(metric); }}
@@ -2067,10 +2025,13 @@ function updateDashboardMetricAndDirection() {{
     formula: isPnp ? (currentDirection === 'dat' ? '∑ P_datang' : currentDirection === 'brg' ? '∑ P_berangkat' : '∑ (P_datang + P_berangkat)') : (currentDirection === 'dat' ? '∑ Trip_datang' : currentDirection === 'brg' ? '∑ Trip_berangkat' : '∑ (Trip Datang + Trip Berangkat)')
   }};
 
+  // 0. Sync Single Global Metric Dropdown ("metrik dan pilihannya 1 aja dibagian atas")
+  const selGlobal = document.getElementById('select-global-metric');
+  if (selGlobal) selGlobal.value = combo;
+
   // 1. Sync All Metric Buttons across Dashboard
   const metricBtns = [
     {{ pnp: 'global-btn-pnp', arm: 'global-btn-arm' }},
-    {{ pnp: 'metric-btn-pnp', arm: 'metric-btn-arm' }},
     {{ pnp: 'hubs-btn-pnp', arm: 'hubs-btn-arm' }},
     {{ pnp: 'map-metric-pnp', arm: 'map-metric-arm' }}
   ];
@@ -2097,7 +2058,6 @@ function updateDashboardMetricAndDirection() {{
   // 2. Sync All Direction Buttons across Dashboard
   const dirSets = [
     {{ tot: 'global-btn-dir-tot', dat: 'global-btn-dir-dat', brg: 'global-btn-dir-brg' }},
-    {{ tot: 'tab1-dir-tot', dat: 'tab1-dir-dat', brg: 'tab1-dir-brg' }},
     {{ tot: 'hubs-dir-tot', dat: 'hubs-dir-dat', brg: 'hubs-dir-brg' }},
     {{ tot: 'map-dir-tot', dat: 'map-dir-dat', brg: 'map-dir-brg' }}
   ];
@@ -2176,14 +2136,10 @@ function updateDashboardMetricAndDirection() {{
     badge.innerText = `${{isPnp ? 'Volume Penumpang' : 'Armada Beroperasi'}} • ${{currentDirection === 'dat' ? 'Datang' : currentDirection === 'brg' ? 'Berangkat' : 'Dua Arah'}}`;
   }}
   
-  // Sync Tab 1 dropdowns with global selection
+  // Sync Tab 1 selection with global selection
   const globalCode = currentMetric + '_' + currentDirection;
   monthlySelectedMetric = globalCode;
   dowSelectedMetric = globalCode;
-  const selMonthly = document.getElementById('select-monthly-metric');
-  if (selMonthly) selMonthly.value = globalCode;
-  const selDow = document.getElementById('select-dow-metric');
-  if (selDow) selDow.value = globalCode;
 
   renderTimelineChart();
   renderMonthlyTable();
