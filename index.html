@@ -972,7 +972,7 @@
               <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Satuan: % Total</span>
             </div>
 
-            <div class="relative w-full h-[320px] mt-3">
+            <div class="relative w-full h-[360px] mt-3">
               <canvas id="chartModalShareAreaCanvas"></canvas>
             </div>
           </div>
@@ -987,18 +987,18 @@
               <div class="grid grid-cols-2 gap-4 mt-4">
                 <div class="text-center">
                   <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Februari (Normal)</div>
-                  <div class="relative w-full h-[140px]">
+                  <div class="relative w-full h-[190px]">
                     <canvas id="donutNormalCanvas"></canvas>
                   </div>
-                  <div class="text-[10px] text-slate-400 mt-1 font-mono">Total: 33,3M</div>
+                  <div id="donut-normal-total" class="text-[11px] text-slate-700 dark:text-slate-300 font-semibold mt-1 font-mono">Total: -</div>
                 </div>
 
                 <div class="text-center">
                   <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Maret (Lebaran)</div>
-                  <div class="relative w-full h-[140px]">
+                  <div class="relative w-full h-[190px]">
                     <canvas id="donutPeakCanvas"></canvas>
                   </div>
-                  <div class="text-[10px] text-slate-400 mt-1 font-mono">Total: 49,8M</div>
+                  <div id="donut-peak-total" class="text-[11px] text-slate-700 dark:text-slate-300 font-semibold mt-1 font-mono">Total: -</div>
                 </div>
               </div>
             </div>
@@ -1781,6 +1781,17 @@ const decFmt = (n, decimals = 1) => {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals
   });
+};
+
+const formatVolCompact = (v) => {
+  if (v === null || v === undefined || isNaN(v)) return '-';
+  const num = Number(v);
+  if (num >= 1e6) {
+    return (num / 1e6).toLocaleString('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + 'M';
+  } else if (num >= 1e3) {
+    return (num / 1e3).toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + 'k';
+  }
+  return num.toLocaleString('id-ID');
 };
 
 // State Variables
@@ -2728,20 +2739,85 @@ function renderModalShareWorkspace() {
   const isDark = document.documentElement.classList.contains('dark');
   const ms = DATA.monthly_summary;
   const ctx = document.getElementById('chartModalShareAreaCanvas').getContext('2d');
+  const unitStr = currentMetric === 'pnp' ? 'penumpang' : 'trip armada';
 
   // Compute shares dynamically for each month
   const shares = ms.map(m => {
     const tot = m[getMetricKey('TOTAL')] || 1;
     return {
       label: m.label,
-      UDARA: ((m[getMetricKey('UDARA')] / tot) * 100).toFixed(1),
-      KA: ((m[getMetricKey('KA')] / tot) * 100).toFixed(1),
-      BUS: ((m[getMetricKey('BUS')] / tot) * 100).toFixed(1),
-      ASDP: ((m[getMetricKey('ASDP')] / tot) * 100).toFixed(1),
-      LAUT: ((m[getMetricKey('LAUT')] / tot) * 100).toFixed(1),
-      TOTAL: m[getMetricKey('TOTAL')]
+      UDARA: Number(((m[getMetricKey('UDARA')] / tot) * 100).toFixed(1)),
+      KA: Number(((m[getMetricKey('KA')] / tot) * 100).toFixed(1)),
+      BUS: Number(((m[getMetricKey('BUS')] / tot) * 100).toFixed(1)),
+      ASDP: Number(((m[getMetricKey('ASDP')] / tot) * 100).toFixed(1)),
+      LAUT: Number(((m[getMetricKey('LAUT')] / tot) * 100).toFixed(1)),
+      TOTAL: m[getMetricKey('TOTAL')],
+      vol_UDARA: m[getMetricKey('UDARA')],
+      vol_KA: m[getMetricKey('KA')],
+      vol_BUS: m[getMetricKey('BUS')],
+      vol_ASDP: m[getMetricKey('ASDP')],
+      vol_LAUT: m[getMetricKey('LAUT')]
     };
   });
+
+  // Plugin: Gambar persentase dan volume langsung di dalam area plot bertumpuk (100% Stacked Area)
+  const areaLabelsPlugin = {
+    id: 'areaLabelsPlugin',
+    afterDatasetsDraw(chart) {
+      const { ctx, data } = chart;
+      const count = data.datasets.length;
+      if (count === 0) return;
+
+      ctx.save();
+      const zeroY = chart.scales.y.getPixelForValue(0);
+
+      for (let d = 0; d < count; d++) {
+        const meta = chart.getDatasetMeta(d);
+        if (!meta || !meta.data || !chart.isDatasetVisible(d)) continue;
+        const prevMeta = d > 0 ? chart.getDatasetMeta(d - 1) : null;
+
+        meta.data.forEach((pt, i) => {
+          const pctVal = data.datasets[d].data[i];
+          if (pctVal === undefined || pctVal === null || pctVal === 0) return;
+          const volVal = data.datasets[d].volumes ? data.datasets[d].volumes[i] : null;
+
+          const currY = pt.y;
+          const prevY = prevMeta ? prevMeta.data[i].y : zeroY;
+          const bandHeight = Math.abs(prevY - currY);
+
+          if (bandHeight < 14) return;
+
+          const x = pt.x;
+          const centerY = (currY + prevY) / 2;
+
+          const pctText = decFmt(pctVal, 1) + '%';
+          const volText = volVal ? formatVolCompact(volVal) : '';
+
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = '#ffffff';
+          ctx.strokeStyle = 'rgba(0, 0, 0, 0.65)';
+          ctx.lineWidth = 2.5;
+
+          if (bandHeight >= 24 && volText) {
+            ctx.font = 'bold 9.5px "Plus Jakarta Sans", sans-serif';
+            ctx.strokeText(pctText, x, centerY - 5.5);
+            ctx.fillText(pctText, x, centerY - 5.5);
+
+            ctx.font = 'bold 8.5px "JetBrains Mono", monospace';
+            ctx.strokeText(volText, x, centerY + 5.5);
+            ctx.fillText(volText, x, centerY + 5.5);
+          } else {
+            ctx.font = 'bold 9px "Plus Jakarta Sans", sans-serif';
+            const txt = volText ? `${pctText} (${volText})` : pctText;
+            ctx.strokeText(txt, x, centerY);
+            ctx.fillText(txt, x, centerY);
+          }
+        });
+      }
+      ctx.restore();
+    }
+  };
 
   if (chartModalShareArea) chartModalShareArea.destroy();
   chartModalShareArea = new Chart(ctx, {
@@ -2749,28 +2825,138 @@ function renderModalShareWorkspace() {
     data: {
       labels: shares.map(m => m.label.split(' ')[0]),
       datasets: [
-        { label: 'Udara', data: shares.map(m => m.UDARA), borderColor: COLOR.UDARA, backgroundColor: 'rgba(2, 132, 199, 0.4)', fill: true, tension: 0.15 },
-        { label: 'Kereta Api', data: shares.map(m => m.KA), borderColor: COLOR.KA, backgroundColor: 'rgba(217, 119, 6, 0.4)', fill: true, tension: 0.15 },
-        { label: 'Terminal Bus', data: shares.map(m => m.BUS), borderColor: COLOR.BUS, backgroundColor: 'rgba(22, 163, 74, 0.4)', fill: true, tension: 0.15 },
-        { label: 'ASDP', data: shares.map(m => m.ASDP), borderColor: COLOR.ASDP, backgroundColor: 'rgba(147, 51, 234, 0.4)', fill: true, tension: 0.15 },
-        { label: 'Laut', data: shares.map(m => m.LAUT), borderColor: COLOR.LAUT, backgroundColor: 'rgba(8, 145, 178, 0.4)', fill: true, tension: 0.15 },
+        { label: 'Udara', data: shares.map(m => m.UDARA), volumes: shares.map(m => m.vol_UDARA), borderColor: COLOR.UDARA, backgroundColor: 'rgba(2, 132, 199, 0.5)', fill: true, tension: 0.15 },
+        { label: 'Kereta Api', data: shares.map(m => m.KA), volumes: shares.map(m => m.vol_KA), borderColor: COLOR.KA, backgroundColor: 'rgba(217, 119, 6, 0.5)', fill: true, tension: 0.15 },
+        { label: 'Terminal Bus', data: shares.map(m => m.BUS), volumes: shares.map(m => m.vol_BUS), borderColor: COLOR.BUS, backgroundColor: 'rgba(22, 163, 74, 0.5)', fill: true, tension: 0.15 },
+        { label: 'ASDP', data: shares.map(m => m.ASDP), volumes: shares.map(m => m.vol_ASDP), borderColor: COLOR.ASDP, backgroundColor: 'rgba(147, 51, 234, 0.5)', fill: true, tension: 0.15 },
+        { label: 'Laut', data: shares.map(m => m.LAUT), volumes: shares.map(m => m.vol_LAUT), borderColor: COLOR.LAUT, backgroundColor: 'rgba(8, 145, 178, 0.5)', fill: true, tension: 0.15 },
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { labels: { color: isDark ? '#cbd5e1' : '#475569' } } },
+      plugins: {
+        legend: { labels: { color: isDark ? '#cbd5e1' : '#475569' } },
+        tooltip: {
+          backgroundColor: isDark ? '#0f172a' : '#ffffff',
+          titleColor: isDark ? '#ffffff' : '#0f172a',
+          bodyColor: isDark ? '#cbd5e1' : '#334155',
+          borderColor: isDark ? '#334155' : '#cbd5e1',
+          borderWidth: 1,
+          padding: 8,
+          bodyFont: { family: 'JetBrains Mono', size: 11 },
+          titleFont: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' },
+          callbacks: {
+            label: (c) => {
+              const idx = c.dataIndex;
+              const pct = c.raw;
+              const vol = c.dataset.volumes ? c.dataset.volumes[idx] : null;
+              const volFmt = vol ? `${numFmt(vol)} ${unitStr}` : '';
+              return ` ${c.dataset.label}: ${decFmt(pct, 1)}% (${volFmt})`;
+            }
+          }
+        }
+      },
       scales: {
         x: { grid: { display: false }, ticks: { color: isDark ? '#94a3b8' : '#64748b' } },
         y: { stacked: true, max: 100, grid: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }, ticks: { color: isDark ? '#94a3b8' : '#64748b', font: { family: 'JetBrains Mono' }, callback: v => v + '%' } }
       }
-    }
+    },
+    plugins: [areaLabelsPlugin]
   });
+
+  // Plugin: Gambar persentase dan volume langsung di dalam irisan donat serta total di tengahnya
+  const donutLabelsPlugin = {
+    id: 'donutLabelsPlugin',
+    afterDatasetsDraw(chart) {
+      const { ctx, data } = chart;
+      const meta = chart.getDatasetMeta(0);
+      if (!meta || !meta.data || meta.data.length === 0) return;
+
+      ctx.save();
+      meta.data.forEach((arc, i) => {
+        const val = data.datasets[0].data[i];
+        if (val === undefined || val === null || val === 0) return;
+        const pctStr = decFmt(val, 1) + '%';
+        const volRaw = data.datasets[0].volumes ? data.datasets[0].volumes[i] : null;
+        const volStr = volRaw ? formatVolCompact(volRaw) : '';
+
+        const midAngle = (arc.startAngle + arc.endAngle) / 2;
+        const midRadius = (arc.innerRadius + arc.outerRadius) / 2;
+        const x = arc.x + Math.cos(midAngle) * midRadius;
+        const y = arc.y + Math.sin(midAngle) * midRadius;
+
+        const angleSpan = arc.endAngle - arc.startAngle;
+        if (angleSpan < 0.22) return;
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.lineWidth = 2.5;
+
+        if (volStr && angleSpan > 0.35) {
+          ctx.font = 'bold 10px "Plus Jakarta Sans", sans-serif';
+          ctx.strokeText(pctStr, x, y - 6);
+          ctx.fillText(pctStr, x, y - 6);
+
+          ctx.font = 'bold 9px "JetBrains Mono", monospace';
+          ctx.strokeText(volStr, x, y + 6);
+          ctx.fillText(volStr, x, y + 6);
+        } else {
+          ctx.font = 'bold 9.5px "Plus Jakarta Sans", sans-serif';
+          ctx.strokeText(pctStr, x, y);
+          ctx.fillText(pctStr, x, y);
+        }
+      });
+
+      // Tampilkan total volume di tengah lingkaran donat
+      if (data.datasets[0].totalVolume) {
+        const isDk = document.documentElement.classList.contains('dark');
+        const cx = meta.data[0].x;
+        const cy = meta.data[0].y;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        ctx.fillStyle = isDk ? '#94a3b8' : '#64748b';
+        ctx.font = 'bold 9px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText('TOTAL', cx, cy - 8);
+
+        ctx.fillStyle = isDk ? '#f8fafc' : '#0f172a';
+        ctx.font = 'bold 12px "JetBrains Mono", monospace';
+        ctx.fillText(formatVolCompact(data.datasets[0].totalVolume), cx, cy + 7);
+      }
+      ctx.restore();
+    }
+  };
 
   const feb = shares[1] || shares[0];
   const mar = shares[2] || shares[0];
-  const labels = ['Udara', 'KA', 'Bus', 'ASDP', 'Laut'];
+  const labels = ['Udara', 'Kereta Api', 'Terminal Bus', 'ASDP', 'Laut'];
   const colors = [COLOR.UDARA, COLOR.KA, COLOR.BUS, COLOR.ASDP, COLOR.LAUT];
+
+  const febVolumes = [feb.vol_UDARA, feb.vol_KA, feb.vol_BUS, feb.vol_ASDP, feb.vol_LAUT];
+  const marVolumes = [mar.vol_UDARA, mar.vol_KA, mar.vol_BUS, mar.vol_ASDP, mar.vol_LAUT];
+
+  const donutTooltipConfig = {
+    backgroundColor: isDark ? '#0f172a' : '#ffffff',
+    titleColor: isDark ? '#ffffff' : '#0f172a',
+    bodyColor: isDark ? '#cbd5e1' : '#334155',
+    borderColor: isDark ? '#334155' : '#cbd5e1',
+    borderWidth: 1,
+    padding: 8,
+    bodyFont: { family: 'JetBrains Mono', size: 11 },
+    titleFont: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' },
+    callbacks: {
+      label: (c) => {
+        const idx = c.dataIndex;
+        const pct = c.raw;
+        const vol = c.dataset.volumes ? c.dataset.volumes[idx] : null;
+        const volFmt = vol ? `${numFmt(vol)} ${unitStr}` : '';
+        return ` ${c.label}: ${decFmt(pct, 1)}% (${volFmt})`;
+      }
+    }
+  };
 
   const ctxNorm = document.getElementById('donutNormalCanvas').getContext('2d');
   if (chartDonutNormal) chartDonutNormal.destroy();
@@ -2780,11 +2966,23 @@ function renderModalShareWorkspace() {
       labels,
       datasets: [{
         data: [feb.UDARA, feb.KA, feb.BUS, feb.ASDP, feb.LAUT],
+        volumes: febVolumes,
+        totalVolume: feb.TOTAL,
         backgroundColor: colors,
-        borderWidth: 1
+        borderWidth: 1.5,
+        borderColor: isDark ? '#1e293b' : '#ffffff'
       }]
     },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '50%',
+      plugins: {
+        legend: { display: false },
+        tooltip: donutTooltipConfig
+      }
+    },
+    plugins: [donutLabelsPlugin]
   });
 
   const ctxPeak = document.getElementById('donutPeakCanvas').getContext('2d');
@@ -2795,12 +2993,34 @@ function renderModalShareWorkspace() {
       labels,
       datasets: [{
         data: [mar.UDARA, mar.KA, mar.BUS, mar.ASDP, mar.LAUT],
+        volumes: marVolumes,
+        totalVolume: mar.TOTAL,
         backgroundColor: colors,
-        borderWidth: 1
+        borderWidth: 1.5,
+        borderColor: isDark ? '#1e293b' : '#ffffff'
       }]
     },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '50%',
+      plugins: {
+        legend: { display: false },
+        tooltip: donutTooltipConfig
+      }
+    },
+    plugins: [donutLabelsPlugin]
   });
+
+  // Update total labels under the doughnut canvases
+  const elNormalTotal = document.getElementById('donut-normal-total');
+  if (elNormalTotal) {
+    elNormalTotal.innerText = `Total: ${formatVolCompact(feb.TOTAL)} (${numFmt(feb.TOTAL)} ${unitStr})`;
+  }
+  const elPeakTotal = document.getElementById('donut-peak-total');
+  if (elPeakTotal) {
+    elPeakTotal.innerText = `Total: ${formatVolCompact(mar.TOTAL)} (${numFmt(mar.TOTAL)} ${unitStr})`;
+  }
 
   const tbody = document.getElementById('tbody-share');
   if (tbody) {
