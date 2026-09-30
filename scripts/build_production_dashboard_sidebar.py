@@ -1311,11 +1311,10 @@ def generate_dashboard():
                 <button id="map-dir-brg" onclick="setGlobalDirection('brg')" class="px-2 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Berangkat</button>
               </div>
 
-              <!-- Basemap Selector (100% Bebas API Key) -->
-              <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-medium">
-                <button id="btn-basemap-canvas" onclick="setBasemap('canvas', this)" class="px-2.5 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold shadow-xs transition-all" title="Kanvas Minimalis Bebas API Key">Peta: Minimalis</button>
-                <button id="btn-basemap-osm" onclick="setBasemap('osm', this)" class="px-2.5 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all" title="OpenStreetMap Standar Bebas API Key">Peta: Terbuka (OSM)</button>
-                <button id="btn-basemap-sat" onclick="setBasemap('sat', this)" class="px-2.5 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all" title="Citra Satelit ESRI Bebas API Key">Peta: Satelit</button>
+              <!-- Basemap Badge (OpenStreetMap Bebas API Key) -->
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300" title="OpenStreetMap (OSM) Bebas API Key">
+                <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg>
+                <span>Peta: Terbuka (OSM)</span>
               </div>
 
               <button onclick="resetSpatialMap()" class="inline-flex items-center gap-1.5 px-3 py-1 rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all" title="Reset Tampilan Peta ke Indonesia">
@@ -3316,39 +3315,21 @@ function renderMatrixTable() {{
 // ---------------------------------------------------------------
 // TAB 7: LEAFLET SPATIAL MAP CONTROLLER
 // ---------------------------------------------------------------
-let currentBasemap = 'canvas'; // 'canvas', 'osm', 'sat'
+let currentBasemap = 'osm'; // Hanya OpenStreetMap (OSM)
 let currentSpatialScale = 'all'; // 'all', 'top10', 'top20', 'top30', 'top50', 'pareto80', 'pareto90'
 
-function getBasemapConfig(type, isDark) {{
-  if (type === 'osm') {{
-    return {{
-      url: 'https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',
-      attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 18
-    }};
-  }} else if (type === 'sat') {{
-    return {{
-      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{x}}/{{y}}',
-      attr: 'Tiles &copy; Esri, Maxar, Earthstar Geographics',
-      maxZoom: 17
-    }};
-  }} else {{
-    // ESRI Gray Canvas (Zero API Key, Zero Watermark, Super Clean)
-    return {{
-      url: isDark 
-        ? 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{{z}}/{{x}}/{{y}}'
-        : 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{{z}}/{{x}}/{{y}}',
-      attr: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-      maxZoom: 16
-    }};
-  }}
+function getBasemapConfig() {{
+  return {{
+    url: 'https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',
+    attr: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+    maxZoom: 18
+  }};
 }}
 
 function initSpatialMap() {{
   if (spatialMap) return;
 
-  const isDark = document.documentElement.classList.contains('dark');
-  const baseConfig = getBasemapConfig(currentBasemap, isDark);
+  const baseConfig = getBasemapConfig();
 
   spatialMap = L.map('spatialMapCanvas', {{
     center: [-2.2, 117.5],
@@ -3387,11 +3368,7 @@ function initSpatialMap() {{
 
 function updateMapTheme() {{
   if (!spatialMap || !mapTileLayer) return;
-  const isDark = document.documentElement.classList.contains('dark');
-  if (currentBasemap === 'canvas') {{
-    const cfg = getBasemapConfig('canvas', isDark);
-    mapTileLayer.setUrl(cfg.url);
-  }}
+  // Basemap OpenStreetMap (OSM) standar konsisten di tema gelap maupun terang
 }}
 
 function setSpatialScaleFilter(scale) {{
@@ -3547,17 +3524,9 @@ function filterSpatialModa(moda, btn) {{
 }}
 
 function setBasemap(type, btn) {{
-  currentBasemap = type;
-  document.querySelectorAll('#btn-basemap-canvas, #btn-basemap-osm, #btn-basemap-sat').forEach(b => {{
-    b.classList.remove('font-semibold', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'shadow-xs');
-    b.classList.add('text-slate-600', 'dark:text-slate-400');
-  }});
-  btn.classList.add('font-semibold', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'shadow-xs');
-  btn.classList.remove('text-slate-600', 'dark:text-slate-400');
-
-  const isDark = document.documentElement.classList.contains('dark');
-  const cfg = getBasemapConfig(type, isDark);
+  currentBasemap = 'osm';
   if (mapTileLayer) {{
+    const cfg = getBasemapConfig();
     mapTileLayer.setUrl(cfg.url);
   }}
 }}
