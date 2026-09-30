@@ -213,7 +213,7 @@ axes_flat = axes.flatten()
 
 modes_list = ['UDARA', 'ASDP', 'BUS', 'LAUT', 'KA']
 titles = {
-    'UDARA': 'Top 10 Bandara Udara',
+    'UDARA': 'Top 10 Bandar Udara',
     'ASDP': 'Top 10 Pelabuhan ASDP',
     'BUS': 'Top 10 Terminal Bus',
     'LAUT': 'Top 10 Pelabuhan Laut',

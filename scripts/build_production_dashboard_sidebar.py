@@ -342,7 +342,7 @@ def generate_dashboard():
         <div class="p-2.5 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] font-mono space-y-1">
           <div class="text-indigo-600 dark:text-indigo-400 font-bold text-xs">Load Factor (P/A) = Total Penumpang / Total Trip Armada</div>
           <div class="text-slate-500 text-[10px] font-sans">
-            Satuan: Penumpang/Flight (Udara), Penumpang/Trip KA (Kereta Api), Penumpang/Trip Bus (Bus AKAP), Penumpang/Trip Kapal (ASDP & Laut).
+            Satuan: Penumpang/Flight (Udara), Penumpang/Trip KA (Kereta Api), Penumpang/Trip Bus (Terminal Bus), Penumpang/Trip Kapal (ASDP & Laut).
           </div>
         </div>
         <div class="p-2.5 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] font-mono space-y-1">
@@ -787,7 +787,7 @@ def generate_dashboard():
                 </span>
               </div>
               <p id="timeline-chart-desc" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Volume harian agregat penumpang: Udara, Kereta Api, Bus AKAP, Penyeberangan ASDP, dan Laut (01 Jan s.d. 29 Sep 2026)
+                Volume harian agregat penumpang: Udara, Kereta Api, Terminal Bus, Penyeberangan ASDP, dan Laut (01 Jan s.d. 29 Sep 2026)
               </p>
               <!-- Formula Badge Tab 1 -->
               <div class="mt-2.5 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
@@ -868,11 +868,11 @@ def generate_dashboard():
                 <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
                   <tr>
                     <th class="py-2.5 px-3">Bulan</th>
-                    <th class="py-2.5 px-3 text-sky-700 dark:text-sky-400">Udara</th>
-                    <th class="py-2.5 px-3 text-amber-700 dark:text-amber-400">Kereta Api</th>
-                    <th class="py-2.5 px-3 text-green-700 dark:text-green-400">Bus AKAP</th>
-                    <th class="py-2.5 px-3 text-purple-700 dark:text-purple-400">ASDP</th>
-                    <th class="py-2.5 px-3 text-cyan-700 dark:text-cyan-400">Laut</th>
+                    <th class="py-2.5 px-3 text-right text-sky-700 dark:text-sky-400">Udara</th>
+                    <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400">Kereta Api</th>
+                    <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Terminal Bus</th>
+                    <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">ASDP</th>
+                    <th class="py-2.5 px-3 text-right text-cyan-700 dark:text-cyan-400">Laut</th>
                     <th class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">Total</th>
                   </tr>
                 </thead>
@@ -924,11 +924,11 @@ def generate_dashboard():
                 <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
                   <tr>
                     <th class="py-2 px-2.5">Hari</th>
-                    <th class="py-2 px-2.5">Udara</th>
-                    <th class="py-2 px-2.5">KA</th>
-                    <th class="py-2 px-2.5">Bus</th>
-                    <th class="py-2 px-2.5">ASDP</th>
-                    <th class="py-2 px-2.5">Laut</th>
+                    <th class="py-2 px-2.5 text-right">Udara</th>
+                    <th class="py-2 px-2.5 text-right">KA</th>
+                    <th class="py-2 px-2.5 text-right">Terminal Bus</th>
+                    <th class="py-2 px-2.5 text-right">ASDP</th>
+                    <th class="py-2 px-2.5 text-right">Laut</th>
                     <th class="py-2 px-2.5 text-right font-bold">Total</th>
                   </tr>
                 </thead>
@@ -1051,13 +1051,13 @@ def generate_dashboard():
               <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
                 <tr>
                   <th class="py-2.5 px-3">Moda Transportasi</th>
-                  <th class="py-2.5 px-3">Baseline Normal (Feb)</th>
-                  <th class="py-2.5 px-3 text-purple-700 dark:text-purple-400">Puncak Mudik (18 Mar / H-3)</th>
-                  <th class="py-2.5 px-3 text-purple-700 dark:text-purple-400">Lonjakan (%)</th>
-                  <th class="py-2.5 px-3 text-rose-700 dark:text-rose-400">Puncak Balik 1 (24 Mar / H+3)</th>
-                  <th class="py-2.5 px-3 text-rose-700 dark:text-rose-400">Lonjakan (%)</th>
-                  <th class="py-2.5 px-3">Puncak Balik 2 (29 Mar / H+8)</th>
-                  <th class="py-2.5 px-3">Lonjakan (%)</th>
+                  <th class="py-2.5 px-3 text-right">Baseline Normal (Feb)</th>
+                  <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">Puncak Mudik (18 Mar / H-3)</th>
+                  <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">Lonjakan (%)</th>
+                  <th class="py-2.5 px-3 text-right text-rose-700 dark:text-rose-400">Puncak Balik 1 (24 Mar / H+3)</th>
+                  <th class="py-2.5 px-3 text-right text-rose-700 dark:text-rose-400">Lonjakan (%)</th>
+                  <th class="py-2.5 px-3 text-right">Puncak Balik 2 (29 Mar / H+8)</th>
+                  <th class="py-2.5 px-3 text-right">Lonjakan (%)</th>
                 </tr>
               </thead>
               <tbody id="tbody-surge" class="divide-y divide-slate-100 dark:divide-slate-800 num-mono text-slate-800 dark:text-slate-200">
@@ -1153,11 +1153,11 @@ def generate_dashboard():
               <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
                 <tr>
                   <th class="py-2.5 px-3">Bulan</th>
-                  <th class="py-2.5 px-3 text-sky-700 dark:text-sky-400">Udara (%)</th>
-                  <th class="py-2.5 px-3 text-amber-700 dark:text-amber-400">Kereta Api (%)</th>
-                  <th class="py-2.5 px-3 text-green-700 dark:text-green-400">Bus AKAP (%)</th>
-                  <th class="py-2.5 px-3 text-purple-700 dark:text-purple-400">ASDP (%)</th>
-                  <th class="py-2.5 px-3 text-cyan-700 dark:text-cyan-400">Laut (%)</th>
+                  <th class="py-2.5 px-3 text-right text-sky-700 dark:text-sky-400">Udara (%)</th>
+                  <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400">Kereta Api (%)</th>
+                  <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Terminal Bus (%)</th>
+                  <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">ASDP (%)</th>
+                  <th class="py-2.5 px-3 text-right text-cyan-700 dark:text-cyan-400">Laut (%)</th>
                   <th class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">Total Volume</th>
                 </tr>
               </thead>
@@ -1209,9 +1209,9 @@ def generate_dashboard():
                   <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
                     <tr>
                       <th class="py-2 px-2.5">Moda</th>
-                      <th class="py-2 px-2.5">Normal</th>
-                      <th class="py-2 px-2.5 text-purple-700 dark:text-purple-400">Mudik</th>
-                      <th class="py-2 px-2.5 text-rose-700 dark:text-rose-400">Balik</th>
+                      <th class="py-2 px-2.5 text-right">Normal</th>
+                      <th class="py-2 px-2.5 text-right text-purple-700 dark:text-purple-400">Mudik</th>
+                      <th class="py-2 px-2.5 text-right text-rose-700 dark:text-rose-400">Balik</th>
                       <th class="py-2 px-2.5 text-right font-bold">Lonjakan Beban</th>
                     </tr>
                   </thead>
@@ -1247,13 +1247,13 @@ def generate_dashboard():
               Semua Moda
             </button>
             <button onclick="filterHubModa('UDARA', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Bandara Udara
+              Bandar Udara
             </button>
             <button onclick="filterHubModa('KA', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
               Stasiun Kereta Api
             </button>
             <button onclick="filterHubModa('BUS', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Terminal Bus AKAP
+              Terminal Bus
             </button>
             <button onclick="filterHubModa('ASDP', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
               Pelabuhan ASDP
@@ -1310,9 +1310,9 @@ def generate_dashboard():
                   <th class="py-2.5 px-3">Nama Prasarana / Simpul</th>
                   <th class="py-2.5 px-3 w-28">Moda</th>
                   <th class="py-2.5 px-3">Provinsi</th>
-                  <th class="py-2.5 px-3">Volume Penumpang</th>
-                  <th class="py-2.5 px-3">Armada Beroperasi</th>
-                  <th class="py-2.5 px-3 w-56">Skala Volume Relatif</th>
+                  <th class="py-2.5 px-3 text-right">Volume Penumpang</th>
+                  <th class="py-2.5 px-3 text-right">Armada Beroperasi</th>
+                  <th class="py-2.5 px-3 w-56 text-right">Skala Volume Relatif</th>
                 </tr>
               </thead>
               <tbody id="tbody-hubs" class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-800 dark:text-slate-200">
@@ -1342,11 +1342,11 @@ def generate_dashboard():
               <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
                 <tr>
                   <th class="py-3 px-3.5 w-72">Indikator Kuantitatif</th>
-                  <th class="py-3 px-3 text-sky-700 dark:text-sky-400">UDARA</th>
-                  <th class="py-3 px-3 text-amber-700 dark:text-amber-400">KERETA API</th>
-                  <th class="py-3 px-3 text-green-700 dark:text-green-400">BUS AKAP</th>
-                  <th class="py-3 px-3 text-purple-700 dark:text-purple-400">ASDP</th>
-                  <th class="py-3 px-3 text-cyan-700 dark:text-cyan-400">LAUT</th>
+                  <th class="py-3 px-3 text-right text-sky-700 dark:text-sky-400">UDARA</th>
+                  <th class="py-3 px-3 text-right text-amber-700 dark:text-amber-400">KERETA API</th>
+                  <th class="py-3 px-3 text-right text-green-700 dark:text-green-400">TERMINAL BUS</th>
+                  <th class="py-3 px-3 text-right text-purple-700 dark:text-purple-400">ASDP</th>
+                  <th class="py-3 px-3 text-right text-cyan-700 dark:text-cyan-400">LAUT</th>
                   <th class="py-3 px-3 text-right font-bold text-slate-900 dark:text-white">TOTAL NASIONAL</th>
                 </tr>
               </thead>
@@ -1427,7 +1427,7 @@ def generate_dashboard():
                 🚆 Kereta Api (193)
               </button>
               <button onclick="filterSpatialModa('BUS', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-green-800 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-950/40 border border-slate-200 dark:border-slate-700 transition-all">
-                🚌 Bus AKAP (139)
+                🚌 Terminal Bus (139)
               </button>
               <button onclick="filterSpatialModa('ASDP', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-purple-800 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/40 border border-slate-200 dark:border-slate-700 transition-all">
                 ⛴ ASDP (158)
@@ -1535,7 +1535,7 @@ def generate_dashboard():
                   <option value="TOTAL" selected>Total Multimoda (Semua Moda)</option>
                   <option value="UDARA">✈ Udara (Penerbangan Domestik)</option>
                   <option value="KA">🚆 Perkeretaapian (KAI)</option>
-                  <option value="BUS">🚌 Bus AKAP (Antar Kota)</option>
+                  <option value="BUS">🚌 Terminal Bus</option>
                   <option value="ASDP">⛴ ASDP (Penyeberangan Feri)</option>
                   <option value="LAUT">🚢 Transportasi Laut (Kapal Pelni)</option>
                 </select>
@@ -1676,9 +1676,9 @@ def generate_dashboard():
                 <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200">MAE & Rasio Error Absolut</span>
                 <span class="text-[10px] font-mono text-slate-500">Rerata: 1,228M pnp</span>
               </div>
-              <div class="text-2xl font-black font-mono text-slate-800 dark:text-slate-100">77.117 <span class="text-xs font-normal text-slate-500">pnp (7,67%)</span></div>
+              <div class="text-2xl font-black font-mono text-slate-800 dark:text-slate-100">77.117 <span class="text-xs font-normal text-slate-500">pnp (7,7%)</span></div>
               <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Rata-rata selisih volume absolut harian. Deviasi 77k pnp ini hanya mewakili 7,67% dari rata-rata pergerakan harian nasional.
+                Rata-rata selisih volume absolut harian. Deviasi 77k pnp ini hanya mewakili 7,7% dari rata-rata pergerakan harian nasional.
               </p>
             </div>
 
@@ -1686,11 +1686,11 @@ def generate_dashboard():
             <div class="p-3.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
               <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200 block">Akurasi Per Moda (Uji 28H)</span>
               <div class="space-y-1 text-[11px] font-mono pt-0.5">
-                <div class="flex justify-between items-center"><span>🚢 Laut:</span> <span class="font-bold text-emerald-600">5,27%</span></div>
-                <div class="flex justify-between items-center"><span>🚌 Bus AKAP:</span> <span class="font-bold text-emerald-600">5,43%</span></div>
-                <div class="flex justify-between items-center"><span>🚆 Kereta Api:</span> <span class="font-bold text-emerald-600">8,13%</span></div>
-                <div class="flex justify-between items-center"><span>⛴ ASDP:</span> <span class="font-bold text-emerald-600">8,82%</span></div>
-                <div class="flex justify-between items-center"><span>✈ Udara:</span> <span class="font-bold text-amber-600">28,64%</span> <span class="text-[10px] text-slate-400 font-sans">(tiket dinamis)</span></div>
+                <div class="flex justify-between items-center"><span>🚢 Laut:</span> <span class="font-bold text-emerald-600">5,3%</span></div>
+                <div class="flex justify-between items-center"><span>🚌 Terminal Bus:</span> <span class="font-bold text-emerald-600">5,4%</span></div>
+                <div class="flex justify-between items-center"><span>🚆 Kereta Api:</span> <span class="font-bold text-emerald-600">8,1%</span></div>
+                <div class="flex justify-between items-center"><span>⛴ ASDP:</span> <span class="font-bold text-emerald-600">8,8%</span></div>
+                <div class="flex justify-between items-center"><span>✈ Udara:</span> <span class="font-bold text-amber-600">28,6%</span> <span class="text-[10px] text-slate-400 font-sans">(tiket dinamis)</span></div>
               </div>
             </div>
           </div>
@@ -1776,7 +1776,7 @@ def generate_dashboard():
                 <span>🚌 BUS</span>
               </div>
               <div class="font-mono font-black text-emerald-700 dark:text-emerald-300 text-base mt-0.5">53.640 pnp/h</div>
-              <div class="text-[10px] text-slate-600 dark:text-slate-300 mt-0.5">Bus AKAP: <strong>2.745 trip/h</strong></div>
+              <div class="text-[10px] text-slate-600 dark:text-slate-300 mt-0.5">Terminal Bus: <strong>2.745 trip/h</strong></div>
               <div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold mt-1">✅ Butuh: +137 Bus (+5%)</div>
             </div>
           </div>
@@ -1869,7 +1869,7 @@ def generate_dashboard():
                   <th class="py-2.5 px-3">Hari</th>
                   <th class="py-2.5 px-3 text-right">Estimasi Penumpang</th>
                   <th class="py-2.5 px-3 text-right">Rentang 95% CI</th>
-                  <th class="py-2.5 px-3 text-center">Lonjakan vs Normal</th>
+                  <th class="py-2.5 px-3 text-right">Lonjakan vs Normal</th>
                   <th class="py-2.5 px-3 text-center">Status Operasional</th>
                   <th class="py-2.5 px-3 text-right">Kebutuhan Armada (Trip)</th>
                 </tr>
@@ -1912,6 +1912,13 @@ def generate_dashboard():
 const DATA = {json_data_str};
 
 const numFmt = (n) => (n !== null && n !== undefined) ? Number(n).toLocaleString('id-ID') : '-';
+const decFmt = (n, decimals = 1) => {{
+  if (n === null || n === undefined || isNaN(n)) return '-';
+  return Number(n).toLocaleString('id-ID', {{
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  }});
+}};
 
 // State Variables
 let isSidebarOpen = true;
@@ -2210,7 +2217,7 @@ function updateDashboardMetricAndDirection() {{
   const elPeakUnit = document.getElementById('strip-peak-unit');
   if (elPeakUnit) elPeakUnit.innerText = s.unit;
   const elPeakDesc = document.getElementById('strip-peak-desc');
-  if (elPeakDesc) elPeakDesc.innerHTML = `${{s.peak_desc}} • <span class="font-semibold text-rose-600 dark:text-rose-400">+${{s.peak_surge_pct}}%</span> vs normal`;
+  if (elPeakDesc) elPeakDesc.innerHTML = `${{s.peak_desc}} • <span class="font-semibold text-rose-600 dark:text-rose-400">+${{decFmt(s.peak_surge_pct, 1)}}%</span> vs normal`;
 
   // Card 3: Mudik Peak
   const elCard3Title = document.getElementById('strip-card3-title');
@@ -2220,7 +2227,7 @@ function updateDashboardMetricAndDirection() {{
   const elMudikUnit = document.getElementById('strip-mudik-unit');
   if (elMudikUnit) elMudikUnit.innerText = s.unit;
   const elMudikDesc = document.getElementById('strip-mudik-desc');
-  if (elMudikDesc) elMudikDesc.innerHTML = `${{s.mudik_desc}} • <span class="font-semibold text-purple-700 dark:text-purple-400">+${{s.mudik_surge_pct}}%</span> vs normal`;
+  if (elMudikDesc) elMudikDesc.innerHTML = `${{s.mudik_desc}} • <span class="font-semibold text-purple-700 dark:text-purple-400">+${{decFmt(s.mudik_surge_pct, 1)}}%</span> vs normal`;
 
   // Card 4: Complementary Opposing Metric
   const oppCombo = (isPnp ? 'arm_' : 'pnp_') + currentDirection;
@@ -2304,7 +2311,7 @@ function renderTimelineChart() {{
     {{ label: 'Total Multimoda', data: raw.map(d => d[getMetricKey('TOTAL')]), borderColor: totalColor, borderWidth: 2, pointRadius: 0, tension: 0.15 }},
     {{ label: 'Udara', data: raw.map(d => d[getMetricKey('UDARA')]), borderColor: COLOR.UDARA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
     {{ label: 'Kereta Api', data: raw.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
-    {{ label: 'Bus AKAP', data: raw.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
+    {{ label: 'Terminal Bus', data: raw.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
     {{ label: 'ASDP', data: raw.map(d => d[getMetricKey('ASDP')]), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
     {{ label: 'Laut', data: raw.map(d => d[getMetricKey('LAUT')]), borderColor: COLOR.LAUT, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
   ];
@@ -2413,11 +2420,11 @@ function renderMonthlyTable() {{
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
     tr.innerHTML = `
       <td class="py-2.5 px-3 font-sans font-medium text-slate-900 dark:text-slate-200">${{m.label}}</td>
-      <td class="py-2.5 px-3">${{numFmt(m[getMetricKeyFromCode(code, 'UDARA')])}}</td>
-      <td class="py-2.5 px-3">${{numFmt(m[getMetricKeyFromCode(code, 'KA')])}}</td>
-      <td class="py-2.5 px-3">${{numFmt(m[getMetricKeyFromCode(code, 'BUS')])}}</td>
-      <td class="py-2.5 px-3">${{numFmt(m[getMetricKeyFromCode(code, 'ASDP')])}}</td>
-      <td class="py-2.5 px-3">${{numFmt(m[getMetricKeyFromCode(code, 'LAUT')])}}</td>
+      <td class="py-2.5 px-3 text-right">${{numFmt(m[getMetricKeyFromCode(code, 'UDARA')])}}</td>
+      <td class="py-2.5 px-3 text-right">${{numFmt(m[getMetricKeyFromCode(code, 'KA')])}}</td>
+      <td class="py-2.5 px-3 text-right">${{numFmt(m[getMetricKeyFromCode(code, 'BUS')])}}</td>
+      <td class="py-2.5 px-3 text-right">${{numFmt(m[getMetricKeyFromCode(code, 'ASDP')])}}</td>
+      <td class="py-2.5 px-3 text-right">${{numFmt(m[getMetricKeyFromCode(code, 'LAUT')])}}</td>
       <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">${{numFmt(m[getMetricKeyFromCode(code, 'TOTAL')])}}</td>
     `;
     tbody.appendChild(tr);
@@ -2490,11 +2497,11 @@ function renderDOWWorkspace() {{
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
     tr.innerHTML = `
       <td class="py-2 px-2.5 font-sans font-medium text-slate-900 dark:text-slate-200">${{d.dow}}</td>
-      <td class="py-2 px-2.5">${{numFmt(d[getMetricKeyFromCode(code, 'UDARA')])}}</td>
-      <td class="py-2 px-2.5">${{numFmt(d[getMetricKeyFromCode(code, 'KA')])}}</td>
-      <td class="py-2 px-2.5">${{numFmt(d[getMetricKeyFromCode(code, 'BUS')])}}</td>
-      <td class="py-2 px-2.5">${{numFmt(d[getMetricKeyFromCode(code, 'ASDP')])}}</td>
-      <td class="py-2 px-2.5">${{numFmt(d[getMetricKeyFromCode(code, 'LAUT')])}}</td>
+      <td class="py-2 px-2.5 text-right">${{numFmt(d[getMetricKeyFromCode(code, 'UDARA')])}}</td>
+      <td class="py-2 px-2.5 text-right">${{numFmt(d[getMetricKeyFromCode(code, 'KA')])}}</td>
+      <td class="py-2 px-2.5 text-right">${{numFmt(d[getMetricKeyFromCode(code, 'BUS')])}}</td>
+      <td class="py-2 px-2.5 text-right">${{numFmt(d[getMetricKeyFromCode(code, 'ASDP')])}}</td>
+      <td class="py-2 px-2.5 text-right">${{numFmt(d[getMetricKeyFromCode(code, 'LAUT')])}}</td>
       <td class="py-2 px-2.5 text-right font-bold text-slate-900 dark:text-white">${{numFmt(d[getMetricKeyFromCode(code, 'TOTAL')])}}</td>
     `;
     tbody.appendChild(tr);
@@ -2543,7 +2550,7 @@ function selectLebaranDate(dateStr) {{
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day[getMetricKey('KA')])}}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-        <div class="text-[10px] font-bold text-green-700 dark:text-green-400">BUS AKAP</div>
+        <div class="text-[10px] font-bold text-green-700 dark:text-green-400">TERMINAL BUS</div>
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day[getMetricKey('BUS')])}}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
@@ -2581,7 +2588,7 @@ function renderLebaranWorkspace() {{
       }}
 
       const val = d[getMetricKey('TOTAL')];
-      const valFmt = isPnp ? (val / 1e6).toFixed(2) + 'M' : (val >= 1e3 ? (val / 1e3).toFixed(1) + 'k' : val);
+      const valFmt = isPnp ? (val / 1e6).toFixed(1) + 'M' : (val >= 1e3 ? (val / 1e3).toFixed(1) + 'k' : val);
 
       btn.className = `shrink-0 text-left px-2.5 py-1.5 rounded border text-xs transition-all ${{btnClass}}`;
       btn.innerHTML = `
@@ -2657,7 +2664,7 @@ function renderLebaranWorkspace() {{
   if (!chartSurgeBar) {{
     const ctxSurge = document.getElementById('chartSurgeBarCanvas').getContext('2d');
     const modas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA', 'TOTAL'];
-    const labelsSurge = ['ASDP', 'Bus AKAP', 'Kereta Api', 'Laut', 'Udara', 'TOTAL'];
+    const labelsSurge = ['ASDP', 'Terminal Bus', 'Kereta Api', 'Laut', 'Udara', 'TOTAL'];
     chartSurgeBar = new Chart(ctxSurge, {{
       type: 'bar',
       data: {{
@@ -2688,13 +2695,13 @@ function renderLebaranWorkspace() {{
         tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
         tr.innerHTML = `
           <td class="py-2.5 px-3 font-sans font-semibold text-slate-900 dark:text-slate-100">${{labelsSurge[idx]}}</td>
-          <td class="py-2.5 px-3">${{numFmt(s.baseline)}}</td>
-          <td class="py-2.5 px-3 font-bold text-purple-700 dark:text-purple-400">${{numFmt(s.peak_mudik)}}</td>
-          <td class="py-2.5 px-3 text-purple-700 dark:text-purple-400 font-semibold">+${{s.surge_mudik_pct}}%</td>
-          <td class="py-2.5 px-3 font-bold text-rose-700 dark:text-rose-400">${{numFmt(s.peak_balik1)}}</td>
-          <td class="py-2.5 px-3 text-rose-700 dark:text-rose-400 font-semibold">+${{s.surge_balik1_pct}}%</td>
-          <td class="py-2.5 px-3">${{numFmt(s.peak_balik2)}}</td>
-          <td class="py-2.5 px-3">+${{s.surge_balik2_pct}}%</td>
+          <td class="py-2.5 px-3 text-right">${{numFmt(s.baseline)}}</td>
+          <td class="py-2.5 px-3 text-right font-bold text-purple-700 dark:text-purple-400">${{numFmt(s.peak_mudik)}}</td>
+          <td class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400 font-semibold">+${{decFmt(s.surge_mudik_pct, 1)}}%</td>
+          <td class="py-2.5 px-3 text-right font-bold text-rose-700 dark:text-rose-400">${{numFmt(s.peak_balik1)}}</td>
+          <td class="py-2.5 px-3 text-right text-rose-700 dark:text-rose-400 font-semibold">+${{decFmt(s.surge_balik1_pct, 1)}}%</td>
+          <td class="py-2.5 px-3 text-right">${{numFmt(s.peak_balik2)}}</td>
+          <td class="py-2.5 px-3 text-right">+${{decFmt(s.surge_balik2_pct, 1)}}%</td>
         `;
         tbody.appendChild(tr);
       }});
@@ -2732,7 +2739,7 @@ function renderModalShareWorkspace() {{
       datasets: [
         {{ label: 'Udara', data: shares.map(m => m.UDARA), borderColor: COLOR.UDARA, backgroundColor: 'rgba(2, 132, 199, 0.4)', fill: true, tension: 0.15 }},
         {{ label: 'Kereta Api', data: shares.map(m => m.KA), borderColor: COLOR.KA, backgroundColor: 'rgba(217, 119, 6, 0.4)', fill: true, tension: 0.15 }},
-        {{ label: 'Bus AKAP', data: shares.map(m => m.BUS), borderColor: COLOR.BUS, backgroundColor: 'rgba(22, 163, 74, 0.4)', fill: true, tension: 0.15 }},
+        {{ label: 'Terminal Bus', data: shares.map(m => m.BUS), borderColor: COLOR.BUS, backgroundColor: 'rgba(22, 163, 74, 0.4)', fill: true, tension: 0.15 }},
         {{ label: 'ASDP', data: shares.map(m => m.ASDP), borderColor: COLOR.ASDP, backgroundColor: 'rgba(147, 51, 234, 0.4)', fill: true, tension: 0.15 }},
         {{ label: 'Laut', data: shares.map(m => m.LAUT), borderColor: COLOR.LAUT, backgroundColor: 'rgba(8, 145, 178, 0.4)', fill: true, tension: 0.15 }},
       ]
@@ -2791,11 +2798,11 @@ function renderModalShareWorkspace() {{
       tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
       tr.innerHTML = `
         <td class="py-2.5 px-3 font-sans font-medium text-slate-900 dark:text-slate-100">${{m.label}}</td>
-        <td class="py-2.5 px-3">${{m.UDARA}}%</td>
-        <td class="py-2.5 px-3">${{m.KA}}%</td>
-        <td class="py-2.5 px-3">${{m.BUS}}%</td>
-        <td class="py-2.5 px-3 font-semibold text-purple-700 dark:text-purple-400">${{m.ASDP}}%</td>
-        <td class="py-2.5 px-3">${{m.LAUT}}%</td>
+        <td class="py-2.5 px-3 text-right">${{decFmt(m.UDARA, 1)}}%</td>
+        <td class="py-2.5 px-3 text-right">${{decFmt(m.KA, 1)}}%</td>
+        <td class="py-2.5 px-3 text-right">${{decFmt(m.BUS, 1)}}%</td>
+        <td class="py-2.5 px-3 text-right font-semibold text-purple-700 dark:text-purple-400">${{decFmt(m.ASDP, 1)}}%</td>
+        <td class="py-2.5 px-3 text-right">${{decFmt(m.LAUT, 1)}}%</td>
         <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">${{numFmt(m.TOTAL)}}</td>
       `;
       tbody.appendChild(tr);
@@ -2812,7 +2819,7 @@ function renderLoadFactorWorkspace() {{
   const isDark = document.documentElement.classList.contains('dark');
   const ctx = document.getElementById('chartLoadFactorCanvas').getContext('2d');
   const modas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA'];
-  const labelsLF = ['ASDP', 'Bus AKAP', 'Kereta Api', 'Laut', 'Udara'];
+  const labelsLF = ['ASDP', 'Terminal Bus', 'Kereta Api', 'Laut', 'Udara'];
   const lf = DATA.load_factor_stats;
 
   chartLoadFactor = new Chart(ctx, {{
@@ -2845,10 +2852,10 @@ function renderLoadFactorWorkspace() {{
       tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
       tr.innerHTML = `
         <td class="py-2.5 px-3 font-sans font-semibold text-slate-900 dark:text-slate-100">${{labelsLF[idx]}}</td>
-        <td class="py-2.5 px-3">${{s.baseline_lf}} pnp/arm</td>
-        <td class="py-2.5 px-3 text-purple-700 dark:text-purple-400 font-semibold">${{s.mudik_lf}}</td>
-        <td class="py-2.5 px-3 text-rose-700 dark:text-rose-400 font-semibold">${{s.balik_lf}}</td>
-        <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">+${{s.surge_lf_pct}}%</td>
+        <td class="py-2.5 px-3 text-right">${{decFmt(s.baseline_lf, 1)}} pnp/arm</td>
+        <td class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400 font-semibold">${{decFmt(s.mudik_lf, 1)}}</td>
+        <td class="py-2.5 px-3 text-right text-rose-700 dark:text-rose-400 font-semibold">${{decFmt(s.balik_lf, 1)}}</td>
+        <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">+${{decFmt(s.surge_lf_pct, 1)}}%</td>
       `;
       tbody.appendChild(tr);
     }});
@@ -2956,10 +2963,10 @@ function renderHubsTable() {{
         </span>
       </td>
       <td class="py-2.5 px-3 font-sans text-slate-600 dark:text-slate-300">${{h.provinsi}}</td>
-      <td class="py-2.5 px-3 font-mono font-bold ${{isPnp ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}}">${{numFmt(pnpDisplay)}}</td>
-      <td class="py-2.5 px-3 font-mono ${{!isPnp ? 'font-bold text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-400'}}">${{numFmt(armDisplay)}}</td>
-      <td class="py-2.5 px-3">
-        <div class="flex items-center gap-2">
+      <td class="py-2.5 px-3 text-right font-mono font-bold ${{isPnp ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}}">${{numFmt(pnpDisplay)}}</td>
+      <td class="py-2.5 px-3 text-right font-mono ${{!isPnp ? 'font-bold text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-400'}}">${{numFmt(armDisplay)}}</td>
+      <td class="py-2.5 px-3 text-right">
+        <div class="flex items-center gap-2 justify-end">
           <div class="flex-1 h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
             <div class="h-full rounded-full transition-all duration-300" style="width: ${{pct}}%; background-color: ${{color}}"></div>
           </div>
@@ -2993,13 +3000,13 @@ function renderMatrixTable() {{
     {{ label: `1. Volume ${{s.label || 'Multimoda'}} YTD`, u: numFmt(DATA.top_hubs_ytd.UDARA.reduce((a,b)=>a+(b[getHubMetricKey()]||0),0)), ka: numFmt(DATA.top_hubs_ytd.KA.reduce((a,b)=>a+(b[getHubMetricKey()]||0),0)), bus: numFmt(DATA.top_hubs_ytd.BUS.reduce((a,b)=>a+(b[getHubMetricKey()]||0),0)), asdp: numFmt(DATA.top_hubs_ytd.ASDP.reduce((a,b)=>a+(b[getHubMetricKey()]||0),0)), laut: numFmt(DATA.top_hubs_ytd.LAUT.reduce((a,b)=>a+(b[getHubMetricKey()]||0),0)), tot: numFmt(s.ytd || meta.total_passengers_ytd) }},
     {{ label: `2. Rata-rata Harian (${{s.unit || 'pnp'}})`, u: numFmt(Math.round((s.ytd || meta.total_passengers_ytd) * 0.325 / 272)), ka: numFmt(Math.round((s.ytd || meta.total_passengers_ytd) * 0.224 / 272)), bus: numFmt(Math.round((s.ytd || meta.total_passengers_ytd) * 0.203 / 272)), asdp: numFmt(Math.round((s.ytd || meta.total_passengers_ytd) * 0.113 / 272)), laut: numFmt(Math.round((s.ytd || meta.total_passengers_ytd) * 0.135 / 272)), tot: numFmt(s.avg || 1367243) }},
     {{ label: '3. Volume Puncak Mudik (18 Mar)', u: numFmt(surge.UDARA.peak_mudik), ka: numFmt(surge.KA.peak_mudik), bus: numFmt(surge.BUS.peak_mudik), asdp: numFmt(surge.ASDP.peak_mudik), laut: numFmt(surge.LAUT.peak_mudik), tot: numFmt(s.mudik_val || surge.TOTAL.peak_mudik) }},
-    {{ label: '4. Lonjakan Arus Mudik (%)', u: '+' + surge.UDARA.surge_mudik_pct + '%', ka: '+' + surge.KA.surge_mudik_pct + '%', bus: '+' + surge.BUS.surge_mudik_pct + '%', asdp: '+' + surge.ASDP.surge_mudik_pct + '%', laut: '+' + surge.LAUT.surge_mudik_pct + '%', tot: '+' + (s.mudik_surge_pct || surge.TOTAL.surge_mudik_pct) + '%' }},
+    {{ label: '4. Lonjakan Arus Mudik (%)', u: '+' + decFmt(surge.UDARA.surge_mudik_pct, 1) + '%', ka: '+' + decFmt(surge.KA.surge_mudik_pct, 1) + '%', bus: '+' + decFmt(surge.BUS.surge_mudik_pct, 1) + '%', asdp: '+' + decFmt(surge.ASDP.surge_mudik_pct, 1) + '%', laut: '+' + decFmt(surge.LAUT.surge_mudik_pct, 1) + '%', tot: '+' + decFmt(s.mudik_surge_pct || surge.TOTAL.surge_mudik_pct, 1) + '%' }},
     {{ label: '5. Volume Puncak Balik 1 (24 Mar)', u: numFmt(surge.UDARA.peak_balik1), ka: numFmt(surge.KA.peak_balik1), bus: numFmt(surge.BUS.peak_balik1), asdp: numFmt(surge.ASDP.peak_balik1), laut: numFmt(surge.LAUT.peak_balik1), tot: numFmt(s.peak_val || surge.TOTAL.peak_balik1) }},
-    {{ label: '6. Lonjakan Arus Balik 1 (%)', u: '+' + surge.UDARA.surge_balik1_pct + '%', ka: '+' + surge.KA.surge_balik1_pct + '%', bus: '+' + surge.BUS.surge_balik1_pct + '%', asdp: '+' + surge.ASDP.surge_balik1_pct + '%', laut: '+' + surge.LAUT.surge_balik1_pct + '%', tot: '+' + (s.peak_surge_pct || surge.TOTAL.surge_balik1_pct) + '%' }},
-    {{ label: '7. Load Factor Normal (Pnp/Arm)', u: lf.UDARA.baseline_lf, ka: lf.KA.baseline_lf, bus: lf.BUS.baseline_lf, asdp: lf.ASDP.baseline_lf, laut: lf.LAUT.baseline_lf, tot: '37,1' }},
-    {{ label: '8. Load Factor Puncak Lebaran', u: lf.UDARA.peak_lf, ka: lf.KA.peak_lf, bus: lf.BUS.peak_lf, asdp: lf.ASDP.peak_lf, laut: lf.LAUT.peak_lf, tot: '52,7' }},
-    {{ label: '9. Pangsa Pasar Normal Feb (%)', u: feb.share_UDARA + '%', ka: feb.share_KA + '%', bus: feb.share_BUS + '%', asdp: feb.share_ASDP + '%', laut: feb.share_LAUT + '%', tot: '100,0%' }},
-    {{ label: '10. Pangsa Pasar Puncak Mar (%)', u: mar.share_UDARA + '%', ka: mar.share_KA + '%', bus: mar.share_BUS + '%', asdp: mar.share_ASDP + '%', laut: mar.share_LAUT + '%', tot: '100,0%' }},
+    {{ label: '6. Lonjakan Arus Balik 1 (%)', u: '+' + decFmt(surge.UDARA.surge_balik1_pct, 1) + '%', ka: '+' + decFmt(surge.KA.surge_balik1_pct, 1) + '%', bus: '+' + decFmt(surge.BUS.surge_balik1_pct, 1) + '%', asdp: '+' + decFmt(surge.ASDP.surge_balik1_pct, 1) + '%', laut: '+' + decFmt(surge.LAUT.surge_balik1_pct, 1) + '%', tot: '+' + decFmt(s.peak_surge_pct || surge.TOTAL.surge_balik1_pct, 1) + '%' }},
+    {{ label: '7. Load Factor Normal (Pnp/Arm)', u: decFmt(lf.UDARA.baseline_lf, 1), ka: decFmt(lf.KA.baseline_lf, 1), bus: decFmt(lf.BUS.baseline_lf, 1), asdp: decFmt(lf.ASDP.baseline_lf, 1), laut: decFmt(lf.LAUT.baseline_lf, 1), tot: '37,1' }},
+    {{ label: '8. Load Factor Puncak Lebaran', u: decFmt(lf.UDARA.peak_lf, 1), ka: decFmt(lf.KA.peak_lf, 1), bus: decFmt(lf.BUS.peak_lf, 1), asdp: decFmt(lf.ASDP.peak_lf, 1), laut: decFmt(lf.LAUT.peak_lf, 1), tot: '52,7' }},
+    {{ label: '9. Pangsa Pasar Normal Feb (%)', u: decFmt(feb.share_UDARA, 1) + '%', ka: decFmt(feb.share_KA, 1) + '%', bus: decFmt(feb.share_BUS, 1) + '%', asdp: decFmt(feb.share_ASDP, 1) + '%', laut: decFmt(feb.share_LAUT, 1) + '%', tot: '100,0%' }},
+    {{ label: '10. Pangsa Pasar Puncak Mar (%)', u: decFmt(mar.share_UDARA, 1) + '%', ka: decFmt(mar.share_KA, 1) + '%', bus: decFmt(mar.share_BUS, 1) + '%', asdp: decFmt(mar.share_ASDP, 1) + '%', laut: decFmt(mar.share_LAUT, 1) + '%', tot: '100,0%' }},
     {{ label: '11. Jumlah Simpul Terverifikasi', u: '257 Bandara', ka: '193 Stasiun', bus: '215 Terminal', asdp: '276 Pelabuhan', laut: '267 Pelabuhan', tot: '1.208 Simpul' }},
     {{ label: '12. Simpul Terpadat Nasional', u: 'Soekarno-Hatta (CGK)', ka: 'Yogyakarta (YK)', bus: 'Purboyo Madiun', asdp: 'Bakauheni Lampung', laut: 'Tanjung Perak', tot: 'Multimoda' }},
   ];
@@ -3009,11 +3016,11 @@ function renderMatrixTable() {{
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
     tr.innerHTML = `
       <td class="py-2.5 px-3.5 font-sans font-medium text-slate-900 dark:text-slate-100">${{r.label}}</td>
-      <td class="py-2.5 px-3">${{r.u}}</td>
-      <td class="py-2.5 px-3">${{r.ka}}</td>
-      <td class="py-2.5 px-3">${{r.bus}}</td>
-      <td class="py-2.5 px-3 font-bold text-purple-700 dark:text-purple-400">${{r.asdp}}</td>
-      <td class="py-2.5 px-3">${{r.laut}}</td>
+      <td class="py-2.5 px-3 text-right">${{r.u}}</td>
+      <td class="py-2.5 px-3 text-right">${{r.ka}}</td>
+      <td class="py-2.5 px-3 text-right">${{r.bus}}</td>
+      <td class="py-2.5 px-3 text-right font-bold text-purple-700 dark:text-purple-400">${{r.asdp}}</td>
+      <td class="py-2.5 px-3 text-right">${{r.laut}}</td>
       <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">${{r.tot}}</td>
     `;
     tbody.appendChild(tr);
@@ -3080,7 +3087,7 @@ function initSpatialMap() {{
       <div class="font-bold text-slate-800 dark:text-slate-200 mb-1">Simpul Multimoda:</div>
       <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-600"></span><span class="text-slate-600 dark:text-slate-300">Udara (257)</span></div>
       <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-600"></span><span class="text-slate-600 dark:text-slate-300">Kereta Api (193)</span></div>
-      <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600"></span><span class="text-slate-600 dark:text-slate-300">Bus AKAP (139)</span></div>
+      <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600"></span><span class="text-slate-600 dark:text-slate-300">Terminal Bus (139)</span></div>
       <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span><span class="text-slate-600 dark:text-slate-300">ASDP (158)</span></div>
       <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-600"></span><span class="text-slate-600 dark:text-slate-300">Laut (267)</span></div>
     `;
@@ -3494,7 +3501,7 @@ function renderForecastTable() {{
       <td class="py-2 px-2.5 font-sans ${{['Min', 'Sab'].includes(dayName) ? 'text-rose-600 font-semibold' : 'text-slate-500'}}">${{dayName}}</td>
       <td class="py-2 px-2.5 text-right font-bold text-slate-900 dark:text-white">${{numFmt(row.TOTAL)}}</td>
       <td class="py-2 px-2.5 text-right text-slate-500 text-[10px]">${{numFmt(row.ci_lower)}} - ${{numFmt(row.ci_upper)}}</td>
-      <td class="py-2 px-2.5 text-center ${{row.surge_pct >= 30 ? 'text-amber-600 font-bold' : (row.surge_pct >= 15 ? 'text-blue-600' : 'text-slate-500')}}">+${{row.surge_pct}}%</td>
+      <td class="py-2 px-2.5 text-right ${{row.surge_pct >= 30 ? 'text-amber-600 font-bold' : (row.surge_pct >= 15 ? 'text-blue-600' : 'text-slate-500')}}">+${{decFmt(row.surge_pct, 1)}}%</td>
       <td class="py-2 px-2.5 text-center">${{badgeStatus}}</td>
       <td class="py-2 px-2.5 text-right text-slate-700 dark:text-slate-300 font-semibold">${{numFmt(row.arm_TOTAL)}}</td>
     `;
@@ -3647,8 +3654,8 @@ const SIMPUL_DATA = [
     name: 'Terminal Purabaya (Bungurasih)',
     prov: 'Jawa Timur',
     moda: 'BUS',
-    modaLabel: '🚌 Bus AKAP',
-    saranaType: 'Armada Bus AKAP Antar Kota',
+    modaLabel: '🚌 Terminal Bus',
+    saranaType: 'Armada Bus Antar Kota',
     saranaUnit: 'trip bus',
     pnpDay: 53640,
     armDay: 2745,
