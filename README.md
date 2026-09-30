@@ -65,7 +65,7 @@ Status kesibukan simpul ditentukan melalui **3 tolok ukur matematis dan operasio
    ```
 
 2. **Jalankan Dashboard:**
-   Cukup buka folder `dashboard_utama/` lalu buka file `index.html` (atau `Dashboard_Mobilitas_Nasional_2026.html`) langsung di Google Chrome, Microsoft Edge, atau browser lainnya. Anda juga dapat langsung membuka `index.html` di root untuk pengalihan otomatis.
+   Cukup buka file `index.html` atau `Dashboard_Mobilitas_Nasional_2026.html` langsung di Google Chrome, Microsoft Edge, atau browser lainnya.
 
 3. **Membangun Ulang dari Data Mentah (Opsional):**
    ```bash
