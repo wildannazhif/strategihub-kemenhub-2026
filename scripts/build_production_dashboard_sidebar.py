@@ -1419,13 +1419,16 @@ def generate_dashboard():
               </p>
             </div>
 
-            <!-- Horizon Badges -->
+            <!-- Horizon Badges with 2025 Baseline -->
             <div class="flex items-center gap-2 text-xs flex-wrap">
+              <span class="px-2.5 py-1 rounded font-mono text-[11px] bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-semibold">
+                Baseline Komparasi: Siasati 2025 (365H)
+              </span>
               <span class="px-2.5 py-1 rounded font-mono text-[11px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
-                Data Historis: 1 Jan - 27 Sep 2026 (270H)
+                Historis 2026: 1 Jan - 27 Sep (270H)
               </span>
               <span class="px-2.5 py-1 rounded font-mono text-[11px] bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
-                Horizon Prediksi: 28 Sep 2026 - 5 Jan 2027 (100H)
+                Horizon Prediksi: 28 Sep '26 - 5 Jan '27 (100H)
               </span>
             </div>
           </div>
@@ -1487,7 +1490,7 @@ def generate_dashboard():
           </div>
         </div>
 
-        <!-- Executive Projections Strip (4 Cards) -->
+        <!-- Executive Projections Strip (4 Cards) with 2025 Comparison -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <!-- Card 1: Total Volume Nataru -->
           <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4">
@@ -1495,10 +1498,10 @@ def generate_dashboard():
               <span>Proyeksi Nataru (18 Hari)</span>
               <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">18 Des - 4 Jan</span>
             </div>
-            <div id="card-fc-total-pnp" class="num-mono text-2xl font-extrabold text-slate-900 dark:text-white">24.754.162</div>
+            <div id="card-fc-total-pnp" class="num-mono text-2xl font-extrabold text-slate-900 dark:text-white">32.771.287</div>
             <div class="text-[11px] text-slate-500 mt-1 flex items-center justify-between">
-              <span>Rata-rata: <strong id="card-fc-avg-pnp" class="text-slate-800 dark:text-slate-200">1.375.231</strong> /hari</span>
-              <span class="text-emerald-600 font-semibold">+15,7% vs Normal</span>
+              <span>Rerata: <strong id="card-fc-avg-pnp" class="text-slate-800 dark:text-slate-200">1.820.627</strong> /h</span>
+              <span id="card-fc-total-yoy" class="text-emerald-600 dark:text-emerald-400 font-bold">+6,3% vs 2025</span>
             </div>
           </div>
 
@@ -1508,10 +1511,10 @@ def generate_dashboard():
               <span>Puncak Mudik Natal (H-1)</span>
               <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">Kamis, 24 Des</span>
             </div>
-            <div id="card-fc-xmas-pnp" class="num-mono text-2xl font-extrabold text-amber-700 dark:text-amber-400">1.596.000</div>
+            <div id="card-fc-xmas-pnp" class="num-mono text-2xl font-extrabold text-amber-700 dark:text-amber-400">2.082.191</div>
             <div class="text-[11px] text-slate-500 mt-1 flex items-center justify-between">
-              <span>Lonjakan: <strong id="card-fc-xmas-surge" class="text-amber-600 dark:text-amber-400">+34,2%</strong></span>
-              <span class="text-slate-400">vs Normal</span>
+              <span class="text-slate-500">vs 2025: 1.922.912</span>
+              <span id="card-fc-xmas-yoy" class="text-amber-600 dark:text-amber-400 font-bold">+8,3% YoY</span>
             </div>
           </div>
 
@@ -1521,10 +1524,10 @@ def generate_dashboard():
               <span>Puncak Balik Tahun Baru</span>
               <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300">Minggu, 3 Jan</span>
             </div>
-            <div id="card-fc-ny-pnp" class="num-mono text-2xl font-extrabold text-rose-700 dark:text-rose-400">1.678.553</div>
+            <div id="card-fc-ny-pnp" class="num-mono text-2xl font-extrabold text-rose-700 dark:text-rose-400">1.746.435</div>
             <div class="text-[11px] text-slate-500 mt-1 flex items-center justify-between">
-              <span>Lonjakan: <strong id="card-fc-ny-surge" class="text-rose-600 dark:text-rose-400">+41,2%</strong></span>
-              <span class="text-slate-400">Puncak Tertinggi Q4</span>
+              <span class="text-slate-500">vs 2025: 1.582.119</span>
+              <span id="card-fc-ny-yoy" class="text-rose-600 dark:text-rose-400 font-bold">+10,4% YoY</span>
             </div>
           </div>
 
@@ -1534,11 +1537,53 @@ def generate_dashboard():
               <span>Kebutuhan Armada Puncak</span>
               <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">Siaga Operasi</span>
             </div>
-            <div id="card-fc-arm-peak" class="num-mono text-2xl font-extrabold text-slate-900 dark:text-white">42.850</div>
+            <div id="card-fc-arm-peak" class="num-mono text-2xl font-extrabold text-slate-900 dark:text-white">46.518</div>
             <div class="text-[11px] text-slate-500 mt-1 flex items-center justify-between">
-              <span>Trip Tambahan: <strong class="text-emerald-600">+4.100</strong> /hari</span>
-              <span class="text-slate-400">ASDP & Bus Utama</span>
+              <span class="text-slate-500">vs 2025: 44.447 trip</span>
+              <span id="card-fc-arm-yoy" class="text-emerald-600 dark:text-emerald-400 font-bold">+4,7% YoY</span>
             </div>
+          </div>
+        </div>
+
+        <!-- Dedicated Multi-Modal Nataru 2026 vs 2025 Comparison Card -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-slate-100 dark:border-slate-800">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
+                  Tabel Komparasi Angkutan Nataru 2026/2027 vs Realisasi Tahun Lalu (2025)
+                </h3>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-0.5">
+                Perbandingan volume penumpang riil posko 18 hari (18 Des – 4 Jan) per moda transportasi serta estimasi pergeseran pangsa pasar
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-semibold">
+                Benchmark Riil: Siasati 2025 (365 Hari)
+              </span>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="bg-slate-50 dark:bg-slate-800 text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-700">
+                <tr>
+                  <th class="py-2.5 px-3">Moda Transportasi</th>
+                  <th class="py-2.5 px-3 text-right">Realisasi 2025 (Pnp)</th>
+                  <th class="py-2.5 px-3 text-right">Pangsa '25</th>
+                  <th class="py-2.5 px-3 text-right text-indigo-700 dark:text-indigo-400">Proyeksi 2026 (Pnp)</th>
+                  <th class="py-2.5 px-3 text-right text-indigo-700 dark:text-indigo-400">Pangsa '26</th>
+                  <th class="py-2.5 px-3 text-right font-semibold">Selisih (Δ Pnp)</th>
+                  <th class="py-2.5 px-3 text-center">Pertumbuhan YoY</th>
+                  <th class="py-2.5 px-3 text-left">Dinamika Operasional & Kapasitas</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-forecast-comparison" class="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px] text-slate-800 dark:text-slate-200">
+                <!-- Populated dynamically by JS -->
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -1553,9 +1598,10 @@ def generate_dashboard():
                 Garis solid mewakili realisasi riil (Jan - Sep). Garis putus-putus ungu mewakili proyeksi model (Okt - Jan 2027) beserta pita keyakinan 95%.
               </p>
             </div>
-            <div class="flex items-center gap-3 text-[11px] font-mono">
+            <div class="flex items-center gap-3 text-[11px] font-mono flex-wrap">
               <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 bg-sky-600"></span> Realisasi 2026</span>
               <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-indigo-500"></span> Proyeksi Model</span>
+              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-emerald-500"></span> Realisasi 2025 (Tahun Lalu)</span>
               <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-indigo-500/20 border border-indigo-400"></span> Rentang 95% CI</span>
             </div>
           </div>
@@ -1807,11 +1853,13 @@ def generate_dashboard():
                 <tr>
                   <th class="py-2.5 px-3">Tanggal</th>
                   <th class="py-2.5 px-3">Hari</th>
-                  <th class="py-2.5 px-3 text-right">Estimasi Penumpang</th>
+                  <th class="py-2.5 px-3 text-right text-indigo-700 dark:text-indigo-400">Proyeksi 2026/27</th>
+                  <th class="py-2.5 px-3 text-right text-emerald-700 dark:text-emerald-400">Realisasi 2025</th>
+                  <th class="py-2.5 px-3 text-center">Pertumbuhan YoY</th>
                   <th class="py-2.5 px-3 text-right">Rentang 95% CI</th>
-                  <th class="py-2.5 px-3 text-right">Lonjakan vs Normal</th>
-                  <th class="py-2.5 px-3 text-center">Status Operasional</th>
-                  <th class="py-2.5 px-3 text-right">Kebutuhan Armada (Trip)</th>
+                  <th class="py-2.5 px-3 text-center">Status Lonjakan</th>
+                  <th class="py-2.5 px-3 text-right">Armada Proyeksi</th>
+                  <th class="py-2.5 px-3 text-right text-slate-500">Armada 2025</th>
                 </tr>
               </thead>
               <tbody id="tbody-forecast" class="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px] text-slate-800 dark:text-slate-200">
@@ -3578,6 +3626,7 @@ function setForecastScenario(scen) {{
   if (select && select.value !== scen) select.value = scen;
 
   renderForecastSummaryCards();
+  renderForecastComparisonTable();
   renderForecastChart();
   renderForecastTable();
   renderArmadaSimulation();
@@ -3617,17 +3666,110 @@ function renderForecastSummaryCards() {{
   const sum = DATA.forecast_nataru.summaries[currentForecastScenario];
   if (!sum) return;
 
-  document.getElementById('card-fc-total-pnp').innerText = numFmt(sum.total_passengers);
-  document.getElementById('card-fc-avg-pnp').innerText = numFmt(sum.avg_daily_passengers);
-  document.getElementById('card-fc-xmas-pnp').innerText = numFmt(sum.xmas_peak_val);
-  document.getElementById('card-fc-xmas-surge').innerText = `+${{sum.xmas_peak_surge}}%`;
-  document.getElementById('card-fc-ny-pnp').innerText = numFmt(sum.ny_peak_val);
-  document.getElementById('card-fc-ny-surge').innerText = `+${{sum.ny_peak_surge}}%`;
+  const totalEl = document.getElementById('card-fc-total-pnp');
+  if (totalEl) totalEl.innerText = numFmt(sum.total_passengers);
+
+  const avgEl = document.getElementById('card-fc-avg-pnp');
+  if (avgEl) avgEl.innerText = numFmt(sum.avg_daily_passengers);
+
+  const totalYoyEl = document.getElementById('card-fc-total-yoy');
+  if (totalYoyEl) {{
+    const sign = sum.yoy_total_pct >= 0 ? '+' : '';
+    totalYoyEl.innerText = `${{sign}}${{decFmt(sum.yoy_total_pct, 1)}}% vs 2025`;
+    totalYoyEl.className = sum.yoy_total_pct >= 0 ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-rose-600 dark:text-rose-400 font-bold';
+  }}
+
+  const xmasEl = document.getElementById('card-fc-xmas-pnp');
+  if (xmasEl) xmasEl.innerText = numFmt(sum.xmas_peak_val);
+
+  const xmasYoyEl = document.getElementById('card-fc-xmas-yoy');
+  if (xmasYoyEl) {{
+    const sign = sum.xmas_peak_yoy >= 0 ? '+' : '';
+    xmasYoyEl.innerText = `${{sign}}${{decFmt(sum.xmas_peak_yoy, 1)}}% YoY`;
+    xmasYoyEl.className = sum.xmas_peak_yoy >= 0 ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-rose-600 dark:text-rose-400 font-bold';
+  }}
+
+  const nyEl = document.getElementById('card-fc-ny-pnp');
+  if (nyEl) nyEl.innerText = numFmt(sum.ny_peak_val);
+
+  const nyYoyEl = document.getElementById('card-fc-ny-yoy');
+  if (nyYoyEl) {{
+    const sign = sum.ny_peak_yoy >= 0 ? '+' : '';
+    nyYoyEl.innerText = `${{sign}}${{decFmt(sum.ny_peak_yoy, 1)}}% YoY`;
+    nyYoyEl.className = sum.ny_peak_yoy >= 0 ? 'text-rose-600 dark:text-rose-400 font-bold' : 'text-slate-500 font-bold';
+  }}
   
   // Peak armada
   const scenData = DATA.forecast_nataru.scenarios[currentForecastScenario];
   const maxArmDay = scenData.reduce((max, d) => d.arm_TOTAL > max.arm_TOTAL ? d : max, scenData[0]);
-  document.getElementById('card-fc-arm-peak').innerText = numFmt(maxArmDay.arm_TOTAL);
+  const armPeakEl = document.getElementById('card-fc-arm-peak');
+  if (armPeakEl) armPeakEl.innerText = numFmt(maxArmDay.arm_TOTAL);
+
+  const armYoyEl = document.getElementById('card-fc-arm-yoy');
+  if (armYoyEl) {{
+    const baseArm25 = maxArmDay.arm_2025 || 44447;
+    const armDiffPct = ((maxArmDay.arm_TOTAL / baseArm25) - 1.0) * 100;
+    const sign = armDiffPct >= 0 ? '+' : '';
+    armYoyEl.innerText = `${{sign}}${{decFmt(armDiffPct, 1)}}% YoY`;
+  }}
+}}
+
+function renderForecastComparisonTable() {{
+  if (!DATA.forecast_nataru) return;
+  const tbody = document.getElementById('tbody-forecast-comparison');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  const sum = DATA.forecast_nataru.summaries[currentForecastScenario];
+  if (!sum || !sum.mode_breakdown) return;
+
+  const modesMeta = [
+    {{ key: 'UDARA', label: '✈ Udara (Penerbangan Domestik)', color: COLOR.UDARA, note: 'Kapasitas armada jet beroperasi optimal; tiket dinamis memfilter demand jarak jauh' }},
+    {{ key: 'KA', label: '🚆 Kereta Api (KAI)', color: COLOR.KA, note: 'Tingkat isian stabil tinggi (load factor 90%+); seluruh kuota KA favorit terjual' }},
+    {{ key: 'BUS', label: '🚌 Bus', color: COLOR.BUS, note: 'Rute Trans Jawa & jalan tol primadona; armada reguler & cadangan siaga penuh' }},
+    {{ key: 'ASDP', label: '⛴ ASDP (Penyeberangan Feri)', color: COLOR.ASDP, note: 'Lonjakan kendaraan pribadi tinggi di lintasan Merak-Bakauheni & Ketapang-Gilimanuk' }},
+    {{ key: 'LAUT', label: '🚢 Laut (Kapal Penumpang Pelni)', color: COLOR.LAUT, note: 'Pertumbuhan tertinggi; pergerakan antarpulau & rute perintis Indonesia Timur' }},
+  ];
+
+  modesMeta.forEach(m => {{
+    const rowData = sum.mode_breakdown[m.key];
+    if (!rowData) return;
+    const yoyClass = rowData.yoy_pct >= 0 ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-rose-600 dark:text-rose-400 font-bold';
+    const tr = document.createElement('tr');
+    tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
+    tr.innerHTML = `
+      <td class="py-2.5 px-3 font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${{m.color}}"></span>
+        <span>${{m.label}}</span>
+      </td>
+      <td class="py-2.5 px-3 text-right font-medium">${{numFmt(rowData.passengers_2025)}}</td>
+      <td class="py-2.5 px-3 text-right text-slate-500">${{decFmt(rowData.share_pct_2025, 1)}}%</td>
+      <td class="py-2.5 px-3 text-right font-bold text-indigo-700 dark:text-indigo-400">${{numFmt(rowData.passengers_2026)}}</td>
+      <td class="py-2.5 px-3 text-right font-semibold text-indigo-600 dark:text-indigo-400">${{decFmt(rowData.share_pct_2026, 1)}}%</td>
+      <td class="py-2.5 px-3 text-right font-semibold">${{rowData.diff >= 0 ? '+' : ''}}${{numFmt(rowData.diff)}}</td>
+      <td class="py-2.5 px-3 text-center ${{yoyClass}}">${{rowData.yoy_pct >= 0 ? '+' : ''}}${{decFmt(rowData.yoy_pct, 1)}}%</td>
+      <td class="py-2.5 px-3 text-left font-sans text-[11px] text-slate-500 dark:text-slate-400">${{m.note}}</td>
+    `;
+    tbody.appendChild(tr);
+  }});
+
+  // Total Multimoda Row
+  const totalYoyClass = sum.yoy_total_pct >= 0 ? 'text-emerald-600 dark:text-emerald-400 font-extrabold' : 'text-rose-600 dark:text-rose-400 font-extrabold';
+  const trTotal = document.createElement('tr');
+  trTotal.className = 'bg-slate-100/80 dark:bg-slate-800/80 font-bold border-t-2 border-slate-300 dark:border-slate-600';
+  trTotal.innerHTML = `
+    <td class="py-3 px-3 uppercase text-slate-900 dark:text-white font-bold">🌟 Total Multimoda Nasional</td>
+    <td class="py-3 px-3 text-right font-black text-slate-900 dark:text-white">${{numFmt(sum.total_passengers_2025)}}</td>
+    <td class="py-3 px-3 text-right text-slate-600 dark:text-slate-400">100,0%</td>
+    <td class="py-3 px-3 text-right font-black text-indigo-700 dark:text-indigo-300 text-xs">${{numFmt(sum.total_passengers)}}</td>
+    <td class="py-3 px-3 text-right font-black text-indigo-700 dark:text-indigo-300">100,0%</td>
+    <td class="py-3 px-3 text-right text-slate-900 dark:text-white">${{sum.diff_passengers >= 0 ? '+' : ''}}${{numFmt(sum.diff_passengers)}}</td>
+    <td class="py-3 px-3 text-center text-xs ${{totalYoyClass}}">${{sum.yoy_total_pct >= 0 ? '+' : ''}}${{decFmt(sum.yoy_total_pct, 1)}}%</td>
+    <td class="py-3 px-3 text-left font-sans text-[11px] text-slate-700 dark:text-slate-300 font-semibold">
+      Ekspansi mobilitas nasional; rerata harian naik dari ${{numFmt(sum.avg_daily_passengers_2025)}} ke ${{numFmt(sum.avg_daily_passengers)}} pnp/hari
+    </td>
+  `;
+  tbody.appendChild(trTotal);
 }}
 
 function renderForecastChart() {{
@@ -3643,10 +3785,10 @@ function renderForecastChart() {{
   const hist = DATA.daily_timeline.filter(d => d.date <= '2026-09-27');
   const fc = DATA.forecast_nataru.scenarios[currentForecastScenario];
 
-  // Combined timeline
+  // Combined timeline labels
   const allLabels = [...hist.map(d => d.date), ...fc.map(d => d.date)];
 
-  // Historical data values
+  // Historical data values (2026)
   const histKey = isPnp ? moda : (moda === 'TOTAL' ? 'arm_TOTAL' : `arm_${{moda}}`);
   const histData = [...hist.map(d => d[histKey]), ...fc.map(() => null)];
 
@@ -3658,13 +3800,29 @@ function renderForecastChart() {{
     ...fc.map(d => isPnp ? d[moda] : d[`arm_${{moda}}`])
   ];
 
+  // Realisasi Tahun Lalu 2025 mapping
+  const map2025 = {{}};
+  if (DATA.timeline_2025) {{
+    DATA.timeline_2025.forEach(r => {{
+      const md = r.date.slice(5);
+      map2025[md] = r;
+    }});
+  }}
+  const hist25Data = allLabels.map(d => {{
+    const md = d.slice(5);
+    const r25 = map2025[md];
+    if (!r25) return null;
+    return isPnp ? r25[moda] : (moda === 'TOTAL' ? r25.arm_TOTAL : r25[`arm_${{moda}}`]);
+  }});
+
   // Colors
   const modaColor = moda === 'TOTAL' ? (isDark ? '#38bdf8' : '#0284c7') : (COLOR[moda] || '#6366f1');
   const forecastColor = '#6366f1'; // Indigo
+  const prevYearColor = isDark ? '#34d399' : '#059669'; // Emerald
 
   const datasets = [
     {{
-      label: `Realisasi Historis (${{isPnp ? 'Penumpang' : 'Armada'}})`,
+      label: `Realisasi Historis 2026 (${{isPnp ? 'Penumpang' : 'Armada'}})`,
       data: histData,
       borderColor: modaColor,
       backgroundColor: 'transparent',
@@ -3675,7 +3833,7 @@ function renderForecastChart() {{
       spanGaps: false
     }},
     {{
-      label: `Proyeksi Model (${{isPnp ? 'Penumpang' : 'Armada'}})`,
+      label: `Proyeksi Model 2026/2027 (${{isPnp ? 'Penumpang' : 'Armada'}})`,
       data: fcData,
       borderColor: forecastColor,
       backgroundColor: 'transparent',
@@ -3685,6 +3843,18 @@ function renderForecastChart() {{
       pointHoverRadius: 4,
       tension: 0.2,
       spanGaps: false
+    }},
+    {{
+      label: `Realisasi Tahun Lalu 2025 (${{isPnp ? 'Penumpang' : 'Armada'}})`,
+      data: hist25Data,
+      borderColor: prevYearColor,
+      backgroundColor: 'transparent',
+      borderWidth: 1.8,
+      borderDash: [3, 3],
+      pointRadius: 0,
+      pointHoverRadius: 4,
+      tension: 0.15,
+      spanGaps: true
     }}
   ];
 
@@ -3824,22 +3994,26 @@ function renderForecastTable() {{
       badgeStatus = `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300">Puncak Natal</span>`;
     }} else if (row.date === '2027-01-03') {{
       badgeStatus = `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 border border-rose-300">Puncak Balik</span>`;
-    }} else if (row.surge_pct >= 40) {{
-      badgeStatus = `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-orange-100 dark:bg-orange-950 text-orange-800 dark:text-orange-300">Sangat Tinggi</span>`;
-    }} else if (row.surge_pct >= 20) {{
+    }} else if (row.status === 'PEAK_SURGE') {{
+      badgeStatus = `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-orange-100 dark:bg-orange-950 text-orange-800 dark:text-orange-300">Puncak Lonjakan</span>`;
+    }} else if (row.status === 'HIGH') {{
       badgeStatus = `<span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">Tinggi</span>`;
     }}
+
+    const yoyClass = row.yoy_pct >= 0 ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-rose-600 dark:text-rose-400 font-bold';
 
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
     tr.innerHTML = `
       <td class="py-2 px-2.5 font-medium text-slate-900 dark:text-white">${{row.date}}</td>
       <td class="py-2 px-2.5 font-sans ${{['Min', 'Sab'].includes(dayName) ? 'text-rose-600 font-semibold' : 'text-slate-500'}}">${{dayName}}</td>
-      <td class="py-2 px-2.5 text-right font-bold text-slate-900 dark:text-white">${{numFmt(row.TOTAL)}}</td>
+      <td class="py-2 px-2.5 text-right font-bold text-indigo-700 dark:text-indigo-400">${{numFmt(row.TOTAL)}}</td>
+      <td class="py-2 px-2.5 text-right font-semibold text-slate-800 dark:text-slate-200">${{numFmt(row.pnp_2025)}}</td>
+      <td class="py-2 px-2.5 text-center ${{yoyClass}}">${{row.yoy_pct >= 0 ? '+' : ''}}${{decFmt(row.yoy_pct, 1)}}%</td>
       <td class="py-2 px-2.5 text-right text-slate-500 text-[10px]">${{numFmt(row.ci_lower)}} - ${{numFmt(row.ci_upper)}}</td>
-      <td class="py-2 px-2.5 text-right ${{row.surge_pct >= 30 ? 'text-amber-600 font-bold' : (row.surge_pct >= 15 ? 'text-blue-600' : 'text-slate-500')}}">+${{decFmt(row.surge_pct, 1)}}%</td>
       <td class="py-2 px-2.5 text-center">${{badgeStatus}}</td>
       <td class="py-2 px-2.5 text-right text-slate-700 dark:text-slate-300 font-semibold">${{numFmt(row.arm_TOTAL)}}</td>
+      <td class="py-2 px-2.5 text-right text-slate-500">${{numFmt(row.arm_2025)}}</td>
     `;
     tbody.appendChild(tr);
   }});
@@ -4354,6 +4528,7 @@ const renderArmadaSimulation = renderSimpulSimulation;
 
 function renderForecastWorkspace() {{
   renderForecastSummaryCards();
+  renderForecastComparisonTable();
   renderForecastChart();
   renderForecastTable();
   renderArmadaSimulation();

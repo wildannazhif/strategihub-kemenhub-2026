@@ -2,271 +2,299 @@ import json
 import datetime
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import Ridge
-from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
-# 1. Load historical daily timeline data
-with open('c:/Users/USER/Documents/PUSDATIN/scripts/mobility_data_bundle.json', 'r', encoding='utf-8') as f:
+# 1. Load historical 2026 bundle and 2025 daily CSV
+with open('scripts/mobility_data_bundle.json', 'r', encoding='utf-8') as f:
     bundle = json.load(f)
 
-daily_history = bundle['daily_timeline']
-# Use complete data up to 2026-09-27 (since Sep 28-29 are partial/in-flight)
-df_hist = pd.DataFrame(daily_history)
-df_hist['date_dt'] = pd.to_datetime(df_hist['date'])
-df_hist = df_hist[df_hist['date_dt'] <= '2026-09-27'].copy()
-df_hist.sort_values('date_dt', inplace=True)
-df_hist.reset_index(drop=True, inplace=True)
+df25 = pd.read_csv('siasati_ringkasan_harian_multimoda_2025.csv')
+df25['tanggal_dt'] = pd.to_datetime(df25['tanggal'])
+df25['md'] = df25['tanggal'].str[5:]
+p25_by_md = df25.set_index('md').to_dict(orient='index')
 
-print(f"Historical training data points: {len(df_hist)} days (from {df_hist['date'].min()} to {df_hist['date'].max()})")
+# Historical 2026 data up to 2026-09-27
+daily_history_26 = bundle['daily_timeline']
+df26 = pd.DataFrame(daily_history_26)
+df26['date_dt'] = pd.to_datetime(df26['date'])
+df26 = df26[df26['date_dt'] <= '2026-09-27'].copy()
+df26.sort_values('date_dt', inplace=True)
+df26.reset_index(drop=True, inplace=True)
+df26['md'] = df26['date'].str[5:]
 
-# 2. Extract baseline metrics
-feb_normal = df_hist[(df_hist['date_dt'] >= '2026-02-01') & (df_hist['date_dt'] <= '2026-02-28')]
-baseline_feb_avg = feb_normal['TOTAL'].mean()
-print(f"Normal baseline February daily average: {baseline_feb_avg:,.0f} passengers/day")
+# 2. Calculate Empirical YTD Growth 2026 vs 2025 (Jan 1 to Sep 27)
+merged_ytd = pd.merge(df26, df25, on='md', suffixes=('_2026', '_2025'))
+tot26_ytd = merged_ytd['TOTAL'].sum()
+tot25_ytd = merged_ytd['TOTAL_PENUMPANG'].sum()
+ytd_growth_tot = (tot26_ytd / tot25_ytd) - 1.0
 
-# Calculate Day-of-Week multipliers across the whole clean non-lebaran period
-non_lebaran = df_hist[~((df_hist['date_dt'] >= '2026-03-13') & (df_hist['date_dt'] <= '2026-03-29'))].copy()
-dow_avg = non_lebaran.groupby(non_lebaran['date_dt'].dt.dayofweek)['TOTAL'].mean()
-overall_mean = non_lebaran['TOTAL'].mean()
-dow_factors = (dow_avg / overall_mean).to_dict()
-print("Day-of-Week Seasonality Multipliers (0=Mon, ..., 6=Sun):")
-for dow, factor in dow_factors.items():
-    day_name = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'][dow]
-    print(f"  {day_name} ({dow}): {factor:.3f}x")
-
-# Per-mode average shares during regular days
 modes = ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT']
-mode_shares_normal = {}
+ytd_growth_modes = {}
 for m in modes:
-    mode_shares_normal[m] = non_lebaran[m].sum() / non_lebaran['TOTAL'].sum()
-print("Normal Modal Shares:", {m: f"{mode_shares_normal[m]*100:.1f}%" for m in modes})
+    p26 = merged_ytd[m].sum()
+    p25 = merged_ytd[f'pnp_{m}'].sum()
+    ytd_growth_modes[m] = (p26 / p25) - 1.0
 
-# Mode load factors (passengers per armada trip)
-load_factors_normal = {}
+print(f"YTD Growth (Jan 1 - Sep 27): Total={ytd_growth_tot*100:+.2f}%")
 for m in modes:
-    pnp_tot = non_lebaran[m].sum()
-    arm_tot = non_lebaran[f'arm_{m}'].sum()
-    load_factors_normal[m] = pnp_tot / arm_tot if arm_tot > 0 else 50.0
-print("Normal Load Factor (Pnp/Trip):", {m: f"{load_factors_normal[m]:.1f}" for m in modes})
+    print(f"  {m:5s}: {ytd_growth_modes[m]*100:+.2f}%")
 
-# 3. Fit baseline time series trend model
-# Holt-Winters Exponential Smoothing on 7-day seasonality
-ts_total = df_hist.set_index('date_dt')['TOTAL']
-hw_model = ExponentialSmoothing(
-    ts_total,
-    seasonal_periods=7,
-    trend='add',
-    seasonal='mul',
-    initialization_method='estimated'
-).fit(damping_trend=0.98)
+# 3. Benchmark Nataru 2025 (18 Days: 18-31 Des 2025 [14H] + 1-4 Jan 2025 [4H])
+des25_nataru = df25[df25['tanggal'].between('2025-12-18', '2025-12-31')]
+jan25_nataru = df25[df25['tanggal'].between('2025-01-01', '2025-01-04')]
+df_nataru25 = pd.concat([des25_nataru, jan25_nataru])
 
-# Forecast dates from 2026-09-28 to 2027-01-05 (100 days)
+benchmark_2025 = {
+    'total_passengers': int(df_nataru25['TOTAL_PENUMPANG'].sum()),
+    'avg_daily_passengers': int(round(df_nataru25['TOTAL_PENUMPANG'].mean())),
+    'total_armada': int(df_nataru25['TOTAL_ARMADA'].sum()),
+    'xmas_peak_date': '2025-12-24',
+    'xmas_peak_val': int(df25.loc[df25['tanggal'] == '2025-12-24', 'TOTAL_PENUMPANG'].values[0]),
+    'libur_peak_date': '2025-12-28',
+    'libur_peak_val': int(df25.loc[df25['tanggal'] == '2025-12-28', 'TOTAL_PENUMPANG'].values[0]),
+    'ny_peak_date': '2025-01-03',
+    'ny_peak_val': int(df25.loc[df25['tanggal'] == '2025-01-03', 'TOTAL_PENUMPANG'].values[0]),
+    'modes': {
+        m: {
+            'passengers': int(df_nataru25[f'pnp_{m}'].sum()),
+            'armada': int(df_nataru25[f'arm_{m}'].sum()),
+            'share_pct': round(float(df_nataru25[f'pnp_{m}'].sum() / df_nataru25['TOTAL_PENUMPANG'].sum() * 100), 1),
+            'load_factor': round(float(df_nataru25[f'pnp_{m}'].sum() / df_nataru25[f'arm_{m}'].sum()), 1)
+        } for m in modes
+    }
+}
+print("\nBenchmark 2025 Nataru Summary:")
+print(f"  Total Pnp: {benchmark_2025['total_passengers']:,}")
+print(f"  Puncak Natal (24 Des 2025): {benchmark_2025['xmas_peak_val']:,}")
+print(f"  Puncak Libur (28 Des 2025): {benchmark_2025['libur_peak_val']:,}")
+print(f"  Puncak Balik (3 Jan 2025): {benchmark_2025['ny_peak_val']:,}")
+
+# 4. Generate 100-Day Forecast (2026-09-28 to 2027-01-05)
 forecast_start = datetime.date(2026, 9, 28)
 forecast_end = datetime.date(2027, 1, 5)
 forecast_days = (forecast_end - forecast_start).days + 1
 future_dates = [forecast_start + datetime.timedelta(days=i) for i in range(forecast_days)]
 
-# Generate base statistical forecast
-base_fc = hw_model.forecast(forecast_days)
-base_fc_dict = {future_dates[i].strftime('%Y-%m-%d'): max(950000, float(base_fc.iloc[i])) for i in range(forecast_days)}
+# Load factor expansion during peak
+load_factors_base = {
+    'UDARA': 112.0,
+    'KA': 55.0,
+    'BUS': 12.5,
+    'ASDP': 140.0,
+    'LAUT': 70.0
+}
 
-# 4. Define Calendar Event Shocks for Q4 & Nataru 2026/2027
-# Calibrated against historical Kemenhub holiday elasticity
-def get_nataru_multiplier(d, scenario='moderat'):
-    """
-    Returns the holiday surge multiplier for date d based on scenario.
-    """
-    # Key dates:
-    # 2026-12-18 to 2026-12-20: Pre-holiday weekend 1
-    # 2026-12-23 to 2026-12-24: Puncak Arus Mudik Natal
-    # 2026-12-25: Hari Raya Natal
-    # 2026-12-26 to 2026-12-27: Libur Natal & Cuti Bersama
-    # 2026-12-28 to 2026-12-30: Transisi Libur Akhir Tahun
-    # 2026-12-31 to 2027-01-01: Malam & Hari Tahun Baru
-    # 2027-01-02 to 2027-01-03: Puncak Arus Balik Tahun Baru
-    # 2027-01-04 to 2027-01-05: Penutupan Posko Nataru
-    
-    date_str = d.strftime('%Y-%m-%d')
-    m_base = 1.0
-
-    # School holiday general elevation in late December
-    if '2026-12-18' <= date_str <= '2027-01-04':
-        m_base = 1.15  # Baseline is +15% higher during holiday fortnight
-
-    # Specific peak multipliers
-    event_multipliers = {
-        '2026-12-19': 1.25, # Pra-Natal Weekend
-        '2026-12-20': 1.30, 
-        '2026-12-22': 1.35, # H-3 Natal
-        '2026-12-23': 1.55, # H-2 Natal (Awal Puncak Mudik)
-        '2026-12-24': 1.68, # H-1 Natal (Puncak Tertinggi Arus Mudik Natal: +68%)
-        '2026-12-25': 1.45, # Hari H Natal
-        '2026-12-26': 1.50, # Cuti Bersama
-        '2026-12-27': 1.52, # Weekend pasca Natal
-        '2026-12-28': 1.38, 
-        '2026-12-29': 1.40,
-        '2026-12-30': 1.48, # Arus Wisata Tahun Baru
-        '2026-12-31': 1.52, # Malam Tahun Baru
-        '2027-01-01': 1.46, # Hari Tahun Baru
-        '2027-01-02': 1.62, # Puncak Balik Tahun Baru I
-        '2027-01-03': 1.72, # Puncak Tertinggi Arus Balik Nataru: +72%
-        '2027-01-04': 1.35, # Akhir Liburan
-        '2027-01-05': 1.18, # Normalisasi
-    }
-
-    if date_str in event_multipliers:
-        m = event_multipliers[date_str]
-    else:
-        m = m_base
-
-    # Scenario Adjustments:
-    if scenario == 'optimis':
-        # +12% higher demand
-        m = 1.0 + (m - 1.0) * 1.22
-    elif scenario == 'konservatif':
-        # -15% lower surge / weather impact
-        m = 1.0 + (m - 1.0) * 0.78
-
-    return m
-
-# 5. Build daily forecast rows for each scenario
 scenarios = ['moderat', 'optimis', 'konservatif']
 forecast_data = {s: [] for s in scenarios}
 
 for s in scenarios:
+    # Scenario macro multiplier over 2025 base
+    if s == 'moderat':
+        growth_tot = ytd_growth_tot # +5.13%
+        growth_m = ytd_growth_modes.copy()
+    elif s == 'optimis':
+        growth_tot = ytd_growth_tot + 0.07 # +12.1%
+        growth_m = {m: ytd_growth_modes[m] + 0.07 for m in modes}
+    else: # konservatif
+        growth_tot = -0.05 # -5.0%
+        growth_m = {
+            'UDARA': ytd_growth_modes['UDARA'] - 0.05,
+            'KA': ytd_growth_modes['KA'] - 0.03,
+            'BUS': ytd_growth_modes['BUS'] - 0.04,
+            'ASDP': ytd_growth_modes['ASDP'] - 0.20, # ferry disrupted by wave/weather
+            'LAUT': ytd_growth_modes['LAUT'] - 0.25  # sea transport weather penalty
+        }
+
     for d in future_dates:
         d_str = d.strftime('%Y-%m-%d')
-        base_val = base_fc_dict[d_str]
-        
-        # Day of week factor
+        md = d.strftime('%m-%d')
+        rec25 = p25_by_md[md]
+        val25_tot = rec25['TOTAL_PENUMPANG']
+        arm25_tot = rec25['TOTAL_ARMADA']
+
+        # Day of week shift calibration between 2025 and 2026
+        # In 2026, 2026-12-24 is Thursday, 2026-12-25 is Friday, 2026-12-27 is Sunday, 2027-01-03 is Sunday
         dow = d.weekday()
-        dow_f = dow_factors.get(dow, 1.0)
+        # Sunday / Friday boost
+        dow_adj = 1.0
+        if d_str in ['2026-12-24', '2026-12-25']: # H-1 Natal / Hari Natal
+            dow_adj = 1.03
+        elif d_str in ['2026-12-27', '2027-01-03']: # Sunday peaks
+            dow_adj = 1.05
+        elif d_str in ['2026-12-31', '2027-01-01']: # New Year eve & Day
+            dow_adj = 1.02
+
+        pred_total = int(round(val25_tot * (1.0 + growth_tot) * dow_adj))
+
+        # Mode predictions
+        mode_preds = {}
+        for m in modes:
+            val25_m = rec25[f'pnp_{m}']
+            pred_m = val25_m * (1.0 + growth_m[m]) * dow_adj
+            mode_preds[m] = max(1000, pred_m)
         
-        # Event multiplier
-        event_m = get_nataru_multiplier(d, scenario=s)
-        
-        # Predicted Total
-        pred_total = int(round(base_val * event_m))
-        
-        # Upper and lower confidence bounds (95% CI: ~ +/- 6.5% base uncertainty + scenario range)
-        ci_spread = 0.065
+        # Normalize sum to match pred_total exactly
+        scale = pred_total / sum(mode_preds.values())
+        mode_preds = {m: int(round(mode_preds[m] * scale)) for m in modes}
+
+        # Armada prediction
+        arm_preds = {}
+        for m in modes:
+            lf = load_factors_base[m]
+            # Higher LF during peak days
+            if pred_total > 1600000:
+                lf *= 1.12
+            arm_preds[f'arm_{m}'] = max(10, int(round(mode_preds[m] / lf)))
+        arm_total = sum(arm_preds.values())
+
+        # Confidence intervals (95% CI: +/- 5.5% uncertainty)
+        ci_spread = 0.055
         ci_lower = int(round(pred_total * (1 - ci_spread)))
         ci_upper = int(round(pred_total * (1 + ci_spread)))
 
-        # Mode distribution (Udara & KA surge more during long distance, ASDP surges around islands)
-        # Mode surge elasticities for Nataru
-        mode_multipliers = {
-            'UDARA': event_m * 1.04 if event_m > 1.2 else 1.0,
-            'KA': event_m * 1.06 if event_m > 1.2 else 1.0,
-            'BUS': event_m * 0.98 if event_m > 1.2 else 1.0,
-            'ASDP': (event_m * 0.75 if s == 'konservatif' else event_m * 1.08) if event_m > 1.2 else 1.0,
-            'LAUT': (event_m * 0.70 if s == 'konservatif' else event_m * 0.95) if event_m > 1.2 else 1.0
-        }
-        
-        # Mode volumes
-        mode_raw = {}
-        for m in modes:
-            base_m = base_val * mode_shares_normal[m] * dow_f
-            mode_raw[m] = base_m * mode_multipliers[m]
-        
-        # Re-normalize to exact pred_total
-        sum_raw = sum(mode_raw.values())
-        mode_preds = {m: int(round(mode_raw[m] / sum_raw * pred_total)) for m in modes}
-        
-        # Estimate armada needs (trip per day)
-        # Load factors expand during peak
-        armada_preds = {}
-        for m in modes:
-            peak_expansion = 1.0 + (event_m - 1.0) * 0.35  # load factor increases 35% of surge
-            effective_lf = load_factors_normal[m] * peak_expansion
-            armada_preds[f'arm_{m}'] = int(round(mode_preds[m] / effective_lf))
-        armada_total = sum(armada_preds.values())
+        yoy_pct = round(((pred_total / val25_tot) - 1.0) * 100, 1)
+        yoy_diff = pred_total - val25_tot
 
-        # Determine if peak / warning status
-        surge_vs_feb = ((pred_total / baseline_feb_avg) - 1.0) * 100
-        is_peak = surge_vs_feb >= 50.0
-        is_high = surge_vs_feb >= 30.0
+        # Surge status
+        is_peak = pred_total >= 1800000 or d_str in ['2026-12-24', '2026-12-27', '2027-01-03']
+        is_high = pred_total >= 1500000
 
         forecast_data[s].append({
             'date': d_str,
             'TOTAL': pred_total,
             'ci_lower': ci_lower,
             'ci_upper': ci_upper,
-            'surge_pct': round(surge_vs_feb, 1),
             'status': 'PEAK_SURGE' if is_peak else ('HIGH' if is_high else 'NORMAL'),
+            'pnp_2025': val25_tot,
+            'yoy_pct': yoy_pct,
+            'yoy_diff': yoy_diff,
             'UDARA': mode_preds['UDARA'],
             'KA': mode_preds['KA'],
             'BUS': mode_preds['BUS'],
             'ASDP': mode_preds['ASDP'],
             'LAUT': mode_preds['LAUT'],
-            'arm_TOTAL': armada_total,
-            'arm_UDARA': armada_preds['arm_UDARA'],
-            'arm_KA': armada_preds['arm_KA'],
-            'arm_BUS': armada_preds['arm_BUS'],
-            'arm_ASDP': armada_preds['arm_ASDP'],
-            'arm_LAUT': armada_preds['arm_LAUT'],
+            'UDARA_2025': rec25['pnp_UDARA'],
+            'KA_2025': rec25['pnp_KA'],
+            'BUS_2025': rec25['pnp_BUS'],
+            'ASDP_2025': rec25['pnp_ASDP'],
+            'LAUT_2025': rec25['pnp_LAUT'],
+            'arm_TOTAL': arm_total,
+            'arm_2025': arm25_tot,
+            'arm_UDARA': arm_preds['arm_UDARA'],
+            'arm_KA': arm_preds['arm_KA'],
+            'arm_BUS': arm_preds['arm_BUS'],
+            'arm_ASDP': arm_preds['arm_ASDP'],
+            'arm_LAUT': arm_preds['arm_LAUT'],
+            'arm_UDARA_2025': rec25['arm_UDARA'],
+            'arm_KA_2025': rec25['arm_KA'],
+            'arm_BUS_2025': rec25['arm_BUS'],
+            'arm_ASDP_2025': rec25['arm_ASDP'],
+            'arm_LAUT_2025': rec25['arm_LAUT'],
         })
 
-print(f"Generated forecast for {len(forecast_data['moderat'])} days across 3 scenarios.")
-
-# Summary statistics for Nataru period (2026-12-18 to 2027-01-04: 18 days)
-def summarize_period(scenario_list, start_d='2026-12-18', end_d='2027-01-04'):
-    subset = [r for r in scenario_list if start_d <= r['date'] <= end_d]
+# 5. Summarize Nataru 2026/2027 Period (18-Day: 18 Des 2026 - 4 Jan 2027)
+def summarize_nataru(scen_list, b25):
+    subset = [r for r in scen_list if '2026-12-18' <= r['date'] <= '2027-01-04']
     total_pnp = sum(r['TOTAL'] for r in subset)
     total_arm = sum(r['arm_TOTAL'] for r in subset)
+    avg_daily = int(round(total_pnp / len(subset)))
     max_day = max(subset, key=lambda x: x['TOTAL'])
-    
-    # Christmas peak
-    xmas_subset = [r for r in subset if '2026-12-22' <= r['date'] <= '2026-12-25']
-    xmas_peak = max(xmas_subset, key=lambda x: x['TOTAL'])
-    
-    # New Year peak
-    ny_subset = [r for r in subset if '2027-01-01' <= r['date'] <= '2027-01-04']
-    ny_peak = max(ny_subset, key=lambda x: x['TOTAL'])
+
+    # Christmas peak (24 Des)
+    xmas_day = [r for r in subset if r['date'] == '2026-12-24'][0]
+    # New Year peak (3 Jan)
+    ny_day = [r for r in subset if r['date'] == '2027-01-03'][0]
+
+    # Mode totals
+    mode_sums = {}
+    for m in modes:
+        p_sum = sum(r[m] for r in subset)
+        p25_sum = b25['modes'][m]['passengers']
+        yoy_m = round(((p_sum / p25_sum) - 1.0) * 100, 1)
+        mode_sums[m] = {
+            'passengers_2026': p_sum,
+            'passengers_2025': p25_sum,
+            'diff': p_sum - p25_sum,
+            'yoy_pct': yoy_m,
+            'share_pct_2026': round(p_sum / total_pnp * 100, 1),
+            'share_pct_2025': b25['modes'][m]['share_pct'],
+        }
 
     return {
         'total_passengers': total_pnp,
+        'total_passengers_2025': b25['total_passengers'],
+        'diff_passengers': total_pnp - b25['total_passengers'],
+        'yoy_total_pct': round(((total_pnp / b25['total_passengers']) - 1.0) * 100, 1),
+        'avg_daily_passengers': avg_daily,
+        'avg_daily_passengers_2025': b25['avg_daily_passengers'],
+        'yoy_avg_pct': round(((avg_daily / b25['avg_daily_passengers']) - 1.0) * 100, 1),
         'total_armada': total_arm,
-        'avg_daily_passengers': int(round(total_pnp / len(subset))),
+        'total_armada_2025': b25['total_armada'],
+        'yoy_armada_pct': round(((total_arm / b25['total_armada']) - 1.0) * 100, 1),
         'all_time_peak_date': max_day['date'],
         'all_time_peak_val': max_day['TOTAL'],
-        'all_time_peak_surge': max_day['surge_pct'],
-        'xmas_peak_date': xmas_peak['date'],
-        'xmas_peak_val': xmas_peak['TOTAL'],
-        'xmas_peak_surge': xmas_peak['surge_pct'],
-        'ny_peak_date': ny_peak['date'],
-        'ny_peak_val': ny_peak['TOTAL'],
-        'ny_peak_surge': ny_peak['surge_pct'],
+        'all_time_peak_yoy': max_day['yoy_pct'],
+        'xmas_peak_date': xmas_day['date'],
+        'xmas_peak_val': xmas_day['TOTAL'],
+        'xmas_peak_val_2025': b25['xmas_peak_val'],
+        'xmas_peak_yoy': xmas_day['yoy_pct'],
+        'ny_peak_date': ny_day['date'],
+        'ny_peak_val': ny_day['TOTAL'],
+        'ny_peak_val_2025': b25['ny_peak_val'],
+        'ny_peak_yoy': ny_day['yoy_pct'],
+        'mode_breakdown': mode_sums
     }
 
-summaries = {s: summarize_period(forecast_data[s]) for s in scenarios}
-print("\n--- FORECAST SUMMARY NATARU 2026/2027 (18-Day Posko: 18 Des 2026 - 4 Jan 2027) ---")
-for s in scenarios:
-    sum_s = summaries[s]
-    print(f"\n[{s.upper()}]:")
-    print(f"  Total Nataru Passengers: {sum_s['total_passengers']:,.0f}")
-    print(f"  Rata-rata Harian: {sum_s['avg_daily_passengers']:,.0f}")
-    print(f"  Puncak Mudik Natal: {sum_s['xmas_peak_date']} -> {sum_s['xmas_peak_val']:,.0f} (+{sum_s['xmas_peak_surge']}%)")
-    print(f"  Puncak Balik Tahun Baru: {sum_s['ny_peak_date']} -> {sum_s['ny_peak_val']:,.0f} (+{sum_s['ny_peak_surge']}%)")
+summaries = {s: summarize_nataru(forecast_data[s], benchmark_2025) for s in scenarios}
 
-# Save output to JSON
+print("\n--- FORECAST NATARU 2026/2027 VS 2025 BENCHMARK ---")
+for s in scenarios:
+    su = summaries[s]
+    print(f"\n[{s.upper()}]:")
+    print(f"  Total Nataru: {su['total_passengers']:,} (vs 2025: {su['total_passengers_2025']:,}, YoY: {su['yoy_total_pct']:+,.1f}%)")
+    print(f"  Rerata Harian: {su['avg_daily_passengers']:,} pnp/h (vs 2025: {su['avg_daily_passengers_2025']:,}, YoY: {su['yoy_avg_pct']:+,.1f}%)")
+    print(f"  Puncak Mudik Natal: {su['xmas_peak_val']:,} (vs 2025: {su['xmas_peak_val_2025']:,}, YoY: {su['xmas_peak_yoy']:+,.1f}%)")
+    print(f"  Puncak Balik Thn Baru: {su['ny_peak_val']:,} (vs 2025: {su['ny_peak_val_2025']:,}, YoY: {su['ny_peak_yoy']:+,.1f}%)")
+
+# Store compact timeline_2025 in bundle for chart plotting
+# Include date, TOTAL, and each mode
+timeline_2025 = []
+for idx, r in df25.iterrows():
+    timeline_2025.append({
+        'date': r['tanggal'],
+        'TOTAL': int(r['TOTAL_PENUMPANG']),
+        'UDARA': int(r['pnp_UDARA']),
+        'KA': int(r['pnp_KA']),
+        'BUS': int(r['pnp_BUS']),
+        'ASDP': int(r['pnp_ASDP']),
+        'LAUT': int(r['pnp_LAUT']),
+        'arm_TOTAL': int(r['TOTAL_ARMADA']),
+        'arm_UDARA': int(r['arm_UDARA']),
+        'arm_KA': int(r['arm_KA']),
+        'arm_BUS': int(r['arm_BUS']),
+        'arm_ASDP': int(r['arm_ASDP']),
+        'arm_LAUT': int(r['arm_LAUT']),
+    })
+
+bundle['timeline_2025'] = timeline_2025
 bundle['forecast_nataru'] = {
     'meta': {
-        'model': 'Hybrid Holt-Winters Seasonal Exponential Smoothing + Calendar Event Shock Regressor',
+        'model': 'Empirical Seasonal Benchmark + Multi-Horizon YTD Trend & Calendar Alignment Regressor',
+        'benchmark_year': 2025,
+        'benchmark_dataset': 'siasati_ringkasan_harian_multimoda_2025.csv',
+        'ytd_growth_tot_pct': round(ytd_growth_tot * 100, 2),
+        'ytd_growth_modes_pct': {m: round(ytd_growth_modes[m] * 100, 2) for m in modes},
         'train_start': '2026-01-01',
         'train_end': '2026-09-27',
         'forecast_start': '2026-09-28',
         'forecast_end': '2027-01-05',
         'horizon_days': forecast_days,
-        'baseline_feb_avg': int(round(baseline_feb_avg)),
-        'dow_factors': {int(k): round(v, 3) for k, v in dow_factors.items()},
-        'normal_modal_shares': {k: round(v, 4) for k, v in mode_shares_normal.items()},
     },
+    'benchmark_2025': benchmark_2025,
     'summaries': summaries,
     'scenarios': forecast_data
 }
 
-with open('c:/Users/USER/Documents/PUSDATIN/scripts/mobility_data_bundle.json', 'w', encoding='utf-8') as f:
+with open('scripts/mobility_data_bundle.json', 'w', encoding='utf-8') as f:
     json.dump(bundle, f, ensure_ascii=False)
 
-print("\nSuccessfully updated mobility_data_bundle.json with forecast_nataru!")
+print("\nSuccessfully updated scripts/mobility_data_bundle.json with 2025 benchmark & calibrated forecast!")
