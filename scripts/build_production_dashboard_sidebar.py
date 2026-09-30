@@ -1293,7 +1293,7 @@ def generate_dashboard():
                 </span>
               </div>
               <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Sebaran geografis 1.014 simpul transportasi nasional terpetakan di seluruh wilayah Indonesia (194 prasarana tanpa koordinat dikosongkan)
+                Sebaran geografis 1.014 simpul transportasi nasional terpetakan di seluruh wilayah Indonesia (ukuran lingkaran proporsional terhadap volume penumpang)
               </p>
             </div>
 
@@ -3398,14 +3398,24 @@ function initSpatialMap() {{
 
   const legend = L.control({{ position: 'bottomleft' }});
   legend.onAdd = function() {{
-    const div = L.DomUtil.create('div', 'p-2.5 rounded-lg bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-slate-200 dark:border-slate-800 text-[11px] font-sans shadow-md space-y-1');
+    const div = L.DomUtil.create('div', 'p-2.5 rounded-lg bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-slate-200 dark:border-slate-800 text-[11px] font-sans shadow-md space-y-1.5');
     div.innerHTML = `
-      <div class="font-bold text-slate-800 dark:text-slate-200 mb-1">Simpul Multimoda:</div>
-      <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-600"></span><span class="text-slate-600 dark:text-slate-300">Udara (257)</span></div>
-      <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-600"></span><span class="text-slate-600 dark:text-slate-300">Kereta Api (193)</span></div>
-      <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600"></span><span class="text-slate-600 dark:text-slate-300">Bus (139)</span></div>
-      <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span><span class="text-slate-600 dark:text-slate-300">ASDP (158)</span></div>
-      <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-600"></span><span class="text-slate-600 dark:text-slate-300">Laut (267)</span></div>
+      <div class="font-bold text-slate-800 dark:text-slate-200">Moda Transportasi:</div>
+      <div class="space-y-0.5">
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Udara (257)</span></div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Kereta Api (193)</span></div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Bus (139)</span></div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">ASDP (158)</span></div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Laut (267)</span></div>
+      </div>
+      <div class="border-t border-slate-200 dark:border-slate-700 pt-1.5">
+        <div class="font-bold text-slate-800 dark:text-slate-200 mb-1">Ukuran Dot (Penumpang):</div>
+        <div class="flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400">
+          <div class="flex items-center gap-1"><span class="inline-block w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span><span>&lt;100rb</span></div>
+          <div class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-400 shrink-0"></span><span>1-5 Jt</span></div>
+          <div class="flex items-center gap-1"><span class="inline-block w-4 h-4 rounded-full bg-slate-400 shrink-0"></span><span>&gt;10 Jt</span></div>
+        </div>
+      </div>
     `;
     return div;
   }};
@@ -3490,10 +3500,16 @@ function renderSpatialMapNodes() {{
     }}
   }}
 
-  // 4. Render marker lingkaran Leaflet (ukuran proporsional lebih kecil dan elegan)
+  // 4. Render marker lingkaran Leaflet (ukuran dot proporsional dinamis terhadap volume penumpang)
+  const maxMetricVal = DATA.spatial_nodes.reduce((max, node) => Math.max(max, (node[sortKey] || 0)), 1);
+
   nodes.forEach((n, rankIdx) => {{
     const val = n[sortKey] || 0;
-    const radius = val > 0 ? Math.max(2.5, Math.min(9.5, 2.2 + Math.log10(val + 1) * 0.85)) : 2;
+    // Semakin banyak penumpang, semakin besar ukuran dot (proporsional 3px s/d 25px)
+    const ratio = Math.min(1, Math.max(0, val / maxMetricVal));
+    const minR = 3;
+    const maxR = 25;
+    const radius = val > 0 ? (minR + Math.pow(ratio, 0.42) * (maxR - minR)) : 2.5;
     const color = COLOR[n.m] || '#64748b';
     const isTop10 = rankIdx < 10;
 
@@ -3501,17 +3517,18 @@ function renderSpatialMapNodes() {{
       radius: radius,
       fillColor: color,
       color: isTop10 ? '#f59e0b' : '#ffffff',
-      weight: isTop10 ? 1.6 : 0.75,
+      weight: isTop10 ? 1.8 : 0.75,
       opacity: 0.95,
-      fillOpacity: 0.78
+      fillOpacity: 0.72
     }});
 
-    // Efek hover halus agar tetap mudah diklik saat titik kecil
+    // Efek hover interaktif dan membawa marker ke lapisan depan
     marker.on('mouseover', function() {{
-      this.setStyle({{ weight: 2.2, fillOpacity: 0.95, radius: radius + 2 }});
+      this.setStyle({{ weight: 2.4, fillOpacity: 0.95, radius: radius + 2.5 }});
+      this.bringToFront();
     }});
     marker.on('mouseout', function() {{
-      this.setStyle({{ weight: isTop10 ? 1.6 : 0.75, fillOpacity: 0.78, radius: radius }});
+      this.setStyle({{ weight: isTop10 ? 1.8 : 0.75, fillOpacity: 0.72, radius: radius }});
     }});
 
     const rankBadge = rankIdx < 50 
