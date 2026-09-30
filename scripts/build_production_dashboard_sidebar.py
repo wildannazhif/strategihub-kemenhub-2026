@@ -367,7 +367,7 @@ def generate_dashboard():
         <div class="p-2.5 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] font-mono space-y-1">
           <div class="text-indigo-600 dark:text-indigo-400 font-bold text-xs">Load Factor (P/A) = Total Penumpang / Total Trip Armada</div>
           <div class="text-slate-500 text-[10px] font-sans">
-            Satuan: Penumpang/Flight (Udara), Penumpang/Trip KA (Kereta Api), Penumpang/Trip Bus (Terminal Bus), Penumpang/Trip Kapal (ASDP & Laut).
+            Satuan: Penumpang/Flight (Udara), Penumpang/Trip KA (Kereta Api), Penumpang/Trip Bus (Bus), Penumpang/Trip Kapal (ASDP & Laut).
           </div>
         </div>
         <div class="p-2.5 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] font-mono space-y-1">
@@ -531,7 +531,7 @@ def generate_dashboard():
             <div>• <strong>Pelabuhan ASDP (Merak & Bakauheni):</strong> Kapasitas kantong parkir buffer zone dermaga dan waktu bongkar muat (port time). Kedatangan kendaraan melebihi kapasitas sandar memicu antrean 4–6 jam.</div>
             <div>• <strong>Stasiun KA (Pasar Senen):</strong> Kapasitas kursi gerbong KA (100% okupansi tiket ludes terjual).</div>
             <div>• <strong>Bandara (Ngurah Rai DPS):</strong> Utilisasi slot runway mencapai 98% dan keterbatasan parking stand.</div>
-            <div>• <strong>Terminal Bus (Purabaya):</strong> Waktu tunggu ruang keberangkatan melonjak dari 15 menit ke ~45 menit.</div>
+            <div>• <strong>Bus (Purabaya):</strong> Waktu tunggu ruang keberangkatan melonjak dari 15 menit ke ~45 menit.</div>
           </div>
         </div>
       </div>
@@ -774,7 +774,7 @@ def generate_dashboard():
                 </span>
               </div>
               <p id="timeline-chart-desc" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Volume harian agregat penumpang: Udara, Kereta Api, Terminal Bus, Penyeberangan ASDP, dan Laut (01 Jan s.d. 29 Sep 2026)
+                Volume harian agregat penumpang: Udara, Kereta Api, Bus, Penyeberangan ASDP, dan Laut (01 Jan s.d. 29 Sep 2026)
               </p>
             </div>
 
@@ -817,7 +817,7 @@ def generate_dashboard():
                     <th class="py-2.5 px-3">Bulan</th>
                     <th class="py-2.5 px-3 text-right text-sky-700 dark:text-sky-400">Udara</th>
                     <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400">Kereta Api</th>
-                    <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Terminal Bus</th>
+                    <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Bus</th>
                     <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">ASDP</th>
                     <th class="py-2.5 px-3 text-right text-cyan-700 dark:text-cyan-400">Laut</th>
                     <th class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">Total</th>
@@ -860,7 +860,7 @@ def generate_dashboard():
                     <th class="py-2 px-2.5">Hari</th>
                     <th class="py-2 px-2.5 text-right">Udara</th>
                     <th class="py-2 px-2.5 text-right">KA</th>
-                    <th class="py-2 px-2.5 text-right">Terminal Bus</th>
+                    <th class="py-2 px-2.5 text-right">Bus</th>
                     <th class="py-2 px-2.5 text-right">ASDP</th>
                     <th class="py-2 px-2.5 text-right">Laut</th>
                     <th class="py-2 px-2.5 text-right font-bold">Total</th>
@@ -1072,7 +1072,7 @@ def generate_dashboard():
                   <th class="py-2.5 px-3">Bulan</th>
                   <th class="py-2.5 px-3 text-right text-sky-700 dark:text-sky-400">Udara (%)</th>
                   <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400">Kereta Api (%)</th>
-                  <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Terminal Bus (%)</th>
+                  <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Bus (%)</th>
                   <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">ASDP (%)</th>
                   <th class="py-2.5 px-3 text-right text-cyan-700 dark:text-cyan-400">Laut (%)</th>
                   <th class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">Total Volume</th>
@@ -1170,7 +1170,7 @@ def generate_dashboard():
               Stasiun Kereta Api
             </button>
             <button onclick="filterHubModa('BUS', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Terminal Bus
+              Bus
             </button>
             <button onclick="filterHubModa('ASDP', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
               Pelabuhan ASDP
@@ -1261,7 +1261,7 @@ def generate_dashboard():
                   <th class="py-3 px-3.5 w-72">Indikator Kuantitatif</th>
                   <th class="py-3 px-3 text-right text-sky-700 dark:text-sky-400">UDARA</th>
                   <th class="py-3 px-3 text-right text-amber-700 dark:text-amber-400">KERETA API</th>
-                  <th class="py-3 px-3 text-right text-green-700 dark:text-green-400">TERMINAL BUS</th>
+                  <th class="py-3 px-3 text-right text-green-700 dark:text-green-400">BUS</th>
                   <th class="py-3 px-3 text-right text-purple-700 dark:text-purple-400">ASDP</th>
                   <th class="py-3 px-3 text-right text-cyan-700 dark:text-cyan-400">LAUT</th>
                   <th class="py-3 px-3 text-right font-bold text-slate-900 dark:text-white">TOTAL NASIONAL</th>
@@ -1345,7 +1345,7 @@ def generate_dashboard():
                 🚆 Kereta Api (193)
               </button>
               <button onclick="filterSpatialModa('BUS', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-green-800 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-950/40 border border-slate-200 dark:border-slate-700 transition-all">
-                🚌 Terminal Bus (139)
+                🚌 Bus (139)
               </button>
               <button onclick="filterSpatialModa('ASDP', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-purple-800 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/40 border border-slate-200 dark:border-slate-700 transition-all">
                 ⛴ ASDP (158)
@@ -1476,7 +1476,7 @@ def generate_dashboard():
                   <option value="TOTAL" selected>Total Multimoda (Semua Moda)</option>
                   <option value="UDARA">✈ Udara (Penerbangan Domestik)</option>
                   <option value="KA">🚆 Perkeretaapian (KAI)</option>
-                  <option value="BUS">🚌 Terminal Bus</option>
+                  <option value="BUS">🚌 Bus</option>
                   <option value="ASDP">⛴ ASDP (Penyeberangan Feri)</option>
                   <option value="LAUT">🚢 Transportasi Laut (Kapal Pelni)</option>
                 </select>
@@ -1628,7 +1628,7 @@ def generate_dashboard():
               <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200 block">Akurasi Per Moda (Uji 28H)</span>
               <div class="space-y-1 text-[11px] font-mono pt-0.5">
                 <div class="flex justify-between items-center"><span>🚢 Laut:</span> <span class="font-bold text-emerald-600">5,3%</span></div>
-                <div class="flex justify-between items-center"><span>🚌 Terminal Bus:</span> <span class="font-bold text-emerald-600">5,4%</span></div>
+                <div class="flex justify-between items-center"><span>🚌 Bus:</span> <span class="font-bold text-emerald-600">5,4%</span></div>
                 <div class="flex justify-between items-center"><span>🚆 Kereta Api:</span> <span class="font-bold text-emerald-600">8,1%</span></div>
                 <div class="flex justify-between items-center"><span>⛴ ASDP:</span> <span class="font-bold text-emerald-600">8,8%</span></div>
                 <div class="flex justify-between items-center"><span>✈ Udara:</span> <span class="font-bold text-amber-600">28,6%</span> <span class="text-[10px] text-slate-400 font-sans">(tiket dinamis)</span></div>
@@ -1717,7 +1717,7 @@ def generate_dashboard():
                 <span>🚌 BUS</span>
               </div>
               <div class="font-mono font-black text-emerald-700 dark:text-emerald-300 text-base mt-0.5">53.640 pnp/h</div>
-              <div class="text-[10px] text-slate-600 dark:text-slate-300 mt-0.5">Terminal Bus: <strong>2.745 trip/h</strong></div>
+              <div class="text-[10px] text-slate-600 dark:text-slate-300 mt-0.5">Bus: <strong>2.745 trip/h</strong></div>
               <div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold mt-1">✅ Butuh: +137 Bus (+5%)</div>
             </div>
           </div>
@@ -2316,7 +2316,7 @@ function renderTimelineChart() {{
     {{ label: 'Total Multimoda', data: raw.map(d => d[getMetricKey('TOTAL')]), borderColor: totalColor, borderWidth: 2, pointRadius: 0, tension: 0.15 }},
     {{ label: 'Udara', data: raw.map(d => d[getMetricKey('UDARA')]), borderColor: COLOR.UDARA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
     {{ label: 'Kereta Api', data: raw.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
-    {{ label: 'Terminal Bus', data: raw.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
+    {{ label: 'Bus', data: raw.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
     {{ label: 'ASDP', data: raw.map(d => d[getMetricKey('ASDP')]), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
     {{ label: 'Laut', data: raw.map(d => d[getMetricKey('LAUT')]), borderColor: COLOR.LAUT, borderWidth: 1.5, pointRadius: 0, tension: 0.15 }},
   ];
@@ -2648,7 +2648,7 @@ function selectLebaranDate(dateStr) {{
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day[getMetricKey('KA')])}}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-        <div class="text-[10px] font-bold text-green-700 dark:text-green-400">TERMINAL BUS</div>
+        <div class="text-[10px] font-bold text-green-700 dark:text-green-400">BUS</div>
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${{numFmt(day[getMetricKey('BUS')])}}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
@@ -2765,7 +2765,7 @@ function renderLebaranWorkspace() {{
   if (!chartSurgeBar) {{
     const ctxSurge = document.getElementById('chartSurgeBarCanvas').getContext('2d');
     const modas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA', 'TOTAL'];
-    const labelsSurge = ['ASDP', 'Terminal Bus', 'Kereta Api', 'Laut', 'Udara', 'TOTAL'];
+    const labelsSurge = ['ASDP', 'Bus', 'Kereta Api', 'Laut', 'Udara', 'TOTAL'];
     chartSurgeBar = new Chart(ctxSurge, {{
       type: 'bar',
       data: {{
@@ -2846,7 +2846,7 @@ function renderModalShareWorkspace() {{
       datasets: [
         {{ label: 'Udara', data: shares.map(m => m.UDARA), volumes: shares.map(m => m.vol_UDARA), borderColor: COLOR.UDARA, backgroundColor: 'rgba(2, 132, 199, 0.45)', fill: true, tension: 0.15 }},
         {{ label: 'Kereta Api', data: shares.map(m => m.KA), volumes: shares.map(m => m.vol_KA), borderColor: COLOR.KA, backgroundColor: 'rgba(217, 119, 6, 0.45)', fill: true, tension: 0.15 }},
-        {{ label: 'Terminal Bus', data: shares.map(m => m.BUS), volumes: shares.map(m => m.vol_BUS), borderColor: COLOR.BUS, backgroundColor: 'rgba(22, 163, 74, 0.45)', fill: true, tension: 0.15 }},
+        {{ label: 'Bus', data: shares.map(m => m.BUS), volumes: shares.map(m => m.vol_BUS), borderColor: COLOR.BUS, backgroundColor: 'rgba(22, 163, 74, 0.45)', fill: true, tension: 0.15 }},
         {{ label: 'ASDP', data: shares.map(m => m.ASDP), volumes: shares.map(m => m.vol_ASDP), borderColor: COLOR.ASDP, backgroundColor: 'rgba(147, 51, 234, 0.45)', fill: true, tension: 0.15 }},
         {{ label: 'Laut', data: shares.map(m => m.LAUT), volumes: shares.map(m => m.vol_LAUT), borderColor: COLOR.LAUT, backgroundColor: 'rgba(8, 145, 178, 0.45)', fill: true, tension: 0.15 }},
       ]
@@ -2983,7 +2983,7 @@ function renderModalShareWorkspace() {{
 
   const feb = shares[1] || shares[0];
   const mar = shares[2] || shares[0];
-  const labels = ['Udara', 'Kereta Api', 'Terminal Bus', 'ASDP', 'Laut'];
+  const labels = ['Udara', 'Kereta Api', 'Bus', 'ASDP', 'Laut'];
   const colors = [COLOR.UDARA, COLOR.KA, COLOR.BUS, COLOR.ASDP, COLOR.LAUT];
 
   const febVolumes = [feb.vol_UDARA, feb.vol_KA, feb.vol_BUS, feb.vol_ASDP, feb.vol_LAUT];
@@ -3105,7 +3105,7 @@ function renderLoadFactorWorkspace() {{
   const isDark = document.documentElement.classList.contains('dark');
   const ctx = document.getElementById('chartLoadFactorCanvas').getContext('2d');
   const modas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA'];
-  const labelsLF = ['ASDP', 'Terminal Bus', 'Kereta Api', 'Laut', 'Udara'];
+  const labelsLF = ['ASDP', 'Bus', 'Kereta Api', 'Laut', 'Udara'];
   const lf = DATA.load_factor_stats;
 
   chartLoadFactor = new Chart(ctx, {{
@@ -3374,7 +3374,7 @@ function initSpatialMap() {{
       <div class="font-bold text-slate-800 dark:text-slate-200 mb-1">Simpul Multimoda:</div>
       <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-600"></span><span class="text-slate-600 dark:text-slate-300">Udara (257)</span></div>
       <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-600"></span><span class="text-slate-600 dark:text-slate-300">Kereta Api (193)</span></div>
-      <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600"></span><span class="text-slate-600 dark:text-slate-300">Terminal Bus (139)</span></div>
+      <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600"></span><span class="text-slate-600 dark:text-slate-300">Bus (139)</span></div>
       <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span><span class="text-slate-600 dark:text-slate-300">ASDP (158)</span></div>
       <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-600"></span><span class="text-slate-600 dark:text-slate-300">Laut (267)</span></div>
     `;
@@ -4021,7 +4021,7 @@ const SIMPUL_DATA = [
     name: 'Terminal Purabaya (Bungurasih)',
     prov: 'Jawa Timur',
     moda: 'BUS',
-    modaLabel: '🚌 Terminal Bus',
+    modaLabel: '🚌 Bus',
     saranaType: 'Armada Bus Antar Kota',
     saranaUnit: 'trip bus',
     pnpDay: 53640,
