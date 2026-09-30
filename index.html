@@ -1308,8 +1308,9 @@
             </div>
           </div>
 
-          <!-- Mode Filter Bar & Stats -->
-          <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+          <!-- Filter Moda, Peringkat / Skala Pangsa Simpul & Badges -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <!-- Filter Moda Buttons -->
             <div class="flex items-center gap-1.5 flex-wrap text-xs">
               <span class="text-slate-400 font-semibold text-[11px] mr-1">Filter Moda:</span>
               <button onclick="filterSpatialModa('ALL', this)" class="map-moda-btn active px-2.5 py-1 rounded text-xs font-semibold bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-xs transition-all">
@@ -1332,14 +1333,37 @@
               </button>
             </div>
 
-            <!-- Spatial Summary Badges -->
-            <div class="flex items-center gap-2 text-xs flex-wrap">
-              <span class="px-2 py-0.5 rounded font-mono text-[11px] bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                ● 1.014 Terpetakan
-              </span>
-              <span class="px-2 py-0.5 rounded font-mono text-[11px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
-                ◌ 194 Koordinat Dikosongkan
-              </span>
+            <!-- Filter Ranking / Skala Pangsa Pasar Simpul & Badges -->
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <div class="flex items-center gap-1.5">
+                <label for="select-spatial-scale" class="text-slate-500 dark:text-slate-400 font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1 shrink-0">
+                  <span>🎯 Peringkat / Pangsa:</span>
+                </label>
+                <div class="relative">
+                  <select id="select-spatial-scale" onchange="setSpatialScaleFilter(this.value)" class="bg-slate-50 dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-semibold rounded-md pl-2.5 pr-7 py-1.5 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none appearance-none cursor-pointer shadow-xs">
+                    <option value="all" selected>Semua Simpul Terpetakan (100%)</option>
+                    <option value="top10">🏆 10 Simpul Terbesar</option>
+                    <option value="top20">⭐ 20 Simpul Terbesar</option>
+                    <option value="top30">📍 30 Simpul Terbesar</option>
+                    <option value="top50">🌐 50 Simpul Terbesar</option>
+                    <option value="pareto80">⚡ Titik Simpul 80% Pangsa Pasar</option>
+                    <option value="pareto90">📊 Titik Simpul 90% Pangsa Pasar</option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Summary Badges -->
+              <div class="flex items-center gap-1.5 text-xs">
+                <span id="badge-spatial-count" class="px-2.5 py-1 rounded font-mono text-[11px] bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-semibold">
+                  ● 1.014 Terpetakan (100%)
+                </span>
+                <span id="badge-spatial-unmapped" class="px-2.5 py-1 rounded font-mono text-[11px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                  ◌ 194 Koordinat Dikosongkan
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -3271,6 +3295,7 @@ function renderMatrixTable() {
 // TAB 7: LEAFLET SPATIAL MAP CONTROLLER
 // ---------------------------------------------------------------
 let currentBasemap = 'canvas'; // 'canvas', 'osm', 'sat'
+let currentSpatialScale = 'all'; // 'all', 'top10', 'top20', 'top30', 'top50', 'pareto80', 'pareto90'
 
 function getBasemapConfig(type, isDark) {
   if (type === 'osm') {
@@ -3347,31 +3372,97 @@ function updateMapTheme() {
   }
 }
 
+function setSpatialScaleFilter(scale) {
+  currentSpatialScale = scale;
+  const select = document.getElementById('select-spatial-scale');
+  if (select && select.value !== scale) select.value = scale;
+  renderSpatialMapNodes();
+}
+
 function renderSpatialMapNodes() {
   if (!spatialMarkerGroup) return;
   spatialMarkerGroup.clearLayers();
 
   const sortKey = getHubMetricKey();
   const isPnp = currentMetric === 'pnp';
-  const nodes = DATA.spatial_nodes.filter(n => {
+
+  // 1. Ambil kandidat dengan koordinat dan filter moda aktif
+  const pool = DATA.spatial_nodes.filter(n => {
     if (!n.has_coords) return false;
     if (currentSpatialModa !== 'ALL' && n.m !== currentSpatialModa) return false;
     return true;
   });
 
-  nodes.forEach(n => {
+  // Urutkan simpul dari volume tertinggi ke terendah berdasarkan metrik aktif
+  pool.sort((a, b) => (b[sortKey] || 0) - (a[sortKey] || 0));
+
+  const totalPoolVol = pool.reduce((acc, n) => acc + (n[sortKey] || 0), 0);
+
+  // 2. Filter berdasarkan skala / ranking / pangsa pasar
+  let nodes = pool;
+  if (currentSpatialScale === 'top10') {
+    nodes = pool.slice(0, 10);
+  } else if (currentSpatialScale === 'top20') {
+    nodes = pool.slice(0, 20);
+  } else if (currentSpatialScale === 'top30') {
+    nodes = pool.slice(0, 30);
+  } else if (currentSpatialScale === 'top50') {
+    nodes = pool.slice(0, 50);
+  } else if (currentSpatialScale === 'pareto80') {
+    let cum = 0;
+    const threshold = totalPoolVol * 0.8;
+    nodes = [];
+    for (const n of pool) {
+      nodes.push(n);
+      cum += (n[sortKey] || 0);
+      if (cum >= threshold) break;
+    }
+  } else if (currentSpatialScale === 'pareto90') {
+    let cum = 0;
+    const threshold = totalPoolVol * 0.9;
+    nodes = [];
+    for (const n of pool) {
+      nodes.push(n);
+      cum += (n[sortKey] || 0);
+      if (cum >= threshold) break;
+    }
+  }
+
+  const displayedVol = nodes.reduce((acc, n) => acc + (n[sortKey] || 0), 0);
+  const sharePct = totalPoolVol > 0 ? (displayedVol / totalPoolVol * 100) : 100;
+
+  // 3. Perbarui teks badge informasi
+  const badgeEl = document.getElementById('badge-spatial-count');
+  if (badgeEl) {
+    const countStr = numFmt(nodes.length);
+    const pctStr = decFmt(sharePct, 1);
+    if (currentSpatialScale === 'all') {
+      badgeEl.innerText = `● ${countStr} Terpetakan (100%)`;
+    } else {
+      badgeEl.innerText = `● ${countStr} Simpul (${pctStr}% Pangsa)`;
+    }
+  }
+
+  // 4. Render marker lingkaran Leaflet
+  nodes.forEach((n, rankIdx) => {
     const val = n[sortKey] || 0;
-    const radius = val > 0 ? Math.max(4.5, Math.min(24, 4.5 + Math.log10(val + 1) * 2.4)) : 4;
+    const radius = val > 0 ? Math.max(5, Math.min(26, 5 + Math.log10(val + 1) * 2.5)) : 4.5;
     const color = COLOR[n.m] || '#64748b';
+    const isTop10 = rankIdx < 10;
 
     const marker = L.circleMarker([n.lat, n.lon], {
       radius: radius,
       fillColor: color,
-      color: '#ffffff',
-      weight: 1.5,
-      opacity: 0.9,
-      fillOpacity: 0.8
+      color: isTop10 ? '#f59e0b' : '#ffffff',
+      weight: isTop10 ? 2.5 : 1.5,
+      opacity: 0.95,
+      fillOpacity: 0.82
     });
+
+    const rankBadge = rankIdx < 50 
+      ? `<span class="px-1.5 py-0.2 rounded text-[10px] font-bold ${isTop10 ? 'bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-950 dark:text-amber-200' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}">Peringkat #${rankIdx + 1}</span>` 
+      : '';
+    const shareOfTotal = totalPoolVol > 0 ? decFmt((val / totalPoolVol * 100), 2) + '%' : '-';
 
     const popupHtml = `
       <div class="p-3 text-xs font-sans space-y-2 max-w-[280px]">
@@ -3379,25 +3470,31 @@ function renderSpatialMapNodes() {
           <span class="font-bold text-slate-900 dark:text-white truncate">${n.nama}</span>
           <span class="px-1.5 py-0.2 rounded text-[10px] font-bold text-white shrink-0" style="background-color: ${color}">${n.m}</span>
         </div>
-        <div class="text-[11px] text-slate-500">${n.p} • Tipe: ${n.tipe}</div>
+        <div class="flex items-center justify-between text-[11px] text-slate-500">
+          <span>${n.p} • Tipe: ${n.tipe}</span>
+          ${rankBadge}
+        </div>
         <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 space-y-1 text-[11px] font-mono">
-          <div class="flex justify-between ${sortKey === 'pnp' ? 'font-bold text-indigo-600' : ''}">
+          <div class="flex justify-between ${sortKey === 'pnp' ? 'font-bold text-indigo-600 dark:text-indigo-400' : ''}">
             <span>Total Penumpang:</span><span>${numFmt(n.pnp)}</span>
           </div>
-          <div class="flex justify-between ${sortKey === 'p_dat' ? 'font-bold text-indigo-600' : 'text-slate-500'}">
+          <div class="flex justify-between ${sortKey === 'p_dat' ? 'font-bold text-indigo-600 dark:text-indigo-400' : 'text-slate-500'}">
             <span>↳ Pnp Datang:</span><span>${numFmt(n.p_dat)}</span>
           </div>
-          <div class="flex justify-between ${sortKey === 'p_brg' ? 'font-bold text-indigo-600' : 'text-slate-500'}">
+          <div class="flex justify-between ${sortKey === 'p_brg' ? 'font-bold text-indigo-600 dark:text-indigo-400' : 'text-slate-500'}">
             <span>↳ Pnp Berangkat:</span><span>${numFmt(n.p_brg)}</span>
           </div>
-          <div class="border-t border-slate-200 dark:border-slate-700 pt-1 flex justify-between ${sortKey === 'arm' ? 'font-bold text-indigo-600' : ''}">
+          <div class="border-t border-slate-200 dark:border-slate-700 pt-1 flex justify-between ${sortKey === 'arm' ? 'font-bold text-indigo-600 dark:text-indigo-400' : ''}">
             <span>Total Armada:</span><span>${numFmt(n.arm)}</span>
           </div>
-          <div class="flex justify-between ${sortKey === 'a_dat' ? 'font-bold text-indigo-600' : 'text-slate-500'}">
+          <div class="flex justify-between ${sortKey === 'a_dat' ? 'font-bold text-indigo-600 dark:text-indigo-400' : 'text-slate-500'}">
             <span>↳ Armada Datang:</span><span>${numFmt(n.a_dat)}</span>
           </div>
-          <div class="flex justify-between ${sortKey === 'a_brg' ? 'font-bold text-indigo-600' : 'text-slate-500'}">
+          <div class="flex justify-between ${sortKey === 'a_brg' ? 'font-bold text-indigo-600 dark:text-indigo-400' : 'text-slate-500'}">
             <span>↳ Armada Berangkat:</span><span>${numFmt(n.a_brg)}</span>
+          </div>
+          <div class="border-t border-slate-200 dark:border-slate-700 pt-1 flex justify-between font-semibold text-emerald-600 dark:text-emerald-400">
+            <span>Pangsa terhadap Total:</span><span>${shareOfTotal}</span>
           </div>
         </div>
       </div>
