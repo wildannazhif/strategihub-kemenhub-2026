@@ -684,9 +684,8 @@ def generate_dashboard():
 
           <!-- Metric 2: All-Time Peak -->
           <div class="pt-3 md:pt-0 md:pl-4 pr-4">
-            <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5 flex items-center justify-between">
-              <span id="strip-card2-title">Puncak Tertinggi 2026</span>
-              <span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">ALL-TIME PEAK</span>
+            <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5" id="strip-card2-title">
+              Puncak Tertinggi 2026
             </div>
             <div class="flex items-baseline gap-2">
               <span class="text-2xl font-bold text-rose-600 dark:text-rose-400 num-mono tracking-tight" id="strip-peak-val">2.415.296</span>
@@ -699,9 +698,8 @@ def generate_dashboard():
 
           <!-- Metric 3: Mudik Peak -->
           <div class="pt-3 md:pt-0 md:pl-4 pr-4">
-            <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5 flex items-center justify-between">
-              <span id="strip-card3-title">Puncak Arus Mudik</span>
-              <span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300">MUDIK PEAK</span>
+            <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5" id="strip-card3-title">
+              Puncak Arus Mudik
             </div>
             <div class="flex items-baseline gap-2">
               <span class="text-2xl font-bold text-purple-700 dark:text-purple-400 num-mono tracking-tight" id="strip-mudik-val">2.258.512</span>
@@ -766,13 +764,10 @@ def generate_dashboard():
           </div>
 
           <!-- Chart Footnote with Interactive Guidance -->
-          <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between text-xs text-slate-500">
+          <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center text-xs text-slate-500">
             <div class="flex items-center gap-1.5">
               <span class="text-blue-600 dark:text-blue-400 font-semibold">ℹ Petunjuk:</span>
               <span>Klik nama moda pada legenda di kanan atas grafik untuk menyembunyikan atau menampilkan garis moda.</span>
-            </div>
-            <div class="num-mono text-[11px] text-slate-400">
-              Sumber: Raw Log StrategiHub Pusdatin Kemenhub (209.885 baris bersih)
             </div>
           </div>
         </div>
@@ -2008,6 +2003,24 @@ function changeDowMetric(metricVal) {{
 function setTimelineMetric(metric) {{ setGlobalMetric(metric); }}
 function setSpatialMapMetric(metric) {{ setGlobalMetric(metric); }}
 
+function formatPeakDescDate(dateStr, tagStr, fallbackPhase) {{
+  if (!dateStr) return '';
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  const parts = dateStr.split('-');
+  let dStr = dateStr;
+  if (parts.length === 3) {{
+    const d = parseInt(parts[2], 10);
+    const m = months[parseInt(parts[1], 10) - 1] || parts[1];
+    dStr = `${{d}} ${{m}} ${{parts[0]}}`;
+  }}
+  let cleanTag = (tagStr || '').split('(')[0].trim();
+  if (!cleanTag) cleanTag = fallbackPhase || '';
+  else if (fallbackPhase && !cleanTag.toLowerCase().includes(fallbackPhase.toLowerCase())) {{
+    cleanTag += ' ' + fallbackPhase;
+  }}
+  return cleanTag ? `${{dStr}} (${{cleanTag}})` : dStr;
+}}
+
 function updateDashboardMetricAndDirection() {{
   const isPnp = currentMetric === 'pnp';
   const combo = currentMetric + '_' + currentDirection;
@@ -2106,7 +2119,12 @@ function updateDashboardMetricAndDirection() {{
   const elPeakUnit = document.getElementById('strip-peak-unit');
   if (elPeakUnit) elPeakUnit.innerText = s.unit;
   const elPeakDesc = document.getElementById('strip-peak-desc');
-  if (elPeakDesc) elPeakDesc.innerHTML = `${{s.peak_desc}} • <span class="font-semibold text-rose-600 dark:text-rose-400">+${{decFmt(s.peak_surge_pct, 1)}}%</span> vs normal`;
+  if (elPeakDesc) {{
+    const peakDateStr = (s.peak_desc && s.peak_desc !== 'undefined') ? s.peak_desc : formatPeakDescDate(s.peak_date, s.peak_tag, 'Balik');
+    const peakPrefix = (peakDateStr && peakDateStr !== 'undefined') ? `${{peakDateStr}} • ` : '';
+    const peakSurge = (s.peak_surge_pct !== undefined && s.peak_surge_pct !== null) ? `<span class="font-semibold text-rose-600 dark:text-rose-400">+${{decFmt(s.peak_surge_pct, 1)}}%</span> vs normal` : '';
+    elPeakDesc.innerHTML = `${{peakPrefix}}${{peakSurge}}`.trim();
+  }}
 
   // Card 3: Mudik Peak
   const elCard3Title = document.getElementById('strip-card3-title');
@@ -2116,7 +2134,12 @@ function updateDashboardMetricAndDirection() {{
   const elMudikUnit = document.getElementById('strip-mudik-unit');
   if (elMudikUnit) elMudikUnit.innerText = s.unit;
   const elMudikDesc = document.getElementById('strip-mudik-desc');
-  if (elMudikDesc) elMudikDesc.innerHTML = `${{s.mudik_desc}} • <span class="font-semibold text-purple-700 dark:text-purple-400">+${{decFmt(s.mudik_surge_pct, 1)}}%</span> vs normal`;
+  if (elMudikDesc) {{
+    const mudikDateStr = (s.mudik_desc && s.mudik_desc !== 'undefined') ? s.mudik_desc : formatPeakDescDate(s.mudik_date, s.mudik_tag, 'Mudik');
+    const mudikPrefix = (mudikDateStr && mudikDateStr !== 'undefined') ? `${{mudikDateStr}} • ` : '';
+    const mudikSurge = (s.mudik_surge_pct !== undefined && s.mudik_surge_pct !== null) ? `<span class="font-semibold text-purple-700 dark:text-purple-400">+${{decFmt(s.mudik_surge_pct, 1)}}%</span> vs normal` : '';
+    elMudikDesc.innerHTML = `${{mudikPrefix}}${{mudikSurge}}`.trim();
+  }}
 
   // Card 4: Complementary Opposing Metric
   const oppCombo = (isPnp ? 'arm_' : 'pnp_') + currentDirection;
