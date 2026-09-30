@@ -3443,10 +3443,10 @@ function renderSpatialMapNodes() {
     }
   }
 
-  // 4. Render marker lingkaran Leaflet
+  // 4. Render marker lingkaran Leaflet (ukuran proporsional lebih kecil dan elegan)
   nodes.forEach((n, rankIdx) => {
     const val = n[sortKey] || 0;
-    const radius = val > 0 ? Math.max(5, Math.min(26, 5 + Math.log10(val + 1) * 2.5)) : 4.5;
+    const radius = val > 0 ? Math.max(2.5, Math.min(9.5, 2.2 + Math.log10(val + 1) * 0.85)) : 2;
     const color = COLOR[n.m] || '#64748b';
     const isTop10 = rankIdx < 10;
 
@@ -3454,9 +3454,17 @@ function renderSpatialMapNodes() {
       radius: radius,
       fillColor: color,
       color: isTop10 ? '#f59e0b' : '#ffffff',
-      weight: isTop10 ? 2.5 : 1.5,
+      weight: isTop10 ? 1.6 : 0.75,
       opacity: 0.95,
-      fillOpacity: 0.82
+      fillOpacity: 0.78
+    });
+
+    // Efek hover halus agar tetap mudah diklik saat titik kecil
+    marker.on('mouseover', function() {
+      this.setStyle({ weight: 2.2, fillOpacity: 0.95, radius: radius + 2 });
+    });
+    marker.on('mouseout', function() {
+      this.setStyle({ weight: isTop10 ? 1.6 : 0.75, fillOpacity: 0.78, radius: radius });
     });
 
     const rankBadge = rankIdx < 50 
