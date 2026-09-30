@@ -2760,54 +2760,6 @@ function renderModalShareWorkspace() {
     };
   });
 
-  // Plugin: Hanya tampilkan persentase (%) yang bersih dan elegan di dalam area plot
-  const areaLabelsPlugin = {
-    id: 'areaLabelsPlugin',
-    afterDatasetsDraw(chart) {
-      const { ctx, data } = chart;
-      const count = data.datasets.length;
-      if (count === 0) return;
-
-      ctx.save();
-      const zeroY = chart.scales.y.getPixelForValue(0);
-
-      for (let d = 0; d < count; d++) {
-        const meta = chart.getDatasetMeta(d);
-        if (!meta || !meta.data || !chart.isDatasetVisible(d)) continue;
-        const prevMeta = d > 0 ? chart.getDatasetMeta(d - 1) : null;
-
-        meta.data.forEach((pt, i) => {
-          const pctVal = data.datasets[d].data[i];
-          if (pctVal === undefined || pctVal === null || pctVal === 0) return;
-
-          const currY = pt.y;
-          const prevY = prevMeta ? prevMeta.data[i].y : zeroY;
-          const bandHeight = Math.abs(prevY - currY);
-
-          if (bandHeight < 15) return; // Lewati jika layer terlalu tipis agar tidak bertumpuk
-
-          const x = pt.x;
-          const centerY = (currY + prevY) / 2;
-          const pctText = decFmt(pctVal, 1) + '%';
-
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.font = '600 10.5px "JetBrains Mono", monospace';
-
-          // Tampilan elegan & bersih: teks putih dengan bayangan halus
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.55)';
-          ctx.shadowBlur = 3;
-          ctx.shadowOffsetX = 0;
-          ctx.shadowOffsetY = 1;
-          ctx.fillStyle = '#ffffff';
-
-          ctx.fillText(pctText, x, centerY);
-        });
-      }
-      ctx.restore();
-    }
-  };
-
   if (chartModalShareArea) chartModalShareArea.destroy();
   chartModalShareArea = new Chart(ctx, {
     type: 'line',
@@ -2891,8 +2843,7 @@ function renderModalShareWorkspace() {
           } 
         }
       }
-    },
-    plugins: [areaLabelsPlugin]
+    }
   });
 
   // Plugin: Hanya tampilkan persentase (%) yang bersih di dalam irisan donat
