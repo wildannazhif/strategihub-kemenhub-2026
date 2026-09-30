@@ -24,6 +24,13 @@ analysis_plots/
 .system_generated/
 ui-ux-pro-max-skill/
 dashboard-angkutan-laut-2026/
+dokumen_rapat/
+laporan_audit_anomali/
+data_mentah_siasati/
+arsip_temp/
+strategihub-kemenhub-2026/
+analysis/
+dataset_siasati_2026/
 
 # OS specific
 .DS_Store
