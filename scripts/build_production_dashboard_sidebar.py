@@ -12,7 +12,9 @@ import json
 import os
 
 BUNDLE_PATH = r"c:\Users\USER\Documents\PUSDATIN\scripts\mobility_data_bundle.json"
-OUTPUT_HTML = r"c:\Users\USER\Documents\PUSDATIN\Dashboard_Mobilitas_Nasional_2026.html"
+OUTPUT_DIR = r"c:\Users\USER\Documents\PUSDATIN\dashboard_utama"
+OUTPUT_HTML = os.path.join(OUTPUT_DIR, "Dashboard_Mobilitas_Nasional_2026.html")
+OUTPUT_INDEX = os.path.join(OUTPUT_DIR, "index.html")
 
 def generate_dashboard():
     with open(BUNDLE_PATH, 'r', encoding='utf-8') as f:
@@ -4613,14 +4615,14 @@ window.addEventListener('DOMContentLoaded', () => {{
 </body>
 </html>
 """
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
     with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
         f.write(html)
         
-    index_html = os.path.join(os.path.dirname(OUTPUT_HTML), "index.html")
-    with open(index_html, 'w', encoding='utf-8') as f:
+    with open(OUTPUT_INDEX, 'w', encoding='utf-8') as f:
         f.write(html)
         
-    print(f"Production dashboard successfully generated: {OUTPUT_HTML} and {index_html}")
+    print(f"Production dashboard successfully generated in: {OUTPUT_DIR}")
     print(f"File size: {os.path.getsize(OUTPUT_HTML) / 1024:.1f} KB")
 
 if __name__ == '__main__':
