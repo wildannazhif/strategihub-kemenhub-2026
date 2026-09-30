@@ -704,9 +704,6 @@ def generate_dashboard():
             <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-avg-pnp">
               Rata-rata: <span class="font-semibold text-slate-700 dark:text-slate-300">1.367.243</span> pnp/hari (272 hari)
             </div>
-            <div class="text-[10px] text-slate-400 font-mono mt-0.5" id="strip-formula-pnp">
-              Rumus: ∑ (P_datang + P_berangkat)
-            </div>
           </div>
 
           <!-- Metric 2: All-Time Peak -->
@@ -721,9 +718,6 @@ def generate_dashboard():
             </div>
             <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-peak-desc">
               24 Mar 2026 (H+3 Balik) • <span class="font-semibold text-rose-600 dark:text-rose-400">+103,2%</span> vs normal
-            </div>
-            <div class="text-[10px] text-slate-400 font-mono mt-0.5" id="strip-peak-formula">
-              Rumus: Max(P_harian) 2026 (H+3 Balik)
             </div>
           </div>
 
@@ -740,9 +734,6 @@ def generate_dashboard():
             <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-mudik-desc">
               18 Mar 2026 (H-3 Mudik) • <span class="font-semibold text-purple-700 dark:text-purple-400">+90,0%</span> vs normal
             </div>
-            <div class="text-[10px] text-slate-400 font-mono mt-0.5" id="strip-mudik-formula">
-              Rumus: Max Mudik(P_harian) (H-3 Mudik)
-            </div>
           </div>
 
           <!-- Metric 4: Armada Beroperasi -->
@@ -756,9 +747,6 @@ def generate_dashboard():
             </div>
             <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-desc-arm">
               Pesawat, Kereta, Bus, Feri, Kapal Laut
-            </div>
-            <div class="text-[10px] text-slate-400 font-mono mt-0.5" id="strip-formula-arm">
-              Rumus: ∑ (Trip Datang + Trip Berangkat)
             </div>
           </div>
 
@@ -789,14 +777,6 @@ def generate_dashboard():
               <p id="timeline-chart-desc" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Volume harian agregat penumpang: Udara, Kereta Api, Terminal Bus, Penyeberangan ASDP, dan Laut (01 Jan s.d. 29 Sep 2026)
               </p>
-              <!-- Formula Badge Tab 1 -->
-              <div class="mt-2.5 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-[10px]">📐 RUMUS</span>
-                  <span class="font-mono text-slate-800 dark:text-slate-200"><strong>P_total(t)</strong> = ∑ (P_datang + P_berangkat) 5 moda | <strong>A_total(t)</strong> = ∑ (Trip Datang + Trip Berangkat)</span>
-                </div>
-                <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Lihat Info Lengkap &rarr;</button>
-              </div>
             </div>
 
             <!-- Controls: Metrik Switcher & Arah Switcher & Active Range Label -->
@@ -906,14 +886,6 @@ def generate_dashboard():
                 </div>
               </div>
 
-              <div class="my-2 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 font-mono font-bold text-[10px]">📐 RUMUS DOW</span>
-                  <span class="font-mono text-slate-800 dark:text-slate-200"><strong>P̄_hari</strong> = (∑ P_hari) / N_hari | <strong>Indeks Musiman (S_d)</strong> = P̄_hari / P̄_nasional</span>
-                </div>
-                <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Info &rarr;</button>
-              </div>
-
               <div class="relative w-full h-[220px] mt-3">
                 <canvas id="chartDOWCanvas"></canvas>
               </div>
@@ -961,15 +933,6 @@ def generate_dashboard():
               <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-rose-600"></span> Puncak Balik</span>
               <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-purple-600"></span> Puncak Mudik</span>
             </div>
-          </div>
-
-          <!-- Formula Note Scrubber -->
-          <div class="my-1.5 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="px-1.5 py-0.2 rounded bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 font-mono font-bold text-[10px]">📐 RUMUS FASE</span>
-              <span class="font-mono text-slate-800 dark:text-slate-200"><strong>Hari Posko</strong> = Tanggal - 21 Mar 2026 (H-8 s.d. H+8 • 17 Hari) | <strong>Hari H</strong> = 21 Mar (Tunggal)</span>
-            </div>
-            <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Buka Kamus Rumus &rarr;</button>
           </div>
 
           <!-- Scrubber Buttons Strip -->
@@ -1038,14 +1001,6 @@ def generate_dashboard():
             <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Unit: Penumpang</span>
           </div>
 
-          <div class="my-2 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 font-mono font-bold text-[10px]">📐 RUMUS SURGE</span>
-              <span class="font-mono text-slate-800 dark:text-slate-200"><strong>Surge %</strong> = [(Volume_Puncak - P̄_Februari) / P̄_Februari] × 100% | <strong>P̄_Feb</strong> = ∑ P_Feb / 28 hari</span>
-            </div>
-            <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Info &rarr;</button>
-          </div>
-
           <div class="overflow-x-auto mt-3">
             <table class="w-full text-left text-xs">
               <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
@@ -1083,14 +1038,6 @@ def generate_dashboard():
                 <p class="text-[11px] text-slate-500">Pergeseran proporsi mobilitas 5 moda dari Januari sampai dengan September 2026</p>
               </div>
               <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Satuan: % Total</span>
-            </div>
-
-            <div class="my-2 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 font-mono font-bold text-[10px]">📐 RUMUS MODAL SHARE</span>
-                <span class="font-mono text-slate-800 dark:text-slate-200"><strong>Pangsa Moda (%)</strong> = (Penumpang_Moda / Total_Penumpang_Multimoda) × 100%</span>
-              </div>
-              <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Info &rarr;</button>
             </div>
 
             <div class="relative w-full h-[320px] mt-3">
@@ -1140,14 +1087,6 @@ def generate_dashboard():
             Tabel Persentase Pangsa Pasar Bulanan (%)
           </h3>
 
-          <div class="my-2 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 font-mono font-bold text-[10px]">📐 RUMUS SURGE</span>
-              <span class="font-mono text-slate-800 dark:text-slate-200"><strong>Surge %</strong> = [(Volume_Puncak - P̄_Februari) / P̄_Februari] × 100% | <strong>P̄_Feb</strong> = ∑ P_Feb / 28 hari</span>
-            </div>
-            <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Info &rarr;</button>
-          </div>
-
           <div class="overflow-x-auto mt-3">
             <table class="w-full text-left text-xs">
               <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
@@ -1183,14 +1122,6 @@ def generate_dashboard():
                 <p class="text-[11px] text-slate-500">Penumpang per trip armada pada kondisi Normal vs Puncak Arus Mudik vs Puncak Arus Balik</p>
               </div>
               <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Satuan: Pnp / Armada</span>
-            </div>
-
-            <div class="my-2 px-3 py-1.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600 dark:text-slate-300">
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-[10px]">📐 RUMUS LOAD FACTOR</span>
-                <span class="font-mono text-slate-800 dark:text-slate-200"><strong>LF Proxy (P/A)</strong> = Total Penumpang / Total Trip Armada | <strong>ΔLF %</strong> = [(LF_puncak - LF_normal) / LF_normal] × 100%</span>
-              </div>
-              <button onclick="toggleExplanationSidebar(true)" class="text-indigo-600 dark:text-indigo-400 hover:underline text-[10px] font-semibold flex items-center gap-0.5">Info &rarr;</button>
             </div>
 
             <div class="relative w-full h-[320px] mt-3">
@@ -2206,8 +2137,6 @@ function updateDashboardMetricAndDirection() {{
   if (elUnitPnp) elUnitPnp.innerText = s.unit;
   const elAvgPnp = document.getElementById('strip-avg-pnp');
   if (elAvgPnp) elAvgPnp.innerHTML = `Rata-rata: <span class="font-semibold text-slate-700 dark:text-slate-300">${{numFmt(s.avg)}}</span> ${{isPnp ? 'pnp' : 'trip'}}/hari (272 hari)`;
-  const elFormulaPnp = document.getElementById('strip-formula-pnp');
-  if (elFormulaPnp) elFormulaPnp.innerText = `Rumus: ${{s.formula}}`;
 
   // Card 2: Peak
   const elCard2Title = document.getElementById('strip-card2-title');
@@ -2238,8 +2167,6 @@ function updateDashboardMetricAndDirection() {{
   if (elTotalArm && oppS.ytd) elTotalArm.innerText = numFmt(oppS.ytd);
   const elUnitArm = document.getElementById('strip-unit-arm');
   if (elUnitArm && oppS.unit) elUnitArm.innerText = oppS.unit;
-  const elFormulaArm = document.getElementById('strip-formula-arm');
-  if (elFormulaArm && oppS.formula) elFormulaArm.innerText = `Rumus: ${{oppS.formula}}`;
 
   // 5. Update Tab 1 (Kronologi & DOW & Monthly)
   const heading = document.getElementById('timeline-chart-heading');
