@@ -666,7 +666,7 @@ def generate_dashboard():
           <div class="relative">
             <select id="select-global-metric" onchange="setGlobalCombo(this.value)" class="text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 pr-8 text-slate-900 dark:text-white shadow-xs hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer transition-all">
               <option value="pnp_tot">Total Penumpang</option>
-              <option value="pnp_brg">Penumpang Berangkat</option>
+              <option value="pnp_brg" selected>Penumpang Berangkat</option>
               <option value="pnp_dat">Penumpang Datang</option>
               <option value="arm_dat">Armada Datang</option>
               <option value="arm_brg">Armada Berangkat</option>
@@ -679,9 +679,9 @@ def generate_dashboard():
         <div class="flex items-center gap-2">
           <span id="global-active-pill" class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-sky-50 dark:bg-sky-950/60 border border-sky-200 dark:border-sky-800 text-sky-800 dark:text-sky-300">
             <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
-            <span id="global-active-label">Penumpang • Dua Arah (Total)</span>
+            <span id="global-active-label">Penumpang Berangkat (Keberangkatan)</span>
             <span class="text-slate-300 dark:text-slate-700">|</span>
-            <span id="global-active-val" class="font-bold text-slate-900 dark:text-white">371.890.120 orang</span>
+            <span id="global-active-val" class="font-bold text-slate-900 dark:text-white">209.143.560 orang</span>
           </span>
         </div>
 
@@ -696,53 +696,53 @@ def generate_dashboard():
           <!-- Metric 1: Total Volume YTD -->
           <div class="pt-2 md:pt-0 pr-4">
             <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5" id="strip-card1-title">
-              Total Mobilitas Penumpang YTD
+              Total Mobilitas Penumpang YTD (Berangkat)
             </div>
             <div class="flex items-baseline gap-2">
-              <span class="text-2xl font-bold text-slate-900 dark:text-white num-mono tracking-tight" id="strip-total-pnp">371.890.120</span>
-              <span class="text-xs text-slate-500 font-medium" id="strip-unit-pnp">penumpang</span>
+              <span class="text-2xl font-bold text-slate-900 dark:text-white num-mono tracking-tight" id="strip-total-pnp">209.143.560</span>
+              <span class="text-xs text-slate-500 font-medium" id="strip-unit-pnp">penumpang berangkat</span>
             </div>
             <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-avg-pnp">
-              Rata-rata: <span class="font-semibold text-slate-700 dark:text-slate-300">1.367.243</span> pnp/hari (272 hari)
+              Rata-rata: <span class="font-semibold text-slate-700 dark:text-slate-300">768.910</span> pnp/hari (272 hari)
             </div>
           </div>
 
           <!-- Metric 2: All-Time Peak -->
           <div class="pt-3 md:pt-0 md:pl-4 pr-4">
             <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5" id="strip-card2-title">
-              Puncak Tertinggi 2026
+              Puncak Tertinggi 2026 (Pnp)
             </div>
             <div class="flex items-baseline gap-2">
-              <span class="text-2xl font-bold text-rose-600 dark:text-rose-400 num-mono tracking-tight" id="strip-peak-val">2.415.296</span>
-              <span class="text-xs text-slate-500 font-medium" id="strip-peak-unit">penumpang</span>
+              <span class="text-2xl font-bold text-rose-600 dark:text-rose-400 num-mono tracking-tight" id="strip-peak-val">1.443.593</span>
+              <span class="text-xs text-slate-500 font-medium" id="strip-peak-unit">penumpang berangkat</span>
             </div>
             <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-peak-desc">
-              24 Mar 2026 (H+3 Balik) • <span class="font-semibold text-rose-600 dark:text-rose-400">+103,2%</span> vs normal
+              24 Mar 2026 (H+3 Balik) • <span class="font-semibold text-rose-600 dark:text-rose-400">+121,2%</span> vs normal
             </div>
           </div>
 
           <!-- Metric 3: Mudik Peak -->
           <div class="pt-3 md:pt-0 md:pl-4 pr-4">
             <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5" id="strip-card3-title">
-              Puncak Arus Mudik
+              Puncak Arus Mudik (Pnp)
             </div>
             <div class="flex items-baseline gap-2">
-              <span class="text-2xl font-bold text-purple-700 dark:text-purple-400 num-mono tracking-tight" id="strip-mudik-val">2.258.512</span>
-              <span class="text-xs text-slate-500 font-medium" id="strip-mudik-unit">penumpang</span>
+              <span class="text-2xl font-bold text-purple-700 dark:text-purple-400 num-mono tracking-tight" id="strip-mudik-val">1.358.209</span>
+              <span class="text-xs text-slate-500 font-medium" id="strip-mudik-unit">penumpang berangkat</span>
             </div>
             <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-mudik-desc">
-              18 Mar 2026 (H-3 Mudik) • <span class="font-semibold text-purple-700 dark:text-purple-400">+90,0%</span> vs normal
+              18 Mar 2026 (H-3 Mudik) • <span class="font-semibold text-purple-700 dark:text-purple-400">+108,2%</span> vs normal
             </div>
           </div>
 
           <!-- Metric 4: Armada Beroperasi -->
           <div class="pt-3 md:pt-0 md:pl-4">
             <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-0.5" id="strip-card4-title">
-              Total Armada Beroperasi YTD
+              Total Armada Operasi YTD (Berangkat)
             </div>
             <div class="flex items-baseline gap-2">
-              <span class="text-2xl font-bold text-slate-900 dark:text-white num-mono tracking-tight" id="strip-total-arm">10.033.092</span>
-              <span class="text-xs text-slate-500 font-medium" id="strip-unit-arm">armada</span>
+              <span class="text-2xl font-bold text-slate-900 dark:text-white num-mono tracking-tight" id="strip-total-arm">5.096.641</span>
+              <span class="text-xs text-slate-500 font-medium" id="strip-unit-arm">trip berangkat</span>
             </div>
             <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-desc-arm">
               Pesawat, Kereta, Bus, Feri, Kapal Laut
@@ -767,10 +767,10 @@ def generate_dashboard():
             <div>
               <div class="flex items-center gap-2.5 flex-wrap">
                 <h2 id="timeline-chart-heading" class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                  Kronologi Mobilitas Multimoda Nasional 2026
+                  Kronologi Mobilitas Penumpang Keberangkatan 2026
                 </h2>
                 <span id="timeline-metric-badge" class="text-[11px] font-semibold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 px-2 py-0.5 rounded border border-sky-200 dark:border-sky-800">
-                  Volume Penumpang
+                  Volume Penumpang • Berangkat
                 </span>
               </div>
               <p id="timeline-chart-desc" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -1162,9 +1162,9 @@ def generate_dashboard():
 
             <!-- Hub Direction Toggle -->
             <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold">
-              <button id="hubs-dir-tot" onclick="setGlobalDirection('tot')" class="px-2 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Dua Arah</button>
+              <button id="hubs-dir-tot" onclick="setGlobalDirection('tot')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Dua Arah</button>
               <button id="hubs-dir-dat" onclick="setGlobalDirection('dat')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Datang</button>
-              <button id="hubs-dir-brg" onclick="setGlobalDirection('brg')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Berangkat</button>
+              <button id="hubs-dir-brg" onclick="setGlobalDirection('brg')" class="px-2 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Berangkat</button>
             </div>
 
             <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-50 dark:bg-slate-800 text-xs font-medium">
@@ -1274,9 +1274,9 @@ def generate_dashboard():
 
               <!-- Map Direction Toggle -->
               <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-xs font-semibold">
-                <button id="map-dir-tot" onclick="setGlobalDirection('tot')" class="px-2 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Dua Arah</button>
+                <button id="map-dir-tot" onclick="setGlobalDirection('tot')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Dua Arah</button>
                 <button id="map-dir-dat" onclick="setGlobalDirection('dat')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Datang</button>
-                <button id="map-dir-brg" onclick="setGlobalDirection('brg')" class="px-2 py-1 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Berangkat</button>
+                <button id="map-dir-brg" onclick="setGlobalDirection('brg')" class="px-2 py-1 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs transition-all">Berangkat</button>
               </div>
 
               <!-- Basemap Selector (100% Bebas API Key) -->
@@ -1933,10 +1933,10 @@ function toggleTheme() {{
 // UNIVERSAL METRIC & DIRECTION STATE MANAGEMENT
 // ---------------------------------------------------------------
 let currentMetric = 'pnp'; // 'pnp' (Penumpang) or 'arm' (Armada)
-let currentDirection = 'tot'; // 'tot' (Total/Dua Arah), 'dat' (Datang), 'brg' (Berangkat)
+let currentDirection = 'brg'; // 'tot' (Total/Dua Arah), 'dat' (Datang), 'brg' (Berangkat)
 let activeLebaranDate = '2026-03-21';
-let monthlySelectedMetric = 'pnp_tot';
-let dowSelectedMetric = 'pnp_tot';
+let monthlySelectedMetric = 'pnp_brg';
+let dowSelectedMetric = 'pnp_brg';
 
 const METRIC_CODE_CONFIG = {{
   'pnp_tot': {{ label: 'Total Penumpang', type: 'pnp', dir: 'Dua Arah', unit: 'penumpang', dowUnit: 'pnp/hari', color: '#0284c7' }},
@@ -4099,9 +4099,7 @@ document.addEventListener('keydown', (e) => {{
 // INITIALIZATION ON LOAD
 // ---------------------------------------------------------------
 window.addEventListener('DOMContentLoaded', () => {{
-  renderTimelineChart();
-  renderMonthlyTable();
-  renderDOWWorkspace();
+  updateDashboardMetricAndDirection();
 }});
 </script>
 </body>
