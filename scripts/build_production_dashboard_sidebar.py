@@ -2782,7 +2782,7 @@ function renderModalShareWorkspace() {{
     }};
   }});
 
-  // Plugin: Gambar persentase dan volume langsung di dalam area plot bertumpuk (100% Stacked Area)
+  // Plugin: Hanya tampilkan persentase (%) yang bersih dan elegan di dalam area plot
   const areaLabelsPlugin = {{
     id: 'areaLabelsPlugin',
     afterDatasetsDraw(chart) {{
@@ -2801,40 +2801,29 @@ function renderModalShareWorkspace() {{
         meta.data.forEach((pt, i) => {{
           const pctVal = data.datasets[d].data[i];
           if (pctVal === undefined || pctVal === null || pctVal === 0) return;
-          const volVal = data.datasets[d].volumes ? data.datasets[d].volumes[i] : null;
 
           const currY = pt.y;
           const prevY = prevMeta ? prevMeta.data[i].y : zeroY;
           const bandHeight = Math.abs(prevY - currY);
 
-          if (bandHeight < 14) return;
+          if (bandHeight < 15) return; // Lewati jika layer terlalu tipis agar tidak bertumpuk
 
           const x = pt.x;
           const centerY = (currY + prevY) / 2;
-
           const pctText = decFmt(pctVal, 1) + '%';
-          const volText = volVal ? formatVolCompact(volVal) : '';
 
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
+          ctx.font = '600 10.5px "JetBrains Mono", monospace';
+
+          // Tampilan elegan & bersih: teks putih dengan bayangan halus
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.55)';
+          ctx.shadowBlur = 3;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 1;
           ctx.fillStyle = '#ffffff';
-          ctx.strokeStyle = 'rgba(0, 0, 0, 0.65)';
-          ctx.lineWidth = 2.5;
 
-          if (bandHeight >= 24 && volText) {{
-            ctx.font = 'bold 9.5px "Plus Jakarta Sans", sans-serif';
-            ctx.strokeText(pctText, x, centerY - 5.5);
-            ctx.fillText(pctText, x, centerY - 5.5);
-
-            ctx.font = 'bold 8.5px "JetBrains Mono", monospace';
-            ctx.strokeText(volText, x, centerY + 5.5);
-            ctx.fillText(volText, x, centerY + 5.5);
-          }} else {{
-            ctx.font = 'bold 9px "Plus Jakarta Sans", sans-serif';
-            const txt = volText ? `${{pctText}} (${{volText}})` : pctText;
-            ctx.strokeText(txt, x, centerY);
-            ctx.fillText(txt, x, centerY);
-          }}
+          ctx.fillText(pctText, x, centerY);
         }});
       }}
       ctx.restore();
@@ -2847,47 +2836,88 @@ function renderModalShareWorkspace() {{
     data: {{
       labels: shares.map(m => m.label.split(' ')[0]),
       datasets: [
-        {{ label: 'Udara', data: shares.map(m => m.UDARA), volumes: shares.map(m => m.vol_UDARA), borderColor: COLOR.UDARA, backgroundColor: 'rgba(2, 132, 199, 0.5)', fill: true, tension: 0.15 }},
-        {{ label: 'Kereta Api', data: shares.map(m => m.KA), volumes: shares.map(m => m.vol_KA), borderColor: COLOR.KA, backgroundColor: 'rgba(217, 119, 6, 0.5)', fill: true, tension: 0.15 }},
-        {{ label: 'Terminal Bus', data: shares.map(m => m.BUS), volumes: shares.map(m => m.vol_BUS), borderColor: COLOR.BUS, backgroundColor: 'rgba(22, 163, 74, 0.5)', fill: true, tension: 0.15 }},
-        {{ label: 'ASDP', data: shares.map(m => m.ASDP), volumes: shares.map(m => m.vol_ASDP), borderColor: COLOR.ASDP, backgroundColor: 'rgba(147, 51, 234, 0.5)', fill: true, tension: 0.15 }},
-        {{ label: 'Laut', data: shares.map(m => m.LAUT), volumes: shares.map(m => m.vol_LAUT), borderColor: COLOR.LAUT, backgroundColor: 'rgba(8, 145, 178, 0.5)', fill: true, tension: 0.15 }},
+        {{ label: 'Udara', data: shares.map(m => m.UDARA), volumes: shares.map(m => m.vol_UDARA), borderColor: COLOR.UDARA, backgroundColor: 'rgba(2, 132, 199, 0.45)', fill: true, tension: 0.15 }},
+        {{ label: 'Kereta Api', data: shares.map(m => m.KA), volumes: shares.map(m => m.vol_KA), borderColor: COLOR.KA, backgroundColor: 'rgba(217, 119, 6, 0.45)', fill: true, tension: 0.15 }},
+        {{ label: 'Terminal Bus', data: shares.map(m => m.BUS), volumes: shares.map(m => m.vol_BUS), borderColor: COLOR.BUS, backgroundColor: 'rgba(22, 163, 74, 0.45)', fill: true, tension: 0.15 }},
+        {{ label: 'ASDP', data: shares.map(m => m.ASDP), volumes: shares.map(m => m.vol_ASDP), borderColor: COLOR.ASDP, backgroundColor: 'rgba(147, 51, 234, 0.45)', fill: true, tension: 0.15 }},
+        {{ label: 'Laut', data: shares.map(m => m.LAUT), volumes: shares.map(m => m.vol_LAUT), borderColor: COLOR.LAUT, backgroundColor: 'rgba(8, 145, 178, 0.45)', fill: true, tension: 0.15 }},
       ]
     }},
     options: {{
       responsive: true,
       maintainAspectRatio: false,
+      interaction: {{
+        mode: 'index',
+        intersect: false
+      }},
       plugins: {{
-        legend: {{ labels: {{ color: isDark ? '#cbd5e1' : '#475569' }} }},
+        legend: {{ 
+          position: 'top',
+          align: 'end',
+          labels: {{ 
+            boxWidth: 8,
+            boxHeight: 8,
+            usePointStyle: true,
+            pointStyle: 'circle',
+            font: {{ family: 'Plus Jakarta Sans', size: 11, weight: '500' }},
+            color: isDark ? '#cbd5e1' : '#475569',
+            padding: 12
+          }} 
+        }},
         tooltip: {{
           backgroundColor: isDark ? '#0f172a' : '#ffffff',
           titleColor: isDark ? '#ffffff' : '#0f172a',
           bodyColor: isDark ? '#cbd5e1' : '#334155',
           borderColor: isDark ? '#334155' : '#cbd5e1',
           borderWidth: 1,
-          padding: 8,
+          padding: 10,
+          boxPadding: 4,
+          usePointStyle: true,
           bodyFont: {{ family: 'JetBrains Mono', size: 11 }},
-          titleFont: {{ family: 'Plus Jakarta Sans', size: 11, weight: 'bold' }},
+          titleFont: {{ family: 'Plus Jakarta Sans', size: 12, weight: 'bold' }},
           callbacks: {{
+            title: (items) => {{
+              if (!items.length) return '';
+              const mIdx = items[0].dataIndex;
+              return shares[mIdx] ? shares[mIdx].label : items[0].label;
+            }},
             label: (c) => {{
               const idx = c.dataIndex;
               const pct = c.raw;
               const vol = c.dataset.volumes ? c.dataset.volumes[idx] : null;
               const volFmt = vol ? `${{numFmt(vol)}} ${{unitStr}}` : '';
-              return ` ${{c.dataset.label}}: ${{decFmt(pct, 1)}}% (${{volFmt}})`;
+              return ` ${{c.dataset.label}}: ${{decFmt(pct, 1)}}% • ${{volFmt}}`;
+            }},
+            footer: (items) => {{
+              if (!items.length) return '';
+              const mIdx = items[0].dataIndex;
+              const m = shares[mIdx];
+              return m ? `Total Multimoda: ${{numFmt(m.TOTAL)}} ${{unitStr}}` : '';
             }}
           }}
         }}
       }},
       scales: {{
-        x: {{ grid: {{ display: false }}, ticks: {{ color: isDark ? '#94a3b8' : '#64748b' }} }},
-        y: {{ stacked: true, max: 100, grid: {{ color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }}, ticks: {{ color: isDark ? '#94a3b8' : '#64748b', font: {{ family: 'JetBrains Mono' }}, callback: v => v + '%' }} }}
+        x: {{ 
+          grid: {{ display: false }}, 
+          ticks: {{ color: isDark ? '#94a3b8' : '#64748b', font: {{ family: 'Plus Jakarta Sans', size: 11, weight: '500' }} }} 
+        }},
+        y: {{ 
+          stacked: true, 
+          max: 100, 
+          grid: {{ color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }}, 
+          ticks: {{ 
+            color: isDark ? '#94a3b8' : '#64748b', 
+            font: {{ family: 'JetBrains Mono', size: 10 }}, 
+            callback: v => v + '%' 
+          }} 
+        }}
       }}
     }},
     plugins: [areaLabelsPlugin]
   }});
 
-  // Plugin: Gambar persentase dan volume langsung di dalam irisan donat serta total di tengahnya
+  // Plugin: Hanya tampilkan persentase (%) yang bersih di dalam irisan donat
   const donutLabelsPlugin = {{
     id: 'donutLabelsPlugin',
     afterDatasetsDraw(chart) {{
@@ -2899,37 +2929,28 @@ function renderModalShareWorkspace() {{
       meta.data.forEach((arc, i) => {{
         const val = data.datasets[0].data[i];
         if (val === undefined || val === null || val === 0) return;
-        const pctStr = decFmt(val, 1) + '%';
-        const volRaw = data.datasets[0].volumes ? data.datasets[0].volumes[i] : null;
-        const volStr = volRaw ? formatVolCompact(volRaw) : '';
 
+        const angleSpan = arc.endAngle - arc.startAngle;
+        if (angleSpan < 0.22) return; // Terlalu sempit untuk teks di dalam irisan
+
+        const pctStr = decFmt(val, 1) + '%';
         const midAngle = (arc.startAngle + arc.endAngle) / 2;
         const midRadius = (arc.innerRadius + arc.outerRadius) / 2;
         const x = arc.x + Math.cos(midAngle) * midRadius;
         const y = arc.y + Math.sin(midAngle) * midRadius;
 
-        const angleSpan = arc.endAngle - arc.startAngle;
-        if (angleSpan < 0.22) return;
-
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
+        ctx.font = '700 11px "Plus Jakarta Sans", sans-serif';
+
+        // Tampilan bersih: teks persentase putih dengan bayangan halus
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+        ctx.shadowBlur = 3;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 1;
         ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.lineWidth = 2.5;
 
-        if (volStr && angleSpan > 0.35) {{
-          ctx.font = 'bold 10px "Plus Jakarta Sans", sans-serif';
-          ctx.strokeText(pctStr, x, y - 6);
-          ctx.fillText(pctStr, x, y - 6);
-
-          ctx.font = 'bold 9px "JetBrains Mono", monospace';
-          ctx.strokeText(volStr, x, y + 6);
-          ctx.fillText(volStr, x, y + 6);
-        }} else {{
-          ctx.font = 'bold 9.5px "Plus Jakarta Sans", sans-serif';
-          ctx.strokeText(pctStr, x, y);
-          ctx.fillText(pctStr, x, y);
-        }}
+        ctx.fillText(pctStr, x, y);
       }});
 
       // Tampilkan total volume di tengah lingkaran donat
@@ -2937,15 +2958,16 @@ function renderModalShareWorkspace() {{
         const isDk = document.documentElement.classList.contains('dark');
         const cx = meta.data[0].x;
         const cy = meta.data[0].y;
+        ctx.shadowBlur = 0;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         
         ctx.fillStyle = isDk ? '#94a3b8' : '#64748b';
-        ctx.font = 'bold 9px "Plus Jakarta Sans", sans-serif';
+        ctx.font = 'bold 8.5px "Plus Jakarta Sans", sans-serif';
         ctx.fillText('TOTAL', cx, cy - 8);
 
         ctx.fillStyle = isDk ? '#f8fafc' : '#0f172a';
-        ctx.font = 'bold 12px "JetBrains Mono", monospace';
+        ctx.font = 'bold 13px "JetBrains Mono", monospace';
         ctx.fillText(formatVolCompact(data.datasets[0].totalVolume), cx, cy + 7);
       }}
       ctx.restore();
@@ -2966,16 +2988,19 @@ function renderModalShareWorkspace() {{
     bodyColor: isDark ? '#cbd5e1' : '#334155',
     borderColor: isDark ? '#334155' : '#cbd5e1',
     borderWidth: 1,
-    padding: 8,
+    padding: 10,
+    boxPadding: 4,
     bodyFont: {{ family: 'JetBrains Mono', size: 11 }},
-    titleFont: {{ family: 'Plus Jakarta Sans', size: 11, weight: 'bold' }},
+    titleFont: {{ family: 'Plus Jakarta Sans', size: 12, weight: 'bold' }},
     callbacks: {{
       label: (c) => {{
-        const idx = c.dataIndex;
         const pct = c.raw;
+        return ` Pangsa: ${{decFmt(pct, 1)}}%`;
+      }},
+      afterLabel: (c) => {{
+        const idx = c.dataIndex;
         const vol = c.dataset.volumes ? c.dataset.volumes[idx] : null;
-        const volFmt = vol ? `${{numFmt(vol)}} ${{unitStr}}` : '';
-        return ` ${{c.label}}: ${{decFmt(pct, 1)}}% (${{volFmt}})`;
+        return vol ? ` Volume: ${{numFmt(vol)}} ${{unitStr}}` : '';
       }}
     }}
   }};
@@ -2998,7 +3023,7 @@ function renderModalShareWorkspace() {{
     options: {{
       responsive: true,
       maintainAspectRatio: false,
-      cutout: '50%',
+      cutout: '52%',
       plugins: {{
         legend: {{ display: false }},
         tooltip: donutTooltipConfig
@@ -3025,7 +3050,7 @@ function renderModalShareWorkspace() {{
     options: {{
       responsive: true,
       maintainAspectRatio: false,
-      cutout: '50%',
+      cutout: '52%',
       plugins: {{
         legend: {{ display: false }},
         tooltip: donutTooltipConfig
