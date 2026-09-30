@@ -4620,6 +4620,15 @@ window.addEventListener('DOMContentLoaded', () => {{
     with open(index_html, 'w', encoding='utf-8') as f:
         f.write(html)
         
+    # Also sync to local 'dashboard utama' folder if exists
+    for folder_name in ["dashboard utama", "dashboard_utama"]:
+        target_dir = os.path.join(os.path.dirname(OUTPUT_HTML), folder_name)
+        if os.path.exists(target_dir):
+            with open(os.path.join(target_dir, "index.html"), 'w', encoding='utf-8') as f:
+                f.write(html)
+            with open(os.path.join(target_dir, "Dashboard_Mobilitas_Nasional_2026.html"), 'w', encoding='utf-8') as f:
+                f.write(html)
+        
     print(f"Production dashboard successfully generated: {OUTPUT_HTML} and {index_html}")
     print(f"File size: {os.path.getsize(OUTPUT_HTML) / 1024:.1f} KB")
 
