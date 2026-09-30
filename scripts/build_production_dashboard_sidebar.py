@@ -198,7 +198,7 @@ def generate_dashboard():
           <button onclick="toggleExplanationSidebar(true)" class="w-full mt-2.5 flex items-center justify-between px-2.5 py-2 rounded-md text-xs font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800/80 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-all text-left group shadow-xs">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse shrink-0"></span>
-              <span class="truncate">📘 Informasi Dashboard</span>
+              <span class="truncate">Tentang Data</span>
             </div>
             <span class="text-[9px] px-1.5 py-0.2 rounded bg-indigo-600 text-white font-mono uppercase">Info</span>
           </button>
@@ -640,7 +640,7 @@ def generate_dashboard():
         <!-- Button Buka Sidebar Metodologi Kepadatan -->
         <button onclick="toggleExplanationSidebar(true)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-indigo-300 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-xs font-semibold shadow-xs transition-all" title="Buka Informasi & Kamus Rumus Dashboard">
           <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-          <span class="hidden sm:inline">Informasi Dashboard</span>
+          <span class="hidden sm:inline">Tentang Data</span>
           <span class="sm:hidden">Info</span>
         </button>
 
@@ -4616,7 +4616,11 @@ window.addEventListener('DOMContentLoaded', () => {{
     with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
         f.write(html)
         
-    print(f"Production dashboard with interactive Leaflet GIS successfully generated: {OUTPUT_HTML}")
+    index_html = os.path.join(os.path.dirname(OUTPUT_HTML), "index.html")
+    with open(index_html, 'w', encoding='utf-8') as f:
+        f.write(html)
+        
+    print(f"Production dashboard successfully generated: {OUTPUT_HTML} and {index_html}")
     print(f"File size: {os.path.getsize(OUTPUT_HTML) / 1024:.1f} KB")
 
 if __name__ == '__main__':
