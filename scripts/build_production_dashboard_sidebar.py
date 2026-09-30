@@ -207,7 +207,10 @@ def generate_dashboard():
 
       <!-- Rentang Waktu Quick Filter -->
       <div>
-        <p class="px-2.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Rentang Waktu</p>
+        <div class="flex items-center justify-between px-2.5 mb-1.5">
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rentang Waktu</p>
+          <span class="text-[9px] text-slate-400 font-mono">1 Jan - 29 Sep</span>
+        </div>
         <div class="space-y-1 bg-slate-50 dark:bg-slate-800/60 p-1.5 rounded-md border border-slate-200 dark:border-slate-800">
           <button onclick="setTimelineFilter('all', this)" class="btn-range active w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold text-slate-900 dark:text-white bg-white dark:bg-slate-900 shadow-xs transition-all">
             <span>Sepanjang 2026</span>
@@ -215,7 +218,7 @@ def generate_dashboard():
           </button>
           <button onclick="setTimelineFilter('lebaran', this)" class="btn-range w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
             <span>Puncak Lebaran</span>
-            <span class="num-mono text-[10px] text-slate-500">27H</span>
+            <span class="num-mono text-[10px] text-slate-500">17H</span>
           </button>
           <button onclick="setTimelineFilter('libur_sekolah', this)" class="btn-range w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
             <span>Libur Sekolah</span>
@@ -225,6 +228,28 @@ def generate_dashboard():
             <span>Tahun Baru</span>
             <span class="num-mono text-[10px] text-slate-500">15H</span>
           </button>
+          <button id="btn-range-custom" onclick="setTimelineFilter('custom', this)" class="btn-range w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+            <span class="flex items-center gap-1.5">
+              <span>📅</span>
+              <span>Kustom Tanggal</span>
+            </span>
+            <span id="badge-custom-days" class="num-mono text-[10px] text-slate-500">Pilih</span>
+          </button>
+
+          <!-- Custom Date Input Form -->
+          <div id="panel-custom-range" class="hidden pt-2 border-t border-slate-200 dark:border-slate-700/60 space-y-2 px-1">
+            <div>
+              <label for="custom-start-date" class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-0.5">Dari Tanggal:</label>
+              <input type="date" id="custom-start-date" min="2026-01-01" max="2026-09-29" value="2026-03-01" onchange="applyCustomDateRange()" class="w-full text-xs font-mono bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+            </div>
+            <div>
+              <label for="custom-end-date" class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-0.5">Sampai Tanggal:</label>
+              <input type="date" id="custom-end-date" min="2026-01-01" max="2026-09-29" value="2026-03-31" onchange="applyCustomDateRange()" class="w-full text-xs font-mono bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+            </div>
+            <button type="button" onclick="applyCustomDateRange()" class="w-full py-1.5 px-2 rounded bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold transition-all shadow-xs flex items-center justify-center gap-1.5">
+              <span>✓ Terapkan Rentang</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -753,9 +778,9 @@ def generate_dashboard():
               </p>
             </div>
 
-            <span id="timeline-badge-info" class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded border border-slate-200 dark:border-slate-700">
+            <button id="timeline-badge-info" onclick="focusCustomRange()" title="Klik untuk pilih rentang tanggal kustom di sidebar" class="text-xs font-mono text-slate-600 dark:text-slate-300 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 dark:bg-slate-800 dark:hover:bg-slate-700 px-3 py-1 rounded border border-slate-200 dark:border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer">
               1 Jan 2026 - 29 Sep 2026 (272 Hari)
-            </span>
+            </button>
           </div>
 
           <!-- Full-Width Chart Canvas -->
@@ -1783,6 +1808,8 @@ const decFmt = (n, decimals = 1) => {{
 // State Variables
 let isSidebarOpen = true;
 let currentTimelineRange = 'all';
+let customStartDate = '2026-03-01';
+let customEndDate = '2026-03-31';
 let currentHubModa = 'ALL';
 let currentHubPeriod = 'peak'; // 'peak' or 'ytd'
 let currentHubSearchTerm = '';
@@ -2202,6 +2229,11 @@ function getFilteredTimelineData() {{
   if (currentTimelineRange === 'lebaran') return all.filter(d => d.date >= '2026-03-13' && d.date <= '2026-03-29');
   if (currentTimelineRange === 'libur_sekolah') return all.filter(d => d.date >= '2026-06-15' && d.date <= '2026-07-15');
   if (currentTimelineRange === 'tahun_baru') return all.filter(d => d.date >= '2026-01-01' && d.date <= '2026-01-15');
+  if (currentTimelineRange === 'custom') {{
+    const s = customStartDate || '2026-01-01';
+    const e = customEndDate || '2026-09-29';
+    return all.filter(d => d.date >= s && d.date <= e);
+  }}
   return all;
 }}
 
@@ -2299,17 +2331,99 @@ function setTimelineFilter(rangeKey, btn) {{
     b.classList.remove('active', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'font-semibold', 'shadow-xs');
     b.classList.add('text-slate-600', 'dark:text-slate-400');
   }});
-  btn.classList.add('active', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'font-semibold', 'shadow-xs');
-  btn.classList.remove('text-slate-600', 'dark:text-slate-400');
+  if (btn) {{
+    btn.classList.add('active', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'font-semibold', 'shadow-xs');
+    btn.classList.remove('text-slate-600', 'dark:text-slate-400');
+  }}
 
-  const labelMap = {{
-    'all': '1 Jan 2026 - 29 Sep 2026 (272 Hari)',
-    'lebaran': '13 Mar 2026 - 29 Mar 2026 (17 Hari)',
-    'libur_sekolah': '15 Jun 2026 - 15 Jul 2026 (31 Hari)',
-    'tahun_baru': '1 Jan 2026 - 15 Jan 2026 (15 Hari)'
-  }};
-  document.getElementById('timeline-badge-info').innerText = labelMap[rangeKey] || '';
-  renderTimelineChart();
+  const customPanel = document.getElementById('panel-custom-range');
+  if (customPanel) {{
+    if (rangeKey === 'custom') {{
+      customPanel.classList.remove('hidden');
+    }} else {{
+      customPanel.classList.add('hidden');
+    }}
+  }}
+
+  if (rangeKey === 'custom') {{
+    applyCustomDateRange(true);
+  }} else {{
+    const labelMap = {{
+      'all': '1 Jan 2026 - 29 Sep 2026 (272 Hari)',
+      'lebaran': '13 Mar 2026 - 29 Mar 2026 (17 Hari)',
+      'libur_sekolah': '15 Jun 2026 - 15 Jul 2026 (31 Hari)',
+      'tahun_baru': '1 Jan 2026 - 15 Jan 2026 (15 Hari)'
+    }};
+    const infoBadge = document.getElementById('timeline-badge-info');
+    if (infoBadge) infoBadge.innerText = labelMap[rangeKey] || '';
+    renderTimelineChart();
+  }}
+}}
+
+function formatDateIndo(dateStr) {{
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length !== 3) return dateStr;
+  const day = parseInt(parts[2], 10);
+  const mIndex = parseInt(parts[1], 10) - 1;
+  const year = parts[0];
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  return `${{day}} ${{months[mIndex] || ''}} ${{year}}`;
+}}
+
+function applyCustomDateRange(triggerRender = true) {{
+  const startEl = document.getElementById('custom-start-date');
+  const endEl = document.getElementById('custom-end-date');
+  if (!startEl || !endEl) return;
+
+  let sVal = startEl.value || '2026-01-01';
+  let eVal = endEl.value || '2026-09-29';
+
+  // Batasi agar sesuai batas dataset
+  if (sVal < '2026-01-01') sVal = '2026-01-01';
+  if (sVal > '2026-09-29') sVal = '2026-09-29';
+  if (eVal < '2026-01-01') eVal = '2026-01-01';
+  if (eVal > '2026-09-29') eVal = '2026-09-29';
+
+  if (sVal > eVal) {{
+    const tmp = sVal;
+    sVal = eVal;
+    eVal = tmp;
+    startEl.value = sVal;
+    endEl.value = eVal;
+  }}
+
+  customStartDate = sVal;
+  customEndDate = eVal;
+
+  const d1 = new Date(sVal + 'T00:00:00');
+  const d2 = new Date(eVal + 'T00:00:00');
+  const diffDays = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)) + 1);
+
+  const customBadge = document.getElementById('badge-custom-days');
+  if (customBadge) customBadge.innerText = `${{diffDays}}H`;
+
+  const infoBadge = document.getElementById('timeline-badge-info');
+  if (infoBadge) {{
+    infoBadge.innerText = `${{formatDateIndo(sVal)}} - ${{formatDateIndo(eVal)}} (${{diffDays}} Hari)`;
+  }}
+
+  if (currentTimelineRange !== 'custom') {{
+    const btn = document.getElementById('btn-range-custom');
+    if (btn) setTimelineFilter('custom', btn);
+  }} else if (triggerRender) {{
+    renderTimelineChart();
+  }}
+}}
+
+function focusCustomRange() {{
+  if (!isSidebarOpen) toggleSidebar();
+  const btn = document.getElementById('btn-range-custom');
+  if (btn) setTimelineFilter('custom', btn);
+  const input = document.getElementById('custom-start-date');
+  if (input) {{
+    setTimeout(() => input.focus(), 150);
+  }}
 }}
 
 function renderMonthlyTable() {{
@@ -3941,7 +4055,8 @@ function exportActiveCSV() {{
   const blob = new Blob([csv], {{ type: 'text/csv;charset=utf-8;' }});
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.setAttribute('download', `strategihub_kemenhub_multimoda_${{currentTimelineRange}}_${{currentMetric}}.csv`);
+  const filenameRange = currentTimelineRange === 'custom' ? `${{customStartDate}}_sd_${{customEndDate}}` : currentTimelineRange;
+  link.setAttribute('download', `strategihub_kemenhub_multimoda_${{filenameRange}}_${{currentMetric}}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
