@@ -128,8 +128,8 @@ m_arm_brg = df_clean.groupby(['bulan', 'moda'])['armada_berangkat'].sum().unstac
 months = sorted(m_pnp_tot.index.tolist())
 month_names = {
     '2026-01': 'Januari', '2026-02': 'Februari', '2026-03': 'Maret (Lebaran)',
-    '2026-04': 'April', '2026-05': 'Mei', '2026-06': 'Juni (Libur Sek.)',
-    '2026-07': 'Juli (Libur Sek.)', '2026-08': 'Agustus', '2026-09': 'September*'
+    '2026-04': 'April', '2026-05': 'Mei', '2026-06': 'Juni (Liburan Sekolah)',
+    '2026-07': 'Juli (Liburan Sekolah)', '2026-08': 'Agustus', '2026-09': 'September*'
 }
 
 monthly_summary = []
