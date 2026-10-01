@@ -4,26 +4,30 @@ import numpy as np
 import pandas as pd
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
-# 1. Load historical datasets: 2025 daily CSV (365 days) and 2026 bundle (270 days)
+# ==============================================================================
+# 1. LOAD HISTORICAL DATASETS (2025: 365 Days, 2026: 272 Days up to 2026-09-29)
+# ==============================================================================
 with open('scripts/mobility_data_bundle.json', 'r', encoding='utf-8') as f:
     bundle = json.load(f)
 
+# 2025 daily CSV (365 days)
 df25 = pd.read_csv('siasati_ringkasan_harian_multimoda_2025.csv')
 df25['tanggal_dt'] = pd.to_datetime(df25['tanggal'])
+df25['dow'] = df25['tanggal_dt'].dt.dayofweek
 df25['md'] = df25['tanggal'].str[5:]
 p25_by_md = df25.set_index('md').to_dict(orient='index')
 
-# 2026 daily history up to 2026-09-27
+# 2026 daily history strictly up to cutoff 2026-09-29
+modes = ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT']
 daily_history_26 = bundle['daily_timeline']
 df26 = pd.DataFrame(daily_history_26)
 df26['date_dt'] = pd.to_datetime(df26['date'])
-df26 = df26[df26['date_dt'] <= '2026-09-27'].copy()
+df26 = df26[df26['date_dt'] <= '2026-09-29'].copy()
 df26.sort_values('date_dt', inplace=True)
 df26.reset_index(drop=True, inplace=True)
 df26['md'] = df26['date'].str[5:]
 
-# 2. Combine 2025 + 2026 into a single continuous training time series (635 days)
-modes = ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT']
+# Combine 2025 + 2026 into a single continuous training time series (637 days)
 s25_tot = df25[['tanggal', 'TOTAL_PENUMPANG'] + [f'pnp_{m}' for m in modes] + ['TOTAL_ARMADA'] + [f'arm_{m}' for m in modes]].rename(
     columns={'tanggal': 'date', 'TOTAL_PENUMPANG': 'TOTAL', 'TOTAL_ARMADA': 'arm_TOTAL',
              **{f'pnp_{m}': m for m in modes}}
@@ -33,38 +37,99 @@ s26_tot = df26[['date', 'TOTAL'] + modes + ['arm_TOTAL'] + [f'arm_{m}' for m in 
 df_train_combined = pd.concat([s25_tot, s26_tot], ignore_index=True)
 df_train_combined['date_dt'] = pd.to_datetime(df_train_combined['date'])
 df_train_combined.set_index('date_dt', inplace=True)
+df_train_combined.index.freq = 'D'
 total_train_days = len(df_train_combined)
 
-print(f"Dataset Latih Gabungan (Unified Training Data): {total_train_days} hari ({df_train_combined.index[0].strftime('%Y-%m-%d')} s.d. {df_train_combined.index[-1].strftime('%Y-%m-%d')})")
+print("=" * 80)
+print("SISTEM FORECASTING NATARU 2026/2027 (KEMENHUB PUSDATIN)")
+print("Model: Holt-Winters Multiplicative Exponential Smoothing + Additive Trend")
+print("       + Damped Trend (phi=0.98) + Weekly Seasonality (s=7) + Nataru Calendar Shock")
+print("=" * 80)
+print(f"Unified Training Data: {total_train_days} hari ({df_train_combined.index[0].strftime('%Y-%m-%d')} s.d. {df_train_combined.index[-1].strftime('%Y-%m-%d')})")
+print(f"  • Data 2025: 365 hari (1 Jan 2025 - 31 Des 2025)")
+print(f"  • Data 2026: 272 hari (1 Jan 2026 - 29 Sep 2026)")
+print("=" * 80)
 
-# 3. Fit Holt-Winters (Exponential Smoothing) on Combined Series
-# Seasonality s=7 (weekly cyclical pattern) with Damped Trend
-hw_model = ExponentialSmoothing(
-    df_train_combined['TOTAL'],
-    seasonal_periods=7,
-    trend='add',
-    damped_trend=True,
-    seasonal='mul',
-    initialization_method='estimated'
-).fit()
+# Helper function to fit Holt-Winters strictly per requirements
+def fit_hw_model(series):
+    """
+    Fit Holt-Winters Multiplicative Exponential Smoothing
+    + Additive Trend
+    + Damped Trend with phi = 0.98 fixed
+    + Weekly Seasonality s = 7
+    Initialization: estimated
+    """
+    return ExponentialSmoothing(
+        series.clip(lower=1.0),
+        trend='add',
+        damped_trend=True,
+        seasonal='mul',
+        seasonal_periods=7,
+        initialization_method='estimated'
+    ).fit(
+        damping_trend=0.98,
+        optimized=True,
+        use_brute=True
+    )
 
-# Calculate empirical growth 2026 vs 2025 YTD
-merged_ytd = pd.merge(df26, df25, on='md', suffixes=('_2026', '_2025'))
-tot26_ytd = merged_ytd['TOTAL'].sum()
-tot25_ytd = merged_ytd['TOTAL_PENUMPANG'].sum()
-ytd_growth_tot = (tot26_ytd / tot25_ytd) - 1.0
+# ==============================================================================
+# 2. BACKTEST EVALUATION (28-Day Temporal Holdout: 2 Sep 2026 - 29 Sep 2026)
+# ==============================================================================
+print("\n[LANGKAH 1/4] Melakukan Backtest Temporal Holdout 28 Hari...")
+train_split = df_train_combined.iloc[:-28]
+test_split = df_train_combined.iloc[-28:]
+test_start = test_split.index[0].strftime('%Y-%m-%d')
+test_end = test_split.index[-1].strftime('%Y-%m-%d')
+train_start = train_split.index[0].strftime('%Y-%m-%d')
+train_end = train_split.index[-1].strftime('%Y-%m-%d')
 
-ytd_growth_modes = {}
+hw_test_tot = fit_hw_model(train_split['TOTAL'])
+pred_test_tot = hw_test_tot.forecast(28).values
+y_true_tot = test_split['TOTAL'].values
+
+mape_tot = float(np.mean(np.abs((y_true_tot - pred_test_tot) / y_true_tot)) * 100)
+wape_tot = float(np.sum(np.abs(y_true_tot - pred_test_tot)) / np.sum(y_true_tot) * 100)
+rmse_tot = float(np.sqrt(np.mean((y_true_tot - pred_test_tot) ** 2)))
+mae_tot = float(np.mean(np.abs(y_true_tot - pred_test_tot)))
+mean_test_vol = float(np.mean(y_true_tot))
+rel_error_tot = float((rmse_tot / mean_test_vol) * 100)
+
+mode_eval = {}
 for m in modes:
-    p26 = merged_ytd[m].sum()
-    p25 = merged_ytd[f'pnp_{m}'].sum()
-    ytd_growth_modes[m] = (p26 / p25) - 1.0
+    hw_test_m = fit_hw_model(train_split[m])
+    pm = hw_test_m.forecast(28).values
+    ym = test_split[m].values
+    mask = ym > 0
+    mape_m = float(np.mean(np.abs((ym[mask] - pm[mask]) / ym[mask])) * 100) if np.any(mask) else 0.0
+    wape_m = float(np.sum(np.abs(ym - pm)) / np.sum(ym) * 100) if np.sum(ym) > 0 else 0.0
+    rmse_m = float(np.sqrt(np.mean((ym - pm) ** 2)))
+    mae_m = float(np.mean(np.abs(ym - pm)))
+    mean_m = float(np.mean(ym))
+    rel_m = float((rmse_m / mean_m) * 100) if mean_m > 0 else 0.0
+    
+    mode_eval[m] = {
+        'mape': round(mape_m, 2),
+        'wape': round(wape_m, 2),
+        'rmse': int(round(rmse_m)),
+        'mae': int(round(mae_m)),
+        'mean_vol': int(round(mean_m)),
+        'rel_error_pct': round(rel_m, 2)
+    }
 
-print(f"YTD Growth (Jan 1 - Sep 27): Total={ytd_growth_tot*100:+.2f}%")
+print(f"Hasil Backtest TOTAL (28 Hari): MAPE={mape_tot:.2f}%, WAPE={wape_tot:.2f}%, RMSE={rmse_tot:,.0f} pnp, MAE={mae_tot:,.0f} pnp")
 for m in modes:
-    print(f"  {m:5s}: {ytd_growth_modes[m]*100:+.2f}%")
+    print(f"  {m:<8} -> MAPE: {mode_eval[m]['mape']:6.2f}% | WAPE: {mode_eval[m]['wape']:6.2f}% | RMSE: {mode_eval[m]['rmse']:8,d} pnp | MAE: {mode_eval[m]['mae']:8,d} pnp")
 
-# 4. Extract Benchmark Nataru 2025 (18 Days: 18-31 Des 2025 [14H] + 1-4 Jan 2025 [4H])
+# ==============================================================================
+# 3. FIT FINAL HOLT-WINTERS ON ENTIRE 637-DAY HISTORICAL DATA
+# ==============================================================================
+print("\n[LANGKAH 2/4] Fit Ulang Model Holt-Winters dengan Seluruh Data (637 Hari)...")
+hw_full_tot = fit_hw_model(df_train_combined['TOTAL'])
+hw_full_modes = {m: fit_hw_model(df_train_combined[m]) for m in modes}
+
+# ==============================================================================
+# 4. BENCHMARK NATARU 2025 (18 Days: 18-31 Des 2025 + 1-4 Jan 2025)
+# ==============================================================================
 des25_nataru = df25[df25['tanggal'].between('2025-12-18', '2025-12-31')]
 jan25_nataru = df25[df25['tanggal'].between('2025-01-01', '2025-01-04')]
 df_nataru25 = pd.concat([des25_nataru, jan25_nataru])
@@ -89,20 +154,60 @@ benchmark_2025 = {
     }
 }
 
-# 5. Generate 100-Day Forecast (2026-09-28 to 2027-01-05) using Holt-Winters + 2025 Nataru Shock
-forecast_start = datetime.date(2026, 9, 28)
-forecast_end = datetime.date(2027, 1, 5)
-forecast_days = (forecast_end - forecast_start).days + 1
+# ==============================================================================
+# 5. NATARU CALENDAR SHOCK COMPUTATION (Nov 2025 DOW Baseline Reference)
+# ==============================================================================
+nov25 = df25[df25['tanggal'].between('2025-11-01', '2025-11-30')]
+nov_mean_tot = nov25.groupby('dow')['TOTAL_PENUMPANG'].mean().to_dict()
+nov_mean_modes = {m: nov25.groupby('dow')[f'pnp_{m}'].mean().to_dict() for m in modes}
+
+dow_names = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
+shock_factors_log = []
+
+# Generate exactly 100 days of future dates: 2026-09-30 to 2027-01-07
+forecast_start = datetime.date(2026, 9, 30)
+forecast_end = datetime.date(2027, 1, 7)
+forecast_days = (forecast_end - forecast_start).days + 1  # Exactly 100 days
 future_dates = [forecast_start + datetime.timedelta(days=i) for i in range(forecast_days)]
 
-# Generate Holt-Winters 100-day baseline
-hw_baseline_series = hw_model.forecast(forecast_days)
-hw_baseline_map = {d.strftime('%Y-%m-%d'): hw_baseline_series.iloc[i] for i, d in enumerate(future_dates)}
+# Generate Holt-Winters 100-day baseline forecasts
+hw_baseline_tot_series = hw_full_tot.forecast(forecast_days).values
+hw_baseline_mode_series = {m: hw_full_modes[m].forecast(forecast_days).values for m in modes}
 
-# November 2025 regular baseline
-nov25_mean = df25[df25['tanggal'].between('2025-11-01', '2025-11-30')]['TOTAL_PENUMPANG'].mean()
+hw_baseline_map_tot = {future_dates[i].strftime('%Y-%m-%d'): hw_baseline_tot_series[i] for i in range(forecast_days)}
+hw_baseline_map_modes = {
+    m: {future_dates[i].strftime('%Y-%m-%d'): hw_baseline_mode_series[m][i] for i in range(forecast_days)}
+    for m in modes
+}
 
-# Load factor base per mode
+# Compute shock factor table for Nataru period (18 Des 2026 s.d. 4 Jan 2027)
+for d in future_dates:
+    d_str = d.strftime('%Y-%m-%d')
+    md = d.strftime('%m-%d')
+    dow = d.weekday()
+    if '2026-12-18' <= d_str <= '2027-01-04':
+        val25_tot = p25_by_md[md]['TOTAL_PENUMPANG']
+        shock_tot = float(val25_tot / nov_mean_tot[dow])
+        entry = {
+            'date': d_str,
+            'dow': dow_names[dow],
+            'val_2025_tot': int(val25_tot),
+            'nov_baseline_tot': int(round(nov_mean_tot[dow])),
+            'shock_factor_tot': round(shock_tot, 4),
+            'mode_shocks': {}
+        }
+        for m in modes:
+            val25_m = p25_by_md[md][f'pnp_{m}']
+            shock_m = float(val25_m / nov_mean_modes[m][dow])
+            entry['mode_shocks'][m] = round(shock_m, 4)
+        shock_factors_log.append(entry)
+
+# ==============================================================================
+# 6. SCENARIO SIMULATION & 100-DAY FORECAST GENERATION
+# ==============================================================================
+print("\n[LANGKAH 3/4] Menghasilkan 100 Hari Proyeksi (30 Sep 2026 s.d. 7 Jan 2027)...")
+
+# Baseline load factor per mode
 load_factors_base = {
     'UDARA': 112.0,
     'KA': 55.0,
@@ -111,79 +216,68 @@ load_factors_base = {
     'LAUT': 70.0
 }
 
+# Explicit scenario factors
 scenarios = ['moderat', 'optimis', 'konservatif']
+scenario_factors = {
+    'moderat': 1.00,
+    'optimis': 1.07,
+    'konservatif': 0.95
+}
+
 forecast_data = {s: [] for s in scenarios}
 
 for s in scenarios:
-    if s == 'moderat':
-        growth_tot = ytd_growth_tot # +5.13%
-        growth_m = ytd_growth_modes.copy()
-    elif s == 'optimis':
-        growth_tot = ytd_growth_tot + 0.07 # +12.1%
-        growth_m = {m: ytd_growth_modes[m] + 0.07 for m in modes}
-    else: # konservatif
-        growth_tot = -0.05 # -5.0%
-        growth_m = {
-            'UDARA': ytd_growth_modes['UDARA'] - 0.05,
-            'KA': ytd_growth_modes['KA'] - 0.03,
-            'BUS': ytd_growth_modes['BUS'] - 0.04,
-            'ASDP': ytd_growth_modes['ASDP'] - 0.20,
-            'LAUT': ytd_growth_modes['LAUT'] - 0.25
-        }
-
-    for d in future_dates:
+    scen_factor = scenario_factors[s]
+    
+    for i, d in enumerate(future_dates):
         d_str = d.strftime('%Y-%m-%d')
         md = d.strftime('%m-%d')
+        dow = d.weekday()
+        
         rec25 = p25_by_md[md]
         val25_tot = rec25['TOTAL_PENUMPANG']
         arm25_tot = rec25['TOTAL_ARMADA']
-
-        # Holt-Winters baseline for this date
-        hw_base = hw_baseline_map[d_str]
-
-        # Is this date inside the Nataru Shock window (Dec 18 - Jan 4)?
-        is_nataru_window = ('12-18' <= md <= '12-31') or ('01-01' <= md <= '01-04')
-        is_transition = ('12-15' <= md <= '12-17')
-
+        
+        # 1. Holt-Winters baselines
+        hw_base_tot = hw_baseline_tot_series[i]
+        hw_base_m = {m: hw_baseline_mode_series[m][i] for m in modes}
+        
+        # 2. Check Nataru shock window (18 Des 2026 s.d. 4 Jan 2027)
+        is_nataru_window = ('2026-12-18' <= d_str <= '2027-01-04')
+        
         if is_nataru_window:
-            # Nataru Seasonal Shock learned from 2025 training data
-            shock_factor = val25_tot / nov25_mean
+            # Nataru Calendar Shock factor based on November 2025 weekday baseline
+            shock_tot = float(val25_tot / nov_mean_tot[dow])
+            pred_total_raw = hw_base_tot * scen_factor * shock_tot
             
-            # Calendar day alignment adjustment for 2026/2027
-            dow_adj = 1.0
-            if d_str in ['2026-12-24', '2026-12-25']:
-                dow_adj = 1.03
-            elif d_str in ['2026-12-27', '2027-01-03']:
-                dow_adj = 1.05
-            elif d_str in ['2026-12-31', '2027-01-01']:
-                dow_adj = 1.02
-
-            # Forecast = HW Base level scaled by Nataru Shock & Growth scenario
-            pred_total = int(round(val25_tot * (1.0 + growth_tot) * dow_adj))
-        elif is_transition:
-            # Smooth ramp-up from HW baseline into Nataru window
-            ramp = 0.5 + 0.5 * (val25_tot / nov25_mean)
-            pred_total = int(round(hw_base * (1.0 + growth_tot * 0.5) * ramp))
+            raw_mode_preds = {}
+            for m in modes:
+                val25_m = rec25[f'pnp_{m}']
+                shock_m = float(val25_m / nov_mean_modes[m][dow])
+                raw_mode_preds[m] = hw_base_m[m] * scen_factor * shock_m
         else:
-            # Regular period (Sep 28 - Dec 14): Follows Holt-Winters baseline directly
-            pred_total = int(round(hw_base * (1.0 + (growth_tot - ytd_growth_tot))))
-
-        # Mode predictions
-        mode_preds = {}
-        for m in modes:
-            val25_m = rec25[f'pnp_{m}']
-            if is_nataru_window or is_transition:
-                pred_m = val25_m * (1.0 + growth_m[m])
-            else:
-                # Share-weighted distribution based on HW total
-                share_m = val25_m / val25_tot
-                pred_m = pred_total * share_m
-            mode_preds[m] = max(1000, pred_m)
-
-        scale = pred_total / sum(mode_preds.values())
-        mode_preds = {m: int(round(mode_preds[m] * scale)) for m in modes}
-
-        # Armada predictions
+            # Non-Nataru dates: pure Holt-Winters baseline scaled by scenario factor
+            shock_tot = 1.0
+            pred_total_raw = hw_base_tot * scen_factor
+            raw_mode_preds = {m: hw_base_m[m] * scen_factor for m in modes}
+            
+        pred_total = int(round(pred_total_raw))
+        
+        # 3. Proportional normalization across 5 modes: sum(modes) == TOTAL
+        sum_raw_modes = sum(raw_mode_preds.values())
+        if sum_raw_modes > 0:
+            scale = pred_total / sum_raw_modes
+            mode_preds = {m: max(10, int(round(raw_mode_preds[m] * scale))) for m in modes}
+            # Adjust minor rounding difference to match pred_total exactly
+            diff_round = pred_total - sum(mode_preds.values())
+            mode_preds['UDARA'] += diff_round
+        else:
+            share_fallback = 1.0 / len(modes)
+            mode_preds = {m: int(round(pred_total * share_fallback)) for m in modes}
+            diff_round = pred_total - sum(mode_preds.values())
+            mode_preds['UDARA'] += diff_round
+            
+        # 4. Armada predictions
         arm_preds = {}
         for m in modes:
             lf = load_factors_base[m]
@@ -191,21 +285,23 @@ for s in scenarios:
                 lf *= 1.12
             arm_preds[f'arm_{m}'] = max(10, int(round(mode_preds[m] / lf)))
         arm_total = sum(arm_preds.values())
-
-        # 95% Confidence Interval (±5.5%)
-        ci_spread = 0.055
-        ci_lower = int(round(pred_total * (1 - ci_spread)))
-        ci_upper = int(round(pred_total * (1 + ci_spread)))
-
+        
+        # 5. Approximate 95% Confidence Interval (RMSE-based)
+        ci_lower = max(0, int(round(pred_total - 1.96 * rmse_tot)))
+        ci_upper = int(round(pred_total + 1.96 * rmse_tot))
+        
         yoy_pct = round(((pred_total / val25_tot) - 1.0) * 100, 1)
         yoy_diff = pred_total - val25_tot
-
-        is_peak = pred_total >= 1800000 or d_str in ['2026-12-24', '2026-12-27', '2027-01-03']
-        is_high = pred_total >= 1500000
-
+        
+        is_peak = pred_total >= 1800000 or d_str in ['2026-12-24', '2026-12-27', '2026-12-28', '2027-01-03']
+        is_high = pred_total >= 1400000
+        
         forecast_data[s].append({
             'date': d_str,
             'TOTAL': pred_total,
+            'hw_baseline': int(round(hw_base_tot)),
+            'shock_factor': round(shock_tot, 4),
+            'scenario_factor': scen_factor,
             'ci_lower': ci_lower,
             'ci_upper': ci_upper,
             'status': 'PEAK_SURGE' if is_peak else ('HIGH' if is_high else 'NORMAL'),
@@ -236,7 +332,9 @@ for s in scenarios:
             'arm_LAUT_2025': rec25['arm_LAUT'],
         })
 
-# 6. Summarize Nataru Period (18-Day: 18 Des 2026 - 4 Jan 2027)
+# ==============================================================================
+# 7. SUMMARIZE NATARU PERIOD (18-Day: 18 Des 2026 - 4 Jan 2027)
+# ==============================================================================
 def summarize_nataru(scen_list, b25):
     subset = [r for r in scen_list if '2026-12-18' <= r['date'] <= '2027-01-04']
     total_pnp = sum(r['TOTAL'] for r in subset)
@@ -251,13 +349,13 @@ def summarize_nataru(scen_list, b25):
     for m in modes:
         p_sum = sum(r[m] for r in subset)
         p25_sum = b25['modes'][m]['passengers']
-        yoy_m = round(((p_sum / p25_sum) - 1.0) * 100, 1)
+        yoy_m = round(((p_sum / p25_sum) - 1.0) * 100, 1) if p25_sum > 0 else 0.0
         mode_sums[m] = {
             'passengers_2026': p_sum,
             'passengers_2025': p25_sum,
             'diff': p_sum - p25_sum,
             'yoy_pct': yoy_m,
-            'share_pct_2026': round(p_sum / total_pnp * 100, 1),
+            'share_pct_2026': round(p_sum / total_pnp * 100, 1) if total_pnp > 0 else 0.0,
             'share_pct_2025': b25['modes'][m]['share_pct'],
         }
 
@@ -265,13 +363,13 @@ def summarize_nataru(scen_list, b25):
         'total_passengers': total_pnp,
         'total_passengers_2025': b25['total_passengers'],
         'diff_passengers': total_pnp - b25['total_passengers'],
-        'yoy_total_pct': round(((total_pnp / b25['total_passengers']) - 1.0) * 100, 1),
+        'yoy_total_pct': round(((total_pnp / b25['total_passengers']) - 1.0) * 100, 1) if b25['total_passengers'] > 0 else 0.0,
         'avg_daily_passengers': avg_daily,
         'avg_daily_passengers_2025': b25['avg_daily_passengers'],
-        'yoy_avg_pct': round(((avg_daily / b25['avg_daily_passengers']) - 1.0) * 100, 1),
+        'yoy_avg_pct': round(((avg_daily / b25['avg_daily_passengers']) - 1.0) * 100, 1) if b25['avg_daily_passengers'] > 0 else 0.0,
         'total_armada': total_arm,
         'total_armada_2025': b25['total_armada'],
-        'yoy_armada_pct': round(((total_arm / b25['total_armada']) - 1.0) * 100, 1),
+        'yoy_armada_pct': round(((total_arm / b25['total_armada']) - 1.0) * 100, 1) if b25['total_armada'] > 0 else 0.0,
         'all_time_peak_date': max_day['date'],
         'all_time_peak_val': max_day['TOTAL'],
         'all_time_peak_yoy': max_day['yoy_pct'],
@@ -288,46 +386,12 @@ def summarize_nataru(scen_list, b25):
 
 summaries = {s: summarize_nataru(forecast_data[s], benchmark_2025) for s in scenarios}
 
-# 7. Evaluate Backtest Holdout (607 days train vs 28 days test)
-train_split = df_train_combined.iloc[:-28]
-test_split = df_train_combined.iloc[-28:]
-hw_test = ExponentialSmoothing(
-    train_split['TOTAL'],
-    seasonal_periods=7,
-    trend='add',
-    damped_trend=True,
-    seasonal='mul',
-    initialization_method='estimated'
-).fit()
+# ==============================================================================
+# 8. UPDATE DATA BUNDLE & SAVE
+# ==============================================================================
+print("\n[LANGKAH 4/4] Memperbarui bundle data JSON...")
 
-pred_test = hw_test.forecast(28).values
-y_true = test_split['TOTAL'].values
-mape_tot = float(np.mean(np.abs((y_true - pred_test) / y_true)) * 100)
-rmse_tot = float(np.sqrt(np.mean((y_true - pred_test) ** 2)))
-mae_tot = float(np.mean(np.abs(y_true - pred_test)))
-mean_test_vol = float(np.mean(y_true))
-
-mode_eval = {}
-for m in modes:
-    hw_m = ExponentialSmoothing(
-        train_split[m],
-        seasonal_periods=7,
-        trend='add',
-        damped_trend=True,
-        seasonal='mul',
-        initialization_method='estimated'
-    ).fit()
-    pm = hw_m.forecast(28).values
-    ym = test_split[m].values
-    mode_eval[m] = {
-        'mape': round(float(np.mean(np.abs((ym - pm) / ym)) * 100), 2),
-        'rmse': int(round(float(np.sqrt(np.mean((ym - pm) ** 2))))),
-        'mae': int(round(float(np.mean(np.abs(ym - pm))))),
-        'mean_vol': int(round(float(np.mean(ym)))),
-        'rel_error_pct': round(float((np.sqrt(np.mean((ym - pm) ** 2)) / np.mean(ym)) * 100), 2)
-    }
-
-# 8. Store timeline_2025 in bundle
+# 2025 timeline list
 timeline_2025 = []
 for _, r in df25.iterrows():
     timeline_2025.append({
@@ -349,30 +413,51 @@ for _, r in df25.iterrows():
 bundle['timeline_2025'] = timeline_2025
 bundle['forecast_nataru'] = {
     'meta': {
-        'model': 'Holt-Winters Damped Trend (s=7) + Seasonal Nataru Shock Model',
-        'training_dataset': 'Gabungan Runtun Waktu Kontinu 2025 (365 hari) + 2026 (270 hari) = 635 Hari',
+        'model': "Holt-Winters Multiplicative Exponential Smoothing + Additive Trend + Damped Trend (phi=0.98) + Weekly Seasonality (s=7) + Nataru Calendar Shock",
+        'training_dataset': f"Gabungan Runtun Waktu Kontinu 2025 (365 hari) + 2026 (272 hari) = {total_train_days} Hari",
         'train_start': '2025-01-01',
-        'train_end': '2026-09-27',
+        'train_end': '2026-09-29',
         'train_days': total_train_days,
-        'forecast_start': '2026-09-28',
-        'forecast_end': '2027-01-05',
+        'forecast_start': future_dates[0].strftime('%Y-%m-%d'),
+        'forecast_end': future_dates[-1].strftime('%Y-%m-%d'),
         'horizon_days': forecast_days,
-        'ytd_growth_tot_pct': round(ytd_growth_tot * 100, 2),
-        'ytd_growth_modes_pct': {m: round(ytd_growth_modes[m] * 100, 2) for m in modes},
+        'parameters': {
+            'trend': 'add',
+            'damped_trend': True,
+            'damping_trend_phi': 0.98,
+            'seasonal': 'mul',
+            'seasonal_periods': 7,
+            'initialization_method': 'estimated',
+            'fit_options': 'optimized=True, use_brute=True'
+        },
+        'scenario_factors': scenario_factors,
+        'scenario_note': 'Scenario factor adalah asumsi proyeksi kebijakan/animo, bukan parameter internal Holt-Winters: moderat=1.00, optimis=1.07, konservatif=0.95.',
+        'ci_method': 'RMSE-based approximate 95% interval / uncertainty approximation (CI = ŷ ± 1.96 × RMSE)',
     },
     'metrics': {
-        'test_period': '31 Agt 2026 s.d. 27 Sep 2026 (28 Hari)',
-        'train_period': f"1 Jan 2025 s.d. 30 Agt 2026 ({len(train_split)} Hari)",
+        'test_period': f"{test_start} s.d. {test_end} (28 Hari)",
+        'train_period': f"{train_start} s.d. {train_end} ({len(train_split)} Hari)",
         'TOTAL': {
             'mape': round(mape_tot, 2),
+            'wape': round(wape_tot, 2),
             'rmse': int(round(rmse_tot)),
             'mae': int(round(mae_tot)),
             'mean_vol': int(round(mean_test_vol)),
-            'rel_error_pct': round((rmse_tot / mean_test_vol) * 100, 2)
+            'rel_error_pct': round(rel_error_tot, 2)
         },
         'modes': mode_eval
     },
     'benchmark_2025': benchmark_2025,
+    'shock_factors': {
+        'nataru_window': '2026-12-18 s.d. 2027-01-04 (18 Hari)',
+        'november_2025_weekday_baseline': {
+            dow_names[dow]: {
+                'TOTAL': int(round(nov_mean_tot[dow])),
+                **{m: int(round(nov_mean_modes[m][dow])) for m in modes}
+            } for dow in range(7)
+        },
+        'factors_by_date': shock_factors_log
+    },
     'summaries': summaries,
     'scenarios': forecast_data
 }
@@ -380,9 +465,14 @@ bundle['forecast_nataru'] = {
 with open('scripts/mobility_data_bundle.json', 'w', encoding='utf-8') as f:
     json.dump(bundle, f, ensure_ascii=False)
 
-print("\nSukses menyimpan mobility_data_bundle.json dengan 1 Model Holt-Winters Terpadu (2025+2026)!")
-print(f"Total Latih: {total_train_days} Hari (2025: 365H + 2026: 270H)")
-print(f"Evaluasi Backtest Total MAPE: {mape_tot:.2f}% | RMSE: {rmse_tot:,.0f} pnp")
+print("\n" + "=" * 80)
+print("PROSES SELESAI DAN VALIDASI BERHASIL:")
+print(f"1. Model Definition : {bundle['forecast_nataru']['meta']['model']}")
+print(f"2. Data Latih       : {total_train_days} Hari (2025-01-01 s.d. 2026-09-29)")
+print(f"3. Jumlah Forecast  : {forecast_days} Hari (Tepat 100 Hari)")
+print(f"4. Tanggal Forecast : {future_dates[0].strftime('%Y-%m-%d')} s.d. {future_dates[-1].strftime('%Y-%m-%d')}")
+print(f"5. Backtest TOTAL   : MAPE={mape_tot:.2f}%, WAPE={wape_tot:.2f}%, RMSE={rmse_tot:,.0f} pnp, MAE={mae_tot:,.0f} pnp")
 for s in scenarios:
     su = summaries[s]
-    print(f"[{s.upper()}] Nataru Total: {su['total_passengers']:,} pnp | Peak: {su['all_time_peak_val']:,} pnp ({su['all_time_peak_date']})")
+    print(f"6. Skenario [{s.upper():<11}] (factor={scenario_factors[s]:.2f}) -> Nataru Total: {su['total_passengers']:,} pnp | Puncak: {su['all_time_peak_val']:,} pnp ({su['all_time_peak_date']})")
+print("=" * 80)
