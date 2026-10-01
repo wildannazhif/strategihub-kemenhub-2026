@@ -475,37 +475,43 @@ def generate_dashboard():
         <!-- Tolok Ukur B -->
         <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-3.5 space-y-2.5">
           <div class="font-bold text-slate-900 dark:text-white text-xs flex items-center justify-between">
-            <span>B. Kriteria Penentuan Berapa Persen Perlu Ditambah (30 Simpul Nasional)</span>
-            <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300">Persentase Tambahan</span>
+            <span>B. Kriteria Penentuan Berapa Persen Perlu Ditambah (Seluruh 1.010 Simpul Nasional)</span>
+            <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300">1.010 Simpul</span>
           </div>
           <div class="overflow-x-auto rounded border border-slate-200 dark:border-slate-700">
             <table class="w-full text-left text-[11px] font-sans">
               <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-600 dark:text-slate-400">
                 <tr>
                   <th class="p-1.5">Klasifikasi Beban</th>
-                  <th class="p-1.5">Lonjakan Beban per Armada</th>
-                  <th class="p-1.5">Perlu Tambah Armada (%)</th>
-                  <th class="p-1.5">Simpul Prasarana (Contoh)</th>
+                  <th class="p-1.5">Kriteria Lonjakan Empiris</th>
+                  <th class="p-1.5">Rekomendasi Tambahan (%)</th>
+                  <th class="p-1.5">Cakupan Simpul Nasional</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
                 <tr>
                   <td class="p-1.5 font-bold text-rose-600 dark:text-rose-400">🔴 Sangat Kritis</td>
-                  <td class="p-1.5 font-mono">Beban naik &ge; 2,0x lipat / Lonjakan ekstrem</td>
-                  <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+15% s/d +20%</td>
-                  <td class="p-1.5">Merak (+20%), Bakauheni (+20%), Gilimanuk (+20%), Senen (+15%), Ketapang (+15%), Poto Tano (+15%), Kayangan (+15%)</td>
+                  <td class="p-1.5 font-mono">Beban &ge; 3,0x lipat atau pnp puncak &ge; 20.000</td>
+                  <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+20%</td>
+                  <td class="p-1.5">174 Simpul (Merak, Bakauheni, Gilimanuk, dll)</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold text-amber-600 dark:text-amber-400">🟠 Padat Tinggi</td>
-                  <td class="p-1.5 font-mono">Beban naik 1,2x &ndash; 1,9x lipat</td>
+                  <td class="p-1.5 font-bold text-orange-600 dark:text-orange-400">🟠 Tinggi / Kritis</td>
+                  <td class="p-1.5 font-mono">Beban 1,8x &ndash; 2,9x lipat atau pnp puncak &ge; 10.000</td>
+                  <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+15%</td>
+                  <td class="p-1.5">267 Simpul (Pasar Senen, Ketapang, Poto Tano, dll)</td>
+                </tr>
+                <tr>
+                  <td class="p-1.5 font-bold text-amber-600 dark:text-amber-400">🟡 Padat Tinggi</td>
+                  <td class="p-1.5 font-mono">Beban 1,2x &ndash; 1,7x lipat atau pnp puncak &ge; 5.000</td>
                   <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+10%</td>
-                  <td class="p-1.5">CGK Soetta (+10%), DPS Bali (+10%), Juanda (+10%), Gambir (+10%), Tugu Yogya (+10%), Giwangan (+10%), Whoosh Halim (+10%), Sepinggan (+10%)</td>
+                  <td class="p-1.5">269 Simpul (CGK Soetta, DPS Bali, Juanda, Gambir, dll)</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold text-emerald-600 dark:text-emerald-400">🟡 Terkendali</td>
-                  <td class="p-1.5 font-mono">Beban naik &le; 1,5x lipat (siaga cadangan)</td>
+                  <td class="p-1.5 font-bold text-emerald-600 dark:text-emerald-400">🟢 Terkendali</td>
+                  <td class="p-1.5 font-mono">Beban &le; 1,2x lipat (siaga cadangan)</td>
                   <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+5%</td>
-                  <td class="p-1.5">Purabaya (+5%), Purboyo (+5%), Kertonegoro (+5%), Batam (+5%), Karimun (+5%), Pakupatan (+5%), Wonogiri (+5%)</td>
+                  <td class="p-1.5">300 Simpul (Purabaya, Batam, Purboyo, dll)</td>
                 </tr>
               </tbody>
             </table>
@@ -1667,11 +1673,11 @@ def generate_dashboard():
               <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
                 <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                  Tabel Rekomendasi Kebutuhan Penambahan Armada di 30 Simpul Prasarana Nasional (Hari Puncak Nataru)
+                  Tabel Rekomendasi Kebutuhan Penambahan Armada di Seluruh Simpul Prasarana Nasional (1.010 Simpul)
                 </h3>
               </div>
               <p class="text-[11px] text-slate-500 mt-0.5">
-                Dihitung murni berdasarkan data keberangkatan empiris SIASATI (penumpang berangkat / armada berangkat): mencakup 30 simpul terpadat lintas 5 moda transportasi nasional.
+                Dihitung murni berdasarkan data keberangkatan empiris SIASATI (penumpang berangkat / armada berangkat). Dilengkapi filter jumlah baris (Top 10, Top 25, Top 50, Top 100, hingga Semua Simpul), filter moda, status urgensi, dan pencarian cepat.
               </p>
             </div>
             
@@ -1681,75 +1687,74 @@ def generate_dashboard():
             </button>
           </div>
 
-          <!-- Highlight Summary Strip: 5 Modas -->
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 text-xs">
-            <div class="bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/60 rounded-lg p-3">
-              <div class="flex items-center justify-between text-[10px] text-rose-600 dark:text-rose-400 font-bold uppercase">
-                <span>⛴ ASDP Feri</span>
-                <span>6 Simpul</span>
-              </div>
-              <div class="font-mono font-black text-rose-700 dark:text-rose-300 text-lg mt-1">+18% Armada</div>
-              <div class="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5">Butuh <strong>+155 trip kapal/hari</strong></div>
-            </div>
+          <!-- Highlight Summary Strip: 5 Modas (Dynamically Updated) -->
+          <div id="simpulHighlightCards" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 text-xs">
+            <!-- Rendered dynamically by JS -->
+          </div>
 
-            <div class="bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 rounded-lg p-3">
-              <div class="flex items-center justify-between text-[10px] text-amber-600 dark:text-amber-400 font-bold uppercase">
-                <span>🚆 Kereta Api</span>
-                <span>7 Simpul</span>
-              </div>
-              <div class="font-mono font-black text-amber-700 dark:text-amber-300 text-lg mt-1">+11% Armada</div>
-              <div class="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5">Butuh <strong>+51 perjalanan KA/hari</strong></div>
+          <!-- Controls Bar 1: Filter Moda & Status Urgensi -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+            <div class="flex flex-wrap items-center gap-1.5 text-xs font-semibold" id="simpulFilterContainer">
+              <button type="button" onclick="filterSimpulModa('ALL', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-indigo-600 text-white shadow-xs font-bold transition-all">Semua Moda (1.010)</button>
+              <button type="button" onclick="filterSimpulModa('UDARA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">✈ Udara (230)</button>
+              <button type="button" onclick="filterSimpulModa('LAUT', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚢 Laut (209)</button>
+              <button type="button" onclick="filterSimpulModa('ASDP', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">⛴ ASDP Feri (196)</button>
+              <button type="button" onclick="filterSimpulModa('BUS', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚌 Bus AKAP (189)</button>
+              <button type="button" onclick="filterSimpulModa('KA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚆 Kereta Api (186)</button>
             </div>
-
-            <div class="bg-sky-50/70 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-900/60 rounded-lg p-3">
-              <div class="flex items-center justify-between text-[10px] text-sky-600 dark:text-sky-400 font-bold uppercase">
-                <span>✈ Penerbangan</span>
-                <span>7 Bandara</span>
-              </div>
-              <div class="font-mono font-black text-sky-700 dark:text-sky-300 text-lg mt-1">+10% Flight</div>
-              <div class="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5">Butuh <strong>+136 penerbangan/hari</strong></div>
-            </div>
-
-            <div class="bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/60 rounded-lg p-3">
-              <div class="flex items-center justify-between text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase">
-                <span>🚌 Bus AKAP</span>
-                <span>7 Terminal</span>
-              </div>
-              <div class="font-mono font-black text-emerald-700 dark:text-emerald-300 text-lg mt-1">+6% Armada</div>
-              <div class="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5">Butuh <strong>+325 bus cadangan/hari</strong></div>
-            </div>
-
-            <div class="bg-cyan-50/70 dark:bg-cyan-950/30 border border-cyan-200 dark:border-cyan-900/60 rounded-lg p-3 col-span-2 md:col-span-1">
-              <div class="flex items-center justify-between text-[10px] text-cyan-600 dark:text-cyan-400 font-bold uppercase">
-                <span>🚢 Kapal Laut</span>
-                <span>3 Pelabuhan</span>
-              </div>
-              <div class="font-mono font-black text-cyan-700 dark:text-cyan-300 text-lg mt-1">+6% Armada</div>
-              <div class="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5">Butuh <strong>+48 trip kapal/hari</strong></div>
+            
+            <div class="flex items-center gap-2">
+              <label for="select-simpul-status" class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider shrink-0">Status:</label>
+              <select id="select-simpul-status" onchange="setSimpulStatusFilter(this.value)" class="text-xs px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+                <option value="ALL" selected>Semua Status Urgensi</option>
+                <option value="20">🔴 Sangat Kritis (+20%)</option>
+                <option value="15">🟠 Tinggi / Kritis (+15%)</option>
+                <option value="10">🟡 Padat Tinggi (+10%)</option>
+                <option value="5">🟢 Terkendali (+5%)</option>
+              </select>
             </div>
           </div>
 
-          <!-- Controls: Moda Filter & Quick Search -->
-          <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
-            <div class="flex flex-wrap items-center gap-1.5 text-xs font-semibold" id="simpulFilterContainer">
-              <button type="button" onclick="filterSimpulModa('ALL', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-indigo-600 text-white shadow-xs font-bold transition-all">Semua Moda (30)</button>
-              <button type="button" onclick="filterSimpulModa('UDARA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">✈ Udara (7)</button>
-              <button type="button" onclick="filterSimpulModa('KA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">🚆 Kereta Api (7)</button>
-              <button type="button" onclick="filterSimpulModa('BUS', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">🚌 Bus AKAP (7)</button>
-              <button type="button" onclick="filterSimpulModa('ASDP', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">⛴ ASDP Feri (6)</button>
-              <button type="button" onclick="filterSimpulModa('LAUT', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">🚢 Laut (3)</button>
+          <!-- Controls Bar 2: Limit Selector, Search & Sort -->
+          <div class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-lg bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80">
+            <div class="flex flex-wrap items-center gap-3">
+              <!-- Limit Dropdown Requested by User -->
+              <div class="flex items-center gap-1.5">
+                <label for="select-simpul-limit" class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                  <span>📊 Tampilkan:</span>
+                </label>
+                <select id="select-simpul-limit" onchange="setSimpulDisplayLimit(this.value)" class="text-xs font-bold px-2.5 py-1.5 rounded-md border border-indigo-300 dark:border-indigo-700 bg-white dark:bg-slate-800 text-indigo-700 dark:text-indigo-300 shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+                  <option value="10">🏆 Top 10 Simpul Utama</option>
+                  <option value="25" selected>⭐ Top 25 Simpul Terpadat</option>
+                  <option value="50">📍 Top 50 Simpul Nasional</option>
+                  <option value="100">🌐 Top 100 Simpul Terbesar</option>
+                  <option value="250">📋 Top 250 Simpul</option>
+                  <option value="all">🇮🇩 Semua Simpul (1.010 Simpul)</option>
+                </select>
+              </div>
+
+              <!-- Sorting Dropdown -->
+              <div class="flex items-center gap-1.5">
+                <label for="select-simpul-sort" class="text-xs font-semibold text-slate-500">Urutkan:</label>
+                <select id="select-simpul-sort" onchange="setSimpulSortBy(this.value)" class="text-xs px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+                  <option value="pnp_desc" selected>Penumpang Puncak (Tertinggi)</option>
+                  <option value="ratio_desc">Lonjakan Beban (Tertinggi)</option>
+                  <option value="pct_desc">% Tambah Armada (Tertinggi)</option>
+                  <option value="add_desc">Tambahan Unit Fisik (Terbanyak)</option>
+                  <option value="name_asc">Nama Simpul (A - Z)</option>
+                </select>
+              </div>
             </div>
-            
+
             <div class="flex items-center gap-3 w-full sm:w-auto">
-              <span id="badge-simpul-count" class="text-[11px] font-mono text-slate-500 shrink-0">Menampilkan 30 dari 30 Simpul</span>
-              <div class="relative w-full sm:w-60">
-                <input type="text" id="simpulSearchInput" oninput="onSimpulSearchChange(this.value)" placeholder="Cari simpul atau kota..." class="w-full text-xs px-2.5 py-1.5 pl-8 rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500">
+              <div class="relative w-full sm:w-64">
+                <input type="text" id="simpulSearchInput" oninput="onSimpulSearchChange(this.value)" placeholder="Cari nama simpul, kota, provinsi..." class="w-full text-xs px-2.5 py-1.5 pl-8 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500">
                 <span class="absolute left-2.5 top-1.5 text-slate-400 text-xs">🔍</span>
               </div>
             </div>
           </div>
 
-          <!-- Top 30 Hub Matrix Table -->
+          <!-- Top Hub Matrix Table -->
           <div class="space-y-3">
             <div class="overflow-x-auto border border-slate-200 dark:border-slate-700 rounded-lg max-h-[750px] overflow-y-auto">
               <table class="w-full text-left border-collapse text-xs">
@@ -1771,6 +1776,25 @@ def generate_dashboard():
                   <!-- Rendered dynamically by JS -->
                 </tbody>
               </table>
+            </div>
+
+            <!-- Pagination & Navigation Controls -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs">
+              <span id="badge-simpul-count" class="font-mono text-slate-500">
+                Menampilkan 1 - 25 dari 1.010 Simpul Nasional
+              </span>
+
+              <div id="simpulPaginationNav" class="flex items-center gap-1.5">
+                <button type="button" id="btn-simpul-prev" onclick="changeSimpulPage(-1)" class="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all font-medium">
+                  &laquo; Sebelumnya
+                </button>
+                <span id="label-simpul-page" class="font-mono px-2 text-slate-600 dark:text-slate-400 font-semibold">
+                  Halaman 1 dari 41
+                </span>
+                <button type="button" id="btn-simpul-next" onclick="changeSimpulPage(1)" class="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all font-medium">
+                  Berikutnya &raquo;
+                </button>
+              </div>
             </div>
 
             <!-- Operational Summary Box -->
@@ -3994,535 +4018,25 @@ function renderForecastTable() {{
 // TAB 8: SIMULASI KEBUTUHAN ARMADA BERDASARKAN PRASARANA / SIMPUL
 // ---------------------------------------------------------------
 // ---------------------------------------------------------------
-// TAB 8: MATRIKS KEBUTUHAN PENAMBAHAN ARMADA DI 30 SIMPUL PRASARANA
 // ---------------------------------------------------------------
-const SIMPUL_DATA = [
-  {{
-    id: 'bakauheni',
-    name: 'Pelabuhan Bakauheni',
-    prov: 'Lampung',
-    moda: 'ASDP',
-    modaLabel: '⛴ ASDP Feri',
-    saranaType: 'Kapal Ro-Ro Feri',
-    saranaUnit: 'trip kapal',
-    pnpBiasa: 23675,
-    armBiasa: 108,
-    pnpPuncak: 128821,
-    armPuncak: 137,
-    statusText: 'Sangat Kritis',
-    statusBadge: 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300',
-    pctTambah: 20,
-    fieldAction: 'Pola operasi TBB (Tiba Bongkar Berangkat) tanpa memuat di Bakauheni untuk menguras antrean kendaraan arus balik ke Jawa.'
-  }},
-  {{
-    id: 'merak',
-    name: 'Pelabuhan Merak',
-    prov: 'Banten',
-    moda: 'ASDP',
-    modaLabel: '⛴ ASDP Feri',
-    saranaType: 'Kapal Ro-Ro Feri',
-    saranaUnit: 'trip kapal',
-    pnpBiasa: 25319,
-    armBiasa: 108,
-    pnpPuncak: 115459,
-    armPuncak: 130,
-    statusText: 'Sangat Kritis',
-    statusBadge: 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300',
-    pctTambah: 20,
-    fieldAction: 'Percepatan waktu port clearance (<45 mnt), aktivasi buffer zone di rest area KM 43/68, pengerahan kapal feri kapasitas besar (>5.000 GT).'
-  }},
-  {{
-    id: 'soetta',
-    name: 'Bandara Soekarno-Hatta (CGK)',
-    prov: 'Banten',
-    moda: 'UDARA',
-    modaLabel: '✈ Udara',
-    saranaType: 'Pesawat Komersial & Widebody',
-    saranaUnit: 'penerbangan',
-    pnpBiasa: 70958,
-    armBiasa: 493,
-    pnpPuncak: 105172,
-    armPuncak: 614,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Optimalisasi runway capacity (Runway 1, 2, 3), izin extra flight malam (red-eye flight), dan buffer time ground handling.'
-  }},
-  {{
-    id: 'gilimanuk',
-    name: 'Pelabuhan Gilimanuk',
-    prov: 'Bali',
-    moda: 'ASDP',
-    modaLabel: '⛴ ASDP Feri',
-    saranaType: 'Kapal Penyeberangan Selat Bali',
-    saranaUnit: 'trip kapal',
-    pnpBiasa: 16693,
-    armBiasa: 217,
-    pnpPuncak: 80416,
-    armPuncak: 251,
-    statusText: 'Sangat Kritis',
-    statusBadge: 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300',
-    pctTambah: 20,
-    fieldAction: 'Penerapan skema bongkar cepat di Gilimanuk, rekayasa antrean di Cekik, serta pengerahan kapal perbantuan kapasitas muat besar.'
-  }},
-  {{
-    id: 'ketapang',
-    name: 'Pelabuhan Ketapang',
-    prov: 'Jawa Timur',
-    moda: 'ASDP',
-    modaLabel: '⛴ ASDP Feri',
-    saranaType: 'Kapal Penyeberangan Selat Bali',
-    saranaUnit: 'trip kapal',
-    pnpBiasa: 17035,
-    armBiasa: 222,
-    pnpPuncak: 56365,
-    armPuncak: 260,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 15,
-    fieldAction: 'Pengoperasian dermaga ponton & MB cadangan, pengerahan kapal kapasitas muat kendaraan roda empat/bus wisata.'
-  }},
-  {{
-    id: 'ngurahrai',
-    name: 'Bandara I Gusti Ngurah Rai (DPS)',
-    prov: 'Bali',
-    moda: 'UDARA',
-    modaLabel: '✈ Udara',
-    saranaType: 'Pesawat Jet Komersial',
-    saranaUnit: 'penerbangan',
-    pnpBiasa: 29296,
-    armBiasa: 186,
-    pnpPuncak: 36072,
-    armPuncak: 215,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Perpanjangan operasional bandara 24 jam penuh, slot extra flight dini hari, serta pengaturan ketat alokasi parking stand.'
-  }},
-  {{
-    id: 'batam',
-    name: 'Pelabuhan Batam Center',
-    prov: 'Kepulauan Riau',
-    moda: 'LAUT',
-    modaLabel: '🚢 Laut',
-    saranaType: 'Kapal Ferry Cepat Penumpang',
-    saranaUnit: 'trip kapal',
-    pnpBiasa: 12672,
-    armBiasa: 210,
-    pnpPuncak: 30635,
-    armPuncak: 288,
-    statusText: 'Terkendali',
-    statusBadge: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300',
-    pctTambah: 5,
-    fieldAction: 'Penambahan trip fast ferry lintas Batam–Singapura/Johor dan rute domestik antarpulau Kepri.'
-  }},
-  {{
-    id: 'purabaya',
-    name: 'Terminal Purabaya (Bungurasih)',
-    prov: 'Jawa Timur',
-    moda: 'BUS',
-    modaLabel: '🚌 Bus',
-    saranaType: 'Armada Bus Antar Kota (AKAP)',
-    saranaUnit: 'trip bus',
-    pnpBiasa: 11448,
-    armBiasa: 550,
-    pnpPuncak: 28319,
-    armPuncak: 946,
-    statusText: 'Terkendali',
-    statusBadge: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300',
-    pctTambah: 5,
-    fieldAction: 'Penyiagaan armada bus pariwisata cadangan sebagai bus perbantuan angkutan malam hari rute Trans-Jawa.'
-  }},
-  {{
-    id: 'giwangan',
-    name: 'Terminal Giwangan',
-    prov: 'D.I. Yogyakarta',
-    moda: 'BUS',
-    modaLabel: '🚌 Bus',
-    saranaType: 'Armada Bus Antar Kota (AKAP)',
-    saranaUnit: 'trip bus',
-    pnpBiasa: 6138,
-    armBiasa: 652,
-    pnpPuncak: 27688,
-    armPuncak: 820,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Sistem sirkulasi peron jalur cepat, buffer parkir bus cadangan di lingkar selatan Jogja, antisipasi lonjakan wisata.'
-  }},
-  {{
-    id: 'juanda',
-    name: 'Bandara Internasional Juanda (SUB)',
-    prov: 'Jawa Timur',
-    moda: 'UDARA',
-    modaLabel: '✈ Udara',
-    saranaType: 'Pesawat Jet Komersial',
-    saranaUnit: 'penerbangan',
-    pnpBiasa: 15550,
-    armBiasa: 115,
-    pnpPuncak: 26427,
-    armPuncak: 159,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Penambahan slot extra flight koridor Surabaya–Jakarta/Balikpapan/Makassar dan percepatan turnaround time.'
-  }},
-  {{
-    id: 'pasarsenen',
-    name: 'Stasiun Pasar Senen',
-    prov: 'DKI Jakarta',
-    moda: 'KA',
-    modaLabel: '🚆 Kereta Api',
-    saranaType: 'Rangkaian KA Jarak Jauh Ekonomi',
-    saranaUnit: 'perjalanan KA',
-    pnpBiasa: 8889,
-    armBiasa: 34,
-    pnpPuncak: 25021,
-    armPuncak: 46,
-    statusText: 'Sangat Kritis',
-    statusBadge: 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300',
-    pctTambah: 15,
-    fieldAction: 'Pengoperasian KLB KA Tambahan Nataru relasi Pasar Senen–Yogyakarta/Solo/Surabaya/Malang.'
-  }},
-  {{
-    id: 'purboyo',
-    name: 'Terminal Purboyo (Madiun)',
-    prov: 'Jawa Timur',
-    moda: 'BUS',
-    modaLabel: '🚌 Bus',
-    saranaType: 'Armada Bus Antar Kota (AKAP)',
-    saranaUnit: 'trip bus',
-    pnpBiasa: 8704,
-    armBiasa: 645,
-    pnpPuncak: 23591,
-    armPuncak: 968,
-    statusText: 'Terkendali',
-    statusBadge: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300',
-    pctTambah: 5,
-    fieldAction: 'Manajemen peron transit lintas Madiun–Surabaya/Solo dan pengaturan antrean bus keluar tol Madiun.'
-  }},
-  {{
-    id: 'kertonegoro',
-    name: 'Terminal Kertonegoro (Ngawi)',
-    prov: 'Jawa Timur',
-    moda: 'BUS',
-    modaLabel: '🚌 Bus',
-    saranaType: 'Armada Bus Antar Kota (AKAP)',
-    saranaUnit: 'trip bus',
-    pnpBiasa: 8511,
-    armBiasa: 631,
-    pnpPuncak: 22595,
-    armPuncak: 952,
-    statusText: 'Terkendali',
-    statusBadge: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300',
-    pctTambah: 5,
-    fieldAction: 'Pengendalian ritme kedatangan bus AKAP koridor tengah Jawa Timur–Jawa Tengah agar tidak menumpuk.'
-  }},
-  {{
-    id: 'hasanuddin',
-    name: 'Bandara Internasional Sultan Hasanuddin (UPG)',
-    prov: 'Sulawesi Selatan',
-    moda: 'UDARA',
-    modaLabel: '✈ Udara',
-    saranaType: 'Pesawat Jet Komersial',
-    saranaUnit: 'penerbangan',
-    pnpBiasa: 11883,
-    armBiasa: 97,
-    pnpPuncak: 21231,
-    armPuncak: 140,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Penyediaan extra flight transit penghubung Indonesia Barat ke Indonesia Timur (Papua/Maluku).'
-  }},
-  {{
-    id: 'gambir',
-    name: 'Stasiun Gambir',
-    prov: 'DKI Jakarta',
-    moda: 'KA',
-    modaLabel: '🚆 Kereta Api',
-    saranaType: 'Rangkaian KA Eksekutif/Luxury',
-    saranaUnit: 'perjalanan KA',
-    pnpBiasa: 8072,
-    armBiasa: 60,
-    pnpPuncak: 18363,
-    armPuncak: 76,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Penambahan stamformasi (panjang 10-12 kereta) dan jadwal KA Argo Lawu/Dwipangga Tambahan.'
-  }},
-  {{
-    id: 'yogyakarta',
-    name: 'Stasiun Yogyakarta (Tugu)',
-    prov: 'D.I. Yogyakarta',
-    moda: 'KA',
-    modaLabel: '🚆 Kereta Api',
-    saranaType: 'Rangkaian KA Jarak Jauh & Aglomerasi',
-    saranaUnit: 'perjalanan KA',
-    pnpBiasa: 8371,
-    armBiasa: 90,
-    pnpPuncak: 15965,
-    armPuncak: 117,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Penambahan frekuensi KRL Commuter Line Solo–Yogya serta integrasi KA Bandara YIA di jam padat.'
-  }},
-  {{
-    id: 'kualanamu',
-    name: 'Bandara Internasional Kualanamu (KNO)',
-    prov: 'Sumatera Utara',
-    moda: 'UDARA',
-    modaLabel: '✈ Udara',
-    saranaType: 'Pesawat Jet Komersial',
-    saranaUnit: 'penerbangan',
-    pnpBiasa: 8921,
-    armBiasa: 72,
-    pnpPuncak: 14491,
-    armPuncak: 92,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Optimalisasi extra flight rute Medan–Jakarta/Batam/Banda Aceh dan integrasi jadwal Kereta Bandara Railink.'
-  }},
-  {{
-    id: 'pototano',
-    name: 'Pelabuhan Poto Tano',
-    prov: 'Nusa Tenggara Barat',
-    moda: 'ASDP',
-    modaLabel: '⛴ ASDP Feri',
-    saranaType: 'Kapal Penyeberangan Lintas Selat Alas',
-    saranaUnit: 'trip kapal',
-    pnpBiasa: 4151,
-    armBiasa: 37,
-    pnpPuncak: 14147,
-    armPuncak: 44,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 15,
-    fieldAction: 'Percepatan jadwal trip kapal lintasan Lombok–Sumbawa dan penyiagaan kapal perbantuan saat arus balik.'
-  }},
-  {{
-    id: 'kcjb_halim',
-    name: 'Stasiun Kereta Cepat Halim',
-    prov: 'DKI Jakarta',
-    moda: 'KA',
-    modaLabel: '🚆 Kereta Api',
-    saranaType: 'Rangkaian Whoosh KCIC 8-Car',
-    saranaUnit: 'perjalanan KA',
-    pnpBiasa: 7180,
-    armBiasa: 26,
-    pnpPuncak: 13409,
-    armPuncak: 31,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Penambahan slot perjalanan Whoosh hingga headway 20–30 menit dan integrasi feeder LRT Jabodebek.'
-  }},
-  {{
-    id: 'karimun',
-    name: 'Pelabuhan Tanjung Balai Karimun',
-    prov: 'Kepulauan Riau',
-    moda: 'LAUT',
-    modaLabel: '🚢 Laut',
-    saranaType: 'Kapal Ferry Antarpulau',
-    saranaUnit: 'trip kapal',
-    pnpBiasa: 4075,
-    armBiasa: 163,
-    pnpPuncak: 13331,
-    armPuncak: 281,
-    statusText: 'Terkendali',
-    statusBadge: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300',
-    pctTambah: 5,
-    fieldAction: 'Koordinasi KSOP untuk kelayakan armada laut, jaket keselamatan, dan jadwal penyeberangan reguler.'
-  }},
-  {{
-    id: 'nusapenida',
-    name: 'Pelabuhan Nusa Penida',
-    prov: 'Bali',
-    moda: 'LAUT',
-    modaLabel: '🚢 Laut',
-    saranaType: 'Kapal Cepat / Fast Boat Wisata',
-    saranaUnit: 'trip kapal',
-    pnpBiasa: 5906,
-    armBiasa: 124,
-    pnpPuncak: 13179,
-    armPuncak: 197,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Pengawasan kapasitas muat fast boat rute Sanur–Nusa Penida dan pengetatan SOP keselamatan cuaca laut.'
-  }},
-  {{
-    id: 'kayangan',
-    name: 'Pelabuhan Kayangan',
-    prov: 'Nusa Tenggara Barat',
-    moda: 'ASDP',
-    modaLabel: '⛴ ASDP Feri',
-    saranaType: 'Kapal Penyeberangan Lintas Selat Alas',
-    saranaUnit: 'trip kapal',
-    pnpBiasa: 3929,
-    armBiasa: 38,
-    pnpPuncak: 11458,
-    armPuncak: 42,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 15,
-    fieldAction: 'Pola operasi kapal cepat dan pemisahan antrean kendaraan roda dua dengan angkutan logistik berat.'
-  }},
-  {{
-    id: 'indihiang',
-    name: 'Terminal Indihiang (Tasikmalaya)',
-    prov: 'Jawa Barat',
-    moda: 'BUS',
-    modaLabel: '🚌 Bus',
-    saranaType: 'Armada Bus Antar Kota (AKAP)',
-    saranaUnit: 'trip bus',
-    pnpBiasa: 1991,
-    armBiasa: 323,
-    pnpPuncak: 11032,
-    armPuncak: 436,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Penyiagaan armada bus AKAP cadangan koridor Priangan Timur menuju Jabodetabek dan Jawa Tengah.'
-  }},
-  {{
-    id: 'kcjb_padalarang',
-    name: 'Stasiun Kereta Cepat Padalarang',
-    prov: 'Jawa Barat',
-    moda: 'KA',
-    modaLabel: '🚆 Kereta Api',
-    saranaType: 'Rangkaian Whoosh KCIC & KA Feeder',
-    saranaUnit: 'perjalanan KA',
-    pnpBiasa: 5468,
-    armBiasa: 53,
-    pnpPuncak: 11017,
-    armPuncak: 49,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Sinkronisasi jam keberangkatan KA Feeder Padalarang–Bandung agar tidak terjadi penumpukan penumpang.'
-  }},
-  {{
-    id: 'purwokerto',
-    name: 'Stasiun Purwokerto',
-    prov: 'Jawa Tengah',
-    moda: 'KA',
-    modaLabel: '🚆 Kereta Api',
-    saranaType: 'Rangkaian KA Lintas Selatan Jawa',
-    saranaUnit: 'perjalanan KA',
-    pnpBiasa: 4022,
-    armBiasa: 85,
-    pnpPuncak: 11004,
-    armPuncak: 120,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Penambahan gerbong KA lintas Kroya–Purwokerto–Cirebon dan penyiagaan lokomotif cadangan di dipo.'
-  }},
-  {{
-    id: 'pakupatan',
-    name: 'Terminal Pakupatan (Serang)',
-    prov: 'Banten',
-    moda: 'BUS',
-    modaLabel: '🚌 Bus',
-    saranaType: 'Armada Bus Antar Kota (AKAP)',
-    saranaUnit: 'trip bus',
-    pnpBiasa: 3795,
-    armBiasa: 452,
-    pnpPuncak: 10940,
-    armPuncak: 694,
-    statusText: 'Terkendali',
-    statusBadge: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300',
-    pctTambah: 5,
-    fieldAction: 'Penataan peron keluar-masuk bus dekat gerbang tol Serang Timur guna mencegah kemacetan arteri.'
-  }},
-  {{
-    id: 'sepinggan',
-    name: 'Bandara SAMS Sepinggan (BPN)',
-    prov: 'Kalimantan Timur',
-    moda: 'UDARA',
-    modaLabel: '✈ Udara',
-    saranaType: 'Pesawat Jet Komersial',
-    saranaUnit: 'penerbangan',
-    pnpBiasa: 6383,
-    armBiasa: 58,
-    pnpPuncak: 10904,
-    armPuncak: 80,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Penambahan frekuensi extra flight rute Balikpapan–Surabaya/Jakarta dan dukungan mobilitas logistik IKN.'
-  }},
-  {{
-    id: 'hangnadim',
-    name: 'Bandara Hang Nadim (BTH)',
-    prov: 'Kepulauan Riau',
-    moda: 'UDARA',
-    modaLabel: '✈ Udara',
-    saranaType: 'Pesawat Jet Komersial',
-    saranaUnit: 'penerbangan',
-    pnpBiasa: 4803,
-    armBiasa: 38,
-    pnpPuncak: 10605,
-    armPuncak: 65,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Extra flight rute Batam–Medan/Padang/Jakarta guna menampung lonjakan perantau lintas pulau.'
-  }},
-  {{
-    id: 'gubeng',
-    name: 'Stasiun Surabaya Gubeng',
-    prov: 'Jawa Timur',
-    moda: 'KA',
-    modaLabel: '🚆 Kereta Api',
-    saranaType: 'Rangkaian KA Jarak Jauh & Lokal',
-    saranaUnit: 'perjalanan KA',
-    pnpBiasa: 4173,
-    armBiasa: 33,
-    pnpPuncak: 10468,
-    armPuncak: 38,
-    statusText: 'Padat Tinggi',
-    statusBadge: 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300',
-    pctTambah: 10,
-    fieldAction: 'Penambahan KA Sancaka Tambahan (Surabaya–Yogyakarta) dan KA Pasundan Tambahan (Surabaya–Kiaracondong).'
-  }},
-  {{
-    id: 'giriadipura',
-    name: 'Terminal Giri Adipura (Wonogiri)',
-    prov: 'Jawa Tengah',
-    moda: 'BUS',
-    modaLabel: '🚌 Bus',
-    saranaType: 'Armada Bus Antar Kota (AKAP)',
-    saranaUnit: 'trip bus',
-    pnpBiasa: 3718,
-    armBiasa: 246,
-    pnpPuncak: 9991,
-    armPuncak: 411,
-    statusText: 'Terkendali',
-    statusBadge: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300',
-    pctTambah: 5,
-    fieldAction: 'Pemberangkatan teratur konvoi bus AKAP rute Wonogiri–Jabodetabek dan ramp check kelayakan rem/ban.'
-  }}
-];
+// TAB 8: MATRIKS KEBUTUHAN PENAMBAHAN ARMADA SIMPUL NASIONAL
+// ---------------------------------------------------------------
+let simpulDisplayLimit = 25; // default 25 baris
+let simpulCurrentPage = 1;
+let simpulModaFilter = 'ALL';
+let simpulStatusFilter = 'ALL';
+let simpulSearchQuery = '';
+let simpulSortBy = 'pnp_desc';
 
-// Perhitungan metrik murni keberangkatan
-SIMPUL_DATA.forEach(s => {{
-  s.lfBiasa = Math.round(s.pnpBiasa / s.armBiasa);
-  s.lfPuncak = Math.round(s.pnpPuncak / s.armPuncak);
-  s.loadRatio = (s.lfPuncak / s.lfBiasa).toFixed(2);
-  s.addArm = Math.round(s.armPuncak * (s.pctTambah / 100));
-  s.totalArm = s.armPuncak + s.addArm;
-}});
-
-let currentSimpulModaFilter = 'ALL';
-let currentSimpulSearch = '';
+function setSimpulDisplayLimit(limit) {{
+  simpulDisplayLimit = (limit === 'all') ? 'all' : parseInt(limit, 10);
+  simpulCurrentPage = 1;
+  renderSimpulSimulation();
+}}
 
 function filterSimpulModa(moda, btn) {{
-  currentSimpulModaFilter = moda;
+  simpulModaFilter = moda;
+  simpulCurrentPage = 1;
   document.querySelectorAll('.simpul-filter-btn').forEach(b => {{
     b.className = 'simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold';
   }});
@@ -4532,48 +4046,205 @@ function filterSimpulModa(moda, btn) {{
   renderSimpulSimulation();
 }}
 
-function onSimpulSearchChange(val) {{
-  currentSimpulSearch = (val || '').toLowerCase().trim();
+function setSimpulStatusFilter(status) {{
+  simpulStatusFilter = status;
+  simpulCurrentPage = 1;
   renderSimpulSimulation();
 }}
 
+function onSimpulSearchChange(val) {{
+  simpulSearchQuery = (val || '').toLowerCase().trim();
+  simpulCurrentPage = 1;
+  renderSimpulSimulation();
+}}
+
+function setSimpulSortBy(val) {{
+  simpulSortBy = val;
+  simpulCurrentPage = 1;
+  renderSimpulSimulation();
+}}
+
+function changeSimpulPage(delta) {{
+  simpulCurrentPage += delta;
+  renderSimpulSimulation();
+}}
+
+function renderDynamicSimpulHighlights(filteredData) {{
+  const container = document.getElementById('simpulHighlightCards');
+  if (!container) return;
+
+  const modas = [
+    {{ key: 'ASDP', label: '⛴ ASDP Feri', color: 'rose' }},
+    {{ key: 'KA', label: '🚆 Kereta Api', color: 'amber' }},
+    {{ key: 'UDARA', label: '✈ Penerbangan', color: 'sky' }},
+    {{ key: 'BUS', label: '🚌 Bus AKAP', color: 'emerald' }},
+    {{ key: 'LAUT', label: '🚢 Kapal Laut', color: 'cyan' }},
+  ];
+
+  let html = '';
+  modas.forEach(m => {{
+    const sub = filteredData.filter(d => d.moda === m.key);
+    const count = sub.length;
+    const totalPuncakArm = sub.reduce((acc, c) => acc + (c.armPuncak || 0), 0);
+    const totalAddArm = sub.reduce((acc, c) => acc + (c.addArm || 0), 0);
+    const avgPct = totalPuncakArm > 0 ? (totalAddArm / totalPuncakArm * 100).toFixed(1) : '0';
+
+    html += `
+      <div class="bg-${{m.color}}-50/70 dark:bg-${{m.color}}-950/30 border border-${{m.color}}-200 dark:border-${{m.color}}-900/60 rounded-lg p-3">
+        <div class="flex items-center justify-between text-[10px] text-${{m.color}}-600 dark:text-${{m.color}}-400 font-bold uppercase">
+          <span>${{m.label}}</span>
+          <span>${{count}} Simpul</span>
+        </div>
+        <div class="font-mono font-black text-${{m.color}}-700 dark:text-${{m.color}}-300 text-lg mt-1">+${{avgPct}}% Armada</div>
+        <div class="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5">
+          Butuh <strong>+${{numFmt(totalAddArm)}} unit/hari</strong>
+        </div>
+      </div>
+    `;
+  }});
+
+  container.innerHTML = html;
+}}
+
+function renderDynamicSimpulSummary(filteredData) {{
+  const elSum = document.getElementById('simpulOperationalSummary');
+  if (!elSum) return;
+
+  const totalSimpul = filteredData.length;
+  const totalAdd = filteredData.reduce((acc, c) => acc + (c.addArm || 0), 0);
+  const totalCur = filteredData.reduce((acc, c) => acc + (c.armPuncak || 0), 0);
+  const nationalAvgPct = totalCur > 0 ? (totalAdd / totalCur * 100).toFixed(1) : '0';
+
+  const criticalCount = filteredData.filter(d => d.pctTambah === 20).length;
+  const highCount = filteredData.filter(d => d.pctTambah === 15).length;
+  const medCount = filteredData.filter(d => d.pctTambah === 10).length;
+  const lowCount = filteredData.filter(d => d.pctTambah === 5).length;
+
+  elSum.innerHTML = `
+    <div class="flex items-start gap-2.5">
+      <span class="w-2.5 h-2.5 rounded-full bg-indigo-600 mt-1 shrink-0"></span>
+      <div class="space-y-1.5">
+        <div class="font-bold text-slate-900 dark:text-white text-xs">
+          Rangkuman Instruksi Operasional Terpadu (${{totalSimpul}} Simpul Terpilih):
+        </div>
+        <div class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed space-y-1">
+          <div>
+            • <strong>Total Kebutuhan Tambahan Armada:</strong> Diperlukan penambahan <strong>+${{numFmt(totalAdd)}} armada fisik/hari (+${{nationalAvgPct}}%)</strong> untuk menjaga kelancaran arus mudik & balik dari total ${{numFmt(totalCur)}} armada operasi puncak.
+          </div>
+          <div>
+            • <strong>Distribusi Tingkat Urgensi:</strong> 
+            <span class="font-semibold text-rose-600 dark:text-rose-400">${{criticalCount}} Simpul Sangat Kritis (+20%)</span>, 
+            <span class="font-semibold text-orange-600 dark:text-orange-400">${{highCount}} Simpul Tinggi (+15%)</span>, 
+            <span class="font-semibold text-amber-600 dark:text-amber-400">${{medCount}} Simpul Padat (+10%)</span>, dan 
+            <span class="font-semibold text-emerald-600 dark:text-emerald-400">${{lowCount}} Simpul Terkendali/Siaga (+5%)</span>.
+          </div>
+          <div>
+            • <strong>Instruksi Utama Lapangan:</strong> Prioritaskan rekayasa *Tiba Bongkar Berangkat* di Pelabuhan Merak-Bakauheni & Ketapang-Gilimanuk, izin slot *extra flight* malam di CGK Soetta & DPS Bali, serta rangkaian Kereta Api Tambahan (KLB) di Pasar Senen & Gambir.
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}}
+
 function renderSimpulSimulation() {{
+  const allData = DATA.simpul_recommendations || [];
   const tbody = document.getElementById('tbody-simpul-matrix');
   if (!tbody) return;
   tbody.innerHTML = '';
 
-  const filtered = SIMPUL_DATA.filter(s => {{
-    const matchModa = (currentSimpulModaFilter === 'ALL' || s.moda === currentSimpulModaFilter);
-    const matchSearch = !currentSimpulSearch || 
-      s.name.toLowerCase().includes(currentSimpulSearch) ||
-      s.prov.toLowerCase().includes(currentSimpulSearch) ||
-      s.modaLabel.toLowerCase().includes(currentSimpulSearch);
-    return matchModa && matchSearch;
+  // 1. Filter
+  let filtered = allData.filter(s => {{
+    const matchModa = (simpulModaFilter === 'ALL' || s.moda === simpulModaFilter);
+    const matchStatus = (simpulStatusFilter === 'ALL' || String(s.pctTambah) === String(simpulStatusFilter));
+    const matchSearch = !simpulSearchQuery || 
+      (s.name && s.name.toLowerCase().includes(simpulSearchQuery)) ||
+      (s.prov && s.prov.toLowerCase().includes(simpulSearchQuery)) ||
+      (s.modaLabel && s.modaLabel.toLowerCase().includes(simpulSearchQuery));
+    return matchModa && matchStatus && matchSearch;
   }});
 
-  const countBadge = document.getElementById('badge-simpul-count');
-  if (countBadge) {{
-    countBadge.innerText = `Menampilkan ${{filtered.length}} dari 30 Simpul`;
+  // 2. Sort
+  filtered.sort((a, b) => {{
+    if (simpulSortBy === 'pnp_desc') return (b.pnpPuncak || 0) - (a.pnpPuncak || 0);
+    if (simpulSortBy === 'pnp_asc') return (a.pnpPuncak || 0) - (b.pnpPuncak || 0);
+    if (simpulSortBy === 'ratio_desc') return (b.loadRatio || 0) - (a.loadRatio || 0);
+    if (simpulSortBy === 'pct_desc') return (b.pctTambah - a.pctTambah) || ((b.pnpPuncak || 0) - (a.pnpPuncak || 0));
+    if (simpulSortBy === 'add_desc') return (b.addArm || 0) - (a.addArm || 0);
+    if (simpulSortBy === 'name_asc') return a.name.localeCompare(b.name);
+    return 0;
+  }});
+
+  const totalFiltered = filtered.length;
+  let itemsToRender = filtered;
+  let totalPages = 1;
+
+  // 3. Pagination or Limit Handling
+  const paginationNav = document.getElementById('simpulPaginationNav');
+  if (simpulDisplayLimit === 'all') {{
+    itemsToRender = filtered;
+    if (paginationNav) paginationNav.classList.add('hidden');
+  }} else {{
+    const limit = parseInt(simpulDisplayLimit, 10);
+    totalPages = Math.max(1, Math.ceil(totalFiltered / limit));
+    if (simpulCurrentPage > totalPages) simpulCurrentPage = totalPages;
+    if (simpulCurrentPage < 1) simpulCurrentPage = 1;
+
+    const startIdx = (simpulCurrentPage - 1) * limit;
+    const endIdx = startIdx + limit;
+    itemsToRender = filtered.slice(startIdx, endIdx);
+
+    if (paginationNav) {{
+      paginationNav.classList.remove('hidden');
+      const prevBtn = document.getElementById('btn-simpul-prev');
+      const nextBtn = document.getElementById('btn-simpul-next');
+      const pageLbl = document.getElementById('label-simpul-page');
+      if (prevBtn) prevBtn.disabled = (simpulCurrentPage <= 1);
+      if (nextBtn) nextBtn.disabled = (simpulCurrentPage >= totalPages);
+      if (pageLbl) pageLbl.innerText = `Halaman ${{simpulCurrentPage}} dari ${{totalPages}}`;
+    }}
   }}
 
-  if (filtered.length === 0) {{
+  // 4. Update Badge Count
+  const badgeCount = document.getElementById('badge-simpul-count');
+  if (badgeCount) {{
+    if (totalFiltered === 0) {{
+      badgeCount.innerText = 'Tidak ada simpul yang cocok.';
+    }} else if (simpulDisplayLimit === 'all') {{
+      badgeCount.innerText = `Menampilkan Seluruh ${{totalFiltered}} Simpul (dari total ${{allData.length}} Simpul Nasional)`;
+    }} else {{
+      const limit = parseInt(simpulDisplayLimit, 10);
+      const start = (simpulCurrentPage - 1) * limit + 1;
+      const end = Math.min(simpulCurrentPage * limit, totalFiltered);
+      badgeCount.innerText = `Menampilkan ${{start}} - ${{end}} dari ${{totalFiltered}} Simpul (Total Terdaftar: ${{allData.length}} Simpul Nasional)`;
+    }}
+  }}
+
+  // 5. Update Dynamic Highlight Cards
+  renderDynamicSimpulHighlights(filtered);
+
+  // 6. Render Table Rows
+  if (itemsToRender.length === 0) {{
     tbody.innerHTML = `
       <tr>
-        <td colspan="10" class="py-8 text-center text-slate-400 font-sans">
-          Tidak ada simpul prasarana yang cocok dengan filter atau kata kunci pencarian.
+        <td colspan="10" class="py-12 text-center text-slate-400 font-sans">
+          Tidak ada simpul prasarana yang memenuhi kriteria filter atau kata kunci pencarian.
         </td>
       </tr>
     `;
+    renderDynamicSimpulSummary(filtered);
     return;
   }}
 
-  filtered.forEach((s, idx) => {{
+  const offset = (simpulDisplayLimit === 'all') ? 0 : (simpulCurrentPage - 1) * parseInt(simpulDisplayLimit, 10);
+
+  itemsToRender.forEach((s, idx) => {{
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
     tr.innerHTML = `
       <td class="py-3 px-3 font-sans">
         <div class="flex items-center gap-2">
-          <span class="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500">${{idx + 1}}</span>
+          <span class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500 shrink-0">${{offset + idx + 1}}</span>
           <div>
             <div class="font-bold text-slate-900 dark:text-white">${{s.name}}</div>
             <div class="text-[10px] text-slate-500">${{s.prov}} • ${{s.modaLabel}}</div>
@@ -4616,26 +4287,8 @@ function renderSimpulSimulation() {{
     tbody.appendChild(tr);
   }});
 
-  const elSum = document.getElementById('simpulOperationalSummary');
-  if (elSum) {{
-    elSum.innerHTML = `
-      <div class="flex items-start gap-2.5">
-        <span class="w-2.5 h-2.5 rounded-full bg-indigo-600 mt-1 shrink-0"></span>
-        <div class="space-y-1.5">
-          <div class="font-bold text-slate-900 dark:text-white text-xs">
-            Instruksi & Alokasi Tambahan Armada di 30 Simpul Prasarana (Posko Angkutan Terpadu Nataru Kemenhub):
-          </div>
-          <div class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed space-y-1">
-            <div>⛴ <strong>Kapal Penyeberangan (6 Simpul):</strong> Total disiagakan tambahan <strong>+155 trip kapal Ro-Ro/hari (+17,9%)</strong>, dipimpin Pelabuhan Merak & Bakauheni (+49 trip, +20%), Gilimanuk (+50 trip, +20%), Ketapang (+39 trip, +15%), serta Selat Alas NTB (Poto Tano +7 trip & Kayangan +6 trip, +15%) untuk meniadakan antrean kendaraan roda 4 dan roda 2.</div>
-            <div>🚆 <strong>Kereta Api (7 Simpul):</strong> Total disiagakan tambahan <strong>+51 perjalanan KA/hari (+10,7%)</strong>, dengan prioritas Stasiun Pasar Senen (+7 KLB ekonomi, +15%), Stasiun Gambir (+8 KA eksekutif, +10%), Stasiun Yogyakarta Tugu (+12 KA, +10%), Stasiun Surabaya Gubeng (+4 KA, +10%), Stasiun Purwokerto (+12 KA, +10%), serta Whoosh Halim (+3 KA) & Padalarang (+5 KA).</div>
-            <div>✈ <strong>Pesawat Udara (7 Bandara):</strong> Total disiagakan tambahan <strong>+136 extra flight/hari (+10,0%)</strong> via izin slot malam (red-eye flight) 24 jam, dipimpin Bandara Soekarno-Hatta (+61 flight), Bandara I Gusti Ngurah Rai (+22 flight), Bandara Juanda (+16 flight), Bandara Sultan Hasanuddin (+14 flight), Bandara Kualanamu (+9 flight), Bandara SAMS Sepinggan Balikpapan (+8 flight), dan Bandara Hang Nadim Batam (+7 flight).</div>
-            <div>🚌 <strong>Bus Antar Kota (7 Terminal):</strong> Total disiagakan tambahan <strong>+325 bus cadangan bantuan/hari (+6,2%)</strong>, dipimpin Terminal Giwangan Jogja (+82 bus, +10%), Terminal Indihiang (+44 bus, +10%), Terminal Purabaya Surabaya (+47 bus, +5%), Terminal Purboyo Madiun (+48 bus, +5%), Terminal Kertonegoro Ngawi (+48 bus, +5%), Terminal Pakupatan Serang (+35 bus, +5%), dan Terminal Giri Adipura Wonogiri (+21 bus, +5%).</div>
-            <div>🚢 <strong>Transportasi Laut (3 Pelabuhan):</strong> Total disiagakan tambahan <strong>+48 trip kapal/hari (+6,3%)</strong> di Pelabuhan Batam Center (+14 trip), Pelabuhan Tanjung Balai Karimun (+14 trip), dan Nusa Penida Bali (+20 fast boat, +10%).</div>
-          </div>
-        </div>
-      </div>
-    `;
-  }}
+  // 7. Update Operational Summary
+  renderDynamicSimpulSummary(filtered);
 }}
 
 const renderArmadaSimulation = renderSimpulSimulation;
