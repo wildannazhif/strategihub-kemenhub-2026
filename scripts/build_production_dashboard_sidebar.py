@@ -524,9 +524,9 @@ def generate_dashboard():
         <div class="border-b border-slate-200 dark:border-slate-800 pb-2 flex items-center justify-between">
           <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-            8. Rumus Model Prediktif Time Series & Akurasi Nataru
+            8. Rumus 1 Model Holt-Winters Terpadu & Akurasi Nataru
           </h4>
-          <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300">Holt-Winters</span>
+          <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300">Holt-Winters 2025+2026</span>
         </div>
         <div class="p-3 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] font-mono space-y-2">
           <div class="font-bold text-indigo-700 dark:text-indigo-300 text-xs">Formulasi Model:</div>
@@ -534,7 +534,8 @@ def generate_dashboard():
             ŷ_{{t+h}} = (ℓ_t + ∑ φ^i b_t) × s_{{t+h-m(k+1)}} × ∏ W_shock
           </div>
           <div class="text-slate-500 text-[10px] font-sans">
-            • <strong>ℓ_t (Level)</strong> & <strong>b_t (Damped Trend)</strong> dengan parameter peredam tren φ = 0,98 untuk mencegah over-ekstrapolasi.<br>
+            • <strong>Data Latih Gabungan:</strong> 635 hari kontinu (Tahun 2025: 365 hari + Tahun 2026: 270 hari) agar model belajar dari shock Nataru tahun sebelumnya.<br>
+            • <strong>ℓ_t (Level) & b_t (Damped Trend):</strong> Tren pertumbuhan riil +5,13% YTD dari 2025 ke 2026 dengan peredam φ = 0,98.<br>
             • <strong>s (Multiplicative Seasonality)</strong> dengan siklus m = 7 hari.<br>
             • <strong>W_shock (Kalender Event Shock)</strong> dikalibrasi dari elastisitas lonjakan empiris libur nasional.<br>
             • <strong>Rentang Keyakinan 95%:</strong> CI_95% = ŷ_t ± 1,96 × RMSE.
@@ -542,15 +543,15 @@ def generate_dashboard():
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[10px] font-mono">
           <div class="p-2 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <div class="font-bold text-slate-900 dark:text-white">MAPE = 6,53%</div>
+            <div class="font-bold text-slate-900 dark:text-white">MAPE = 7,95%</div>
             <div class="text-[9px] text-slate-500 font-sans mt-0.5">MAPE = (100%/n) ∑ |(y - ŷ)/y|</div>
           </div>
           <div class="p-2 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <div class="font-bold text-slate-900 dark:text-white">RMSE = 94.259</div>
+            <div class="font-bold text-slate-900 dark:text-white">RMSE = 110.440</div>
             <div class="text-[9px] text-slate-500 font-sans mt-0.5">RMSE = √[(1/n) ∑ (y - ŷ)²]</div>
           </div>
           <div class="p-2 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <div class="font-bold text-slate-900 dark:text-white">MAE = 77.117</div>
+            <div class="font-bold text-slate-900 dark:text-white">MAE = 94.759</div>
             <div class="text-[9px] text-slate-500 font-sans mt-0.5">MAE = (1/n) ∑ |y - ŷ|</div>
           </div>
         </div>
@@ -1578,13 +1579,13 @@ def generate_dashboard():
                 Tren Berkelanjutan: Data Historis 2026 Tersambung ke Garis Proyeksi Nataru 2026/2027
               </h3>
               <p class="text-[11px] text-slate-500">
-                Garis solid mewakili realisasi riil (Jan - Sep). Garis putus-putus ungu mewakili proyeksi model (Okt - Jan 2027) beserta pita keyakinan 95%.
+                Garis solid mewakili realisasi riil (Jan - Sep). Garis putus-putus ungu mewakili proyeksi 1 model Holt-Winters terpadu (Okt - Jan 2027) dengan shock musiman Nataru dari data latih 2025 beserta pita keyakinan 95%.
               </p>
             </div>
             <div class="flex items-center gap-3 text-[11px] font-mono flex-wrap">
               <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 bg-sky-600"></span> Realisasi 2026</span>
-              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-indigo-500"></span> Proyeksi Model</span>
-              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-emerald-500"></span> Realisasi 2025 (Tahun Lalu)</span>
+              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-indigo-500"></span> Proyeksi Holt-Winters</span>
+              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-emerald-500"></span> Realisasi 2025 (Data Latih)</span>
               <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-indigo-500/20 border border-indigo-400"></span> Rentang 95% CI</span>
             </div>
           </div>
@@ -1605,11 +1606,11 @@ def generate_dashboard():
                 </h3>
               </div>
               <p class="text-[11px] text-slate-500 mt-0.5">
-                Pengujian empiris out-of-sample: 242 hari data latih (1 Jan – 30 Agt 2026) vs 28 hari data uji (31 Agt – 27 Sep 2026)
+                Pengujian out-of-sample: 607 hari data latih gabungan 2025–2026 (1 Jan 2025 – 30 Agt 2026) vs 28 hari data uji (31 Agt – 27 Sep 2026)
               </p>
             </div>
             <span class="text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
-              Metode: Holt-Winters Damped Trend (&phi; = 0.98) + Weekly Seasonality (s=7) + Shocks
+              Metode: 1 Model Holt-Winters Terpadu (Data 2025+2026) + Musiman Mingguan (s=7) + Shock Nataru
             </span>
           </div>
 
@@ -1621,9 +1622,9 @@ def generate_dashboard():
                 <span class="text-[11px] font-bold text-emerald-800 dark:text-emerald-300">MAPE (Mean Absolute % Error)</span>
                 <span class="text-[10px] font-bold bg-emerald-200 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-1.5 py-0.5 rounded">Akurasi Tinggi (&lt;10%)</span>
               </div>
-              <div class="text-2xl font-black font-mono text-emerald-700 dark:text-emerald-400">6,53%</div>
+              <div class="text-2xl font-black font-mono text-emerald-700 dark:text-emerald-400">7,95%</div>
               <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Rata-rata persentase deviasi prediksi terhadap data aktual lapangan. Nilai 6,53% membuktikan model sangat akurat (&lt;10% standar internasional).
+                Rata-rata persentase deviasi prediksi terhadap data aktual lapangan. Nilai 7,95% membuktikan model sangat akurat (&lt;10% standar internasional).
               </p>
             </div>
 
@@ -1633,7 +1634,7 @@ def generate_dashboard():
                 <span class="text-[11px] font-bold text-indigo-800 dark:text-indigo-300">RMSE (Root Mean Squared Error)</span>
                 <span class="text-[10px] font-bold bg-indigo-200 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 px-1.5 py-0.5 rounded">Satuan Riil Pnp</span>
               </div>
-              <div class="text-2xl font-black font-mono text-indigo-700 dark:text-indigo-400">94.259 <span class="text-xs font-normal text-slate-500">pnp/hari</span></div>
+              <div class="text-2xl font-black font-mono text-indigo-700 dark:text-indigo-400">110.440 <span class="text-xs font-normal text-slate-500">pnp/hari</span></div>
               <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
                 Standar deviasi kesalahan dalam satuan penumpang riil. Mengkuadratkan selisih agar penalti lonjakan ekstrem terdeteksi untuk keamanan logistik armada.
               </p>
@@ -1645,9 +1646,9 @@ def generate_dashboard():
                 <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200">MAE & Rasio Error Absolut</span>
                 <span class="text-[10px] font-mono text-slate-500">Rerata: 1,228M pnp</span>
               </div>
-              <div class="text-2xl font-black font-mono text-slate-800 dark:text-slate-100">77.117 <span class="text-xs font-normal text-slate-500">pnp (7,7%)</span></div>
+              <div class="text-2xl font-black font-mono text-slate-800 dark:text-slate-100">94.759 <span class="text-xs font-normal text-slate-500">pnp (8,99%)</span></div>
               <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Rata-rata selisih volume absolut harian. Deviasi 77k pnp ini hanya mewakili 7,7% dari rata-rata pergerakan harian nasional.
+                Rata-rata selisih volume absolut harian. Deviasi 77k pnp ini hanya mewakili 8,99% dari rata-rata pergerakan harian nasional.
               </p>
             </div>
 
@@ -3828,7 +3829,7 @@ function renderForecastChart() {{
       spanGaps: false
     }},
     {{
-      label: `Proyeksi Model 2026/2027 (${{isPnp ? 'Penumpang' : 'Armada'}})`,
+      label: `Proyeksi Holt-Winters 2026/2027 (${{isPnp ? 'Penumpang' : 'Armada'}})`,
       data: fcData,
       borderColor: forecastColor,
       backgroundColor: 'transparent',
@@ -3840,7 +3841,7 @@ function renderForecastChart() {{
       spanGaps: false
     }},
     {{
-      label: `Realisasi Tahun Lalu 2025 (${{isPnp ? 'Penumpang' : 'Armada'}})`,
+      label: `Realisasi 2025 (Data Latih) (${{isPnp ? 'Penumpang' : 'Armada'}})`,
       data: hist25Data,
       borderColor: prevYearColor,
       backgroundColor: 'transparent',

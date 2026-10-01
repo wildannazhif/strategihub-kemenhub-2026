@@ -3,36 +3,44 @@ import numpy as np
 import pandas as pd
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
-with open('c:/Users/USER/Documents/PUSDATIN/scripts/mobility_data_bundle.json', 'r', encoding='utf-8') as f:
+# 1. Load combined 2025 + 2026 dataset
+df25 = pd.read_csv('siasati_ringkasan_harian_multimoda_2025.csv')
+with open('scripts/mobility_data_bundle.json', 'r', encoding='utf-8') as f:
     bundle = json.load(f)
+df26 = pd.DataFrame(bundle['daily_timeline'])
+df26 = df26[df26['date'] <= '2026-09-27'].copy()
 
-df = pd.DataFrame(bundle['daily_timeline'])
-df['date_dt'] = pd.to_datetime(df['date'])
-df = df[df['date_dt'] <= '2026-09-27'].copy()
-df.sort_values('date_dt', inplace=True)
-df.reset_index(drop=True, inplace=True)
+modes = ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT']
+s25 = df25[['tanggal', 'TOTAL_PENUMPANG'] + [f'pnp_{m}' for m in modes]].rename(
+    columns={'tanggal': 'date', 'TOTAL_PENUMPANG': 'TOTAL', **{f'pnp_{m}': m for m in modes}}
+)
+s26 = df26[['date', 'TOTAL'] + modes]
 
-# Train-test split for backtesting (last 28 days: 31 Aug 2026 - 27 Sep 2026 as test set)
-train_df = df.iloc[:-28]
-test_df = df.iloc[-28:]
+combined = pd.concat([s25, s26], ignore_index=True)
+combined['date_dt'] = pd.to_datetime(combined['date'])
+combined.set_index('date_dt', inplace=True)
 
-train_start = train_df['date'].min()
-train_end = train_df['date'].max()
-test_start = test_df['date'].min()
-test_end = test_df['date'].max()
+# 2. Train-test split for backtesting (last 28 days: 31 Aug 2026 - 27 Sep 2026 as test set)
+train_df = combined.iloc[:-28]
+test_df = combined.iloc[-28:]
 
-print(f"Data Latih (Training): {len(train_df)} hari ({train_start} s.d. {train_end})")
+train_start = train_df.index[0].strftime('%Y-%m-%d')
+train_end = train_df.index[-1].strftime('%Y-%m-%d')
+test_start = test_df.index[0].strftime('%Y-%m-%d')
+test_end = test_df.index[-1].strftime('%Y-%m-%d')
+
+print(f"Data Latih (Training): {len(train_df)} hari ({train_start} s.d. {train_end}) [2025: 365H + 2026: 242H]")
 print(f"Data Uji (Testing/Backtest): {len(test_df)} hari ({test_start} s.d. {test_end})")
 
-# Fit model on train
-ts_train = train_df.set_index('date_dt')['TOTAL']
+# 3. Fit Holt-Winters (s=7, Damped Trend) on total series
 hw = ExponentialSmoothing(
-    ts_train,
+    train_df['TOTAL'],
     seasonal_periods=7,
     trend='add',
+    damped_trend=True,
     seasonal='mul',
     initialization_method='estimated'
-).fit(damping_trend=0.98)
+).fit()
 
 pred_test = hw.forecast(28).values
 y_true = test_df['TOTAL'].values
@@ -49,19 +57,18 @@ print(f"  MAE:  {mae:,.0f} penumpang/hari")
 print(f"  Rata-rata Riil: {mean_vol:,.0f} penumpang/hari")
 print(f"  Rasio Error (RMSE / Mean): {(rmse / mean_vol) * 100:.2f}%")
 
-# Compute per-mode metrics
+# 4. Compute per-mode metrics
 mode_eval = {}
-modes = ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT']
 print("\nEvaluasi Per Moda (Uji 28 Hari):")
 for m in modes:
-    ts_m = train_df.set_index('date_dt')[m]
     hw_m = ExponentialSmoothing(
-        ts_m,
+        train_df[m],
         seasonal_periods=7,
         trend='add',
+        damped_trend=True,
         seasonal='mul',
         initialization_method='estimated'
-    ).fit(damping_trend=0.98)
+    ).fit()
     
     pred_m = hw_m.forecast(28).values
     y_m = test_df[m].values
@@ -93,7 +100,7 @@ bundle['forecast_nataru']['metrics'] = {
     'modes': mode_eval
 }
 
-with open('c:/Users/USER/Documents/PUSDATIN/scripts/mobility_data_bundle.json', 'w', encoding='utf-8') as f:
+with open('scripts/mobility_data_bundle.json', 'w', encoding='utf-8') as f:
     json.dump(bundle, f, ensure_ascii=False)
 
 print("\nSaved evaluation metrics to mobility_data_bundle.json successfully!")
