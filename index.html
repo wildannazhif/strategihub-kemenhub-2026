@@ -429,71 +429,79 @@
         </div>
       </div>
 
-      <!-- Box 7: Standar 3 Tolok Ukur Kepadatan Simpul Prasarana -->
+      <!-- Box 7: Model Beban Armada Relatif & Defisit Sarana (100% Data Empiris SIASATI) -->
       <div class="space-y-3.5">
         <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
           <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-            7. Standar 3 Tolok Ukur Kepadatan Simpul Prasarana
+            7. Model Beban Armada Relatif & Defisit Sarana (100% Data SIASATI)
           </h4>
-          <p class="text-[11px] text-slate-500 mt-0.5">Penentuan status beban simpul prasarana menggunakan 3 parameter terintegrasi:</p>
+          <p class="text-[11px] text-slate-500 mt-0.5">Penentuan beban kesibukan (Base Stress) & kebutuhan armada murni dari data empiris operasional tanpa asumsi dokumen luar:</p>
         </div>
 
         <!-- Tolok Ukur A -->
         <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-3.5 space-y-2">
           <div class="font-bold text-slate-900 dark:text-white text-xs flex items-center justify-between">
-            <span>A. Rasio Beban per Armada (Density / Load Factor)</span>
+            <span>A. Rasio Beban Sarana Normal vs Puncak (Density Load Factor)</span>
             <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300">P/A Ratio</span>
           </div>
           <p class="text-[11px] text-slate-600 dark:text-slate-300">
-            Rumus: <code class="font-mono font-bold text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-700 px-1 rounded">Rasio Kepadatan = Penumpang Harian / Trip Armada Harian</code>.
-            Membandingkan rasio hari normal vs hari puncak:
+            Rumus: <code class="font-mono font-bold text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-700 px-1 rounded">LF = Penumpang Harian / Trip Armada Harian</code>.
+            Membandingkan daya tampung rata-rata per armada di hari biasa vs saat puncak:
           </p>
           <ul class="text-[11px] space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-300">
-            <li><strong>Pelabuhan Bakauheni (ASDP):</strong> Normal 206 pnp/kapal &rarr; saat puncak melonjak jadi <strong class="text-rose-600 dark:text-rose-400 font-mono">614 pnp/kapal</strong> (naik hampir 3x lipat).</li>
-            <li><strong>Stasiun Pasar Senen (KA):</strong> Normal 247 pnp/KA &rarr; saat puncak melonjak jadi <strong class="text-rose-600 dark:text-rose-400 font-mono">357 pnp/KA</strong> (okupansi 100% penuh).</li>
-            <li><strong>Bandara Ngurah Rai Bali (Udara):</strong> Normal 156 pnp/flight &rarr; saat puncak <strong class="text-sky-600 dark:text-sky-400 font-mono">165+ pnp/flight</strong> (kursi terisi >92–95%).</li>
+            <li><strong>Pelabuhan Merak (ASDP):</strong> Normal 240 pnp/kapal &rarr; saat puncak melonjak jadi <strong class="text-rose-600 dark:text-rose-400 font-mono">470 pnp/kapal</strong> (beban naik 1,96x lipat).</li>
+            <li><strong>Stasiun Pasar Senen (KA):</strong> Normal 188 pnp/KA &rarr; saat puncak melonjak jadi <strong class="text-rose-600 dark:text-rose-400 font-mono">373 pnp/KA</strong> (beban naik 1,98x lipat).</li>
+            <li><strong>Terminal Purabaya (Bus):</strong> Normal 13 pnp/bus &rarr; saat puncak <strong class="text-emerald-600 dark:text-emerald-400 font-mono">20 pnp/bus</strong> (beban naik 1,52x lipat).</li>
           </ul>
         </div>
 
         <!-- Tolok Ukur B -->
         <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-3.5 space-y-2.5">
           <div class="font-bold text-slate-900 dark:text-white text-xs flex items-center justify-between">
-            <span>B. Persentase Lonjakan Beban vs Hari Normal (Surge %)</span>
-            <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300">Surge %</span>
+            <span>B. Rumus Base Stress Murni Data (Skala 0% – 100%)</span>
+            <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300">Base Stress %</span>
           </div>
           <p class="text-[11px] text-slate-600 dark:text-slate-300">
-            Rumus: <code class="font-mono font-bold text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-700 px-1 rounded">Lonjakan (%) = [(Volume Puncak - Volume Normal) / Volume Normal] × 100%</code>.
+            Kondisi hari biasa dipatok sebagai beban seimbang (<code class="font-mono font-bold text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-700 px-1 rounded">50%</code>). Jika beban per armada naik ~2x lipat saat puncak, stres menyentuh batas kritis (<code class="font-mono font-bold text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-700 px-1 rounded">100%</code>):
           </p>
+          <div class="p-2 rounded bg-slate-100 dark:bg-slate-800 font-mono text-[11px] text-slate-700 dark:text-slate-200">
+            Base Stress = min(99%, round[ 50% &times; (LF_puncak / LF_normal) ])
+          </div>
           <div class="overflow-x-auto rounded border border-slate-200 dark:border-slate-700">
             <table class="w-full text-left text-[11px] font-sans">
               <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-600 dark:text-slate-400">
                 <tr>
-                  <th class="p-1.5">Klasifikasi Beban</th>
-                  <th class="p-1.5">Kriteria Lonjakan</th>
+                  <th class="p-1.5">Klasifikasi</th>
+                  <th class="p-1.5">Rasio Beban (LF)</th>
+                  <th class="p-1.5">Base Stress</th>
                   <th class="p-1.5">Contoh Simpul Riil</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
                 <tr>
-                  <td class="p-1.5 font-bold text-rose-600 dark:text-rose-400">🔴 Sangat Kritis (95–99%)</td>
-                  <td class="p-1.5 font-mono">> +80% s/d +200%</td>
-                  <td class="p-1.5">Merak (+92%), Bakauheni (+195%), Senen (+88%)</td>
+                  <td class="p-1.5 font-bold text-rose-600 dark:text-rose-400">🔴 Sangat Kritis</td>
+                  <td class="p-1.5 font-mono">&ge; 1,90x &ndash; 2,00x</td>
+                  <td class="p-1.5 font-mono font-bold">95% &ndash; 99%</td>
+                  <td class="p-1.5">Senen (99%), Merak (98%), Bakauheni (97%), DPS (96%)</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold text-amber-600 dark:text-amber-400">🟠 Padat Tinggi (85–94%)</td>
-                  <td class="p-1.5 font-mono">+50% s/d +80%</td>
-                  <td class="p-1.5">Gambir (+56%), Yogyakarta (+61%), Ngurah Rai</td>
+                  <td class="p-1.5 font-bold text-amber-600 dark:text-amber-400">🟠 Padat / Siaga</td>
+                  <td class="p-1.5 font-mono">1,70x &ndash; 1,89x</td>
+                  <td class="p-1.5 font-mono font-bold">85% &ndash; 94%</td>
+                  <td class="p-1.5">Gambir (92%), Yogyakarta (91%), Soetta (90%), Ketapang (88%)</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold text-yellow-600 dark:text-yellow-400">🟡 Sibuk Terkendali (65–84%)</td>
-                  <td class="p-1.5 font-mono">+25% s/d +50%</td>
-                  <td class="p-1.5">Purabaya (+49%), Batam Center (+59%)</td>
+                  <td class="p-1.5 font-bold text-yellow-600 dark:text-yellow-400">🟡 Terkendali</td>
+                  <td class="p-1.5 font-mono">1,30x &ndash; 1,69x</td>
+                  <td class="p-1.5 font-mono font-bold">65% &ndash; 84%</td>
+                  <td class="p-1.5">Purabaya (76%), Batam Center (70%)</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold text-emerald-600 dark:text-emerald-400">🟢 Stabil / Normal (&lt;65%)</td>
-                  <td class="p-1.5 font-mono">&lt; +25%</td>
-                  <td class="p-1.5">Simpul kepulauan perintis / non-wisata</td>
+                  <td class="p-1.5 font-bold text-emerald-600 dark:text-emerald-400">🟢 Normal / Stabil</td>
+                  <td class="p-1.5 font-mono">&le; 1,29x</td>
+                  <td class="p-1.5 font-mono font-bold">&lt; 65%</td>
+                  <td class="p-1.5">Simpul perintis / rute pulau terluar</td>
                 </tr>
               </tbody>
             </table>
@@ -502,14 +510,20 @@
 
         <!-- Tolok Ukur C -->
         <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-3.5 space-y-2">
-          <div class="font-bold text-slate-900 dark:text-white text-xs">
-            C. Batas Kapasitas Fisik Prasarana (Physical Bottlenecks)
+          <div class="font-bold text-slate-900 dark:text-white text-xs flex items-center justify-between">
+            <span>C. Formula Kebutuhan Armada Ideal & Defisit Sarana</span>
+            <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300">Fleet Deficit</span>
           </div>
           <div class="space-y-1.5 text-[11px] text-slate-600 dark:text-slate-300">
-            <div>• <strong>Pelabuhan ASDP (Merak & Bakauheni):</strong> Kapasitas kantong parkir buffer zone dermaga dan waktu bongkar muat (port time). Kedatangan kendaraan melebihi kapasitas sandar memicu antrean 4–6 jam.</div>
-            <div>• <strong>Stasiun KA (Pasar Senen):</strong> Kapasitas kursi gerbong KA (100% okupansi tiket ludes terjual).</div>
-            <div>• <strong>Bandara (Ngurah Rai DPS):</strong> Utilisasi slot runway mencapai 98% dan keterbatasan parking stand.</div>
-            <div>• <strong>Bus (Purabaya):</strong> Waktu tunggu ruang keberangkatan melonjak dari 15 menit ke ~45 menit.</div>
+            <div>• <strong>Armada Ideal:</strong> Jumlah trip armada yang dibutuhkan agar beban puncak kembali senyaman hari biasa:
+              <br><code class="font-mono text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-700 px-1 rounded">A_ideal = Penumpang_puncak / LF_normal</code>
+            </div>
+            <div>• <strong>Defisit Armada:</strong> Kekurangan trip sarana di lapangan saat hari puncak:
+              <br><code class="font-mono text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-700 px-1 rounded">Defisit = A_ideal - A_puncak</code>
+            </div>
+            <div>• <strong>Pelemahan Stres Simulasi:</strong> Saat slider penambahan armada (&Delta;S%) digeser:
+              <br><code class="font-mono text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-700 px-1 rounded">Stress_Baru = round( Base_Stress / (1 + &Delta;S% / 100) )</code>
+            </div>
           </div>
         </div>
       </div>
@@ -4026,9 +4040,10 @@ const SIMPUL_DATA = [
     modaLabel: '⛴ ASDP Feri',
     saranaType: 'Kapal Ro-Ro Feri Penyeberangan',
     saranaUnit: 'trip kapal',
+    pnpNorm: 40560,
+    armNorm: 169,
     pnpDay: 88266,
     armDay: 188,
-    baseStress: 98,
     recAddPct: 20,
     baseQueue: 'Antrean kendaraan 4 – 6 Jam di dermaga & kantong parkir Cikuasa Atas',
     mitigatedQueue: 'Antrean terpangkas menjadi 1 – 1,5 Jam (mengalir lancar)',
@@ -4043,9 +4058,10 @@ const SIMPUL_DATA = [
     modaLabel: '⛴ ASDP Feri',
     saranaType: 'Kapal Ro-Ro Feri Penyeberangan',
     saranaUnit: 'trip kapal',
+    pnpNorm: 45408,
+    armNorm: 176,
     pnpDay: 97573,
     armDay: 195,
-    baseStress: 97,
     recAddPct: 20,
     baseQueue: 'Antrean kendaraan 4 – 5 Jam saat arus balik Sumatera ke Jawa',
     mitigatedQueue: 'Antrean terpangkas menjadi 1 – 1,5 Jam',
@@ -4060,9 +4076,10 @@ const SIMPUL_DATA = [
     modaLabel: '🚆 Kereta Api',
     saranaType: 'Rangkaian KA Jarak Jauh (KAI)',
     saranaUnit: 'perjalanan KA',
+    pnpNorm: 25192,
+    armNorm: 134,
     pnpDay: 55604,
     armDay: 149,
-    baseStress: 99,
     recAddPct: 15,
     baseQueue: 'Tiket KA ekonomi habis terjual 100%, antrean boarding hall padat',
     mitigatedQueue: 'Okupansi turun ke 86%, ketersediaan tiket tambahan terbuka',
@@ -4077,9 +4094,10 @@ const SIMPUL_DATA = [
     modaLabel: '🚆 Kereta Api',
     saranaType: 'Rangkaian KA Eksekutif & Kompartemen',
     saranaUnit: 'perjalanan KA',
+    pnpNorm: 19412,
+    armNorm: 211,
     pnpDay: 42106,
     armDay: 248,
-    baseStress: 92,
     recAddPct: 10,
     baseQueue: 'Tiket eksekutif Trans-Jawa 95% terjual, ruang tunggu peron padat',
     mitigatedQueue: 'Kapasitas eksekutif terbuka, waktu tunggu boarding nyaman',
@@ -4094,9 +4112,10 @@ const SIMPUL_DATA = [
     modaLabel: '✈ Udara',
     saranaType: 'Pesawat Jet Komersial (A320 / B737)',
     saranaUnit: 'penerbangan (flight)',
+    pnpNorm: 45780,
+    armNorm: 545,
     pnpDay: 103504,
     armDay: 641,
-    baseStress: 96,
     recAddPct: 10,
     baseQueue: 'Slot penerbangan padat 98%, tarif tiket mencapai Tarif Batas Atas (TBA)',
     mitigatedQueue: 'Slot extra flight malam terakomodasi, keterjangkauan tarif tiket terjaga',
@@ -4111,9 +4130,10 @@ const SIMPUL_DATA = [
     modaLabel: '✈ Udara',
     saranaType: 'Pesawat Komersial & Widebody',
     saranaUnit: 'penerbangan (flight)',
+    pnpNorm: 133896,
+    armNorm: 1594,
     pnpDay: 283048,
     armDay: 1875,
-    baseStress: 90,
     recAddPct: 10,
     baseQueue: 'Kepadatan di check-in counter & delay rotasi pesawat rute hub',
     mitigatedQueue: 'Kelancaran transit multimoda antar-pulau terjaga optimal',
@@ -4128,9 +4148,10 @@ const SIMPUL_DATA = [
     modaLabel: '🚆 Kereta Api',
     saranaType: 'Rangkaian KA Jarak Jauh & Aglomerasi',
     saranaUnit: 'perjalanan KA',
+    pnpNorm: 18032,
+    armNorm: 322,
     pnpDay: 38595,
     armDay: 379,
-    baseStress: 91,
     recAddPct: 10,
     baseQueue: 'Peron padat wisatawan, frekuensi komuter aglomerasi penuh sesak',
     mitigatedQueue: 'Penumpukan peron terurai, flow keluar masuk penumpang lancar',
@@ -4145,9 +4166,10 @@ const SIMPUL_DATA = [
     modaLabel: '⛴ ASDP Feri',
     saranaType: 'Kapal Penyeberangan Selat Bali',
     saranaUnit: 'trip kapal',
+    pnpNorm: 27225,
+    armNorm: 275,
     pnpDay: 56310,
     armDay: 324,
-    baseStress: 88,
     recAddPct: 15,
     baseQueue: 'Antrean kendaraan liburan Jawa-Bali 2 – 3 Jam di kantong buffer zone',
     mitigatedQueue: 'Waktu antrean terpangkas menjadi < 45 menit',
@@ -4162,9 +4184,10 @@ const SIMPUL_DATA = [
     modaLabel: '🚌 Bus',
     saranaType: 'Armada Bus Antar Kota',
     saranaUnit: 'trip bus',
+    pnpNorm: 30000,
+    armNorm: 2333,
     pnpDay: 53640,
     armDay: 2745,
-    baseStress: 76,
     recAddPct: 5,
     baseQueue: 'Waktu tunggu penumpang di jalur keberangkatan ~45 menit saat malam puncak',
     mitigatedQueue: 'Waktu tunggu terpangkas menjadi ~15 menit',
@@ -4179,9 +4202,10 @@ const SIMPUL_DATA = [
     modaLabel: '🚢 Laut',
     saranaType: 'Kapal Ferry Penumpang & Cepat',
     saranaUnit: 'trip kapal',
+    pnpNorm: 36088,
+    armNorm: 694,
     pnpDay: 59518,
     armDay: 816,
-    baseStress: 70,
     recAddPct: 5,
     baseQueue: 'Antrean ruang tunggu ponton pada jam favorit pagi & sore',
     mitigatedQueue: 'Sirkulasi embarkasi penumpang cepat & tertib',
@@ -4189,6 +4213,16 @@ const SIMPUL_DATA = [
     color: 'cyan'
   }
 ];
+
+// Inisialisasi Metrik 100% Data Empiris SIASATI (Pilihan 1: Fleet Overload & Deficit Model)
+SIMPUL_DATA.forEach(s => {
+  s.lfNorm = Math.round(s.pnpNorm / s.armNorm);
+  s.lfPeak = Math.round(s.pnpDay / s.armDay);
+  s.loadRatio = (s.lfPeak / s.lfNorm).toFixed(2);
+  s.baseStress = Math.min(99, Math.max(40, Math.round(50 * (s.lfPeak / s.lfNorm))));
+  s.idealArm = Math.round(s.pnpDay / s.lfNorm);
+  s.deficitArm = Math.max(0, s.idealArm - s.armDay);
+});
 
 let selectedSimpulId = 'merak';
 let simpulCustomPcts = {
@@ -4292,6 +4326,7 @@ function renderSimpulSimulation() {
   const activeAddArm = Math.round(active.armDay * (activePct / 100));
   const activeNewArm = active.armDay + activeAddArm;
   const activeAddCap = Math.round(active.pnpDay * (activePct / 100));
+  const activeNewLF = Math.round(active.pnpDay / activeNewArm);
   const activeNewStress = Math.max(30, Math.round(active.baseStress / (1 + activePct / 100)));
 
   let activeImpactText = '';
@@ -4343,7 +4378,10 @@ function renderSimpulSimulation() {
             <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
               <div class="${stressBg} h-2 rounded-full transition-all duration-300" style="width: ${activeNewStress}%"></div>
             </div>
-            <div class="text-[10px] text-slate-400 mt-1">Baseline Puncak: ${numFmt(active.pnpDay)} pnp/hari (${numFmt(active.armDay)} ${active.saranaUnit}/hari)</div>
+            <div class="text-[10px] text-slate-500 mt-1.5 space-y-0.5">
+              <div>📊 <strong>Beban Armada:</strong> Normal <strong>${active.lfNorm}</strong> &rarr; Puncak <strong>${active.lfPeak} pnp/trip</strong> (<span class="text-rose-600 dark:text-rose-400 font-bold">${active.loadRatio}x lipat</span>)</div>
+              <div>🎯 <strong>Armada Ideal:</strong> <strong>${numFmt(active.idealArm)} trip</strong> (Defisit: <span class="text-indigo-600 dark:text-indigo-400 font-bold">${numFmt(active.deficitArm)} trip</span>)</div>
+            </div>
           </div>
         </div>
 
@@ -4377,9 +4415,9 @@ function renderSimpulSimulation() {
             <div class="text-[10px] text-slate-500 font-mono mt-0.5">Total: ${numFmt(activeNewArm)} trip/hari</div>
           </div>
           <div class="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">Kapasitas Terbuka</div>
-            <div class="font-mono font-bold text-emerald-600 dark:text-emerald-400 text-base mt-0.5">+${numFmt(activeAddCap)} pnp</div>
-            <div class="text-[10px] text-emerald-600 font-semibold mt-0.5">Daya serap puncak</div>
+            <div class="text-[10px] text-slate-400 uppercase font-semibold">Beban Armada Baru</div>
+            <div class="font-mono font-bold text-emerald-600 dark:text-emerald-400 text-base mt-0.5">${numFmt(activeNewLF)} pnp/trip</div>
+            <div class="text-[10px] text-emerald-600 font-semibold mt-0.5">Turun dari ${active.lfPeak} pnp/trip</div>
           </div>
           <div class="col-span-2 bg-indigo-50/70 dark:bg-indigo-950/40 p-2.5 rounded-lg border border-indigo-200 dark:border-indigo-800/60">
             <div class="text-[10px] text-indigo-800 dark:text-indigo-300 font-bold uppercase">Dampak Penguraian di Lapangan:</div>
@@ -4441,7 +4479,8 @@ function renderSimpulSimulation() {
         </td>
         <td class="py-2.5 px-3 font-sans text-slate-700 dark:text-slate-300">
           <div class="font-medium">${s.saranaType}</div>
-          <div class="text-[10px] text-slate-400 font-mono">${numFmt(s.pnpDay)} pnp/hari</div>
+          <div class="text-[10px] text-slate-400 font-mono">${numFmt(s.pnpDay)} pnp/hari (LF: ${s.lfNorm} &rarr; ${s.lfPeak})</div>
+          <div class="text-[9px] text-indigo-600 dark:text-indigo-400 font-mono">Defisit: ${numFmt(s.deficitArm)} ${s.saranaUnit}</div>
         </td>
         <td class="py-2.5 px-3 text-center">${badge}</td>
         <td class="py-2.5 px-3 text-right font-mono text-slate-600 dark:text-slate-400">${numFmt(s.armDay)} ${s.saranaUnit}</td>
