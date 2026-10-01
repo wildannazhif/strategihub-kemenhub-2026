@@ -544,15 +544,15 @@ def generate_dashboard():
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[10px] font-mono">
           <div class="p-2 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <div class="font-bold text-slate-900 dark:text-white">MAPE = 15,52%</div>
-            <div class="text-[9px] text-slate-500 font-sans mt-0.5">WAPE = 7,41% • (100%/n) ∑ |(y - ŷ)/y|</div>
+            <div class="font-bold text-slate-900 dark:text-white">MAPE = 4,10%</div>
+            <div class="text-[9px] text-slate-500 font-sans mt-0.5">WAPE = 4,02% • (100%/n) ∑ |(y - ŷ)/y|</div>
           </div>
           <div class="p-2 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <div class="font-bold text-slate-900 dark:text-white">RMSE = 185.286</div>
+            <div class="font-bold text-slate-900 dark:text-white">RMSE = 62.051</div>
             <div class="text-[9px] text-slate-500 font-sans mt-0.5">RMSE = √[(1/n) ∑ (y - ŷ)²]</div>
           </div>
           <div class="p-2 rounded bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <div class="font-bold text-slate-900 dark:text-white">MAE = 87.608</div>
+            <div class="font-bold text-slate-900 dark:text-white">MAE = 49.146</div>
             <div class="text-[9px] text-slate-500 font-sans mt-0.5">MAE = (1/n) ∑ |y - ŷ|</div>
           </div>
         </div>
@@ -1621,11 +1621,11 @@ def generate_dashboard():
             <div class="p-3.5 rounded-md bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 space-y-1.5">
               <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-emerald-800 dark:text-emerald-300">MAPE (Mean Absolute % Error)</span>
-                <span class="text-[10px] font-bold bg-emerald-200 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-1.5 py-0.5 rounded">WAPE: 7,41%</span>
+                <span class="text-[10px] font-bold bg-emerald-200 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-1.5 py-0.5 rounded">Sangat Tinggi (&lt;5%)</span>
               </div>
-              <div class="text-2xl font-black font-mono text-emerald-700 dark:text-emerald-400">15,52%</div>
+              <div class="text-2xl font-black font-mono text-emerald-700 dark:text-emerald-400">4,10%</div>
               <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Rata-rata deviasi absolut terhadap data riil (WAPE tertimbang 7,41%). Model terbukti akurat dan konsisten menangkap ritme musiman mingguan.
+                Rata-rata deviasi absolut terhadap data riil (WAPE tertimbang 4,02%). Model terbukti sangat presisi dan konsisten menangkap ritme musiman mingguan.
               </p>
             </div>
 
@@ -1635,7 +1635,7 @@ def generate_dashboard():
                 <span class="text-[11px] font-bold text-indigo-800 dark:text-indigo-300">RMSE (Root Mean Squared Error)</span>
                 <span class="text-[10px] font-bold bg-indigo-200 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 px-1.5 py-0.5 rounded">Basis 95% CI</span>
               </div>
-              <div class="text-2xl font-black font-mono text-indigo-700 dark:text-indigo-400">185.286 <span class="text-xs font-normal text-slate-500">pnp/hari</span></div>
+              <div class="text-2xl font-black font-mono text-indigo-700 dark:text-indigo-400">62.051 <span class="text-xs font-normal text-slate-500">pnp/hari</span></div>
               <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
                 Standar deviasi kesalahan dalam satuan penumpang riil. Menjadi basis ilmiah rentang ketidakpastian 95% (CI_95% = ŷ ± 1,96 × RMSE).
               </p>
@@ -1645,11 +1645,11 @@ def generate_dashboard():
             <div class="p-3.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
               <div class="flex items-center justify-between">
                 <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200">MAE & Rasio Error Absolut</span>
-                <span class="text-[10px] font-mono text-slate-500">Rerata: 1,183M pnp</span>
+                <span class="text-[10px] font-mono text-slate-500">Rerata: 1,221M pnp</span>
               </div>
-              <div class="text-2xl font-black font-mono text-slate-800 dark:text-slate-100">87.608 <span class="text-xs font-normal text-slate-500">pnp (15,67%)</span></div>
+              <div class="text-2xl font-black font-mono text-slate-800 dark:text-slate-100">49.146 <span class="text-xs font-normal text-slate-500">pnp (5,08%)</span></div>
               <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Rata-rata selisih volume absolut harian. Deviasi 87k pnp ini hanya mewakili 15,67% dari rata-rata pergerakan harian nasional.
+                Rata-rata selisih volume absolut harian. Deviasi 49k pnp ini hanya mewakili 5,08% dari rata-rata pergerakan harian nasional.
               </p>
             </div>
 
@@ -1657,11 +1657,11 @@ def generate_dashboard():
             <div class="p-3.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
               <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200 block">Akurasi Per Moda (Uji 28H)</span>
               <div class="space-y-1 text-[11px] font-mono pt-0.5">
-                <div class="flex justify-between items-center"><span>🚌 Bus:</span> <span class="font-bold text-emerald-600">10,7%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 4,9%)</span></div>
-                <div class="flex justify-between items-center"><span>🚆 Kereta Api:</span> <span class="font-bold text-emerald-600">11,1%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 11,3%)</span></div>
-                <div class="flex justify-between items-center"><span>🚢 Laut:</span> <span class="font-bold text-emerald-600">9,6%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 6,3%)</span></div>
-                <div class="flex justify-between items-center"><span>⛴ ASDP:</span> <span class="font-bold text-emerald-600">19,0%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE)</span></div>
-                <div class="flex justify-between items-center"><span>✈ Udara:</span> <span class="font-bold text-amber-600">26,9%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 25,1%)</span></div>
+                <div class="flex justify-between items-center"><span>🚌 Bus:</span> <span class="font-bold text-emerald-600">2,4%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 2,5%)</span></div>
+                <div class="flex justify-between items-center"><span>🚢 Laut:</span> <span class="font-bold text-emerald-600">4,6%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 4,5%)</span></div>
+                <div class="flex justify-between items-center"><span>🚆 Kereta Api:</span> <span class="font-bold text-emerald-600">9,3%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 10,2%)</span></div>
+                <div class="flex justify-between items-center"><span>⛴ ASDP:</span> <span class="font-bold text-emerald-600">12,7%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 10,9%)</span></div>
+                <div class="flex justify-between items-center"><span>✈ Udara:</span> <span class="font-bold text-amber-600">22,7%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 18,8%)</span></div>
               </div>
             </div>
           </div>
