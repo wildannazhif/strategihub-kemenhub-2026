@@ -1170,7 +1170,7 @@
             <div class="p-3 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs mt-4">
               <div class="font-bold text-slate-800 dark:text-slate-200 mb-1">Temuan Utilisasi:</div>
               <p class="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
-                Lonjakan beban tertinggi terjadi pada <strong>Penyeberangan ASDP (+121,9%)</strong> di mana rata-rata penumpang per trip melonjak dari 110 menjadi 245 penumpang/trip pada arus balik.
+                Lonjakan beban tertinggi terjadi pada <strong>Penyeberangan ASDP (+122,4%)</strong> di mana rata-rata penumpang per trip melonjak dari 125 menjadi 278 penumpang/trip pada arus balik.
               </p>
             </div>
           </div>
@@ -3458,18 +3458,32 @@ function renderLoadFactorWorkspace() {
     data: {
       labels: labelsLF,
       datasets: [
-        { label: 'Baseline Normal', data: modas.map(m => lf[m].baseline_lf), backgroundColor: '#64748b', borderRadius: 3 },
-        { label: 'Puncak Mudik', data: modas.map(m => lf[m].mudik_lf), backgroundColor: '#9333ea', borderRadius: 3 },
-        { label: 'Puncak Balik', data: modas.map(m => lf[m].balik_lf), backgroundColor: '#0284c7', borderRadius: 3 },
+        { label: 'Baseline Normal', data: modas.map(m => Math.ceil(lf[m].baseline_lf)), backgroundColor: '#64748b', borderRadius: 3 },
+        { label: 'Puncak Mudik', data: modas.map(m => Math.ceil(lf[m].mudik_lf)), backgroundColor: '#9333ea', borderRadius: 3 },
+        { label: 'Puncak Balik', data: modas.map(m => Math.ceil(lf[m].balik_lf)), backgroundColor: '#0284c7', borderRadius: 3 },
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { labels: { color: isDark ? '#cbd5e1' : '#475569' } } },
+      plugins: { 
+        legend: { labels: { color: isDark ? '#cbd5e1' : '#475569' } },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.dataset.label}: ${numFmt(ctx.raw)} pnp/armada`
+          }
+        }
+      },
       scales: {
         x: { grid: { display: false }, ticks: { color: isDark ? '#94a3b8' : '#64748b' } },
-        y: { grid: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }, ticks: { color: isDark ? '#94a3b8' : '#64748b', font: { family: 'JetBrains Mono' } } }
+        y: { 
+          grid: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }, 
+          ticks: { 
+            color: isDark ? '#94a3b8' : '#64748b', 
+            font: { family: 'JetBrains Mono' },
+            callback: v => Math.round(v)
+          } 
+        }
       }
     }
   });
@@ -3483,9 +3497,9 @@ function renderLoadFactorWorkspace() {
       tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
       tr.innerHTML = `
         <td class="py-2.5 px-3 font-sans font-semibold text-slate-900 dark:text-slate-100">${labelsLF[idx]}</td>
-        <td class="py-2.5 px-3 text-right">${decFmt(s.baseline_lf, 1)} pnp/arm</td>
-        <td class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400 font-semibold">${decFmt(s.mudik_lf, 1)}</td>
-        <td class="py-2.5 px-3 text-right text-rose-700 dark:text-rose-400 font-semibold">${decFmt(s.balik_lf, 1)}</td>
+        <td class="py-2.5 px-3 text-right">${numFmt(Math.ceil(s.baseline_lf))} pnp/arm</td>
+        <td class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400 font-semibold">${numFmt(Math.ceil(s.mudik_lf))}</td>
+        <td class="py-2.5 px-3 text-right text-rose-700 dark:text-rose-400 font-semibold">${numFmt(Math.ceil(s.balik_lf))}</td>
         <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">+${decFmt(s.surge_lf_pct, 1)}%</td>
       `;
       tbody.appendChild(tr);
@@ -3634,8 +3648,8 @@ function renderMatrixTable() {
     { label: '4. Lonjakan Arus Mudik (%)', u: '+' + decFmt(surge.UDARA.surge_mudik_pct, 1) + '%', ka: '+' + decFmt(surge.KA.surge_mudik_pct, 1) + '%', bus: '+' + decFmt(surge.BUS.surge_mudik_pct, 1) + '%', asdp: '+' + decFmt(surge.ASDP.surge_mudik_pct, 1) + '%', laut: '+' + decFmt(surge.LAUT.surge_mudik_pct, 1) + '%', tot: '+' + decFmt(s.mudik_surge_pct || surge.TOTAL.surge_mudik_pct, 1) + '%' },
     { label: '5. Volume Puncak Balik 1 (24 Mar)', u: numFmt(surge.UDARA.peak_balik1), ka: numFmt(surge.KA.peak_balik1), bus: numFmt(surge.BUS.peak_balik1), asdp: numFmt(surge.ASDP.peak_balik1), laut: numFmt(surge.LAUT.peak_balik1), tot: numFmt(s.peak_val || surge.TOTAL.peak_balik1) },
     { label: '6. Lonjakan Arus Balik 1 (%)', u: '+' + decFmt(surge.UDARA.surge_balik1_pct, 1) + '%', ka: '+' + decFmt(surge.KA.surge_balik1_pct, 1) + '%', bus: '+' + decFmt(surge.BUS.surge_balik1_pct, 1) + '%', asdp: '+' + decFmt(surge.ASDP.surge_balik1_pct, 1) + '%', laut: '+' + decFmt(surge.LAUT.surge_balik1_pct, 1) + '%', tot: '+' + decFmt(s.peak_surge_pct || surge.TOTAL.surge_balik1_pct, 1) + '%' },
-    { label: '7. Load Factor Normal (Pnp/Arm)', u: decFmt(lf.UDARA.baseline_lf, 1), ka: decFmt(lf.KA.baseline_lf, 1), bus: decFmt(lf.BUS.baseline_lf, 1), asdp: decFmt(lf.ASDP.baseline_lf, 1), laut: decFmt(lf.LAUT.baseline_lf, 1), tot: '37,1' },
-    { label: '8. Load Factor Puncak Lebaran', u: decFmt(lf.UDARA.peak_lf, 1), ka: decFmt(lf.KA.peak_lf, 1), bus: decFmt(lf.BUS.peak_lf, 1), asdp: decFmt(lf.ASDP.peak_lf, 1), laut: decFmt(lf.LAUT.peak_lf, 1), tot: '52,7' },
+    { label: '7. Load Factor Normal (Pnp/Arm)', u: numFmt(Math.ceil(lf.UDARA.baseline_lf)), ka: numFmt(Math.ceil(lf.KA.baseline_lf)), bus: numFmt(Math.ceil(lf.BUS.baseline_lf)), asdp: numFmt(Math.ceil(lf.ASDP.baseline_lf)), laut: numFmt(Math.ceil(lf.LAUT.baseline_lf)), tot: '38' },
+    { label: '8. Load Factor Puncak Lebaran', u: numFmt(Math.ceil(lf.UDARA.peak_lf)), ka: numFmt(Math.ceil(lf.KA.peak_lf)), bus: numFmt(Math.ceil(lf.BUS.peak_lf)), asdp: numFmt(Math.ceil(lf.ASDP.peak_lf)), laut: numFmt(Math.ceil(lf.LAUT.peak_lf)), tot: '53' },
     { label: '9. Pangsa Pasar Normal Feb (%)', u: decFmt(feb.share_UDARA, 1) + '%', ka: decFmt(feb.share_KA, 1) + '%', bus: decFmt(feb.share_BUS, 1) + '%', asdp: decFmt(feb.share_ASDP, 1) + '%', laut: decFmt(feb.share_LAUT, 1) + '%', tot: '100,0%' },
     { label: '10. Pangsa Pasar Puncak Mar (%)', u: decFmt(mar.share_UDARA, 1) + '%', ka: decFmt(mar.share_KA, 1) + '%', bus: decFmt(mar.share_BUS, 1) + '%', asdp: decFmt(mar.share_ASDP, 1) + '%', laut: decFmt(mar.share_LAUT, 1) + '%', tot: '100,0%' },
     { label: '11. Jumlah Simpul Terverifikasi', u: '257 Bandara', ka: '193 Stasiun', bus: '215 Terminal', asdp: '276 Pelabuhan', laut: '267 Pelabuhan', tot: '1.208 Simpul' },
