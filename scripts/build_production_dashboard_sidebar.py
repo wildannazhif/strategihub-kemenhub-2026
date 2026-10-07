@@ -1135,12 +1135,6 @@ def generate_dashboard():
               </div>
             </div>
 
-            <div class="p-3 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs mt-4">
-              <div class="font-bold text-slate-800 dark:text-slate-200 mb-1">Temuan Utilisasi:</div>
-              <p class="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
-                Lonjakan beban tertinggi terjadi pada <strong>Penyeberangan ASDP (+121,9%)</strong> di mana rata-rata penumpang per trip melonjak dari 110 menjadi 245 penumpang/trip pada arus balik.
-              </p>
-            </div>
           </div>
 
         </div>
