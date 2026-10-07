@@ -1,0 +1,101 @@
+{
+  "1. Holt-Winters Mul Damped (Model Terpilih)": {
+    "MAPE (%)": 4.06,
+    "WAPE (%)": 4.0,
+    "RMSE": 60232,
+    "MAE": 48905,
+    "Max Error": 142320,
+    "Direction Acc (%)": 89.3,
+    "Waktu (dtk)": 0.152
+  },
+  "2. Holt-Winters Mul Standar (No Damping)": {
+    "MAPE (%)": 3.34,
+    "WAPE (%)": 3.39,
+    "RMSE": 54924,
+    "MAE": 41374,
+    "Max Error": 132348,
+    "Direction Acc (%)": 89.3,
+    "Waktu (dtk)": 0.126
+  },
+  "3. Holt-Winters Additive Damped": {
+    "MAPE (%)": 4.63,
+    "WAPE (%)": 4.52,
+    "RMSE": 69617,
+    "MAE": 55187,
+    "Max Error": 180080,
+    "Direction Acc (%)": 89.3,
+    "Waktu (dtk)": 0.122
+  },
+  "4. SARIMA (1,1,1)x(1,1,1,7)": {
+    "MAPE (%)": 5.87,
+    "WAPE (%)": 5.94,
+    "RMSE": 83614,
+    "MAE": 72529,
+    "Max Error": 167345,
+    "Direction Acc (%)": 57.1,
+    "Waktu (dtk)": 0.249
+  },
+  "5. ARIMA (1,1,1) Non-Seasonal": {
+    "MAPE (%)": 11.17,
+    "WAPE (%)": 10.73,
+    "RMSE": 151818,
+    "MAE": 131008,
+    "Max Error": 260532,
+    "Direction Acc (%)": 53.6,
+    "Waktu (dtk)": 0.135
+  },
+  "6. Holt's Linear Trend (No Seasonal)": {
+    "MAPE (%)": 6.24,
+    "WAPE (%)": 6.51,
+    "RMSE": 103284,
+    "MAE": 79534,
+    "Max Error": 259871,
+    "Direction Acc (%)": 50.0,
+    "Waktu (dtk)": 0.028
+  },
+  "7. Simple Exp Smoothing (SES)": {
+    "MAPE (%)": 6.15,
+    "WAPE (%)": 6.38,
+    "RMSE": 100170,
+    "MAE": 77936,
+    "Max Error": 248426,
+    "Direction Acc (%)": 3.6,
+    "Waktu (dtk)": 0.012
+  },
+  "8. Linear Regression (Trend + DOW)": {
+    "MAPE (%)": 16.76,
+    "WAPE (%)": 16.47,
+    "RMSE": 208674,
+    "MAE": 201091,
+    "Max Error": 331971,
+    "Direction Acc (%)": 89.3,
+    "Waktu (dtk)": 0.011
+  },
+  "9. Seasonal Naive (Lag 7)": {
+    "MAPE (%)": 13.51,
+    "WAPE (%)": 13.19,
+    "RMSE": 188309,
+    "MAE": 161035,
+    "Max Error": 404539,
+    "Direction Acc (%)": 60.7,
+    "Waktu (dtk)": 0.0
+  },
+  "10. Naive / Random Walk (Lag 1)": {
+    "MAPE (%)": 7.1,
+    "WAPE (%)": 7.48,
+    "RMSE": 118759,
+    "MAE": 91365,
+    "Max Error": 283926,
+    "Direction Acc (%)": 0.0,
+    "Waktu (dtk)": 0.0
+  },
+  "11. 7-Day Moving Average": {
+    "MAPE (%)": 10.55,
+    "WAPE (%)": 10.11,
+    "RMSE": 141982,
+    "MAE": 123434,
+    "Max Error": 237076,
+    "Direction Acc (%)": 3.6,
+    "Waktu (dtk)": 0.0
+  }
+}
