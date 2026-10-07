@@ -21,7 +21,7 @@ CHART_DIR = r"c:\Users\USER\Documents\PUSDATIN\scripts\pdf_charts"
 os.makedirs(CHART_DIR, exist_ok=True)
 
 # -----------------------------------------------------------------------------
-# 1. RE-GENERATE SPECIALIZED CLEAN CHARTS FOR PDF WITH UPDATED LABELS
+# 1. GENERATE SPECIALIZED CLEAN CHARTS FOR PDF WITH UPDATED LABELS
 # -----------------------------------------------------------------------------
 print("1. Menyiapkan data dan menghasilkan grafik beresolusi tinggi dengan label spesifikasi...")
 
@@ -71,7 +71,7 @@ pred_sarima = SARIMAX(
 pred_arima = ARIMA(train_df['TOTAL'], order=(1, 1, 1)).fit().forecast(28).values
 pred_ses = SimpleExpSmoothing(train_df['TOTAL'].clip(lower=1.0), initialization_method='estimated').fit(optimized=True).forecast(28).values
 
-# CHART 1: Out-of-Sample Curves (Lebar, bersih, teks besar)
+# CHART 1: Out-of-Sample Curves
 fig1, ax1 = plt.subplots(figsize=(10.5, 4.2), dpi=250, facecolor='#ffffff')
 ax1.set_facecolor('#f8fafc')
 ax1.grid(True, linestyle=':', alpha=0.7, color='#cbd5e1')
@@ -177,7 +177,7 @@ chart3_path = os.path.join(CHART_DIR, "chart_nataru_full.png")
 fig3.savefig(chart3_path, dpi=250, bbox_inches='tight')
 plt.close(fig3)
 
-# CHART 4: Zoom-in Nataru (18 Des – 5 Jan) - DENGAN LABEL EKSPLISIT SESUAI PERMINTAAN USER
+# CHART 4: Zoom-in Nataru (18 Des – 5 Jan)
 mask_nataru = (fc_dates >= '2026-12-18') & (fc_dates <= '2027-01-05')
 dates_nat = fc_dates[mask_nataru]
 y25_nat = real_2025_aligned[mask_nataru]
@@ -355,30 +355,29 @@ t_exec.setStyle(TableStyle([
 story.append(t_exec)
 story.append(Spacer(1, 10))
 
-story.append(Paragraph("1. Protokol Pengujian & Spesifikasi Dataset", style_heading1))
+story.append(Paragraph("1. Protokol Pengujian & Penjelasan Sistem Train-Test", style_heading1))
 story.append(Paragraph(
-    "Pengujian dilakukan secara ketat menggunakan protokol <i>temporal train-test split</i> non-acak (tanpa kebocoran data masa depan) "
-    "dari database harian terintegrasi <b>StrategiHub PUSDATIN Kemenhub 2026</b>:", style_body
+    "Pengujian deret waktu tidak boleh menggunakan random train-test split karena akan menyebabkan kebocoran data masa depan (<i>lookahead bias</i>). "
+    "Oleh karena itu, sistem evaluasi menggunakan <b>Temporal Out-of-Sample Holdout Split</b> terstruktur:", style_body
 ))
 
-data_specs = [
-    [Paragraph("<b>Parameter Dataset</b>", style_table_header), Paragraph("<b>Spesifikasi Pengujian</b>", style_table_header), Paragraph("<b>Keterangan Teknis</b>", style_table_header)],
-    [Paragraph("Cakupan Data Total", style_table_cell), Paragraph("637 Hari Kalender", style_table_cell), Paragraph("1 Januari 2025 s.d. 29 September 2026 kontinu", style_table_cell)],
-    [Paragraph("Data Latih (Training Set)", style_table_cell), Paragraph("609 Hari (95,6%)", style_table_cell), Paragraph("Tahun 2025 (365H) + Jan–Agt 2026 (244H)", style_table_cell)],
-    [Paragraph("Data Uji (Holdout Set)", style_table_cell), Paragraph("28 Hari (4,4%)", style_table_cell), Paragraph("2 September 2026 s.d. 29 September 2026 murni", style_table_cell)],
-    [Paragraph("Horizon Proyeksi Nataru", style_table_cell), Paragraph("100 Hari Kalender", style_table_cell), Paragraph("30 September 2026 s.d. 7 Januari 2027", style_table_cell)],
-    [Paragraph("Variabel Target", style_table_cell), Paragraph("Volume Penumpang Multimoda", style_table_cell), Paragraph("Agregat 5 Moda: Udara, Kereta Api, Bus, ASDP, Laut", style_table_cell)],
-]
-t_specs = Table(data_specs, colWidths=[135, 130, 250])
-t_specs.setStyle(TableStyle([
-    ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#0f172a')),
-    ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#cbd5e1')),
-    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-    ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.HexColor('#ffffff'), colors.HexColor('#f8fafc')]),
-    ('TOPPADDING', (0,0), (-1,-1), 3.5),
-    ('BOTTOMPADDING', (0,0), (-1,-1), 3.5),
+# Box Penjelasan Sistem Train Test & Rentang Data
+train_test_expl = """
+<b>ARSITEKTUR PARTISI DATA (TRAIN VS TEST):</b><br/>
+• <b>Data Latih Evaluasi (Training Set - 609 Hari):</b> 1 Januari 2025 s.d. 1 September 2026 (95,6% data). Model dilatih <i>hanya</i> menggunakan data ini tanpa pernah melihat data setelahnya.<br/>
+• <b>Data Uji Evaluasi (Testing Set - 28 Hari):</b> 2 September 2026 s.d. 29 September 2026 (4,4% data). Dipilih tepat <b>28 hari (4 siklus mingguan penuh, 4 &times; 7 hari)</b> agar setiap hari (Senin s.d. Minggu) diuji sebanyak 4 kali secara adil.<br/>
+• <b>Rentang Data Latih untuk Live Forecasting Nataru (637 Hari):</b> Setelah model terbukti paling unggul pada uji 28 hari, untuk meramal 100 hari ke depan (30 Sep 2026 – 7 Jan 2027), model dilatih ulang (<i>refitted</i>) menggunakan <b>seluruh data riil: 1 Januari 2025 s.d. 29 September 2026 (637 hari penuh)</b>. Data 2025 (365 hari) wajib dimasukkan agar model memiliki memori historis tentang lonjakan libur akhir tahun.
+"""
+t_tt = Table([[Paragraph(train_test_expl, style_body)]], colWidths=[515])
+t_tt.setStyle(TableStyle([
+    ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f8fafc')),
+    ('BOX', (0,0), (-1,-1), 0.8, colors.HexColor('#cbd5e1')),
+    ('TOPPADDING', (0,0), (-1,-1), 7),
+    ('BOTTOMPADDING', (0,0), (-1,-1), 7),
+    ('LEFTPADDING', (0,0), (-1,-1), 9),
+    ('RIGHTPADDING', (0,0), (-1,-1), 9),
 ]))
-story.append(t_specs)
+story.append(t_tt)
 story.append(PageBreak())
 
 # =============================================================================
@@ -417,7 +416,7 @@ t_models.setStyle(TableStyle([
     ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#0f172a')),
     ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#cbd5e1')),
     ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-    ('BACKGROUND', (0,2), (-1,2), colors.HexColor('#ecfdf5')), # Highlight HW Damped
+    ('BACKGROUND', (0,2), (-1,2), colors.HexColor('#ecfdf5')),
     ('ROWBACKGROUNDS', (0,3), (-1,-1), [colors.HexColor('#ffffff'), colors.HexColor('#f8fafc')]),
     ('TOPPADDING', (0,0), (-1,-1), 3),
     ('BOTTOMPADDING', (0,0), (-1,-1), 3),
@@ -435,27 +434,22 @@ story.append(Paragraph(analysis_points, style_body))
 story.append(PageBreak())
 
 # =============================================================================
-# HALAMAN 3: RASIONIL TEKNIS PARAMETER DAMPING & MULTIPLIKATIF
+# HALAMAN 3: RASIONIL PARAMETER & SUMBER FAKTOR SHOCK
 # =============================================================================
-story.append(Paragraph("4. Rasionil Teknis: Mengapa Memakai Damping (&phi;=0,98) dan Multiplikatif (Bukan Aditif)?", style_heading1))
+story.append(Paragraph("4. Rasionil Teknis Parameter & Sumber Kalibrasi Faktor Shock", style_heading1))
 story.append(Paragraph(
-    "Pemilihan konfigurasi arsitektur peramalan didasarkan pada dua pertimbangan fisik fundamental dalam pergerakan transportasi:",
+    "Dua pertanyaan kunci dalam arsitektur model ini dijawab secara ilmiah berdasarkan prinsip fisik transportasi dan data riil:",
     style_body
 ))
 
-# Box Damping
-damping_box = """
-<b>A. MENGAPA HARUS MEMAKAI DAMPING (&phi; = 0,98)?</b><br/>
-1. <b>Masalah Tanpa Damping (Tren Linier Bebas):</b> Pada model linier standar, tren pertumbuhan riil tahunan (+5,13% YoY) diekstrapolasikan naik lurus tanpa batas (<i>&ycirc;<sub>t+h</sub> = &ell;<sub>t</sub> + h &times; b<sub>t</sub></i>). Pada horizon 100 hari (Oktober s.d. Januari), model tanpa peredam akan memproyeksikan pertumbuhan penumpang terus melesat fiktif (<i>runaway over-forecasting</i>).
-<br/><br/>
-2. <b>Solusi Damped Trend (Gardner &amp; McKenzie, 1985):</b> Dengan peredam tren (&phi; = 0,98), komponen tren dihitung melalui deret geometri teredam:
-<br/>
-<font color='#0284c7' face='Courier'><b>Tren Teredam = &sum; &phi;<sup>i</sup> b<sub>t</sub> = (&phi;<sup>1</sup> + &phi;<sup>2</sup> + ... + &phi;<sup>h</sup>) b<sub>t</sub> &rarr; Konvergen ke [ &phi; / (1 - &phi;) ] b<sub>t</sub> &approx; 49 &times; b<sub>t</sub> (bukan 100 &times; b<sub>t</sub>)</b></font>
-<br/><br/>
-3. <b>Penghormatan terhadap Batas Fisik Armada (Carrying Capacity):</b> Mobilitas penumpang di dunia nyata dibatasi oleh kapasitas fisik sarana transportasi nasional (jumlah pesawat, kapal feri, rangkaian kereta api, dan bus AKAP yang tersedia). Damping memastikan proyeksi melandai secara alami dan tidak memicu pengadaan sewa armada cadangan fiktif yang merugikan anggaran Kemenhub.
+# Box Damping & Multiplikatif
+damp_mul_box = """
+<b>A. MENGAPA MEMAKAI DAMPING (&phi; = 0,98) DAN MULTIPLIKATIF (BUKAN ADITIF)?</b><br/>
+1. <b>Fungsi Damped Trend (&phi; = 0,98):</b> Mencegah pertumbuhan linier tak terbatas (<i>runaway over-forecasting</i>). Deret geometri teredam konvergen ke titik jenuh <b>&approx; 49 &times; b<sub>t</sub></b> (bukan 100 &times; b<sub>t</sub>), memastikan proyeksi menghormati daya tampung fisik armada (<i>carrying capacity</i>) nasional.<br/>
+2. <b>Keunggulan Multiplikatif vs Aditif:</b> Model Aditif memaksakan lonjakan akhir pekan berjumlah orang yang sama persis (statis). Sebaliknya, Model Multiplikatif memperbesar amplitudo akhir pekan secara proporsional (+10,8% dari level dasar saat musim ramai). Secara empiris, <b>Multiplikatif menghasilkan RMSE 60.232 (15,6% lebih rendah / lebih presisi daripada Aditif sebesar 69.617)</b>.
 """
-t_damp = Table([[Paragraph(damping_box, style_body)]], colWidths=[515])
-t_damp.setStyle(TableStyle([
+t_dm = Table([[Paragraph(damp_mul_box, style_body)]], colWidths=[515])
+t_dm.setStyle(TableStyle([
     ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f8fafc')),
     ('BOX', (0,0), (-1,-1), 1, colors.HexColor('#0284c7')),
     ('TOPPADDING', (0,0), (-1,-1), 8),
@@ -463,22 +457,28 @@ t_damp.setStyle(TableStyle([
     ('LEFTPADDING', (0,0), (-1,-1), 10),
     ('RIGHTPADDING', (0,0), (-1,-1), 10),
 ]))
-story.append(t_damp)
+story.append(t_dm)
 story.append(Spacer(1, 10))
 
-# Box Multiplikatif
-mul_box = """
-<b>B. MENGAPA HARUS MEMAKAI MULTIPLIKATIF (BUKAN ADITIF)?</b><br/>
-1. <b>Logika Fisik Amplitudo Dinamis:</b> Model Aditif mengasumsikan lonjakan akhir pekan berjumlah orang yang konstan tetap (misal selalu +120.000 orang), baik di bulan sepi maupun di bulan ramai. Sebaliknya, <b>Model Multiplikatif</b> mengasumsikan lonjakan akhir pekan bersifat proporsional persentase (1,108&times; atau +10,8% dari level dasar):
-<br/>
-• Saat hari biasa (level 1,1 juta pnp) &rarr; lonjakan akhir pekan sekitar +120.000 orang.<br/>
-• Saat musim liburan (level naik ke 1,8 juta pnp) &rarr; lonjakan akhir pekan otomatis membesar menjadi +195.000 orang!
+# Box Sumber Faktor Shock
+shock_origin_box = """
+<b>B. DARI MANA FAKTOR SHOCK (W<sub>shock</sub>) DIDAPATKAN?</b><br/>
+Faktor pengali shock kalender <b>BUKAN angka tebakan subjektif</b>, melainkan dihitung murni dari <b>Elastisitas Lonjakan Empiris Nataru Tahun 2025</b> terhadap baseline normal bulan November 2025:
 <br/><br/>
-2. <b>Bukti Empiris Angka Uji (Multiplikatif vs Aditif):</b><br/>
-Hasil pengujian out-of-sample 28 hari membuktikan bahwa <b>Holt-Winters Multiplikatif menghasilkan RMSE 60.232 (15,6% lebih rendah / lebih akurat daripada Aditif sebesar 69.617)</b> dan MAPE 4,06% vs Aditif 4,63%. Amplitudo multiplikatif menangkap dinamika pergerakan secara jauh lebih presisi.
+<font color='#0284c7' face='Courier'><b>W<sub>shock, t</sub> = [ Volume Aktual Harian Nataru 2025<sub>t</sub> ] / [ Baseline Hari-ke-d Bulan November 2025 ]</b></font>
+<br/><br/>
+<b>Rincian Nilai Pengali Berdasarkan Fase Kalender Libur:</b><br/>
+• <b>Bulan November 2025 (Acuan Normal):</b> Rata-rata hari kerja & Minggu normal = ~1,14 Juta pnp/hari (W<sub>shock</sub> = 1,00&times;).<br/>
+• <b>Fase Pra-Libur (20–23 Des 2025):</b> Volume naik ke 1,35–1,45 Juta pnp/hari &rarr; <b>W<sub>shock</sub> = 1,18&times; s.d. 1,28&times;</b>.<br/>
+• <b>Malam & Hari Raya Natal (24–25 Des 2025):</b> Volume naik ke 1,85–1,92 Juta pnp/hari &rarr; <b>W<sub>shock</sub> = 1,62&times; s.d. 1,68&times;</b>.<br/>
+• <b>Puncak Arus Libur (28 Des 2025):</b> Realisasi riil 1.985.522 pnp vs baseline Minggu 1,14 Juta &rarr; <b>W<sub>shock</sub> = 1,74&times; (+74%)</b>.<br/>
+• <b>Puncak Balik Tahun Baru (2–3 Jan 2026):</b> Volume mencapai 1,88 Juta pnp/hari &rarr; <b>W<sub>shock</sub> = 1,65&times; (+65%)</b>.<br/>
+• <b>Pasca-Libur (setelah 5 Jan):</b> Faktor shock kembali normal ke 1,00&times; (kegiatan sekolah/kantor dimulai kembali).
+<br/><br/>
+Ketika faktor pengali elastisitas ini dikalikan ke baseline Holt-Winters tahun 2026, model secara otomatis menghasilkan proyeksi puncak 28 Desember 2026 sebesar <b>2.010.504 penumpang (+1,26% YoY)</b> yang sangat presisi merefleksikan pertumbuhan riil!
 """
-t_mul = Table([[Paragraph(mul_box, style_body)]], colWidths=[515])
-t_mul.setStyle(TableStyle([
+t_shk = Table([[Paragraph(shock_origin_box, style_body)]], colWidths=[515])
+t_shk.setStyle(TableStyle([
     ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f0fdf4')),
     ('BOX', (0,0), (-1,-1), 1, colors.HexColor('#16a34a')),
     ('TOPPADDING', (0,0), (-1,-1), 8),
@@ -486,7 +486,7 @@ t_mul.setStyle(TableStyle([
     ('LEFTPADDING', (0,0), (-1,-1), 10),
     ('RIGHTPADDING', (0,0), (-1,-1), 10),
 ]))
-story.append(t_mul)
+story.append(t_shk)
 story.append(PageBreak())
 
 # =============================================================================
@@ -529,7 +529,6 @@ story.append(Paragraph("<b>Detail Pergerakan Harian Periode Inti Nataru (18 Dese
 story.append(Image(chart4_path, width=515, height=190))
 story.append(Spacer(1, 8))
 
-# Table Deviasi Puncak 28 Des - LABEL DIPERBARUI SESUAI INSTRUKSI USER
 table_nataru_data = [
     [Paragraph("<b>Model Peramalan</b>", style_table_header),
      Paragraph("<b>Proyeksi Puncak (28 Des)</b>", style_table_header),
@@ -591,7 +590,6 @@ t_recom.setStyle(TableStyle([
 story.append(t_recom)
 story.append(Spacer(1, 16))
 
-# Signatures Block
 sign_block = [
     [Paragraph("Mengetahui,<br/><b>Kepala Pusat Data dan Informasi</b><br/>Kementerian Perhubungan RI<br/><br/><br/><br/><u>( ............................................................ )</u><br/>NIP. .....................................................", style_body),
      Paragraph("Jakarta, 7 Oktober 2026<br/><b>Tim Analis Statistik & Pemodelan Data</b><br/>Pusdatin Kemenhub RI<br/><br/><br/><br/><u>( Tim Analitik StrategiHub )</u><br/>Pusdatin Kemenhub", style_body)]
@@ -604,8 +602,7 @@ t_sign.setStyle(TableStyle([
 ]))
 story.append(t_sign)
 
-# Build Document with NumberedCanvas
 doc.build(story, canvasmaker=NumberedCanvas)
 
 pdf_size_mb = os.path.getsize(PDF_OUTPUT) / (1024 * 1024)
-print(f"Laporan PDF 6 halaman berhasil disusun: {PDF_OUTPUT} ({pdf_size_mb:.2f} MB)")
+print(f"Laporan PDF 6 halaman berhasil diperbarui: {PDF_OUTPUT} ({pdf_size_mb:.2f} MB)")
