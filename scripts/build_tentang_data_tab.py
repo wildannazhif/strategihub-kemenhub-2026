@@ -430,24 +430,6 @@ TAB_CONTENT = """      <!-- ====================================================
             </div>
           </div>
 
-          <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-            <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">C. Ambang Klasifikasi Status Pertumbuhan Bulanan (Badge UI Tab 1):</div>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs pt-1">
-              <div class="p-2 rounded bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 font-bold">
-                🔥 Puncak: $$t = t_{\text{peak}}$$
-              </div>
-              <div class="p-2 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-semibold">
-                ↗ Naik Tajam: $$\text{MoM} \ge +15\%$$
-              </div>
-              <div class="p-2 rounded bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 text-sky-800 dark:text-sky-300">
-                ↗ Wajar: $$0\% < \text{MoM} < +15\%$$
-              </div>
-              <div class="p-2 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400">
-                ↘ Menurun: $$\text{MoM} < 0\%$$
-              </div>
-            </div>
-          </div>
-
           <!-- Table of Notation -->
           <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
             <table class="w-full text-left text-xs font-sans">
@@ -477,12 +459,6 @@ TAB_CONTENT = """      <!-- ====================================================
                   <td class="p-2.5 font-semibold">Pangsa Moda Dominan</td>
                   <td class="p-2.5 text-slate-500 font-mono">%</td>
                   <td class="p-2.5">Porsi moda utama di provinsi tersebut (contoh: Jatim dominan KA/Bus, Bali dominan Udara, Kepri dominan Laut).</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-mono font-bold text-amber-600 dark:text-amber-400">$$t_{\text{peak}}$$</td>
-                  <td class="p-2.5 font-semibold">Bulan Puncak Regional</td>
-                  <td class="p-2.5 text-slate-500 font-mono">bulan kalender</td>
-                  <td class="p-2.5">Bulan dengan rekor mobilitas tertinggi di provinsi tersebut (Maret saat Lebaran, Juli saat libur sekolah, dll).</td>
                 </tr>
               </tbody>
             </table>
