@@ -1763,7 +1763,6 @@ def generate_dashboard():
                 <thead class="bg-slate-50 dark:bg-slate-800 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 sticky top-0 z-10 backdrop-blur-md">
                   <tr>
                     <th class="py-2.5 px-3">No & Simpul Prasarana</th>
-                    <th class="py-2.5 px-3">Sarana Transportasi</th>
                     <th class="py-2.5 px-3">Keberangkatan Normal</th>
                     <th class="py-2.5 px-3">Keberangkatan Puncak</th>
                     <th class="py-2.5 px-3 text-center">Lonjakan Beban</th>
@@ -4229,7 +4228,7 @@ function renderSimpulSimulation() {{
   if (itemsToRender.length === 0) {{
     tbody.innerHTML = `
       <tr>
-        <td colspan="10" class="py-12 text-center text-slate-400 font-sans">
+        <td colspan="9" class="py-12 text-center text-slate-400 font-sans">
           Tidak ada simpul prasarana yang memenuhi kriteria filter atau kata kunci pencarian.
         </td>
       </tr>
@@ -4252,9 +4251,6 @@ function renderSimpulSimulation() {{
             <div class="text-[10px] text-slate-500">${{s.prov}} • ${{s.modaLabel}}</div>
           </div>
         </div>
-      </td>
-      <td class="py-3 px-3 font-sans text-slate-700 dark:text-slate-300">
-        <div class="font-medium">${{s.saranaType}}</div>
       </td>
       <td class="py-3 px-3 font-mono text-slate-600 dark:text-slate-400">
         <div>${{numFmt(s.pnpBiasa)}} pnp/h</div>
