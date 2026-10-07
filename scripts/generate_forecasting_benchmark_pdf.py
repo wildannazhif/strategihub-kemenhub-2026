@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.patches as patches
 from datetime import datetime
 
 # ReportLab imports
@@ -20,10 +21,7 @@ PDF_OUTPUT = r"c:\Users\USER\Documents\PUSDATIN\Laporan_Komparasi_Forecasting_Na
 CHART_DIR = r"c:\Users\USER\Documents\PUSDATIN\scripts\pdf_charts"
 os.makedirs(CHART_DIR, exist_ok=True)
 
-# -----------------------------------------------------------------------------
-# 1. GENERATE SPECIALIZED CLEAN CHARTS FOR PDF WITH UPDATED LABELS
-# -----------------------------------------------------------------------------
-print("1. Menyiapkan data dan menghasilkan grafik beresolusi tinggi dengan label spesifikasi...")
+print("1. Menyiapkan dataset dan menghasilkan grafik dengan LEGEND DI LUAR PLOT...")
 
 plt.rcParams['font.sans-serif'] = 'DejaVu Sans'
 plt.rcParams['axes.edgecolor'] = '#cbd5e1'
@@ -71,30 +69,108 @@ pred_sarima = SARIMAX(
 pred_arima = ARIMA(train_df['TOTAL'], order=(1, 1, 1)).fit().forecast(28).values
 pred_ses = SimpleExpSmoothing(train_df['TOTAL'].clip(lower=1.0), initialization_method='estimated').fit(optimized=True).forecast(28).values
 
-# CHART 1: Out-of-Sample Curves
-fig1, ax1 = plt.subplots(figsize=(10.5, 4.2), dpi=250, facecolor='#ffffff')
+# =============================================================================
+# CHART 0: VISUALISASI SISTEM TRAIN-TEST & KALIBRASI SHOCK (LABEL BERSIH)
+# =============================================================================
+fig0, ax0 = plt.subplots(figsize=(11, 4.4), dpi=250, facecolor='#ffffff')
+ax0.set_facecolor('#ffffff')
+ax0.axis('off')
+ax0.set_xlim(0, 100)
+ax0.set_ylim(0, 100)
+
+ax0.text(0, 96, "DIAGRAM PARTISI TEMPORAL DATA (TRAIN-TEST) & KALIBRASI SHOCK NATARU", fontsize=11, fontweight='bold', color='#0f172a')
+ax0.text(0, 89, "Metodologi Partisi Non-Acak Bebas Data Leakage • Kalibrasi Multiplier Elastisitas Libur Akhir Tahun", fontsize=8.5, color='#64748b')
+
+rect_bg = patches.FancyBboxPatch((0, 56), 100, 20, boxstyle="round,pad=0.2,rounding_size=1", facecolor='#f1f5f9', edgecolor='#94a3b8', linewidth=1)
+ax0.add_patch(rect_bg)
+
+rect_2025 = patches.FancyBboxPatch((0.5, 57), 49, 18, boxstyle="square,pad=0", facecolor='#0284c7', alpha=0.85, edgecolor='none')
+ax0.add_patch(rect_2025)
+ax0.text(25, 68, "TAHUN 2025 (365 Hari Penuh)", color='white', fontsize=9, fontweight='bold', ha='center', va='center')
+ax0.text(25, 61, "1 Jan 2025 s.d. 31 Des 2025 (Memori Shock Nataru Riil)", color='#e0f2fe', fontsize=7.5, ha='center', va='center')
+
+rect_2026_tr = patches.FancyBboxPatch((50, 57), 32.5, 18, boxstyle="square,pad=0", facecolor='#38bdf8', alpha=0.9, edgecolor='none')
+ax0.add_patch(rect_2026_tr)
+ax0.text(66.2, 68, "2026 LATIH (244 Hari)", color='#0f172a', fontsize=8.5, fontweight='bold', ha='center', va='center')
+ax0.text(66.2, 61, "1 Jan s.d. 1 Sep 2026", color='#0369a1', fontsize=7.5, ha='center', va='center')
+
+rect_test = patches.FancyBboxPatch((83, 57), 4.5, 18, boxstyle="square,pad=0", facecolor='#f59e0b', alpha=0.95, edgecolor='none')
+ax0.add_patch(rect_test)
+ax0.text(85.25, 68, "UJI", color='white', fontsize=8, fontweight='black', ha='center', va='center')
+ax0.text(85.25, 61, "28H", color='white', fontsize=7, fontweight='bold', ha='center', va='center')
+
+rect_fc = patches.FancyBboxPatch((88, 57), 11.5, 18, boxstyle="square,pad=0", facecolor='#a855f7', alpha=0.9, edgecolor='none')
+ax0.add_patch(rect_fc)
+ax0.text(93.75, 68, "PROYEKSI", color='white', fontsize=8, fontweight='bold', ha='center', va='center')
+ax0.text(93.75, 61, "100 Hari", color='#f3e8ff', fontsize=7, ha='center', va='center')
+
+# Cutoff Markers - POSISI TIDAK MENUMPUK (1 Sep di bawah, 29 Sep di atas)
+ax0.plot([83, 83], [54, 78], color='#d97706', lw=1.2, ls='--')
+ax0.text(83, 49, "1 Sep '26\n(Cutoff Uji)", color='#b45309', fontsize=7, ha='center', fontweight='bold')
+
+ax0.plot([87.8, 87.8], [57, 81], color='#ef4444', lw=1.6, ls='--')
+ax0.annotate("29 Sep '26 (Cutoff Riil)", xy=(87.8, 77), xytext=(87.8, 83),
+             arrowprops=dict(arrowstyle='->', color='#dc2626', lw=1.2),
+             color='#dc2626', fontsize=7.2, ha='center', fontweight='bold')
+
+# Card 1 & Card 2
+c1 = patches.FancyBboxPatch((0, 3), 48.5, 42, boxstyle="round,pad=0.5,rounding_size=1.5", facecolor='#f8fafc', edgecolor='#cbd5e1', lw=1)
+ax0.add_patch(c1)
+ax0.text(2, 40, "FASE 1: EVALUASI TRAIN-TEST (HOLDOUT 28 HARI)", fontsize=8.5, fontweight='bold', color='#0284c7')
+ax0.text(2, 33, "• Data Latih (Train): 609 Hari (1 Jan 2025 s.d. 1 Sep 2026)", fontsize=7.8, color='#334155')
+ax0.text(2, 26, "• Data Uji (Test): 28 Hari Murni (2 Sep s.d. 29 Sep 2026)", fontsize=7.8, color='#d97706', fontweight='bold')
+ax0.text(2, 19, "• Mengapa 28 Hari? Tepat 4 siklus mingguan penuh (4 x 7 hari),", fontsize=7.5, color='#475569')
+ax0.text(3, 13, "menguji setiap hari (Senin s.d. Minggu) tepat 4 kali tanpa bias.", fontsize=7.5, color='#475569')
+ax0.text(2, 6, "✓ Hasil Uji Empiris: MAPE = 4,06% | WAPE = 4,00% (Peringkat 1)", fontsize=8, fontweight='bold', color='#059669')
+
+c2 = patches.FancyBboxPatch((51.5, 3), 48.5, 42, boxstyle="round,pad=0.5,rounding_size=1.5", facecolor='#f0fdf4', edgecolor='#86efac', lw=1)
+ax0.add_patch(c2)
+ax0.text(53.5, 40, "FASE 2: KALIBRASI FAKTOR SHOCK DARI REALISASI 2025", fontsize=8.5, fontweight='bold', color='#16a34a')
+ax0.text(53.5, 33, "• Data Latih Live: 637 Hari Penuh (1 Jan 2025 s.d. 29 Sep 2026)", fontsize=7.8, color='#334155')
+ax0.text(53.5, 26, "• Asal Faktor Shock: Dihitung dari elastisitas lonjakan riil 2025 vs", fontsize=7.5, color='#475569')
+ax0.text(54.5, 20, "baseline hari-ke-d bulan November 2025 (bulan kerja reguler).", fontsize=7.5, color='#475569')
+ax0.text(53.5, 13, "• Kalibrasi Puncak: 28 Des 2025 (1,98M vs 1,14M) -> W_shock = 1,74x", fontsize=7.8, color='#0f172a', fontfamily='monospace', fontweight='bold')
+ax0.text(53.5, 6, "-> Proyeksi Puncak 28 Des 2026 = 2.010.504 pnp (+1,26% YoY)", fontsize=8, fontweight='bold', color='#7c3aed')
+
+chart0_path = os.path.join(CHART_DIR, "chart_train_test_split.png")
+fig0.savefig(chart0_path, dpi=250, bbox_inches='tight')
+plt.close(fig0)
+
+# =============================================================================
+# CHART 1: OUT-OF-SAMPLE CURVES (LEGEND DILUAR PLOT DI ATAS)
+# =============================================================================
+fig1 = plt.figure(figsize=(10.5, 4.6), dpi=250, facecolor='#ffffff')
+ax1 = fig1.add_subplot(111)
+fig1.subplots_adjust(top=0.74, bottom=0.14, left=0.08, right=0.96)
 ax1.set_facecolor('#f8fafc')
 ax1.grid(True, linestyle=':', alpha=0.7, color='#cbd5e1')
 
-ax1.plot(dates_test, y_true, color='#0f172a', linewidth=2.8, label='Data Aktual Riil (Ground Truth)', zorder=10)
+ax1.plot(dates_test, y_true, color='#0f172a', linewidth=2.8, label='Aktual Riil (Ground Truth)', zorder=10)
 ax1.plot(dates_test, pred_hw_damped, color='#10b981', linewidth=2.4, label='Holt-Winters + S7 + Damped (Pilihan, MAPE 4,06%)', zorder=9)
 ax1.plot(dates_test, pred_sarima, color='#f59e0b', linewidth=1.8, linestyle='--', label='SARIMA (1,1,1)x(1,1,1)7 (MAPE 5,87%)', zorder=8)
 ax1.plot(dates_test, pred_ses, color='#8b5cf6', linewidth=1.5, linestyle=':', label='Simple Exp Smoothing (MAPE 6,15%)', zorder=6)
-ax1.plot(dates_test, pred_arima, color='#ef4444', linewidth=1.5, linestyle='-.', label='ARIMA (1,1,1) Non-Seasonal (MAPE 11,17%)', zorder=5)
+ax1.plot(dates_test, pred_arima, color='#ef4444', linewidth=1.5, linestyle='-.', label='ARIMA Non-Seasonal (MAPE 11,17%)', zorder=5)
 
-ax1.set_title('Uji Validasi Out-of-Sample 28 Hari (2 Sep – 29 Sep 2026): Aktual vs Prediksi Model', fontsize=11, fontweight='bold', color='#0f172a', pad=10)
+fig1.suptitle('Uji Validasi Out-of-Sample 28 Hari (2 Sep – 29 Sep 2026): Aktual vs Prediksi Model', fontsize=11.5, fontweight='bold', color='#0f172a', y=0.96)
 ax1.set_ylabel('Volume Penumpang / Hari', fontsize=9.5, fontweight='bold', color='#334155')
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d %b'))
 ax1.xaxis.set_major_locator(mdates.DayLocator(interval=3))
 ax1.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, p: f'{v*1e-6:.2f}M' if v >= 1e6 else f'{v*1e-3:.0f}k'))
-ax1.legend(loc='upper right', frameon=True, facecolor='#ffffff', edgecolor='#cbd5e1', fontsize=8.2)
+ax1.set_ylim(1_000_000, 1_550_000)
+
+# LEGEND DI LUAR PLOT (DI ATAS AXES, DI BAWAH JUDUL)
+ax1.legend(bbox_to_anchor=(0.5, 1.02), loc='lower center', ncol=3, frameon=True, facecolor='#ffffff', edgecolor='#cbd5e1', fontsize=8.2)
 
 chart1_path = os.path.join(CHART_DIR, "chart_curves_28d.png")
 fig1.savefig(chart1_path, dpi=250, bbox_inches='tight')
 plt.close(fig1)
 
-# CHART 2: Ranking Bar MAPE (%)
-fig2, ax2 = plt.subplots(figsize=(10.5, 3.8), dpi=250, facecolor='#ffffff')
+# =============================================================================
+# CHART 2: RANKING BAR MAPE (%)
+# =============================================================================
+fig2 = plt.figure(figsize=(10.5, 3.8), dpi=250, facecolor='#ffffff')
+ax2 = fig2.add_subplot(111)
+fig2.subplots_adjust(top=0.82, bottom=0.14, left=0.22, right=0.96)
 ax2.set_facecolor('#ffffff')
 ax2.grid(True, linestyle=':', alpha=0.6, color='#cbd5e1', axis='x')
 
@@ -118,20 +194,22 @@ b_colors = [m[2] for m in models_clean]
 
 bars = ax2.barh(names, mapes, color=b_colors, height=0.65, edgecolor='none')
 ax2.set_xlabel('MAPE (%) - Semakin Rendah Semakin Presisi', fontsize=9.5, fontweight='bold', color='#334155')
-ax2.set_title('Peringkat Akurasi Evaluasi: MAPE (%) Seluruh 11 Model', fontsize=11, fontweight='bold', color='#0f172a', pad=10)
+ax2.set_title('Peringkat Akurasi Evaluasi: MAPE (%) Seluruh 11 Model', fontsize=11, fontweight='bold', color='#0f172a', pad=25)
 ax2.axvline(10.0, color='#dc2626', linestyle='--', linewidth=1.2, label='Batas Standar Internasional (<10% = Sangat Presisi)')
 
 for bar, val in zip(bars, mapes):
     ax2.text(val + 0.25, bar.get_y() + bar.get_height()/2, f'{val:.2f}%', va='center', fontsize=8.5, fontweight='bold', color='#0f172a')
 
 ax2.set_xlim(0, 19.5)
-ax2.legend(loc='lower right', fontsize=8, frameon=True, facecolor='#ffffff')
+ax2.legend(bbox_to_anchor=(0.5, 1.15), loc='upper center', fontsize=8.2, frameon=True, facecolor='#ffffff', edgecolor='#cbd5e1')
 
 chart2_path = os.path.join(CHART_DIR, "chart_ranking_mape.png")
 fig2.savefig(chart2_path, dpi=250, bbox_inches='tight')
 plt.close(fig2)
 
-# CHART 3: Proyeksi 100 Hari Penuh Nataru
+# =============================================================================
+# CHART 3: PROYEKSI 100 HARI (LEGEND DILUAR PLOT DI ATAS)
+# =============================================================================
 y_train_full = combined['TOTAL']
 n_fc = 100
 fc_dates = pd.date_range('2026-09-30', periods=n_fc, freq='D')
@@ -154,11 +232,13 @@ for dt in fc_dates:
     real_2025_aligned.append(val)
 real_2025_aligned = np.array(real_2025_aligned)
 
-fig3, ax3 = plt.subplots(figsize=(10.5, 4.0), dpi=250, facecolor='#ffffff')
+fig3 = plt.figure(figsize=(10.5, 4.6), dpi=250, facecolor='#ffffff')
+ax3 = fig3.add_subplot(111)
+fig3.subplots_adjust(top=0.74, bottom=0.14, left=0.08, right=0.96)
 ax3.set_facecolor('#f8fafc')
 ax3.grid(True, linestyle=':', alpha=0.7, color='#cbd5e1')
 
-ax3.axvspan(datetime(2026, 12, 18), datetime(2027, 1, 5), color='#fef08a', alpha=0.4, label='Periode Puncak Nataru (18 Des - 5 Jan)')
+ax3.axvspan(datetime(2026, 12, 18), datetime(2027, 1, 5), color='#fef08a', alpha=0.4, label='Zona Libur Nataru (18 Des - 5 Jan)')
 ax3.plot(fc_dates, real_2025_aligned, color='#059669', linewidth=2.2, linestyle=':', label='Realisasi Riil 2025 (Ground Truth)', zorder=6)
 ax3.plot(fc_dates, hw_fc, color='#9333ea', linewidth=2.6, label='Holt-Winters + S7 + Shock (Pilihan)', zorder=7)
 ax3.fill_between(fc_dates, ci_lower, ci_upper, color='#c084fc', alpha=0.2, label='95% Confidence Interval')
@@ -166,18 +246,23 @@ ax3.plot(fc_dates, sarima_full, color='#f59e0b', linewidth=1.5, linestyle='--', 
 ax3.plot(fc_dates, arima_full, color='#ef4444', linewidth=1.4, linestyle='-.', label='ARIMA Non-Seasonal', zorder=3)
 ax3.plot(fc_dates, ses_full, color='#64748b', linewidth=1.3, linestyle='-', label='Simple Exp Smoothing (SES)', zorder=2)
 
-ax3.set_title('Proyeksi Horizon 100 Hari (Okt 2026 – Jan 2027): Deteksi Lonjakan Libur Akhir Tahun', fontsize=11, fontweight='bold', color='#0f172a', pad=10)
+fig3.suptitle('Proyeksi Horizon 100 Hari (Okt 2026 – Jan 2027): Deteksi Lonjakan Libur Akhir Tahun', fontsize=11.5, fontweight='bold', color='#0f172a', y=0.96)
 ax3.set_ylabel('Volume Penumpang / Hari', fontsize=9.5, fontweight='bold', color='#334155')
 ax3.xaxis.set_major_formatter(mdates.DateFormatter('%d %b %Y'))
 ax3.xaxis.set_major_locator(mdates.DayLocator(interval=14))
 ax3.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, p: f'{v*1e-6:.2f}M' if v >= 1e6 else f'{v*1e-3:.0f}k'))
-ax3.legend(loc='upper left', frameon=True, facecolor='#ffffff', edgecolor='#cbd5e1', fontsize=8, ncol=2)
+ax3.set_ylim(600_000, 2_450_000)
+
+# LEGEND DI LUAR PLOT (DI ATAS AXES, DI BAWAH JUDUL)
+ax3.legend(bbox_to_anchor=(0.5, 1.02), loc='lower center', ncol=3, frameon=True, facecolor='#ffffff', edgecolor='#cbd5e1', fontsize=7.8)
 
 chart3_path = os.path.join(CHART_DIR, "chart_nataru_full.png")
 fig3.savefig(chart3_path, dpi=250, bbox_inches='tight')
 plt.close(fig3)
 
-# CHART 4: Zoom-in Nataru (18 Des – 5 Jan)
+# =============================================================================
+# CHART 4: ZOOM-IN NATARU (LEGEND DILUAR PLOT DI ATAS)
+# =============================================================================
 mask_nataru = (fc_dates >= '2026-12-18') & (fc_dates <= '2027-01-05')
 dates_nat = fc_dates[mask_nataru]
 y25_nat = real_2025_aligned[mask_nataru]
@@ -186,7 +271,9 @@ sarima_nat = sarima_full[mask_nataru]
 arima_nat = arima_full[mask_nataru]
 ses_nat = ses_full[mask_nataru]
 
-fig4, ax4 = plt.subplots(figsize=(10.5, 4.0), dpi=250, facecolor='#ffffff')
+fig4 = plt.figure(figsize=(10.5, 4.6), dpi=250, facecolor='#ffffff')
+ax4 = fig4.add_subplot(111)
+fig4.subplots_adjust(top=0.74, bottom=0.14, left=0.08, right=0.96)
 ax4.set_facecolor('#ffffff')
 ax4.grid(True, linestyle=':', alpha=0.7, color='#cbd5e1')
 
@@ -201,25 +288,27 @@ pk_date = dates_nat[idx_pk]
 ax4.scatter([pk_date], [y25_nat[idx_pk]], color='#059669', s=120, zorder=12, edgecolors='black', linewidth=1.2)
 ax4.scatter([pk_date], [hw_nat[idx_pk]], color='#9333ea', s=120, zorder=13, edgecolors='black', linewidth=1.2)
 
-ax4.set_title('Detail Pergerakan Harian Periode Inti Nataru (18 Des – 5 Jan): Replikasi Puncak 28 Desember', fontsize=11, fontweight='bold', color='#0f172a', pad=10)
+fig4.suptitle('Detail Pergerakan Harian Periode Inti Nataru (18 Des – 5 Jan): Replikasi Puncak 28 Desember', fontsize=11.5, fontweight='bold', color='#0f172a', y=0.96)
 ax4.set_ylabel('Volume Penumpang / Hari', fontsize=9.5, fontweight='bold', color='#334155')
 ax4.xaxis.set_major_formatter(mdates.DateFormatter('%d %b'))
 ax4.xaxis.set_major_locator(mdates.DayLocator(interval=2))
 ax4.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, p: f'{v*1e-6:.2f}M' if v >= 1e6 else f'{v*1e-3:.0f}k'))
-ax4.set_ylim(700_000, 2_400_000)
-ax4.legend(loc='lower left', frameon=True, facecolor='#ffffff', edgecolor='#cbd5e1', fontsize=8.2)
+ax4.set_ylim(700_000, 2_350_000)
+
+# LEGEND DI LUAR PLOT (DI ATAS AXES, DI BAWAH JUDUL)
+ax4.legend(bbox_to_anchor=(0.5, 1.02), loc='lower center', ncol=3, frameon=True, facecolor='#ffffff', edgecolor='#cbd5e1', fontsize=7.8)
 
 chart4_path = os.path.join(CHART_DIR, "chart_nataru_zoom.png")
 fig4.savefig(chart4_path, dpi=250, bbox_inches='tight')
 plt.close(fig4)
 
-print("Grafik resolusi tinggi selesai diperbarui.")
+print("Seluruh 5 grafik resolusi tinggi dengan legend bersih di luar plot selesai dibuat.")
 
 
 # -----------------------------------------------------------------------------
-# 2. COMPILE 6-PAGE PROFESSIONAL REPORTLAB PDF
+# 2. COMPILE REPORTLAB 6-PAGE DOCUMENT
 # -----------------------------------------------------------------------------
-print("2. Menyusun dokumen PDF 6 halaman berstandar resmi...")
+print("2. Menyusun dokumen PDF 6 halaman...")
 
 class NumberedCanvas(canvas.Canvas):
     def __init__(self, *args, **kwargs):
@@ -273,37 +362,37 @@ styles = getSampleStyleSheet()
 
 style_title = ParagraphStyle(
     'DocTitle', parent=styles['Normal'],
-    fontName='Helvetica-Bold', fontSize=18, leading=22,
-    textColor=colors.HexColor('#0f172a'), spaceAfter=6
+    fontName='Helvetica-Bold', fontSize=17, leading=21,
+    textColor=colors.HexColor('#0f172a'), spaceAfter=5
 )
 style_subtitle = ParagraphStyle(
     'DocSubtitle', parent=styles['Normal'],
-    fontName='Helvetica', fontSize=10, leading=14,
-    textColor=colors.HexColor('#475569'), spaceAfter=12
+    fontName='Helvetica', fontSize=9.5, leading=13.5,
+    textColor=colors.HexColor('#475569'), spaceAfter=10
 )
 style_heading1 = ParagraphStyle(
     'Heading1', parent=styles['Normal'],
-    fontName='Helvetica-Bold', fontSize=12.5, leading=16,
-    textColor=colors.HexColor('#1e293b'), spaceBefore=8, spaceAfter=6
+    fontName='Helvetica-Bold', fontSize=12, leading=15,
+    textColor=colors.HexColor('#1e293b'), spaceBefore=7, spaceAfter=5
 )
 style_heading2 = ParagraphStyle(
     'Heading2', parent=styles['Normal'],
-    fontName='Helvetica-Bold', fontSize=10, leading=13,
-    textColor=colors.HexColor('#334155'), spaceBefore=6, spaceAfter=4
+    fontName='Helvetica-Bold', fontSize=9.5, leading=13,
+    textColor=colors.HexColor('#334155'), spaceBefore=5, spaceAfter=3
 )
 style_body = ParagraphStyle(
     'BodyTextCustom', parent=styles['Normal'],
-    fontName='Helvetica', fontSize=8.8, leading=12.5,
-    textColor=colors.HexColor('#334155'), spaceAfter=5
+    fontName='Helvetica', fontSize=8.5, leading=12,
+    textColor=colors.HexColor('#334155'), spaceAfter=4
 )
 style_callout = ParagraphStyle(
     'CalloutText', parent=styles['Normal'],
-    fontName='Helvetica-Oblique', fontSize=8.2, leading=11.5,
+    fontName='Helvetica-Oblique', fontSize=8, leading=11,
     textColor=colors.HexColor('#1e293b')
 )
 style_table_cell = ParagraphStyle(
     'TableCell', parent=styles['Normal'],
-    fontName='Helvetica', fontSize=7.6, leading=9.8,
+    fontName='Helvetica', fontSize=7.5, leading=9.5,
     textColor=colors.HexColor('#1e293b')
 )
 style_table_header = ParagraphStyle(
@@ -328,11 +417,11 @@ t_badge.setStyle(TableStyle([
     ('LINEBELOW', (0,0), (-1,-1), 1, colors.HexColor('#0284c7'))
 ]))
 story.append(t_badge)
-story.append(Spacer(1, 10))
+story.append(Spacer(1, 8))
 
 story.append(Paragraph("LAPORAN EVALUASI & KOMPARASI EMPIRIS METODOLOGI PERAMALAN (FORECASTING) NATARU 2026/2027", style_title))
 story.append(Paragraph("Pembuktian Ilmiah & Visual Model <b>Holt-Winters + S7 + Shock</b> (Damped Trend &phi;=0,98) terhadap 10 Model Pembanding dalam Mengantisipasi Kapasitas Akhir Tahun", style_subtitle))
-story.append(HRFlowable(width="100%", thickness=0.8, color=colors.HexColor("#cbd5e1"), spaceBefore=2, spaceAfter=10))
+story.append(HRFlowable(width="100%", thickness=0.8, color=colors.HexColor("#cbd5e1"), spaceBefore=2, spaceAfter=8))
 
 exec_summary_html = """
 <b>RINGKASAN EKSEKUTIF PENGUJIAN:</b><br/>
@@ -353,40 +442,84 @@ t_exec.setStyle(TableStyle([
     ('RIGHTPADDING', (0,0), (-1,-1), 10),
 ]))
 story.append(t_exec)
-story.append(Spacer(1, 10))
+story.append(Spacer(1, 8))
 
-story.append(Paragraph("1. Protokol Pengujian & Penjelasan Sistem Train-Test", style_heading1))
+story.append(Paragraph("1. Protokol Pengujian & Spesifikasi Dataset", style_heading1))
 story.append(Paragraph(
-    "Pengujian deret waktu tidak boleh menggunakan random train-test split karena akan menyebabkan kebocoran data masa depan (<i>lookahead bias</i>). "
-    "Oleh karena itu, sistem evaluasi menggunakan <b>Temporal Out-of-Sample Holdout Split</b> terstruktur:", style_body
+    "Pengujian dilakukan secara ketat menggunakan protokol <i>temporal train-test split</i> non-acak (tanpa kebocoran data masa depan) "
+    "dari database harian terintegrasi <b>StrategiHub PUSDATIN Kemenhub 2026</b>:", style_body
 ))
 
-# Box Penjelasan Sistem Train Test & Rentang Data
-train_test_expl = """
-<b>ARSITEKTUR PARTISI DATA (TRAIN VS TEST):</b><br/>
-• <b>Data Latih Evaluasi (Training Set - 609 Hari):</b> 1 Januari 2025 s.d. 1 September 2026 (95,6% data). Model dilatih <i>hanya</i> menggunakan data ini tanpa pernah melihat data setelahnya.<br/>
-• <b>Data Uji Evaluasi (Testing Set - 28 Hari):</b> 2 September 2026 s.d. 29 September 2026 (4,4% data). Dipilih tepat <b>28 hari (4 siklus mingguan penuh, 4 &times; 7 hari)</b> agar setiap hari (Senin s.d. Minggu) diuji sebanyak 4 kali secara adil.<br/>
-• <b>Rentang Data Latih untuk Live Forecasting Nataru (637 Hari):</b> Setelah model terbukti paling unggul pada uji 28 hari, untuk meramal 100 hari ke depan (30 Sep 2026 – 7 Jan 2027), model dilatih ulang (<i>refitted</i>) menggunakan <b>seluruh data riil: 1 Januari 2025 s.d. 29 September 2026 (637 hari penuh)</b>. Data 2025 (365 hari) wajib dimasukkan agar model memiliki memori historis tentang lonjakan libur akhir tahun.
-"""
-t_tt = Table([[Paragraph(train_test_expl, style_body)]], colWidths=[515])
-t_tt.setStyle(TableStyle([
-    ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f8fafc')),
-    ('BOX', (0,0), (-1,-1), 0.8, colors.HexColor('#cbd5e1')),
-    ('TOPPADDING', (0,0), (-1,-1), 7),
-    ('BOTTOMPADDING', (0,0), (-1,-1), 7),
-    ('LEFTPADDING', (0,0), (-1,-1), 9),
-    ('RIGHTPADDING', (0,0), (-1,-1), 9),
+data_specs = [
+    [Paragraph("<b>Parameter Dataset</b>", style_table_header), Paragraph("<b>Spesifikasi Pengujian</b>", style_table_header), Paragraph("<b>Keterangan Teknis</b>", style_table_header)],
+    [Paragraph("Cakupan Data Total", style_table_cell), Paragraph("637 Hari Kalender", style_table_cell), Paragraph("1 Januari 2025 s.d. 29 September 2026 kontinu", style_table_cell)],
+    [Paragraph("Data Latih (Training Set)", style_table_cell), Paragraph("609 Hari (95,6%)", style_table_cell), Paragraph("Tahun 2025 (365H) + Jan–Agt 2026 (244H)", style_table_cell)],
+    [Paragraph("Data Uji (Holdout Set)", style_table_cell), Paragraph("28 Hari (4,4%)", style_table_cell), Paragraph("2 September 2026 s.d. 29 September 2026 murni", style_table_cell)],
+    [Paragraph("Horizon Proyeksi Nataru", style_table_cell), Paragraph("100 Hari Kalender", style_table_cell), Paragraph("30 September 2026 s.d. 7 Januari 2027", style_table_cell)],
+    [Paragraph("Variabel Target", style_table_cell), Paragraph("Volume Penumpang Multimoda", style_table_cell), Paragraph("Agregat 5 Moda: Udara, Kereta Api, Bus, ASDP, Laut", style_table_cell)],
+]
+t_specs = Table(data_specs, colWidths=[135, 130, 250])
+t_specs.setStyle(TableStyle([
+    ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#0f172a')),
+    ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#cbd5e1')),
+    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+    ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.HexColor('#ffffff'), colors.HexColor('#f8fafc')]),
+    ('TOPPADDING', (0,0), (-1,-1), 3.5),
+    ('BOTTOMPADDING', (0,0), (-1,-1), 3.5),
 ]))
-story.append(t_tt)
+story.append(t_specs)
 story.append(PageBreak())
 
 # =============================================================================
-# HALAMAN 2: BENCHMARK 11 MODEL & TABEL PERINGKAT
+# HALAMAN 2: VISUALISASI SISTEM TRAIN-TEST & ASAL FAKTOR SHOCK
 # =============================================================================
-story.append(Paragraph("2. Hasil Evaluasi Empiris & Peringkat 11 Model Peramalan", style_heading1))
+story.append(Paragraph("2. Penjelasan Sistem Train-Test & Asal Kalibrasi Faktor Shock", style_heading1))
 story.append(Paragraph(
-    "Seluruh 11 model dilatih pada subset data latih 609 hari yang sama dan diuji untuk memprediksi 28 hari data uji. "
-    "Kinerja model dievaluasi berdasarkan deviasi persentase (MAPE, WAPE), kesalahan kuadratik (RMSE), dan ketepatan arah mingguan (Directional Accuracy):",
+    "Untuk memastikan transparansi metodologi pemodelan, diagram di bawah memperlihatkan pembagian partisi data deret waktu "
+    "antara fase pengujian validasi (28 hari) dan fase peramalan produksi (100 hari), beserta mekanisme penurunan faktor pengali shock kalender:",
+    style_body
+))
+
+# Insert Chart 0: Diagram Train-Test & Shock Split
+story.append(Image(chart0_path, width=515, height=205))
+story.append(Spacer(1, 8))
+
+train_test_deep = """
+<b>RINCIAN METODOLOGIS ARSITEKTUR DATA:</b><br/>
+1. <b>Sistem Train-Test Evaluasi (Fase Uji 28 Hari):</b><br/>
+• <b>Rentang Data Latih:</b> 1 Januari 2025 s.d. 1 September 2026 (609 hari). Model dilatih <i>hanya</i> pada rentang ini.<br/>
+• <b>Rentang Data Uji:</b> 2 September 2026 s.d. 29 September 2026 (28 hari). Alasan memilih 28 hari adalah karena merepresentasikan <b>tepat 4 siklus mingguan penuh (4 &times; 7 hari)</b>. Dengan demikian, seluruh hari kerja dan akhir pekan teruji 4 kali secara seimbang tanpa bias.
+<br/><br/>
+2. <b>Rentang Data Latih untuk Live Forecasting (Horizon 100 Hari):</b><br/>
+Setelah model tervalidasi paling unggul pada uji 28 hari, untuk meramal 100 hari ke depan (30 Sep 2026 s.d. 7 Jan 2027), model dilatih ulang menggunakan <b>seluruh data riil yang tersedia: 1 Januari 2025 s.d. 29 September 2026 (637 hari penuh)</b>. Data tahun 2025 (365 hari) wajib disertakan agar model memiliki memori historis lengkap mengenai lonjakan libur akhir tahun yang belum dialami oleh data 2026 berjalan.
+<br/><br/>
+3. <b>Dari Mana Faktor Shock (W<sub>shock</sub>) Didapatkan?</b><br/>
+Faktor shock <b>BUKAN angka tebakan subjektif</b>, melainkan dihitung murni dari <b>Elastisitas Lonjakan Empiris Nataru Tahun 2025</b> terhadap baseline normal bulan November 2025:
+<br/>
+<font color='#0284c7' face='Courier'><b>W<sub>shock, t</sub> = [ Volume Aktual Harian Nataru 2025<sub>t</sub> ] / [ Baseline Hari-ke-d Bulan November 2025 ]</b></font>
+<br/>
+• November 2025 diambil sebagai acuan karena merupakan bulan kerja normal tepat sebelum musim liburan.<br/>
+• Pada puncak libur 28 Desember 2025, volume riil mencapai 1.985.522 pnp vs baseline Minggu 1,14 Juta pnp &rarr; <b>W<sub>shock</sub> = 1,74&times; (+74%)</b>.<br/>
+• Nilai pengali elastisitas inilah yang dikalikan ke baseline Holt-Winters tahun 2026 sehingga menghasilkan proyeksi puncak 28 Desember 2026 sebesar <b>2.010.504 pnp (+1,26% YoY)</b> yang sangat presisi!
+"""
+t_tt_deep = Table([[Paragraph(train_test_deep, style_body)]], colWidths=[515])
+t_tt_deep.setStyle(TableStyle([
+    ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f8fafc')),
+    ('BOX', (0,0), (-1,-1), 0.8, colors.HexColor('#cbd5e1')),
+    ('TOPPADDING', (0,0), (-1,-1), 8),
+    ('BOTTOMPADDING', (0,0), (-1,-1), 8),
+    ('LEFTPADDING', (0,0), (-1,-1), 10),
+    ('RIGHTPADDING', (0,0), (-1,-1), 10),
+]))
+story.append(t_tt_deep)
+story.append(PageBreak())
+
+# =============================================================================
+# HALAMAN 3: BENCHMARK 11 MODEL & TABEL PERINGKAT
+# =============================================================================
+story.append(Paragraph("3. Hasil Evaluasi Empiris & Peringkat 11 Model Peramalan", style_heading1))
+story.append(Paragraph(
+    "Seluruh 11 model diuji pada data uji 28 hari yang sama. Kinerja dievaluasi berdasarkan deviasi persentase (MAPE, WAPE), kesalahan kuadratik (RMSE), dan ketepatan arah mingguan (Directional Accuracy):",
     style_body
 ))
 
@@ -424,7 +557,7 @@ t_models.setStyle(TableStyle([
 story.append(t_models)
 story.append(Spacer(1, 10))
 
-story.append(Paragraph("3. Analisis Keunggulan Model Terhadap SARIMA & Model Non-Musiman", style_heading1))
+story.append(Paragraph("Analisis Keunggulan vs SARIMA & Model Non-Musiman", style_heading2))
 analysis_points = """
 • <b>Keunggulan vs SARIMA (Error SARIMA 45% Lebih Besar):</b> SARIMA (1,1,1)&times;(1,1,1)<sub>7</sub> mengasumsikan varians musiman konstan, sehingga kesulitan menangkap lonjakan amplitudo di akhir pekan. Akibatnya, estimasi baseline SARIMA tertinggal sekitar 100.000 penumpang di bawah realisasi riil, dan Directional Accuracy-nya hanya 57,1% (hampir setara tebakan acak), dibandingkan Holt-Winters yang mencapai <b>89,3%</b>.
 <br/><br/>
@@ -434,22 +567,26 @@ story.append(Paragraph(analysis_points, style_body))
 story.append(PageBreak())
 
 # =============================================================================
-# HALAMAN 3: RASIONIL PARAMETER & SUMBER FAKTOR SHOCK
+# HALAMAN 4: RASIONIL TEKNIS PARAMETER DAMPING & MULTIPLIKATIF
 # =============================================================================
-story.append(Paragraph("4. Rasionil Teknis Parameter & Sumber Kalibrasi Faktor Shock", style_heading1))
+story.append(Paragraph("4. Rasionil Teknis: Mengapa Memakai Damping (&phi;=0,98) dan Multiplikatif (Bukan Aditif)?", style_heading1))
 story.append(Paragraph(
-    "Dua pertanyaan kunci dalam arsitektur model ini dijawab secara ilmiah berdasarkan prinsip fisik transportasi dan data riil:",
+    "Pemilihan konfigurasi arsitektur peramalan didasarkan pada dua pertimbangan fisik fundamental dalam pergerakan transportasi:",
     style_body
 ))
 
-# Box Damping & Multiplikatif
-damp_mul_box = """
-<b>A. MENGAPA MEMAKAI DAMPING (&phi; = 0,98) DAN MULTIPLIKATIF (BUKAN ADITIF)?</b><br/>
-1. <b>Fungsi Damped Trend (&phi; = 0,98):</b> Mencegah pertumbuhan linier tak terbatas (<i>runaway over-forecasting</i>). Deret geometri teredam konvergen ke titik jenuh <b>&approx; 49 &times; b<sub>t</sub></b> (bukan 100 &times; b<sub>t</sub>), memastikan proyeksi menghormati daya tampung fisik armada (<i>carrying capacity</i>) nasional.<br/>
-2. <b>Keunggulan Multiplikatif vs Aditif:</b> Model Aditif memaksakan lonjakan akhir pekan berjumlah orang yang sama persis (statis). Sebaliknya, Model Multiplikatif memperbesar amplitudo akhir pekan secara proporsional (+10,8% dari level dasar saat musim ramai). Secara empiris, <b>Multiplikatif menghasilkan RMSE 60.232 (15,6% lebih rendah / lebih presisi daripada Aditif sebesar 69.617)</b>.
+damp_box = """
+<b>A. MENGAPA HARUS MEMAKAI DAMPING (&phi; = 0,98)?</b><br/>
+1. <b>Masalah Tanpa Damping (Tren Linier Bebas):</b> Pada model linier standar, tren pertumbuhan riil tahunan (+5,13% YoY) diekstrapolasikan naik lurus tanpa batas (<i>&ycirc;<sub>t+h</sub> = &ell;<sub>t</sub> + h &times; b<sub>t</sub></i>). Pada horizon 100 hari (Oktober s.d. Januari), model tanpa peredam akan memproyeksikan pertumbuhan penumpang terus melesat fiktif (<i>runaway over-forecasting</i>).
+<br/><br/>
+2. <b>Solusi Damped Trend (Gardner &amp; McKenzie, 1985):</b> Dengan peredam tren (&phi; = 0,98), komponen tren dihitung melalui deret geometri teredam:
+<br/>
+<font color='#0284c7' face='Courier'><b>Tren Teredam = &sum; &phi;<sup>i</sup> b<sub>t</sub> = (&phi;<sup>1</sup> + &phi;<sup>2</sup> + ... + &phi;<sup>h</sup>) b<sub>t</sub> &rarr; Konvergen ke [ &phi; / (1 - &phi;) ] b<sub>t</sub> &approx; 49 &times; b<sub>t</sub> (bukan 100 &times; b<sub>t</sub>)</b></font>
+<br/><br/>
+3. <b>Penghormatan terhadap Batas Fisik Armada (Carrying Capacity):</b> Mobilitas penumpang di dunia nyata dibatasi oleh kapasitas fisik sarana transportasi nasional (jumlah pesawat, kapal feri, rangkaian kereta api, dan bus AKAP yang tersedia). Damping memastikan proyeksi melandai secara alami dan tidak memicu pengadaan sewa armada cadangan fiktif yang merugikan anggaran Kemenhub.
 """
-t_dm = Table([[Paragraph(damp_mul_box, style_body)]], colWidths=[515])
-t_dm.setStyle(TableStyle([
+t_damp = Table([[Paragraph(damp_box, style_body)]], colWidths=[515])
+t_damp.setStyle(TableStyle([
     ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f8fafc')),
     ('BOX', (0,0), (-1,-1), 1, colors.HexColor('#0284c7')),
     ('TOPPADDING', (0,0), (-1,-1), 8),
@@ -457,28 +594,21 @@ t_dm.setStyle(TableStyle([
     ('LEFTPADDING', (0,0), (-1,-1), 10),
     ('RIGHTPADDING', (0,0), (-1,-1), 10),
 ]))
-story.append(t_dm)
+story.append(t_damp)
 story.append(Spacer(1, 10))
 
-# Box Sumber Faktor Shock
-shock_origin_box = """
-<b>B. DARI MANA FAKTOR SHOCK (W<sub>shock</sub>) DIDAPATKAN?</b><br/>
-Faktor pengali shock kalender <b>BUKAN angka tebakan subjektif</b>, melainkan dihitung murni dari <b>Elastisitas Lonjakan Empiris Nataru Tahun 2025</b> terhadap baseline normal bulan November 2025:
+mul_box = """
+<b>B. MENGAPA HARUS MEMAKAI MULTIPLIKATIF (BUKAN ADITIF)?</b><br/>
+1. <b>Logika Fisik Amplitudo Dinamis:</b> Model Aditif mengasumsikan lonjakan akhir pekan berjumlah orang yang konstan tetap (misal selalu +120.000 orang), baik di bulan sepi maupun di bulan ramai. Sebaliknya, <b>Model Multiplikatif</b> mengasumsikan lonjakan akhir pekan bersifat proporsional persentase (1,108&times; atau +10,8% dari level dasar):
+<br/>
+• Saat hari biasa (level 1,1 juta pnp) &rarr; lonjakan akhir pekan sekitar +120.000 orang.<br/>
+• Saat musim liburan (level naik ke 1,8 juta pnp) &rarr; lonjakan akhir pekan otomatis membesar menjadi +195.000 orang!
 <br/><br/>
-<font color='#0284c7' face='Courier'><b>W<sub>shock, t</sub> = [ Volume Aktual Harian Nataru 2025<sub>t</sub> ] / [ Baseline Hari-ke-d Bulan November 2025 ]</b></font>
-<br/><br/>
-<b>Rincian Nilai Pengali Berdasarkan Fase Kalender Libur:</b><br/>
-• <b>Bulan November 2025 (Acuan Normal):</b> Rata-rata hari kerja & Minggu normal = ~1,14 Juta pnp/hari (W<sub>shock</sub> = 1,00&times;).<br/>
-• <b>Fase Pra-Libur (20–23 Des 2025):</b> Volume naik ke 1,35–1,45 Juta pnp/hari &rarr; <b>W<sub>shock</sub> = 1,18&times; s.d. 1,28&times;</b>.<br/>
-• <b>Malam & Hari Raya Natal (24–25 Des 2025):</b> Volume naik ke 1,85–1,92 Juta pnp/hari &rarr; <b>W<sub>shock</sub> = 1,62&times; s.d. 1,68&times;</b>.<br/>
-• <b>Puncak Arus Libur (28 Des 2025):</b> Realisasi riil 1.985.522 pnp vs baseline Minggu 1,14 Juta &rarr; <b>W<sub>shock</sub> = 1,74&times; (+74%)</b>.<br/>
-• <b>Puncak Balik Tahun Baru (2–3 Jan 2026):</b> Volume mencapai 1,88 Juta pnp/hari &rarr; <b>W<sub>shock</sub> = 1,65&times; (+65%)</b>.<br/>
-• <b>Pasca-Libur (setelah 5 Jan):</b> Faktor shock kembali normal ke 1,00&times; (kegiatan sekolah/kantor dimulai kembali).
-<br/><br/>
-Ketika faktor pengali elastisitas ini dikalikan ke baseline Holt-Winters tahun 2026, model secara otomatis menghasilkan proyeksi puncak 28 Desember 2026 sebesar <b>2.010.504 penumpang (+1,26% YoY)</b> yang sangat presisi merefleksikan pertumbuhan riil!
+2. <b>Bukti Empiris Angka Uji (Multiplikatif vs Aditif):</b><br/>
+Hasil pengujian out-of-sample 28 hari membuktikan bahwa <b>Holt-Winters Multiplikatif menghasilkan RMSE 60.232 (15,6% lebih rendah / lebih akurat daripada Aditif sebesar 69.617)</b> dan MAPE 4,06% vs Aditif 4,63%. Amplitudo multiplikatif menangkap dinamika pergerakan secara jauh lebih presisi.
 """
-t_shk = Table([[Paragraph(shock_origin_box, style_body)]], colWidths=[515])
-t_shk.setStyle(TableStyle([
+t_mul = Table([[Paragraph(mul_box, style_body)]], colWidths=[515])
+t_mul.setStyle(TableStyle([
     ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f0fdf4')),
     ('BOX', (0,0), (-1,-1), 1, colors.HexColor('#16a34a')),
     ('TOPPADDING', (0,0), (-1,-1), 8),
@@ -486,20 +616,21 @@ t_shk.setStyle(TableStyle([
     ('LEFTPADDING', (0,0), (-1,-1), 10),
     ('RIGHTPADDING', (0,0), (-1,-1), 10),
 ]))
-story.append(t_shk)
+story.append(t_mul)
 story.append(PageBreak())
 
 # =============================================================================
-# HALAMAN 4: VISUALISASI UJI OUT-OF-SAMPLE (28 HARI)
+# HALAMAN 5: VISUALISASI UJI OUT-OF-SAMPLE (LEGEND BERSIH DI ATAS)
 # =============================================================================
 story.append(Paragraph("5. Bukti Visualisasi: Kurva Uji Out-of-Sample 28 Hari", style_heading1))
 story.append(Paragraph(
     "Visualisasi kurva harian membuktikan secara grafis bahwa lintasan proyeksi Holt-Winters + S7 + Damped "
-    "menempel paling presisi mengikuti puncak akhir pekan (Jumat–Minggu) dan lembah hari kerja (Selasa–Rabu):",
+    "menempel paling presisi mengikuti puncak akhir pekan (Jumat–Minggu) dan lembah hari kerja (Selasa–Rabu). "
+    "Legend grafik telah diletakkan di luar area kurva agar tidak menutupi lintasan garis data:",
     style_body
 ))
 
-story.append(Image(chart1_path, width=515, height=205))
+story.append(Image(chart1_path, width=515, height=210))
 story.append(Spacer(1, 10))
 
 story.append(Paragraph("<b>Perbandingan Nilai MAPE (%) Seluruh Model terhadap Standar Internasional:</b>", style_heading2))
@@ -513,20 +644,20 @@ story.append(Paragraph(
 story.append(PageBreak())
 
 # =============================================================================
-# HALAMAN 5: KOMPARASI PERIODE NATARU VS REALISASI 2025
+# HALAMAN 6: KOMPARASI PERIODE NATARU VS REALISASI 2025
 # =============================================================================
 story.append(Paragraph("6. Komparasi Proyeksi Periode Nataru terhadap Realisasi Riil 2025", style_heading1))
 story.append(Paragraph(
     "Pengujian terpenting bagi Kementerian Perhubungan adalah keandalan model dalam mendeteksi <b>gelombang lonjakan libur Natal dan Tahun Baru</b>. "
-    "Grafik di bawah membandingkan proyeksi masing-masing model terhadap realisasi riil tahun 2025 (Ground Truth):",
+    "Grafik di bawah membandingkan proyeksi model <b>Holt-Winters + S7 + Shock</b> terhadap realisasi riil tahun 2025 (Ground Truth), dengan legend diletakkan di luar bidang kurva:",
     style_body
 ))
 
-story.append(Image(chart3_path, width=515, height=190))
+story.append(Image(chart3_path, width=515, height=195))
 story.append(Spacer(1, 10))
 
 story.append(Paragraph("<b>Detail Pergerakan Harian Periode Inti Nataru (18 Desember – 5 Januari):</b>", style_heading2))
-story.append(Image(chart4_path, width=515, height=190))
+story.append(Image(chart4_path, width=515, height=195))
 story.append(Spacer(1, 8))
 
 table_nataru_data = [
@@ -555,7 +686,7 @@ story.append(t_nataru)
 story.append(PageBreak())
 
 # =============================================================================
-# HALAMAN 6: REKOMENDASI KEBIJAKAN & KESIMPULAN TEKNIS
+# HALAMAN 7: REKOMENDASI KEBIJAKAN & KESIMPULAN TEKNIS
 # =============================================================================
 story.append(Paragraph("7. Implikasi Operasional & Rekomendasi Kebijakan Kemenhub", style_heading1))
 story.append(Paragraph(
@@ -605,4 +736,4 @@ story.append(t_sign)
 doc.build(story, canvasmaker=NumberedCanvas)
 
 pdf_size_mb = os.path.getsize(PDF_OUTPUT) / (1024 * 1024)
-print(f"Laporan PDF 6 halaman berhasil diperbarui: {PDF_OUTPUT} ({pdf_size_mb:.2f} MB)")
+print(f"Laporan PDF 7 halaman berhasil disusun: {PDF_OUTPUT} ({pdf_size_mb:.2f} MB)")
