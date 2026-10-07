@@ -55,10 +55,10 @@ TAB_CONTENT = """      <!-- ====================================================
             <a href="#rumus-sec-3" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">3. Load Factor</a>
             <a href="#rumus-sec-4" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">4. Modal Share</a>
             <a href="#rumus-sec-5" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">5. Arus Lebaran</a>
-            <a href="#rumus-sec-6" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">6. Musiman Mingguan</a>
+            <a href="#rumus-sec-6" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">6. Tren Provinsi</a>
             <a href="#rumus-sec-7" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">7. Rekomendasi Armada (Persentil)</a>
             <a href="#rumus-sec-8" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">8. Model Nataru</a>
-            <a href="#rumus-sec-9" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">9. Simulasi Kapasitas</a>
+            <a href="#rumus-sec-9" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">9. Tabel Simpul</a>
           </div>
         </div>
 
@@ -397,31 +397,53 @@ TAB_CONTENT = """      <!-- ====================================================
           </div>
         </div>
 
-        <!-- Section 6: Rumus Profil Musiman Mingguan -->
+                <!-- Section 6: Rumus Analisis Tren & Lonjakan Bulanan per Provinsi -->
         <div id="rumus-sec-6" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
             <div class="flex items-center gap-2.5">
-              <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+              <span class="w-3 h-3 rounded-full bg-blue-500"></span>
               <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                6. Rumus Profil Musiman Mingguan (Day of Week Index)
+                6. Rumus Analisis Tren & Lonjakan Bulanan per Provinsi (38 Provinsi)
               </h3>
             </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold">
-              Siklus 7 Hari
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold">
+              Tab 1 • Wilayah & MoM
             </span>
           </div>
 
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Menghitung dinamika pertumbuhan bulanan, mengidentifikasi bulan puncak mobilitas regional, serta menentukan moda transportasi dominan di masing-masing 38 provinsi di Indonesia (aktif di panel kanan Tab 1).
+          </p>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">A. Rata-rata Hari Tertentu d:</div>
-              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-amber-600 dark:text-amber-400 font-semibold text-sm">
-                $$\\bar{P}_d = \\frac{\\sum_{i=1}^{N_d} P_{d, i}}{N_d}$$
+              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">A. Laju Pertumbuhan Bulanan (Month-over-Month / MoM %):</div>
+              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-blue-600 dark:text-blue-400 font-semibold text-sm">
+                $$\text{MoM}_{\text{prov}, t} = \left( \frac{P_{\text{prov}, t} - P_{\text{prov}, t-1}}{P_{\text{prov}, t-1}} \right) \times 100\%$$
               </div>
             </div>
             <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">B. Indeks Musiman Hari d:</div>
-              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-amber-600 dark:text-amber-400 font-semibold text-sm">
-                $$S_d = \\frac{\\bar{P}_d}{\\bar{P}_{\\text{keseluruhan}}}$$
+              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">B. Pangsa Moda Dominan Provinsi (%):</div>
+              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-blue-600 dark:text-blue-400 font-semibold text-sm">
+                $$\text{Share}_{m, \text{prov}} = \left( \frac{P_{m, \text{prov}}}{P_{\text{total}, \text{prov}}} \right) \times 100\%$$
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+            <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">C. Ambang Klasifikasi Status Pertumbuhan Bulanan (Badge UI Tab 1):</div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs pt-1">
+              <div class="p-2 rounded bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 font-bold">
+                🔥 Puncak: $$t = t_{\text{peak}}$$
+              </div>
+              <div class="p-2 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-semibold">
+                ↗ Naik Tajam: $$\text{MoM} \ge +15\%$$
+              </div>
+              <div class="p-2 rounded bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 text-sky-800 dark:text-sky-300">
+                ↗ Wajar: $$0\% < \text{MoM} < +15\%$$
+              </div>
+              <div class="p-2 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400">
+                ↘ Menurun: $$\text{MoM} < 0\%$$
               </div>
             </div>
           </div>
@@ -431,7 +453,7 @@ TAB_CONTENT = """      <!-- ====================================================
             <table class="w-full text-left text-xs font-sans">
               <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-300">
                 <tr>
-                  <th class="p-2.5 w-28">Simbol</th>
+                  <th class="p-2.5 w-32">Simbol</th>
                   <th class="p-2.5 w-44">Nama Notasi</th>
                   <th class="p-2.5 w-32">Satuan</th>
                   <th class="p-2.5">Penjelasan Makna Operasional Lapangan</th>
@@ -439,16 +461,28 @@ TAB_CONTENT = """      <!-- ====================================================
               </thead>
               <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-[11px]">
                 <tr>
-                  <td class="p-2.5 font-mono font-bold text-amber-600 dark:text-amber-400">$$S_d$$</td>
-                  <td class="p-2.5 font-semibold">Indeks Musiman Hari d</td>
-                  <td class="p-2.5 text-slate-500 font-mono">faktor pengali</td>
-                  <td class="p-2.5">Bobot ritme: Minggu (1,108x) &gt; Jumat (1,038x) &gt; Sabtu (1,018x) &gt; Senin (1,002x) &gt; Kamis (0,965x) &gt; Rabu (0,941x) &gt; Selasa (0,928x).</td>
+                  <td class="p-2.5 font-mono font-bold text-blue-600 dark:text-blue-400">$$\text{MoM}_{\text{prov}, t}$$</td>
+                  <td class="p-2.5 font-semibold">Pertumbuhan MoM</td>
+                  <td class="p-2.5 text-slate-500 font-mono">%</td>
+                  <td class="p-2.5">Laju akselerasi keberangkatan penumpang provinsi pada bulan $t$ dibanding bulan sebelumnya $(t-1)$.</td>
                 </tr>
                 <tr>
-                  <td class="p-2.5 font-mono font-bold text-amber-600 dark:text-amber-400">$$N_d$$</td>
-                  <td class="p-2.5 font-semibold">Jumlah Kemunculan Hari d</td>
-                  <td class="p-2.5 text-slate-500 font-mono">kali</td>
-                  <td class="p-2.5">Berapa kali hari $d$ berulang sepanjang 272 hari pengamatan (rata-rata 38-39 kali).</td>
+                  <td class="p-2.5 font-mono font-bold text-blue-600 dark:text-blue-400">$$P_{\text{prov}, t}$$</td>
+                  <td class="p-2.5 font-semibold">Volume Penumpang Provinsi</td>
+                  <td class="p-2.5 text-slate-500 font-mono">orang / bulan</td>
+                  <td class="p-2.5">Total keberangkatan seluruh simpul prasarana dalam batas teritorial provinsi pada bulan $t$.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-blue-600 dark:text-blue-400">$$\text{Share}_{m, \text{prov}}$$</td>
+                  <td class="p-2.5 font-semibold">Pangsa Moda Dominan</td>
+                  <td class="p-2.5 text-slate-500 font-mono">%</td>
+                  <td class="p-2.5">Porsi moda utama di provinsi tersebut (contoh: Jatim dominan KA/Bus, Bali dominan Udara, Kepri dominan Laut).</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-amber-600 dark:text-amber-400">$$t_{\text{peak}}$$</td>
+                  <td class="p-2.5 font-semibold">Bulan Puncak Regional</td>
+                  <td class="p-2.5 text-slate-500 font-mono">bulan kalender</td>
+                  <td class="p-2.5">Bulan dengan rekor mobilitas tertinggi di provinsi tersebut (Maret saat Lebaran, Juli saat libur sekolah, dll).</td>
                 </tr>
               </tbody>
             </table>
