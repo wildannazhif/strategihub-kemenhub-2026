@@ -1019,22 +1019,7 @@
       <!-- ========================================================= -->
       <div id="tab-modal-share" class="tab-content hidden space-y-6">
         
-        <!-- 100% Stacked Area Chart (Full Width) -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-            <div>
-              <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Dinamika Pangsa Pasar Penumpang Bulanan (100% Stacked)</h3>
-              <p class="text-[11px] text-slate-500">Pergeseran proporsi mobilitas 5 moda dari Januari sampai dengan September 2026</p>
-            </div>
-            <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Satuan: % Total</span>
-          </div>
-
-          <div class="relative w-full h-[360px] mt-3">
-            <canvas id="chartModalShareAreaCanvas"></canvas>
-          </div>
-        </div>
-
-        <!-- Normal vs Peak Comparison Doughnuts (Full Width, Placed Below Stacked Area Chart) -->
+        <!-- Normal vs Peak Comparison Doughnuts (Full Width) -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
           <div class="flex flex-wrap items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 gap-2">
             <div>
@@ -3161,7 +3146,6 @@ function renderLebaranWorkspace() {
 function renderModalShareWorkspace() {
   const isDark = document.documentElement.classList.contains('dark');
   const ms = DATA.monthly_summary;
-  const ctx = document.getElementById('chartModalShareAreaCanvas').getContext('2d');
   const unitStr = currentMetric === 'pnp' ? 'penumpang' : 'trip armada';
 
   // Compute shares dynamically for each month
@@ -3181,92 +3165,6 @@ function renderModalShareWorkspace() {
       vol_ASDP: m[getMetricKey('ASDP')],
       vol_LAUT: m[getMetricKey('LAUT')]
     };
-  });
-
-  if (chartModalShareArea) chartModalShareArea.destroy();
-  chartModalShareArea = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: shares.map(m => m.label.split(' ')[0]),
-      datasets: [
-        { label: 'Udara', data: shares.map(m => m.UDARA), volumes: shares.map(m => m.vol_UDARA), borderColor: COLOR.UDARA, backgroundColor: 'rgba(2, 132, 199, 0.45)', fill: true, tension: 0.15 },
-        { label: 'Kereta Api', data: shares.map(m => m.KA), volumes: shares.map(m => m.vol_KA), borderColor: COLOR.KA, backgroundColor: 'rgba(217, 119, 6, 0.45)', fill: true, tension: 0.15 },
-        { label: 'Bus', data: shares.map(m => m.BUS), volumes: shares.map(m => m.vol_BUS), borderColor: COLOR.BUS, backgroundColor: 'rgba(22, 163, 74, 0.45)', fill: true, tension: 0.15 },
-        { label: 'ASDP', data: shares.map(m => m.ASDP), volumes: shares.map(m => m.vol_ASDP), borderColor: COLOR.ASDP, backgroundColor: 'rgba(147, 51, 234, 0.45)', fill: true, tension: 0.15 },
-        { label: 'Laut', data: shares.map(m => m.LAUT), volumes: shares.map(m => m.vol_LAUT), borderColor: COLOR.LAUT, backgroundColor: 'rgba(8, 145, 178, 0.45)', fill: true, tension: 0.15 },
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        mode: 'index',
-        intersect: false
-      },
-      plugins: {
-        legend: { 
-          position: 'top',
-          align: 'end',
-          labels: { 
-            boxWidth: 8,
-            boxHeight: 8,
-            usePointStyle: true,
-            pointStyle: 'circle',
-            font: { family: 'Plus Jakarta Sans', size: 11, weight: '500' },
-            color: isDark ? '#cbd5e1' : '#475569',
-            padding: 12
-          } 
-        },
-        tooltip: {
-          backgroundColor: isDark ? '#0f172a' : '#ffffff',
-          titleColor: isDark ? '#ffffff' : '#0f172a',
-          bodyColor: isDark ? '#cbd5e1' : '#334155',
-          borderColor: isDark ? '#334155' : '#cbd5e1',
-          borderWidth: 1,
-          padding: 10,
-          boxPadding: 4,
-          usePointStyle: true,
-          bodyFont: { family: 'JetBrains Mono', size: 11 },
-          titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: 'bold' },
-          callbacks: {
-            title: (items) => {
-              if (!items.length) return '';
-              const mIdx = items[0].dataIndex;
-              return shares[mIdx] ? shares[mIdx].label : items[0].label;
-            },
-            label: (c) => {
-              const idx = c.dataIndex;
-              const pct = c.raw;
-              const vol = c.dataset.volumes ? c.dataset.volumes[idx] : null;
-              const volFmt = vol ? `${numFmt(vol)} ${unitStr}` : '';
-              return ` ${c.dataset.label}: ${decFmt(pct, 1)}% • ${volFmt}`;
-            },
-            footer: (items) => {
-              if (!items.length) return '';
-              const mIdx = items[0].dataIndex;
-              const m = shares[mIdx];
-              return m ? `Total Multimoda: ${numFmt(m.TOTAL)} ${unitStr}` : '';
-            }
-          }
-        }
-      },
-      scales: {
-        x: { 
-          grid: { display: false }, 
-          ticks: { color: isDark ? '#94a3b8' : '#64748b', font: { family: 'Plus Jakarta Sans', size: 11, weight: '500' } } 
-        },
-        y: { 
-          stacked: true, 
-          max: 100, 
-          grid: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }, 
-          ticks: { 
-            color: isDark ? '#94a3b8' : '#64748b', 
-            font: { family: 'JetBrains Mono', size: 10 }, 
-            callback: v => v + '%' 
-          } 
-        }
-      }
-    }
   });
 
   // Plugin: Hanya tampilkan persentase (%) yang bersih di dalam irisan donat
