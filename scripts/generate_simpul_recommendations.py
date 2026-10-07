@@ -1,5 +1,6 @@
 import os
 import json
+import numpy as np
 import pandas as pd
 
 RAW_CSV = r"c:\Users\USER\Documents\PUSDATIN\siasati_multimoda_2026.csv"
@@ -72,39 +73,57 @@ def generate_recommendations():
 
     print(f"Total simpul aktif keberangkatan: {len(merged)}")
 
+    # 1. Pra-kalkulasi rasio load factor untuk menentukan ambang persentil empiris nasional
+    temp_calc = []
+    for idx, r in merged.iterrows():
+        pb = int(round(r['pnp_brg_biasa']))
+        ab = int(round(r['arm_brg_biasa']))
+        pp = int(round(r['pnp_brg_puncak']))
+        ap = int(round(r['arm_brg_puncak']))
+        lfb = round(pb / ab, 1) if ab > 0 else 0
+        lfp = round(pp / ap, 1) if ap > 0 else 0
+        ratio = round(lfp / lfb, 2) if lfb > 0 else (2.5 if pp >= 5000 else 1.2)
+        temp_calc.append({'pb': pb, 'ab': ab, 'pp': pp, 'ap': ap, 'lfb': lfb, 'lfp': lfp, 'ratio': ratio})
+
+    all_ratios = np.array([x['ratio'] for x in temp_calc])
+    p50 = float(np.percentile(all_ratios, 50))
+    p75 = float(np.percentile(all_ratios, 75))
+    p90 = float(np.percentile(all_ratios, 90))
+    print(f"Ambang Persentil Lonjakan Load Factor: P50={p50:.2f}x, P75={p75:.2f}x, P90={p90:.2f}x")
+
     items = []
     for idx, r in merged.iterrows():
         moda = r['moda']
         nama = r['nama_prasarana']
         prov = r['provinsi']
+        calc = temp_calc[idx]
         
-        pb = int(round(r['pnp_brg_biasa']))
-        ab = int(round(r['arm_brg_biasa']))
-        pp = int(round(r['pnp_brg_puncak']))
-        ap = int(round(r['arm_brg_puncak']))
+        pb = calc['pb']
+        ab = calc['ab']
+        pp = calc['pp']
+        ap = calc['ap']
+        lfb = calc['lfb']
+        lfp = calc['lfp']
+        ratio = calc['ratio']
 
-        lfb = round(pb / ab, 1) if ab > 0 else 0
-        lfp = round(pp / ap, 1) if ap > 0 else 0
-        ratio = round(lfp / lfb, 2) if lfb > 0 else (2.5 if pp >= 5000 else 1.2)
-
-        # Penentuan Persentase Kebutuhan Tambahan Armada
-        if ratio >= 3.0 or (ratio >= 2.0 and pp >= 20000):
+        # Penentuan Persentase Kebutuhan Tambahan Armada Berbasis Persentil Lonjakan Load Factor (TCQSM & TRB Standard)
+        # Simpul perintis sangat kecil (pp < 100) diklasifikasikan ke Terkendali karena tidak memicu defisit kapasitas nasional
+        if ratio >= p90 and pp >= 100:
             pct = 20
             status_text = 'Sangat Kritis'
             status_badge = 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300'
-        elif ratio >= 1.8 or (ratio >= 1.4 and pp >= 10000):
+        elif ratio >= p75 and pp >= 100:
             pct = 15
             status_text = 'Tinggi / Kritis'
             status_badge = 'bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300'
-        elif ratio >= 1.2 or pp >= 5000:
+        elif ratio >= p50 and pp >= 100:
             pct = 10
-            status_text = 'Padat Tinggi'
+            status_text = 'Padat'
             status_badge = 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300'
         else:
             pct = 5
             status_text = 'Terkendali'
             status_badge = 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300'
-
         add_arm = int(round(ap * (pct / 100.0)))
         total_arm = ap + add_arm
 
