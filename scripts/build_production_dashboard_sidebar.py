@@ -411,13 +411,13 @@ def generate_dashboard():
         </p>
         <div class="space-y-2 text-[10px] font-mono">
           <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 p-2.5 rounded space-y-1">
-            <div class="font-bold text-slate-900 dark:text-white font-sans text-xs">A. Baseline Normal (Februari 2026):</div>
-            <div class="text-indigo-600 dark:text-indigo-400 font-bold">P̄_Feb = (∑ P_Februari) / 28 Hari = 1.188.888 pnp/hari</div>
-            <div class="text-slate-500 text-[9px] font-sans">Bulan Februari digunakan sebagai acuan normal karena bebas libur panjang nasional.</div>
+            <div class="font-bold text-slate-900 dark:text-white font-sans text-xs">A. Baseline Normal Operasional (Median 2026):</div>
+            <div class="text-indigo-600 dark:text-indigo-400 font-bold">P̃_Median = Median(P_Harian 2026) = 1.321.644 pnp/hari</div>
+            <div class="text-slate-500 text-[9px] font-sans">Nilai Median harian dari seluruh 272 hari (Jan–Sep 2026) digunakan sebagai acuan normal sesuai metodologi robust Google Mobility &amp; Van Lint (2005) agar kebal terhadap pencilan ekstrem libur nasional.</div>
           </div>
           <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 p-2.5 rounded space-y-1">
             <div class="font-bold text-slate-900 dark:text-white font-sans text-xs">B. Persentase Lonjakan (Surge %):</div>
-            <div class="text-rose-600 dark:text-rose-400 font-bold">Surge (%) = [(Volume_Puncak - P̄_Feb) / P̄_Feb] × 100%</div>
+            <div class="text-rose-600 dark:text-rose-400 font-bold">Surge (%) = [(Volume_Puncak - P̃_Median) / P̃_Median] × 100%</div>
           </div>
           <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 p-2.5 rounded space-y-1">
             <div class="font-bold text-slate-900 dark:text-white font-sans text-xs">C. Penomoran Hari Posko Lebaran (Relatif Hari H):</div>
@@ -942,7 +942,7 @@ def generate_dashboard():
 
           <div class="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
             <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight pb-3 border-b border-slate-100 dark:border-slate-800">
-              Persentase Lonjakan (%) terhadap Rata-rata Normal Februari
+              Persentase Lonjakan (%) terhadap Baseline Normal (Median 2026)
             </h3>
             <div class="relative w-full h-[320px] mt-3">
               <canvas id="chartSurgeBarCanvas"></canvas>
@@ -955,7 +955,7 @@ def generate_dashboard():
           <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
             <div>
               <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Tabel Komparasi Angka Lonjakan Puncak Lebaran</h3>
-              <p class="text-[11px] text-slate-500">Perbandingan baseline harian Februari dengan volume puncak arus mudik dan arus balik</p>
+              <p class="text-[11px] text-slate-500">Perbandingan baseline harian normal (Median 2026) dengan volume puncak arus mudik dan arus balik</p>
             </div>
             <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Unit: Penumpang</span>
           </div>
@@ -965,7 +965,7 @@ def generate_dashboard():
               <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
                 <tr>
                   <th class="py-2.5 px-3">Moda Transportasi</th>
-                  <th class="py-2.5 px-3 text-right">Baseline Normal (Feb)</th>
+                  <th class="py-2.5 px-3 text-right">Baseline Normal (Median)</th>
                   <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">Puncak Mudik (18 Mar / H-3)</th>
                   <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">Lonjakan (%)</th>
                   <th class="py-2.5 px-3 text-right text-rose-700 dark:text-rose-400">Puncak Balik 1 (24 Mar / H+3)</th>
@@ -987,37 +987,22 @@ def generate_dashboard():
       <!-- ========================================================= -->
       <div id="tab-modal-share" class="tab-content hidden space-y-6">
         
-        <!-- 100% Stacked Area Chart (Full Width) -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-            <div>
-              <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Dinamika Pangsa Pasar Penumpang Bulanan (100% Stacked)</h3>
-              <p class="text-[11px] text-slate-500">Pergeseran proporsi mobilitas 5 moda dari Januari sampai dengan September 2026</p>
-            </div>
-            <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Satuan: % Total</span>
-          </div>
-
-          <div class="relative w-full h-[360px] mt-3">
-            <canvas id="chartModalShareAreaCanvas"></canvas>
-          </div>
-        </div>
-
-        <!-- Normal vs Peak Comparison Doughnuts (Full Width, Placed Below Stacked Area Chart) -->
+        <!-- Normal vs Peak Comparison Doughnuts (Full Width) -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
           <div class="flex flex-wrap items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 gap-2">
             <div>
               <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
                 Komparasi Struktur Moda: Normal vs Puncak
               </h3>
-              <p class="text-[11px] text-slate-500">Perbandingan pergeseran proporsi moda transportasi antara periode normal (Februari) dan puncak arus mudik Lebaran (Maret)</p>
+              <p class="text-[11px] text-slate-500">Perbandingan pergeseran proporsi moda transportasi antara periode normal (Median 2026) dan puncak arus mudik Lebaran (Maret)</p>
             </div>
             <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Satuan: % & Penumpang</span>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-4 items-center">
-            <!-- Normal (Februari) -->
-            <div class="md:col-span-4 text-center bg-slate-50/50 dark:bg-slate-800/40 rounded-lg p-4 border border-slate-100 dark:border-slate-800">
-              <div class="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Februari (Normal)</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 items-center">
+            <!-- Normal (Median) -->
+            <div class="text-center bg-slate-50/50 dark:bg-slate-800/40 rounded-lg p-4 border border-slate-100 dark:border-slate-800">
+              <div class="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Periode Normal (Median 2026)</div>
               <div class="relative w-full h-[200px] flex items-center justify-center">
                 <canvas id="donutNormalCanvas"></canvas>
               </div>
@@ -1025,27 +1010,12 @@ def generate_dashboard():
             </div>
 
             <!-- Peak (Maret / Lebaran) -->
-            <div class="md:col-span-4 text-center bg-slate-50/50 dark:bg-slate-800/40 rounded-lg p-4 border border-slate-100 dark:border-slate-800">
+            <div class="text-center bg-slate-50/50 dark:bg-slate-800/40 rounded-lg p-4 border border-slate-100 dark:border-slate-800">
               <div class="text-[11px] font-bold text-purple-700 dark:text-purple-400 uppercase tracking-wider mb-2">Maret (Lebaran)</div>
               <div class="relative w-full h-[200px] flex items-center justify-center">
                 <canvas id="donutPeakCanvas"></canvas>
               </div>
               <div id="donut-peak-total" class="text-[11px] text-slate-700 dark:text-slate-300 font-semibold mt-2 font-mono">Total: -</div>
-            </div>
-
-            <!-- Insight Box -->
-            <div class="md:col-span-4 p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs flex flex-col justify-center h-full">
-              <div class="font-bold text-slate-800 dark:text-slate-200 mb-2 flex items-center gap-1.5">
-                <span class="inline-block w-2 h-2 rounded-full bg-purple-600"></span>
-                <span>Dinamika Pangsa:</span>
-              </div>
-              <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed">
-                Pada periode Lebaran (Maret), pangsa ASDP melonjak dari <strong>11,8%</strong> menjadi <strong>17,9%</strong>, membuktikan pergeseran mobilitas ke penyeberangan kendaraan darat.
-              </p>
-              <div class="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 text-[11px] text-slate-500">
-                <span class="font-semibold text-slate-700 dark:text-slate-300">Catatan Analitis:</span>
-                Kenaikan pangsa ASDP dan Kereta Api diiringi penurunan proporsi angkutan udara domestik saat puncak mudik nasional.
-              </div>
             </div>
           </div>
         </div>
@@ -2848,7 +2818,6 @@ function renderLebaranWorkspace() {{
 function renderModalShareWorkspace() {{
   const isDark = document.documentElement.classList.contains('dark');
   const ms = DATA.monthly_summary;
-  const ctx = document.getElementById('chartModalShareAreaCanvas').getContext('2d');
   const unitStr = currentMetric === 'pnp' ? 'penumpang' : 'trip armada';
 
   // Compute shares dynamically for each month
@@ -2868,92 +2837,6 @@ function renderModalShareWorkspace() {{
       vol_ASDP: m[getMetricKey('ASDP')],
       vol_LAUT: m[getMetricKey('LAUT')]
     }};
-  }});
-
-  if (chartModalShareArea) chartModalShareArea.destroy();
-  chartModalShareArea = new Chart(ctx, {{
-    type: 'line',
-    data: {{
-      labels: shares.map(m => m.label.split(' ')[0]),
-      datasets: [
-        {{ label: 'Udara', data: shares.map(m => m.UDARA), volumes: shares.map(m => m.vol_UDARA), borderColor: COLOR.UDARA, backgroundColor: 'rgba(2, 132, 199, 0.45)', fill: true, tension: 0.15 }},
-        {{ label: 'Kereta Api', data: shares.map(m => m.KA), volumes: shares.map(m => m.vol_KA), borderColor: COLOR.KA, backgroundColor: 'rgba(217, 119, 6, 0.45)', fill: true, tension: 0.15 }},
-        {{ label: 'Bus', data: shares.map(m => m.BUS), volumes: shares.map(m => m.vol_BUS), borderColor: COLOR.BUS, backgroundColor: 'rgba(22, 163, 74, 0.45)', fill: true, tension: 0.15 }},
-        {{ label: 'ASDP', data: shares.map(m => m.ASDP), volumes: shares.map(m => m.vol_ASDP), borderColor: COLOR.ASDP, backgroundColor: 'rgba(147, 51, 234, 0.45)', fill: true, tension: 0.15 }},
-        {{ label: 'Laut', data: shares.map(m => m.LAUT), volumes: shares.map(m => m.vol_LAUT), borderColor: COLOR.LAUT, backgroundColor: 'rgba(8, 145, 178, 0.45)', fill: true, tension: 0.15 }},
-      ]
-    }},
-    options: {{
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {{
-        mode: 'index',
-        intersect: false
-      }},
-      plugins: {{
-        legend: {{ 
-          position: 'top',
-          align: 'end',
-          labels: {{ 
-            boxWidth: 8,
-            boxHeight: 8,
-            usePointStyle: true,
-            pointStyle: 'circle',
-            font: {{ family: 'Plus Jakarta Sans', size: 11, weight: '500' }},
-            color: isDark ? '#cbd5e1' : '#475569',
-            padding: 12
-          }} 
-        }},
-        tooltip: {{
-          backgroundColor: isDark ? '#0f172a' : '#ffffff',
-          titleColor: isDark ? '#ffffff' : '#0f172a',
-          bodyColor: isDark ? '#cbd5e1' : '#334155',
-          borderColor: isDark ? '#334155' : '#cbd5e1',
-          borderWidth: 1,
-          padding: 10,
-          boxPadding: 4,
-          usePointStyle: true,
-          bodyFont: {{ family: 'JetBrains Mono', size: 11 }},
-          titleFont: {{ family: 'Plus Jakarta Sans', size: 12, weight: 'bold' }},
-          callbacks: {{
-            title: (items) => {{
-              if (!items.length) return '';
-              const mIdx = items[0].dataIndex;
-              return shares[mIdx] ? shares[mIdx].label : items[0].label;
-            }},
-            label: (c) => {{
-              const idx = c.dataIndex;
-              const pct = c.raw;
-              const vol = c.dataset.volumes ? c.dataset.volumes[idx] : null;
-              const volFmt = vol ? `${{numFmt(vol)}} ${{unitStr}}` : '';
-              return ` ${{c.dataset.label}}: ${{decFmt(pct, 1)}}% • ${{volFmt}}`;
-            }},
-            footer: (items) => {{
-              if (!items.length) return '';
-              const mIdx = items[0].dataIndex;
-              const m = shares[mIdx];
-              return m ? `Total Multimoda: ${{numFmt(m.TOTAL)}} ${{unitStr}}` : '';
-            }}
-          }}
-        }}
-      }},
-      scales: {{
-        x: {{ 
-          grid: {{ display: false }}, 
-          ticks: {{ color: isDark ? '#94a3b8' : '#64748b', font: {{ family: 'Plus Jakarta Sans', size: 11, weight: '500' }} }} 
-        }},
-        y: {{ 
-          stacked: true, 
-          max: 100, 
-          grid: {{ color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }}, 
-          ticks: {{ 
-            color: isDark ? '#94a3b8' : '#64748b', 
-            font: {{ family: 'JetBrains Mono', size: 10 }}, 
-            callback: v => v + '%' 
-          }} 
-        }}
-      }}
-    }}
   }});
 
   // Plugin: Hanya tampilkan persentase (%) yang bersih di dalam irisan donat
@@ -3013,12 +2896,21 @@ function renderModalShareWorkspace() {{
     }}
   }};
 
-  const feb = shares[1] || shares[0];
-  const mar = shares[2] || shares[0];
+  const modas = ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT'];
   const labels = ['Udara', 'Kereta Api', 'Bus', 'ASDP', 'Laut'];
   const colors = [COLOR.UDARA, COLOR.KA, COLOR.BUS, COLOR.ASDP, COLOR.LAUT];
 
-  const febVolumes = [feb.vol_UDARA, feb.vol_KA, feb.vol_BUS, feb.vol_ASDP, feb.vol_LAUT];
+  // Hitung Nilai Median Harian dari seluruh daily_timeline untuk Baseline Normal
+  const normVolumes = modas.map(m => {{
+    const vals = (DATA.daily_timeline || []).map(d => Number(d[getMetricKey(m)] || 0)).sort((a, b) => a - b);
+    if (!vals.length) return 0;
+    const mid = Math.floor(vals.length / 2);
+    return vals.length % 2 !== 0 ? vals[mid] : Math.round((vals[mid - 1] + vals[mid]) / 2);
+  }});
+  const normTotal = normVolumes.reduce((acc, v) => acc + v, 0) || 1;
+  const normShares = normVolumes.map(v => Number(((v / normTotal) * 100).toFixed(1)));
+
+  const mar = shares[2] || shares[0];
   const marVolumes = [mar.vol_UDARA, mar.vol_KA, mar.vol_BUS, mar.vol_ASDP, mar.vol_LAUT];
 
   const donutTooltipConfig = {{
@@ -3051,9 +2943,9 @@ function renderModalShareWorkspace() {{
     data: {{
       labels,
       datasets: [{{
-        data: [feb.UDARA, feb.KA, feb.BUS, feb.ASDP, feb.LAUT],
-        volumes: febVolumes,
-        totalVolume: feb.TOTAL,
+        data: normShares,
+        volumes: normVolumes,
+        totalVolume: normTotal,
         backgroundColor: colors,
         borderWidth: 1.5,
         borderColor: isDark ? '#1e293b' : '#ffffff'
@@ -3101,11 +2993,11 @@ function renderModalShareWorkspace() {{
   // Update total labels under the doughnut canvases
   const elNormalTotal = document.getElementById('donut-normal-total');
   if (elNormalTotal) {{
-    elNormalTotal.innerText = `Total: ${{formatVolCompact(feb.TOTAL)}} (${{numFmt(feb.TOTAL)}} ${{unitStr}})`;
+    elNormalTotal.innerText = `Total Baseline: ${{formatVolCompact(normTotal)}} (${{numFmt(normTotal)}} ${{unitStr}}/hari)`;
   }}
   const elPeakTotal = document.getElementById('donut-peak-total');
   if (elPeakTotal) {{
-    elPeakTotal.innerText = `Total: ${{formatVolCompact(mar.TOTAL)}} (${{numFmt(mar.TOTAL)}} ${{unitStr}})`;
+    elPeakTotal.innerText = `Total Puncak: ${{formatVolCompact(mar.TOTAL)}} (${{numFmt(mar.TOTAL)}} ${{unitStr}})`;
   }}
 
   const tbody = document.getElementById('tbody-share');
@@ -3323,7 +3215,7 @@ function renderMatrixTable() {{
     {{ label: '6. Lonjakan Arus Balik 1 (%)', u: '+' + decFmt(surge.UDARA.surge_balik1_pct, 1) + '%', ka: '+' + decFmt(surge.KA.surge_balik1_pct, 1) + '%', bus: '+' + decFmt(surge.BUS.surge_balik1_pct, 1) + '%', asdp: '+' + decFmt(surge.ASDP.surge_balik1_pct, 1) + '%', laut: '+' + decFmt(surge.LAUT.surge_balik1_pct, 1) + '%', tot: '+' + decFmt(s.peak_surge_pct || surge.TOTAL.surge_balik1_pct, 1) + '%' }},
     {{ label: '7. Load Factor Normal (Pnp/Arm)', u: decFmt(lf.UDARA.baseline_lf, 1), ka: decFmt(lf.KA.baseline_lf, 1), bus: decFmt(lf.BUS.baseline_lf, 1), asdp: decFmt(lf.ASDP.baseline_lf, 1), laut: decFmt(lf.LAUT.baseline_lf, 1), tot: '37,1' }},
     {{ label: '8. Load Factor Puncak Lebaran', u: decFmt(lf.UDARA.peak_lf, 1), ka: decFmt(lf.KA.peak_lf, 1), bus: decFmt(lf.BUS.peak_lf, 1), asdp: decFmt(lf.ASDP.peak_lf, 1), laut: decFmt(lf.LAUT.peak_lf, 1), tot: '52,7' }},
-    {{ label: '9. Pangsa Pasar Normal Feb (%)', u: decFmt(feb.share_UDARA, 1) + '%', ka: decFmt(feb.share_KA, 1) + '%', bus: decFmt(feb.share_BUS, 1) + '%', asdp: decFmt(feb.share_ASDP, 1) + '%', laut: decFmt(feb.share_LAUT, 1) + '%', tot: '100,0%' }},
+    {{ label: '9. Pangsa Pasar Normal (Median %)', u: decFmt((surge.UDARA.baseline / surge.TOTAL.baseline) * 100, 1) + '%', ka: decFmt((surge.KA.baseline / surge.TOTAL.baseline) * 100, 1) + '%', bus: decFmt((surge.BUS.baseline / surge.TOTAL.baseline) * 100, 1) + '%', asdp: decFmt((surge.ASDP.baseline / surge.TOTAL.baseline) * 100, 1) + '%', laut: decFmt((surge.LAUT.baseline / surge.TOTAL.baseline) * 100, 1) + '%', tot: '100,0%' }},
     {{ label: '10. Pangsa Pasar Puncak Mar (%)', u: decFmt(mar.share_UDARA, 1) + '%', ka: decFmt(mar.share_KA, 1) + '%', bus: decFmt(mar.share_BUS, 1) + '%', asdp: decFmt(mar.share_ASDP, 1) + '%', laut: decFmt(mar.share_LAUT, 1) + '%', tot: '100,0%' }},
     {{ label: '11. Jumlah Simpul Terverifikasi', u: '257 Bandara', ka: '193 Stasiun', bus: '215 Terminal', asdp: '276 Pelabuhan', laut: '267 Pelabuhan', tot: '1.208 Simpul' }},
     {{ label: '12. Simpul Terpadat Nasional', u: 'Soekarno-Hatta (CGK)', ka: 'Yogyakarta (YK)', bus: 'Purboyo Madiun', asdp: 'Bakauheni Lampung', laut: 'Tanjung Perak', tot: 'Multimoda' }},
