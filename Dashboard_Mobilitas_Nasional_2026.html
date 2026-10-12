@@ -849,7 +849,7 @@
                   <th class="py-2.5 px-3">Provinsi</th>
                   <th class="py-2.5 px-3 text-right">Volume Penumpang</th>
                   <th class="py-2.5 px-3 text-right">Armada Beroperasi</th>
-                  <th class="py-2.5 px-3 w-56 text-right">Skala Volume Relatif</th>
+                  <th class="py-2.5 px-3 w-60 text-right">Skala Volume Dibandingkan Total</th>
                 </tr>
               </thead>
               <tbody id="tbody-hubs" class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-800 dark:text-slate-200">
@@ -3935,6 +3935,9 @@ function renderHubsTable() {
     list.sort((a, b) => (b[sortKey] || 0) - (a[sortKey] || 0));
   }
 
+  // Hitung total volume keseluruhan dari daftar simpul aktif (sebelum search filter)
+  const totalVal = list.reduce((acc, h) => acc + (h[sortKey] || 0), 0) || 1;
+
   if (currentHubSearchTerm) {
     list = list.filter(h => 
       h.nama_prasarana.toLowerCase().includes(currentHubSearchTerm) || 
@@ -3944,7 +3947,7 @@ function renderHubsTable() {
 
   const resultCount = document.getElementById('hub-result-count');
   if (resultCount) {
-    resultCount.innerText = `Menampilkan ${list.length} prasarana transportasi (Diurutkan: ${isPnp ? 'Penumpang' : 'Armada'} • ${currentDirection === 'dat' ? 'Datang' : currentDirection === 'brg' ? 'Berangkat' : 'Dua Arah'})`;
+    resultCount.innerText = `Menampilkan ${list.length} prasarana transportasi (Total: ${numFmt(totalVal)} ${isPnp ? 'penumpang' : 'trip armada'} • Diurutkan: ${isPnp ? 'Penumpang' : 'Armada'} • ${currentDirection === 'dat' ? 'Datang' : currentDirection === 'brg' ? 'Berangkat' : 'Dua Arah'})`;
   }
 
   const tbody = document.getElementById('tbody-hubs');
@@ -3956,11 +3959,11 @@ function renderHubsTable() {
     return;
   }
 
-  const maxVal = list[0][sortKey] || 1;
-
   list.forEach((h, idx) => {
     const activeVal = h[sortKey] || 0;
-    const pct = Math.round((activeVal / maxVal) * 100);
+    const pctNum = totalVal > 0 ? (activeVal / totalVal) * 100 : 0;
+    const pctStr = decFmt(pctNum, 1) + '%';
+    const barWidth = Math.max(1.5, Math.min(100, pctNum));
     const color = COLOR[h.moda] || '#64748b';
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
@@ -3980,11 +3983,11 @@ function renderHubsTable() {
       <td class="py-2.5 px-3 text-right font-mono font-bold ${isPnp ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}">${numFmt(pnpDisplay)}</td>
       <td class="py-2.5 px-3 text-right font-mono ${!isPnp ? 'font-bold text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-400'}">${numFmt(armDisplay)}</td>
       <td class="py-2.5 px-3 text-right">
-        <div class="flex items-center gap-2 justify-end">
+        <div class="flex items-center gap-2 justify-end" title="${numFmt(activeVal)} dari total ${numFmt(totalVal)} (${pctStr})">
           <div class="flex-1 h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-            <div class="h-full rounded-full transition-all duration-300" style="width: ${pct}%; background-color: ${color}"></div>
+            <div class="h-full rounded-full transition-all duration-300" style="width: ${barWidth}%; background-color: ${color}"></div>
           </div>
-          <span class="text-[10px] font-mono text-slate-400 w-8 text-right">${pct}%</span>
+          <span class="text-[10px] font-mono font-medium text-slate-600 dark:text-slate-400 w-12 text-right">${pctStr}</span>
         </div>
       </td>
     `;
