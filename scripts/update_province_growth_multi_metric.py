@@ -329,8 +329,10 @@ function renderProvinceGrowthWorkspace() {
     };
 
     const monthlyVals = provInfo.monthly.map(m => getMonthVal(m));
-    const sortedVals = [...monthlyVals].sort((a, b) => a - b);
-    const scopeMedian = sortedVals[4] || 0; // Robust Median 9 bulan (posisi ke-5)
+    // Baseline Median Pra-Lebaran (1 Jan - 12 Mar 2026, 71 Hari)
+    const scopeMedian = isAllModa
+      ? (provInfo.baseline_vol || provInfo.median_vol || 0)
+      : ((provInfo.moda_baselines && provInfo.moda_baselines[selectedModaForGrowth]) || provInfo.baseline_vol || provInfo.median_vol || 0);
 
     let scopePeakVol = -1;
     let scopePeakIdx = 0;
@@ -386,7 +388,7 @@ function renderProvinceGrowthWorkspace() {
     }
 
     if (boxTitleEl) boxTitleEl.innerText = isAllModa ? `Visualisasi Tren Bulanan (${provLabel})` : `Tren Bulanan Moda ${activeModaLabel} (${provLabel})`;
-    if (boxSubEl) boxSubEl.innerText = `${mCfg.label} • Baseline Median: ${numFmt(scopeMedian)} ${mCfg.unit}`;
+    if (boxSubEl) boxSubEl.innerText = `${mCfg.label} • Baseline Median Pra-Lebaran (1 Jan - 12 Mar): ${numFmt(scopeMedian)} ${mCfg.unit}`;
 
     // Datasets Chart
     let datasets = [];
@@ -485,7 +487,7 @@ function renderProvinceGrowthWorkspace() {
     // Unified Table Rendering: Akumulasi Bulanan per Moda
     if (tableTitle) tableTitle.innerText = 'Akumulasi Bulanan per Moda Transportasi';
     if (tableSub) tableSub.innerText = `Rincian volume ${mCfg.verb} di ${provLabel} (${activeModaLabel}) Januari s.d. September 2026`;
-    if (tableBadge) tableBadge.innerText = `Median: ${numFmt(scopeMedian)} ${mCfg.unit}/bln`;
+    if (tableBadge) tableBadge.innerText = `Baseline Median: ${numFmt(scopeMedian)} ${mCfg.unit}/bln (1 Jan - 12 Mar)`;
 
     if (theadMonthly) {
       theadMonthly.innerHTML = `
@@ -496,7 +498,7 @@ function renderProvinceGrowthWorkspace() {
         <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400 ${selectedModaForGrowth === 'ASDP' ? 'bg-purple-50 dark:bg-purple-950/40 font-bold' : ''}">ASDP</th>
         <th class="py-2.5 px-3 text-right text-cyan-700 dark:text-cyan-400 ${selectedModaForGrowth === 'LAUT' ? 'bg-cyan-50 dark:bg-cyan-950/40 font-bold' : ''}">Laut</th>
         <th class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">Total</th>
-        <th class="py-2.5 px-3 text-right text-slate-700 dark:text-slate-300">vs Median</th>
+        <th class="py-2.5 px-3 text-right text-slate-700 dark:text-slate-300" title="Lonjakan terhadap Baseline Median Pra-Lebaran 1 Jan - 12 Mar 2026">vs Median (1 Jan - 12 Mar)</th>
       `;
     }
 
