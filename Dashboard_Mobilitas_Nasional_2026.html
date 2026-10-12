@@ -1267,13 +1267,13 @@
               <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
                 Tren Berkelanjutan: Data Historis 2026 Tersambung ke Garis Proyeksi Nataru 2026/2027 • <span id="fc-chart-scope-badge" class="text-indigo-600 dark:text-indigo-400 font-bold">Nasional</span>
               </h3>
-              <p class="text-[11px] text-slate-500">
-                Garis solid mewakili realisasi riil (Jan - Sep). Garis putus-putus ungu mewakili proyeksi 1 model Holt-Winters terpadu (Okt - Jan 2027) dengan shock musiman Nataru dari data latih 2025 beserta pita keyakinan 95%.
+              <p id="fc-chart-model-desc" class="text-[11px] text-slate-500 leading-relaxed">
+                Garis solid mewakili realisasi riil (1 Jan – 29 Sep 2026). Garis putus-putus ungu mewakili kurva peramalan model terbaik <b id="fc-chart-model-name" class="text-indigo-600 dark:text-indigo-400">Holt-Winters Mul Damped</b> (Okt 2026 – Jan 2027) dengan kalibrasi shock Nataru dari data latih 2025 dan pita keyakinan 95% CI.
               </p>
             </div>
             <div class="flex items-center gap-3 text-[11px] font-mono flex-wrap">
               <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 bg-sky-600"></span> Realisasi 2026</span>
-              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-indigo-500"></span> Proyeksi Holt-Winters</span>
+              <span id="fc-legend-model-label" class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-indigo-500"></span> Proyeksi Model Champion</span>
               <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-emerald-500"></span> Realisasi 2025 (Data Latih)</span>
               <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-indigo-500/20 border border-indigo-400"></span> Rentang 95% CI</span>
             </div>
@@ -4709,6 +4709,20 @@ function renderForecastChart() {
   if (badgeEl) badgeEl.innerText = isAll ? 'Nasional' : currentForecastProv;
 
   const pData = !isAll ? DATA.forecast_nataru.by_province?.[currentForecastProv] : null;
+  const champ = isAll
+    ? DATA.forecast_nataru.champion_model
+    : (pData?.champion_model || DATA.forecast_nataru.champion_model);
+  const champName = champ?.name || 'Holt-Winters Mul Damped';
+  const champMape = champ ? `${decFmt(champ.mape, 2)}%` : '4,10%';
+
+  // Update dynamic chart subtitle & legend label to reflect the selected Champion Model
+  const modelNameEl = document.getElementById('fc-chart-model-name');
+  if (modelNameEl) modelNameEl.innerText = `${champName} (${champMape} MAPE)`;
+  const legendLabelEl = document.getElementById('fc-legend-model-label');
+  if (legendLabelEl) {
+    legendLabelEl.innerHTML = `<span class="w-3 h-0.5 border-t border-dashed border-indigo-500"></span> Proyeksi ${champName}`;
+  }
+
   const fc = (pData && pData.scenarios)
     ? pData.scenarios[currentForecastScenario]
     : DATA.forecast_nataru.scenarios[currentForecastScenario];
@@ -4719,19 +4733,19 @@ function renderForecastChart() {
   let lastHistVal = 0;
 
   if (isAll) {
-    const hist = DATA.daily_timeline.filter(d => d.date <= '2026-09-27');
+    const hist = DATA.daily_timeline.filter(d => d.date <= '2026-09-29');
     allLabels = [...hist.map(d => d.date), ...fc.map(d => d.date)];
     histData = [...hist.map(d => d[histKey]), ...fc.map(() => null)];
     lastHistVal = hist[hist.length - 1][histKey];
   } else {
     const histArr = (pData && pData.history_2026 && pData.history_2026[histKey]) || [];
-    const hist26Dates = DATA.daily_timeline.filter(d => d.date <= '2026-09-27').map(d => d.date);
+    const hist26Dates = (pData && pData.history_2026 && pData.history_2026.dates) || DATA.daily_timeline.filter(d => d.date <= '2026-09-29').map(d => d.date);
     allLabels = [...hist26Dates, ...fc.map(d => d.date)];
-    const slicedHist = histArr.slice(0, hist26Dates.length);
-    histData = [...slicedHist, ...fc.map(() => null)];
-    lastHistVal = slicedHist[slicedHist.length - 1] || 0;
+    histData = [...histArr, ...fc.map(() => null)];
+    lastHistVal = histArr[histArr.length - 1] || 0;
   }
 
+  // Connect actual 2026 line smoothly to forecast line at the exact junction (2026-09-29)
   const fcData = [
     ...histData.slice(0, allLabels.length - fc.length - 1).map(() => null),
     lastHistVal,
@@ -4780,7 +4794,7 @@ function renderForecastChart() {
       spanGaps: false
     },
     {
-      label: `Proyeksi Holt-Winters 2026/2027 (${isPnp ? 'Penumpang' : 'Armada'})`,
+      label: `Proyeksi ${champName} 2026/2027 (${isPnp ? 'Penumpang' : 'Armada'})`,
       data: fcData,
       borderColor: forecastColor,
       backgroundColor: 'transparent',
