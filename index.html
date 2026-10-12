@@ -444,142 +444,150 @@
           </div>
         </div>
 
-        <!-- Split Panel: Monthly Accumulation Table vs Day-of-Week Distribution -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          
-          <!-- Left (7 Cols): Dense Monthly Data Table -->
-          <div class="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
-            <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
-              <div>
-                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Akumulasi Bulanan per Moda Transportasi</h3>
-                <p id="monthly-table-subtitle" class="text-[11px] text-slate-500">Volume pergerakan dari Januari sampai dengan September 2026</p>
+        <!-- Panel 1: Analisis Tren & Lonjakan Bulanan per Provinsi -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
+          <!-- Header & Mode Toggle -->
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="inline-block w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Tren & Lonjakan Bulanan per Provinsi</h3>
               </div>
-              <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700">9 Bulan (Jan - Sep)</span>
+              <p id="prov-growth-subtitle" class="text-[11px] text-slate-500">Cek di bulan apa suatu provinsi naik tinggi (2026)</p>
             </div>
-
-            <div class="overflow-x-auto mt-3">
-              <table class="w-full text-left text-xs">
-                <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
-                  <tr>
-                    <th class="py-2.5 px-3">Bulan</th>
-                    <th class="py-2.5 px-3 text-right text-sky-700 dark:text-sky-400">Udara</th>
-                    <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400">Kereta Api</th>
-                    <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Bus</th>
-                    <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">ASDP</th>
-                    <th class="py-2.5 px-3 text-right text-cyan-700 dark:text-cyan-400">Laut</th>
-                    <th class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">Total</th>
-                  </tr>
-                </thead>
-                <tbody id="tbody-monthly" class="divide-y divide-slate-100 dark:divide-slate-800 num-mono text-slate-800 dark:text-slate-200">
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Footnote Catatan September* -->
-            <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-start gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-              <span class="font-bold text-amber-600 dark:text-amber-400 shrink-0">* Catatan September:</span>
-              <p class="leading-relaxed text-[11px]">
-                Data bulan September 2026 merupakan data berjalan s.d. 29 September (29 hari, belum genap satu bulan penuh 30 hari).
-              </p>
+            
+            <!-- View Mode Buttons -->
+            <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded border border-slate-200 dark:border-slate-700 text-[11px]">
+              <button id="btn-mode-prov" onclick="switchProvGrowthMode('prov')" class="px-2 py-0.5 rounded font-semibold bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs transition-colors">Per Provinsi</button>
+              <button id="btn-mode-month" onclick="switchProvGrowthMode('month')" class="px-2 py-0.5 rounded font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">Per Bulan</button>
             </div>
           </div>
 
-          <!-- Right (5 Cols): Analisis Tren & Lonjakan Bulanan per Provinsi -->
-          <div class="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 flex flex-col justify-between">
-            <div>
-              <!-- Header & Mode Toggle -->
-              <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-                <div>
-                  <div class="flex items-center gap-1.5">
-                    <span class="inline-block w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                    <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Tren & Lonjakan Bulanan per Provinsi</h3>
-                  </div>
-                  <p id="prov-growth-subtitle" class="text-[11px] text-slate-500">Cek di bulan apa suatu provinsi naik tinggi (2026)</p>
-                </div>
-                
-                <!-- View Mode Buttons -->
-                <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded border border-slate-200 dark:border-slate-700 text-[11px]">
-                  <button id="btn-mode-prov" onclick="switchProvGrowthMode('prov')" class="px-2 py-0.5 rounded font-semibold bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs transition-colors">Per Provinsi</button>
-                  <button id="btn-mode-month" onclick="switchProvGrowthMode('month')" class="px-2 py-0.5 rounded font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">Per Bulan</button>
-                </div>
+          <!-- Controls Row & Key Metrics Highlight Strip -->
+          <div class="mt-3.5 grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
+            <!-- Dropdowns & Filters (Mode 'prov' vs 'month') -->
+            <div class="lg:col-span-4">
+              <div id="wrapper-sel-prov" class="flex items-center gap-2 w-full">
+                <label for="sel-prov-growth" class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 shrink-0">Pilih Provinsi:</label>
+                <select id="sel-prov-growth" onchange="onProvinceGrowthSelectChange()" class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2.5 py-1.5 text-slate-900 dark:text-slate-100 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-xs cursor-pointer">
+                  <!-- Populated dynamically via JS -->
+                </select>
               </div>
 
-              <!-- Controls Row (Dropdowns & Filters) -->
-              <div class="mt-3 flex items-center justify-between gap-2">
-                <!-- Dropdown Provinsi (Mode 'prov') -->
-                <div id="wrapper-sel-prov" class="flex items-center gap-2 w-full">
-                  <label for="sel-prov-growth" class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 shrink-0">Pilih Provinsi:</label>
-                  <select id="sel-prov-growth" onchange="onProvinceGrowthSelectChange()" class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2.5 py-1.5 text-slate-900 dark:text-slate-100 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-xs cursor-pointer">
-                    <!-- Populated dynamically via JS -->
-                  </select>
-                </div>
-
-                <!-- Dropdown Bulan (Mode 'month') -->
-                <div id="wrapper-sel-month" class="hidden items-center gap-2 w-full">
-                  <label for="sel-month-growth" class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 shrink-0">Pilih Bulan:</label>
-                  <select id="sel-month-growth" onchange="onMonthGrowthSelectChange()" class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2.5 py-1.5 text-slate-900 dark:text-slate-100 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-xs cursor-pointer">
-                    <option value="3" selected>Maret 2026 (Puncak Mudik Lebaran)</option>
-                    <option value="4">April 2026 (Puncak Arus Balik)</option>
-                    <option value="5">Mei 2026</option>
-                    <option value="6">Juni 2026 (Libur Sekolah Awal)</option>
-                    <option value="7">Juli 2026 (Puncak Libur Sekolah)</option>
-                    <option value="8">Agustus 2026 (Wisata Musim Panas)</option>
-                    <option value="9">September 2026</option>
-                    <option value="1">Januari 2026 (Nataru)</option>
-                    <option value="2">Februari 2026 (Kondisi Reguler)</option>
-                  </select>
-                </div>
+              <div id="wrapper-sel-month" class="hidden items-center gap-2 w-full">
+                <label for="sel-month-growth" class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 shrink-0">Pilih Bulan:</label>
+                <select id="sel-month-growth" onchange="onMonthGrowthSelectChange()" class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2.5 py-1.5 text-slate-900 dark:text-slate-100 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-xs cursor-pointer">
+                  <option value="3" selected>Maret 2026 (Puncak Mudik Lebaran)</option>
+                  <option value="4">April 2026 (Puncak Arus Balik)</option>
+                  <option value="5">Mei 2026</option>
+                  <option value="6">Juni 2026 (Libur Sekolah Awal)</option>
+                  <option value="7">Juli 2026 (Puncak Libur Sekolah)</option>
+                  <option value="8">Agustus 2026 (Wisata Musim Panas)</option>
+                  <option value="9">September 2026</option>
+                  <option value="1">Januari 2026 (Nataru)</option>
+                  <option value="2">Februari 2026 (Kondisi Reguler)</option>
+                </select>
               </div>
+            </div>
 
-              <!-- Key Metrics Highlight Strip -->
-              <div id="prov-metrics-strip" class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
-                <div class="bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 rounded p-2">
-                  <span id="label-stat-1" class="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-400 block tracking-tight">Bulan Puncak</span>
-                  <span id="badge-prov-peak" class="font-bold text-slate-900 dark:text-white text-xs num-mono">Maret</span>
-                  <span id="badge-prov-peak-vol" class="text-[10px] text-slate-500 dark:text-slate-400 block num-mono">4.68M pnp</span>
-                </div>
-                <div class="bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40 rounded p-2">
-                  <span id="label-stat-2" class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400 block tracking-tight">Lonjakan MoM</span>
-                  <span id="badge-prov-jump" class="font-bold text-emerald-600 dark:text-emerald-400 text-xs num-mono">+53.7%</span>
-                  <span id="badge-prov-jump-m" class="text-[10px] text-slate-500 dark:text-slate-400 block">vs Februari</span>
-                </div>
-                <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded p-2">
-                  <span id="label-stat-3" class="text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 block tracking-tight">Total YTD</span>
-                  <span id="badge-prov-ytd" class="font-bold text-slate-900 dark:text-white text-xs num-mono">34.05M</span>
-                  <span id="badge-prov-ytd-sub" class="text-[10px] text-slate-500 dark:text-slate-400 block">Penumpang Brg</span>
-                </div>
+            <!-- Key Metrics Highlight Strip -->
+            <div id="prov-metrics-strip" class="lg:col-span-8 grid grid-cols-3 gap-2 text-xs">
+              <div class="bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 rounded p-2">
+                <span id="label-stat-1" class="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-400 block tracking-tight">Bulan Puncak</span>
+                <span id="badge-prov-peak" class="font-bold text-slate-900 dark:text-white text-xs num-mono">Maret</span>
+                <span id="badge-prov-peak-vol" class="text-[10px] text-slate-500 dark:text-slate-400 block num-mono">4.68M pnp</span>
               </div>
-
-              <!-- Descriptive Finding Callout -->
-              <div id="prov-finding-callout" class="mt-2.5 p-2.5 bg-blue-50/50 dark:bg-blue-950/20 border-l-3 border-blue-500 rounded-r text-[11px] text-slate-700 dark:text-slate-300 leading-relaxed">
-                <!-- Dynamic text populated by JS -->
+              <div class="bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40 rounded p-2">
+                <span id="label-stat-2" class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400 block tracking-tight">Lonjakan MoM</span>
+                <span id="badge-prov-jump" class="font-bold text-emerald-600 dark:text-emerald-400 text-xs num-mono">+53.7%</span>
+                <span id="badge-prov-jump-m" class="text-[10px] text-slate-500 dark:text-slate-400 block">vs Februari</span>
               </div>
+              <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded p-2">
+                <span id="label-stat-3" class="text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 block tracking-tight">Total YTD</span>
+                <span id="badge-prov-ytd" class="font-bold text-slate-900 dark:text-white text-xs num-mono">34.05M</span>
+                <span id="badge-prov-ytd-sub" class="text-[10px] text-slate-500 dark:text-slate-400 block">Penumpang Brg</span>
+              </div>
+            </div>
+          </div>
 
-              <!-- Chart Area -->
-              <div class="relative w-full h-[190px] mt-3">
+          <!-- Descriptive Finding Callout -->
+          <div id="prov-finding-callout" class="mt-3 p-2.5 bg-blue-50/50 dark:bg-blue-950/20 border-l-3 border-blue-500 rounded-r text-[11px] text-slate-700 dark:text-slate-300 leading-relaxed">
+            <!-- Dynamic text populated by JS -->
+          </div>
+
+          <!-- Chart & Table Dual Workspace -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <!-- Left (7 Cols): Chart Area -->
+            <div class="lg:col-span-7">
+              <div class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1.5 flex items-center justify-between">
+                <span>Visualisasi Tren Bulanan</span>
+                <span class="text-[10px] text-slate-400 font-mono">Volume Penumpang</span>
+              </div>
+              <div class="relative w-full h-[290px]">
                 <canvas id="chartProvinceGrowthCanvas"></canvas>
               </div>
             </div>
 
-            <!-- Table Area -->
-            <div class="overflow-x-auto mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-              <table class="w-full text-left text-xs">
-                <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
-                  <tr id="thead-prov-growth">
-                    <th class="py-2 px-2.5">Bulan</th>
-                    <th class="py-2 px-2.5 text-right">Keberangkatan</th>
-                    <th class="py-2 px-2.5 text-right">Pertumbuhan (MoM)</th>
-                    <th class="py-2 px-2.5 text-center">Moda Utama</th>
-                    <th class="py-2 px-2.5 text-center">Status</th>
-                  </tr>
-                </thead>
-                <tbody id="tbody-prov-growth" class="divide-y divide-slate-100 dark:divide-slate-800 num-mono text-slate-800 dark:text-slate-200">
-                  <!-- Dynamic rows populated by JS -->
-                </tbody>
-              </table>
+            <!-- Right (5 Cols): Table Area -->
+            <div class="lg:col-span-5">
+              <div class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1.5 flex items-center justify-between">
+                <span>Rincian Data Bulanan</span>
+                <span class="text-[10px] text-slate-400 font-mono">Pertumbuhan MoM</span>
+              </div>
+              <div class="overflow-x-auto border border-slate-100 dark:border-slate-800 rounded">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
+                    <tr id="thead-prov-growth">
+                      <th class="py-2 px-2.5">Bulan</th>
+                      <th class="py-2 px-2.5 text-right">Keberangkatan</th>
+                      <th class="py-2 px-2.5 text-right">Pertumbuhan (MoM)</th>
+                      <th class="py-2 px-2.5 text-center">Moda Utama</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-prov-growth" class="divide-y divide-slate-100 dark:divide-slate-800 num-mono text-slate-800 dark:text-slate-200">
+                    <!-- Dynamic rows populated by JS -->
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
+        </div>
 
+        <!-- Panel 2: Akumulasi Bulanan per Moda Transportasi (Di Bawah) -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div>
+              <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Akumulasi Bulanan per Moda Transportasi</h3>
+              <p id="monthly-table-subtitle" class="text-[11px] text-slate-500">Volume pergerakan dari Januari sampai dengan September 2026</p>
+            </div>
+            <span class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700">9 Bulan (Jan - Sep)</span>
+          </div>
+
+          <div class="overflow-x-auto mt-3">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
+                <tr>
+                  <th class="py-2.5 px-3">Bulan</th>
+                  <th class="py-2.5 px-3 text-right text-sky-700 dark:text-sky-400">Udara</th>
+                  <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400">Kereta Api</th>
+                  <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Bus</th>
+                  <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">ASDP</th>
+                  <th class="py-2.5 px-3 text-right text-cyan-700 dark:text-cyan-400">Laut</th>
+                  <th class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">Total</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-monthly" class="divide-y divide-slate-100 dark:divide-slate-800 num-mono text-slate-800 dark:text-slate-200">
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Footnote Catatan September* -->
+          <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-start gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+            <span class="font-bold text-amber-600 dark:text-amber-400 shrink-0">* Catatan September:</span>
+            <p class="leading-relaxed text-[11px]">
+              Data bulan September 2026 merupakan data berjalan s.d. 29 September (29 hari, belum genap satu bulan penuh 30 hari).
+            </p>
+          </div>
         </div>
 
       </div>
