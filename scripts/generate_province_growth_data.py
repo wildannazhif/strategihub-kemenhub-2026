@@ -44,6 +44,7 @@ for m_key, m_info in metrics_map.items():
     p_m = df.groupby(['provinsi', 'month'])[col].sum().unstack(fill_value=0)
     p_m_moda = df.groupby(['provinsi', 'month', 'moda'])[col].sum().unstack(fill_value=0).reset_index()
     top_provinces = p_m.sum(axis=1).sort_values(ascending=False).index.tolist()
+    sorted_provinces = sorted(top_provinces)
     
     prov_summary = {}
     for p in top_provinces:
@@ -79,12 +80,14 @@ for m_key, m_info in metrics_map.items():
                 'modas': modas
             })
             
+        vals = [x['val'] for x in monthly]
+        med_vol = float(np.median(vals))
         for item in monthly:
             if item['m'] == peak_m:
                 item['is_peak'] = True
+            item['vs_median'] = round(((item['val'] - med_vol) / med_vol) * 100, 1) if med_vol > 0 else 0.0
                 
-        valid_jumps = [x for x in monthly if x['mom'] is not None and x['mom'] > 0]
-        max_jump_item = max(valid_jumps, key=lambda x: x['mom']) if valid_jumps else None
+        max_jump_vs_med = round(((peak_vol - med_vol) / med_vol) * 100, 1) if med_vol > 0 else 0.0
         
         prov_summary[p] = {
             'provinsi': p,
@@ -93,26 +96,82 @@ for m_key, m_info in metrics_map.items():
             'peak_month': month_names[peak_m],
             'peak_month_num': peak_m,
             'peak_vol': peak_vol,
-            'max_jump_month': max_jump_item['name'] if max_jump_item else '-',
-            'max_jump_pct': max_jump_item['mom'] if max_jump_item else 0.0,
+            'median_vol': int(med_vol),
+            'max_jump_month': month_names[peak_m],
+            'max_jump_pct': max_jump_vs_med,
+            'max_jump_vs_median_pct': max_jump_vs_med,
             'monthly': monthly
         }
+    
+    # Agregat Nasional (Seluruh Provinsi)
+    all_monthly = []
+    all_prev_val = None
+    all_peak_m = 1
+    all_peak_vol = 0
+    for m in range(1, 10):
+        m_modas = {mod: sum(prov_summary[pr]['monthly'][m-1]['modas'][mod] for pr in top_provinces) for mod in ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT']}
+        m_val = sum(m_modas.values())
+        mom = round(((m_val - all_prev_val) / all_prev_val) * 100, 1) if (all_prev_val is not None and all_prev_val > 0) else None
+        all_prev_val = m_val
+        
+        if m_val > all_peak_vol:
+            all_peak_vol = m_val
+            all_peak_m = m
+            
+        dom_moda = max(m_modas.items(), key=lambda x: x[1]) if m_modas else ('-', 0)
+        dom_pct = round((dom_moda[1] / m_val * 100), 1) if m_val > 0 else 0
+        
+        all_monthly.append({
+            'm': m,
+            'name': month_names[m],
+            'short': short_names[m],
+            'val': m_val,
+            'brg': m_val,
+            'mom': mom,
+            'dom_moda': dom_moda[0],
+            'dom_pct': dom_pct,
+            'is_peak': False,
+            'modas': m_modas
+        })
+        
+    all_vals = [x['val'] for x in all_monthly]
+    all_med_vol = float(np.median(all_vals))
+    for item in all_monthly:
+        if item['m'] == all_peak_m:
+            item['is_peak'] = True
+        item['vs_median'] = round(((item['val'] - all_med_vol) / all_med_vol) * 100, 1) if all_med_vol > 0 else 0.0
+        
+    all_max_jump = round(((all_peak_vol - all_med_vol) / all_med_vol) * 100, 1) if all_med_vol > 0 else 0.0
+    
+    prov_summary['ALL'] = {
+        'provinsi': 'Seluruh Provinsi (Nasional)',
+        'total': sum(all_vals),
+        'total_brg': sum(all_vals),
+        'peak_month': month_names[all_peak_m],
+        'peak_month_num': all_peak_m,
+        'peak_vol': all_peak_vol,
+        'median_vol': int(all_med_vol),
+        'max_jump_month': month_names[all_peak_m],
+        'max_jump_pct': all_max_jump,
+        'max_jump_vs_median_pct': all_max_jump,
+        'monthly': all_monthly
+    }
+    prov_summary['Seluruh Provinsi'] = prov_summary['ALL']
         
     monthly_rankings = {}
     for m in range(1, 10):
         vols = p_m[m].sort_values(ascending=False)
         top_vol = [{'provinsi': prov, 'vol': int(vols[prov])} for prov in vols.head(8).index]
         top_growth = []
-        if m > 1:
-            growths = {}
-            for prov in top_provinces:
-                v_curr = p_m.loc[prov, m]
-                v_prev = p_m.loc[prov, m-1]
-                threshold = 15000 if 'pnp' in m_key else 300
-                if v_prev > threshold:
-                    growths[prov] = round(((v_curr - v_prev) / v_prev) * 100, 1)
-            sorted_g = sorted(growths.items(), key=lambda x: x[1], reverse=True)[:8]
-            top_growth = [{'provinsi': k, 'mom': v, 'vol': int(p_m.loc[k, m])} for k, v in sorted_g]
+        growths = {}
+        for prov in top_provinces:
+            v_curr = p_m.loc[prov, m]
+            med_v = prov_summary[prov]['median_vol']
+            threshold = 15000 if 'pnp' in m_key else 300
+            if med_v > threshold:
+                growths[prov] = round(((v_curr - med_v) / med_v) * 100, 1)
+        sorted_g = sorted(growths.items(), key=lambda x: x[1], reverse=True)[:8]
+        top_growth = [{'provinsi': k, 'mom': v, 'vs_median': v, 'vol': int(p_m.loc[k, m])} for k, v in sorted_g]
             
         monthly_rankings[m] = {
             'month': m,
@@ -122,7 +181,7 @@ for m_key, m_info in metrics_map.items():
         }
         
     all_metrics_data[m_key] = {
-        'provinces': top_provinces,
+        'provinces': sorted_provinces,
         'by_province': prov_summary,
         'by_month': monthly_rankings
     }
