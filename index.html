@@ -2459,8 +2459,8 @@ let chartDonutNormal = null;
 let chartDonutPeak = null;
 let chartLoadFactor = null;
 
-// Track active dataset visibilities
-let timelineVisibility = [true, true, true, true, true, true];
+// Track active dataset visibilities (Total Multimoda default dicoret / hidden)
+let timelineVisibility = [false, true, true, true, true, true];
 let lebaranVisibility = [true, true, true, true, true, true];
 
 // Spatial Map Variables
@@ -2890,7 +2890,7 @@ function renderTimelineChart() {
   const unit = currentMetric === 'pnp' ? 'penumpang' : 'trip armada';
 
   const datasets = [
-    { label: 'Total Multimoda', data: raw.map(d => d[getMetricKey('TOTAL')]), borderColor: totalColor, borderWidth: 2, pointRadius: 0, tension: 0.15 },
+    { label: 'Total Multimoda', data: raw.map(d => d[getMetricKey('TOTAL')]), borderColor: totalColor, borderWidth: 2, pointRadius: 0, tension: 0.15, hidden: !timelineVisibility[0] },
     { label: 'Udara', data: raw.map(d => d[getMetricKey('UDARA')]), borderColor: COLOR.UDARA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
     { label: 'Kereta Api', data: raw.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
     { label: 'Bus', data: raw.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
