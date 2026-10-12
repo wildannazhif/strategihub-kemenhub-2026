@@ -171,46 +171,83 @@ function renderProvinceGrowthWorkspace() {
       findingEl.innerHTML = `<span class="font-bold text-blue-700 dark:text-blue-400">💡 Temuan Kenaikan:</span> ${insightStr}`;
     }
 
-    // Chart: Bar 9 Bulan
-    const barColors = provInfo.monthly.map(m => {
-      if (m.is_peak) return '#d97706'; // Amber 600 untuk bulan puncak
-      if (m.mom !== null && m.mom > 0) return '#0284c7'; // Sky 600 pertumbuhan positif
-      return isDark ? '#475569' : '#94a3b8'; // Slate penurunan / awal tahun
-    });
+    const boxTitleEl = document.getElementById('prov-chart-box-title');
+    const boxSubEl = document.getElementById('prov-chart-box-sub');
+    if (boxTitleEl) boxTitleEl.innerText = 'Visualisasi Tren Bulanan (Stacked per Moda)';
+    if (boxSubEl) boxSubEl.innerText = `${mCfg.label} (5 Moda)`;
+
+    // Chart: Stacked Bar 9 Bulan per Moda
+    const modaKeys = [
+      { key: 'UDARA', label: 'Udara', color: (typeof COLOR !== 'undefined' && COLOR.UDARA) || '#0284c7' },
+      { key: 'KA', label: 'Kereta Api', color: (typeof COLOR !== 'undefined' && COLOR.KA) || '#d97706' },
+      { key: 'BUS', label: 'Bus', color: (typeof COLOR !== 'undefined' && COLOR.BUS) || '#16a34a' },
+      { key: 'ASDP', label: 'ASDP', color: (typeof COLOR !== 'undefined' && COLOR.ASDP) || '#9333ea' },
+      { key: 'LAUT', label: 'Laut', color: (typeof COLOR !== 'undefined' && COLOR.LAUT) || '#0891b2' }
+    ];
+
+    const datasets = modaKeys.map(mInfo => ({
+      label: mInfo.label,
+      data: provInfo.monthly.map(m => (m.modas && m.modas[mInfo.key]) || 0),
+      backgroundColor: mInfo.color,
+      borderRadius: 0,
+      stack: 'provStack'
+    }));
 
     chartProvGrowth = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: provInfo.monthly.map(m => m.short),
-        datasets: [{
-          label: mCfg.label,
-          data: provInfo.monthly.map(m => m.val !== undefined ? m.val : m.brg),
-          backgroundColor: barColors,
-          borderRadius: 4
-        }]
+        datasets: datasets
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: false },
+          legend: {
+            display: true,
+            position: 'top',
+            align: 'end',
+            labels: {
+              boxWidth: 8,
+              boxHeight: 8,
+              usePointStyle: true,
+              pointStyle: 'circle',
+              padding: 10,
+              color: isDark ? '#94a3b8' : '#64748b',
+              font: { size: 10, family: 'Inter, sans-serif' }
+            }
+          },
           tooltip: {
+            mode: 'index',
+            intersect: false,
             callbacks: {
-              label: ctx => {
-                const item = provInfo.monthly[ctx.dataIndex];
+              title: (items) => {
+                if (!items || items.length === 0) return '';
+                const idx = items[0].dataIndex;
+                const item = provInfo.monthly[idx];
+                const mVal = item.val !== undefined ? item.val : item.brg;
                 const momStr = item.mom !== null ? (item.mom >= 0 ? `+${item.mom}%` : `${item.mom}%`) : 'Baseline';
-                return [
-                  ` Volume: ${numFmt(ctx.raw)} ${mCfg.unit}`,
-                  ` Pertumbuhan MoM: ${momStr}`,
-                  ` Moda Utama: ${item.dom_moda} (${item.dom_pct}%)`
-                ];
+                return `${item.name} 2026 • Total: ${numFmt(mVal)} ${mCfg.unit} (${momStr} MoM)`;
+              },
+              label: (ctx) => {
+                const val = ctx.raw || 0;
+                if (val === 0) return null;
+                const item = provInfo.monthly[ctx.dataIndex];
+                const mVal = item.val !== undefined ? item.val : item.brg;
+                const pct = mVal > 0 ? ((val / mVal) * 100).toFixed(1) : '0.0';
+                return ` ${ctx.dataset.label}: ${numFmt(val)} ${mCfg.unit} (${pct}%)`;
               }
             }
           }
         },
         scales: {
-          x: { grid: { display: false }, ticks: { color: isDark ? '#94a3b8' : '#64748b' } },
+          x: {
+            stacked: true,
+            grid: { display: false },
+            ticks: { color: isDark ? '#94a3b8' : '#64748b' }
+          },
           y: {
+            stacked: true,
             grid: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' },
             ticks: {
               color: isDark ? '#94a3b8' : '#64748b',
@@ -306,6 +343,11 @@ function renderProvinceGrowthWorkspace() {
     }
 
     // Chart: Horizontal Bar Top 6 Provinsi di Bulan Ini
+    const boxTitleEl = document.getElementById('prov-chart-box-title');
+    const boxSubEl = document.getElementById('prov-chart-box-sub');
+    if (boxTitleEl) boxTitleEl.innerText = 'Peringkat Provinsi Tertinggi';
+    if (boxSubEl) boxSubEl.innerText = `${mCfg.label} (${monthRank.name})`;
+
     const topVolSlice = monthRank.top_vol.slice(0, 6);
     chartProvGrowth = new Chart(ctx, {
       type: 'bar',
@@ -407,7 +449,19 @@ for filename in ['index.html', 'Dashboard_Mobilitas_Nasional_2026.html']:
         "renderTimelineChart();\n  renderMonthlyTable();\n  renderProvinceGrowthWorkspace();\n  renderDOWWorkspace();"
     )
 
-    # 3. Replace Province Growth Workspace JS block
+    # 3. Update chart header titles if not already updated
+    html = html.replace(
+        '''              <div class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1.5 flex items-center justify-between">
+                <span>Visualisasi Tren Bulanan</span>
+                <span class="text-[10px] text-slate-400 font-mono">Volume Penumpang</span>
+              </div>''',
+        '''              <div class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1.5 flex items-center justify-between">
+                <span id="prov-chart-box-title">Visualisasi Tren Bulanan (Stacked per Moda)</span>
+                <span id="prov-chart-box-sub" class="text-[10px] text-slate-400 font-mono">5 Moda Transportasi</span>
+              </div>'''
+    )
+
+    # 4. Replace Province Growth Workspace JS block
     start_ws = "// ===============================================================\n// WORKSPACE: ANALISIS TREN & LONJAKAN BULANAN PER PROVINSI"
     end_ws = "// ---------------------------------------------------------------\n// TAB 2: PUNCAK LEBARAN CONTROLLER"
     pos_ws1 = html.find(start_ws)

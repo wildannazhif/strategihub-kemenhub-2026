@@ -75,7 +75,8 @@ for m_key, m_info in metrics_map.items():
                 'mom': mom,
                 'dom_moda': dom_moda[0],
                 'dom_pct': dom_pct,
-                'is_peak': False
+                'is_peak': False,
+                'modas': modas
             })
             
         for item in monthly:
