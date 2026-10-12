@@ -163,11 +163,7 @@ const METRIC_CONFIG_PROV = {
   'arm_tot': { label: 'Total Armada', short: 'Total Arm', unit: 'trip', fullUnit: 'trip armada', verb: 'total armada' }
 };
 
-let currentProvGrowthMode = 'prov';
-let selectedProvinceForGrowth = 'ALL';
-let selectedModaForGrowth = 'ALL';
-let selectedMonthForGrowth = 3;
-let chartProvGrowth = null;
+// State variables (currentProvGrowthMode, selectedProvinceForGrowth, selectedModaForGrowth, selectedMonthForGrowth, chartProvGrowth) are declared at top of script
 
 function getActiveProvinceGrowthData() {
   const pmd = DATA.province_monthly_data;
@@ -196,7 +192,7 @@ function initProvinceGrowthWorkspace() {
     // 2. Daftar 38 Provinsi Diurutkan Berdasarkan Alfabet (A-Z)
     const sortedProvs = [...pData.provinces]
       .filter(p => p !== 'ALL' && p !== 'Seluruh Provinsi')
-      .sort((a, b) => a.localeCompare('id', { sensitivity: 'base' }));
+      .sort((a, b) => a.localeCompare(b, 'id', { sensitivity: 'base' }));
 
     sortedProvs.forEach(prov => {
       const opt = document.createElement('option');
@@ -731,6 +727,32 @@ for filename in ['index.html', 'Dashboard_Mobilitas_Nasional_2026.html']:
         raise Exception(f"Cannot find Province Growth Workspace JS block in {filename}")
 
     html = html[:pos_ws1] + new_workspace_js + "\n\n" + html[pos_ws2:]
+
+    # 5. Ensure top-level state variables are cleanly declared
+    if "let selectedProvinceForGrowth = 'Jawa Timur';" in html:
+        html = html.replace(
+            "let selectedProvinceForGrowth = 'Jawa Timur';",
+            "let selectedProvinceForGrowth = 'ALL';\nlet selectedModaForGrowth = 'ALL';"
+        )
+    elif "let selectedProvinceForGrowth = 'ALL';" in html and "let selectedModaForGrowth = 'ALL';" not in html:
+        html = html.replace(
+            "let selectedProvinceForGrowth = 'ALL';",
+            "let selectedProvinceForGrowth = 'ALL';\nlet selectedModaForGrowth = 'ALL';"
+        )
+
+    # 6. Remove legacy duplicate renderMonthlyTable around line 3065
+    legacy_fn_marker = "function renderMonthlyTable() {\n  const ms = DATA.monthly_summary;"
+    if legacy_fn_marker in html:
+        p_fn_start = html.find(legacy_fn_marker)
+        p_fn_end = html.find("// ===============================================================", p_fn_start)
+        if p_fn_start != -1 and p_fn_end != -1:
+            html = html[:p_fn_start] + "// Legacy renderMonthlyTable removed; unified in renderProvinceGrowthWorkspace\n\n" + html[p_fn_end:]
+
+    # 7. Clean up multiple redundant calls in updateDashboardMetricAndDirection
+    html = html.replace(
+        "  renderTimelineChart();\n  renderMonthlyTable();\n  renderProvinceGrowthWorkspace();\n  renderDOWWorkspace();",
+        "  renderTimelineChart();\n  renderProvinceGrowthWorkspace();"
+    )
 
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(html)

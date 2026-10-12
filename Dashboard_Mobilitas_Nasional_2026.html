@@ -2442,7 +2442,8 @@ let chartTimeline = null;
 let chartDOW = null;
 let chartProvGrowth = null;
 let currentProvGrowthMode = 'prov';
-let selectedProvinceForGrowth = 'Jawa Timur';
+let selectedProvinceForGrowth = 'ALL';
+let selectedModaForGrowth = 'ALL';
 let selectedMonthForGrowth = 3;
 let chartLebaranLine = null;
 let chartSurgeBar = null;
@@ -2827,9 +2828,7 @@ function updateDashboardMetricAndDirection() {
   dowSelectedMetric = globalCode;
 
   renderTimelineChart();
-  renderMonthlyTable();
   renderProvinceGrowthWorkspace();
-  renderDOWWorkspace();
 
   // 6. Update Tab 2 (Lebaran)
   if (chartLebaranLine) {
@@ -3062,35 +3061,7 @@ function focusCustomRange() {
   }
 }
 
-function renderMonthlyTable() {
-  const ms = DATA.monthly_summary;
-  const tbody = document.getElementById('tbody-monthly');
-  if (!tbody) return;
-  tbody.innerHTML = '';
-  
-  const code = monthlySelectedMetric || (currentMetric + '_' + currentDirection);
-  const cfg = METRIC_CODE_CONFIG[code] || { label: 'Total Penumpang' };
-
-  ms.forEach((m) => {
-    const tr = document.createElement('tr');
-    tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
-    tr.innerHTML = `
-      <td class="py-2.5 px-3 font-sans font-medium text-slate-900 dark:text-slate-200">${m.label}</td>
-      <td class="py-2.5 px-3 text-right">${numFmt(m[getMetricKeyFromCode(code, 'UDARA')])}</td>
-      <td class="py-2.5 px-3 text-right">${numFmt(m[getMetricKeyFromCode(code, 'KA')])}</td>
-      <td class="py-2.5 px-3 text-right">${numFmt(m[getMetricKeyFromCode(code, 'BUS')])}</td>
-      <td class="py-2.5 px-3 text-right">${numFmt(m[getMetricKeyFromCode(code, 'ASDP')])}</td>
-      <td class="py-2.5 px-3 text-right">${numFmt(m[getMetricKeyFromCode(code, 'LAUT')])}</td>
-      <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">${numFmt(m[getMetricKeyFromCode(code, 'TOTAL')])}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  const subEl = document.getElementById('monthly-table-subtitle');
-  if (subEl) {
-    subEl.innerText = `Akumulasi ${cfg.label} dari Januari sampai dengan September 2026`;
-  }
-}
+// Legacy renderMonthlyTable removed; unified in renderProvinceGrowthWorkspace
 
 // ===============================================================
 // WORKSPACE: ANALISIS TREN & LONJAKAN BULANAN PER PROVINSI
@@ -3104,11 +3075,7 @@ const METRIC_CONFIG_PROV = {
   'arm_tot': { label: 'Total Armada', short: 'Total Arm', unit: 'trip', fullUnit: 'trip armada', verb: 'total armada' }
 };
 
-let currentProvGrowthMode = 'prov';
-let selectedProvinceForGrowth = 'ALL';
-let selectedModaForGrowth = 'ALL';
-let selectedMonthForGrowth = 3;
-let chartProvGrowth = null;
+// State variables (currentProvGrowthMode, selectedProvinceForGrowth, selectedModaForGrowth, selectedMonthForGrowth, chartProvGrowth) are declared at top of script
 
 function getActiveProvinceGrowthData() {
   const pmd = DATA.province_monthly_data;
@@ -3137,7 +3104,7 @@ function initProvinceGrowthWorkspace() {
     // 2. Daftar 38 Provinsi Diurutkan Berdasarkan Alfabet (A-Z)
     const sortedProvs = [...pData.provinces]
       .filter(p => p !== 'ALL' && p !== 'Seluruh Provinsi')
-      .sort((a, b) => a.localeCompare('id', { sensitivity: 'base' }));
+      .sort((a, b) => a.localeCompare(b, 'id', { sensitivity: 'base' }));
 
     sortedProvs.forEach(prov => {
       const opt = document.createElement('option');
