@@ -169,7 +169,13 @@
           <!-- TAB 8: FORECASTING NATARU 2026/2027 -->
           <button onclick="switchTab('tab-forecasting', 'Proyeksi & Prediksi Nataru 2026/2027', this)" class="nav-btn w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent transition-all text-left">
             <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0"></span>
-            <span class="truncate font-semibold text-indigo-700 dark:text-indigo-400">Proyeksi Nataru 2026</span>
+            <span class="truncate font-semibold text-indigo-700 dark:text-indigo-400">Forecasting</span>
+          </button>
+
+          <!-- TAB 9: REKOMENDASI PENAMBAHAN ARMADA (1.010 SIMPUL) -->
+          <button onclick="switchTab('tab-rekomendasi', 'Rekomendasi Penambahan Armada (1.010 Simpul)', this)" class="nav-btn w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent transition-all text-left">
+            <span class="w-1.5 h-1.5 rounded-full bg-violet-600 shrink-0"></span>
+            <span class="truncate font-semibold text-violet-700 dark:text-violet-400">Rekomendasi</span>
           </button>
 
                     <!-- TAB 9: TENTANG DATA & KAMUS RUMUS -->
@@ -1373,6 +1379,56 @@
           </div>
         </div>
 
+        <!-- Table: Daily Forecast Detail (100 Days) -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-slate-100 dark:border-slate-800">
+            <div>
+              <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
+                Tabel Rincian Harian Prediksi Mobilitas Multimoda (Horizon 100 Hari)
+              </h4>
+              <p class="text-[11px] text-slate-500">Estimasi volume harian, batas rentang interval 95% CI, persentase lonjakan, dan alokasi armada</p>
+            </div>
+
+            <!-- Table Range Filter -->
+            <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-[11px] font-medium">
+              <button onclick="setForecastTableRange('nataru', this)" class="btn-fc-tbl active px-2 py-0.5 rounded bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 font-semibold shadow-xs transition-all">Posko Nataru (18H)</button>
+              <button onclick="setForecastTableRange('des', this)" class="btn-fc-tbl px-2 py-0.5 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Desember</button>
+              <button onclick="setForecastTableRange('nov', this)" class="btn-fc-tbl px-2 py-0.5 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">November</button>
+              <button onclick="setForecastTableRange('okt', this)" class="btn-fc-tbl px-2 py-0.5 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Oktober</button>
+              <button onclick="setForecastTableRange('all', this)" class="btn-fc-tbl px-2 py-0.5 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Semua (100H)</button>
+            </div>
+          </div>
+
+          <!-- Table Container -->
+          <div class="overflow-x-auto max-h-[420px] overflow-y-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="sticky top-0 bg-slate-50 dark:bg-slate-800/90 backdrop-blur-xs text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 dark:border-slate-700">
+                <tr>
+                  <th class="py-2.5 px-3">Tanggal</th>
+                  <th class="py-2.5 px-3">Hari</th>
+                  <th class="py-2.5 px-3 text-right text-indigo-700 dark:text-indigo-400">Proyeksi 2026/27</th>
+                  <th class="py-2.5 px-3 text-right text-emerald-700 dark:text-emerald-400">Realisasi 2025</th>
+                  <th class="py-2.5 px-3 text-center">Pertumbuhan YoY</th>
+                  <th class="py-2.5 px-3 text-right">Rentang 95% CI</th>
+                  <th class="py-2.5 px-3 text-center">Status Lonjakan</th>
+                  <th class="py-2.5 px-3 text-right">Armada Proyeksi</th>
+                  <th class="py-2.5 px-3 text-right text-slate-500">Armada 2025</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-forecast" class="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px] text-slate-800 dark:text-slate-200">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- TAB 9: REKOMENDASI PENAMBAHAN ARMADA (1.010 SIMPUL)        -->
+      <!-- ========================================================= -->
+      <div id="tab-rekomendasi" class="tab-content hidden space-y-5">
+        
         <!-- Section: Interactive Per-Prasarana / Simpul Simulation Panel -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-5">
           <!-- Header -->
@@ -1508,49 +1564,6 @@
             <div id="simpulOperationalSummary" class="p-4 rounded-md bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/50 text-xs text-slate-600 dark:text-slate-300">
               <!-- Rendered dynamically by JS -->
             </div>
-          </div>
-        </div>
-
-        <!-- Table: Daily Forecast Detail (100 Days) -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-slate-100 dark:border-slate-800">
-            <div>
-              <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                Tabel Rincian Harian Prediksi Mobilitas Multimoda (Horizon 100 Hari)
-              </h4>
-              <p class="text-[11px] text-slate-500">Estimasi volume harian, batas rentang interval 95% CI, persentase lonjakan, dan alokasi armada</p>
-            </div>
-
-            <!-- Table Range Filter -->
-            <div class="inline-flex rounded-md border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-[11px] font-medium">
-              <button onclick="setForecastTableRange('nataru', this)" class="btn-fc-tbl active px-2 py-0.5 rounded bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 font-semibold shadow-xs transition-all">Posko Nataru (18H)</button>
-              <button onclick="setForecastTableRange('des', this)" class="btn-fc-tbl px-2 py-0.5 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Desember</button>
-              <button onclick="setForecastTableRange('nov', this)" class="btn-fc-tbl px-2 py-0.5 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">November</button>
-              <button onclick="setForecastTableRange('okt', this)" class="btn-fc-tbl px-2 py-0.5 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Oktober</button>
-              <button onclick="setForecastTableRange('all', this)" class="btn-fc-tbl px-2 py-0.5 rounded text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Semua (100H)</button>
-            </div>
-          </div>
-
-          <!-- Table Container -->
-          <div class="overflow-x-auto max-h-[420px] overflow-y-auto">
-            <table class="w-full text-left border-collapse text-xs">
-              <thead class="sticky top-0 bg-slate-50 dark:bg-slate-800/90 backdrop-blur-xs text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 dark:border-slate-700">
-                <tr>
-                  <th class="py-2.5 px-3">Tanggal</th>
-                  <th class="py-2.5 px-3">Hari</th>
-                  <th class="py-2.5 px-3 text-right text-indigo-700 dark:text-indigo-400">Proyeksi 2026/27</th>
-                  <th class="py-2.5 px-3 text-right text-emerald-700 dark:text-emerald-400">Realisasi 2025</th>
-                  <th class="py-2.5 px-3 text-center">Pertumbuhan YoY</th>
-                  <th class="py-2.5 px-3 text-right">Rentang 95% CI</th>
-                  <th class="py-2.5 px-3 text-center">Status Lonjakan</th>
-                  <th class="py-2.5 px-3 text-right">Armada Proyeksi</th>
-                  <th class="py-2.5 px-3 text-right text-slate-500">Armada 2025</th>
-                </tr>
-              </thead>
-              <tbody id="tbody-forecast" class="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px] text-slate-800 dark:text-slate-200">
-                <!-- Populated by JS -->
-              </tbody>
-            </table>
           </div>
         </div>
 
@@ -2560,6 +2573,9 @@ function switchTab(targetId, title, btn) {
     if (targetId === 'tab-forecasting') {
       renderForecastWorkspace();
     }
+    if (targetId === 'tab-rekomendasi') {
+      renderSimpulSimulation();
+    }
     if (targetId === 'tab-tentang-data') {
       renderKaTeXFormulas();
     }
@@ -2864,6 +2880,9 @@ function updateDashboardMetricAndDirection() {
 
   // 10. Update Tab 7 (Leaflet Spatial Map)
   renderSpatialMapNodes();
+
+  // 11. Update Tab 9 (Rekomendasi Simpul)
+  renderSimpulSimulation();
 }
 
 // ---------------------------------------------------------------
