@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagram Sankey OD Udara Nasional & Pipeline Data</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --background: #f8fafc;
+      --foreground: #0f172a;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --muted-foreground: #64748b;
+    }
+    .dark {
+      --background: #0b1120;
+      --foreground: #f8fafc;
+      --card: #0f172a;
+      --border: #1e293b;
+      --muted-foreground: #94a3b8;
+    }
+    .flow-ribbon {
+      transition: opacity 0.25s ease, stroke-width 0.25s ease, filter 0.25s ease;
+      cursor: pointer;
+    }
+    .flow-ribbon:hover {
+      opacity: 0.95 !important;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+    }
+    .node-bar {
+      transition: transform 0.2s ease, filter 0.2s ease;
+      cursor: pointer;
+    }
+    .node-bar:hover {
+      filter: brightness(1.12);
+      transform: scaleX(1.08);
+    }
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-transparent text-[var(--foreground)] antialiased p-3 sm:p-5">
+  <div class="max-w-7xl mx-auto space-y-4">
+
+    <!-- HEADER CARD -->
+    <div class="bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] rounded-2xl p-5 shadow-sm">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">
+              Kemenhub • SIASATI OD Udara
+            </span>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">
+              Verified Domestic 100%
+            </span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-[var(--foreground)]">
+            Diagram Alir Sankey: Arus Mobilitas Udara & Pipeline 2 Skema
+          </h1>
+          <p class="text-xs sm:text-sm text-[var(--muted-foreground)] mt-0.5">
+            Visualisasi proporsional volume penumpang antar-hub bandara, konektivitas kepulauan, serta audit pipeline filtering data.
+          </p>
+        </div>
+
+        <!-- TAB NAVIGATION -->
+        <div class="flex items-center bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] self-start md:self-auto overflow-x-auto">
+          <button id="tab-btn-hub" onclick="switchView('hub')" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-semibold transition-all duration-200 bg-[var(--card)] text-[var(--foreground)] shadow-sm">
+            ✈️ Arus Hub Bandara
+          </button>
+          <button id="tab-btn-island" onclick="switchView('island')" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-semibold transition-all duration-200 text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+            🏝️ Arus Antar-Pulau
+          </button>
+          <button id="tab-btn-pipeline" onclick="switchView('pipeline')" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-semibold transition-all duration-200 text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+            🔬 Pipeline Data (2 Skema)
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI METRIC STRIP -->
+      <div id="kpi-strip" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-4 border-t border-[var(--border)]">
+        <div class="bg-[var(--background)] rounded-xl p-3 border border-[var(--border)]">
+          <span class="text-xs text-[var(--muted-foreground)] block">Total Penumpang Terpantau</span>
+          <span id="kpi-pax" class="text-lg font-bold text-[var(--foreground)]">1.941.399</span>
+          <span class="text-xs text-blue-600 dark:text-blue-400 block font-medium">Orang / Bulan</span>
+        </div>
+        <div class="bg-[var(--background)] rounded-xl p-3 border border-[var(--border)]">
+          <span class="text-xs text-[var(--muted-foreground)] block">Frekuensi Penerbangan</span>
+          <span id="kpi-flt" class="text-lg font-bold text-[var(--foreground)]">14.869</span>
+          <span class="text-xs text-emerald-600 dark:text-emerald-400 block font-medium">Flights Komersial</span>
+        </div>
+        <div class="bg-[var(--background)] rounded-xl p-3 border border-[var(--border)]">
+          <span class="text-xs text-[var(--muted-foreground)] block">Koridor Terpadat</span>
+          <span id="kpi-top" class="text-lg font-bold text-[var(--foreground)]">DPS ⇄ CGK</span>
+          <span id="kpi-top-sub" class="text-xs text-amber-600 dark:text-amber-400 block font-medium">266.263 Pax Gabungan</span>
+        </div>
+        <div class="bg-[var(--background)] rounded-xl p-3 border border-[var(--border)]">
+          <span class="text-xs text-[var(--muted-foreground)] block">Rata-rata Kepadatan</span>
+          <span id="kpi-density" class="text-lg font-bold text-[var(--foreground)]">130,6</span>
+          <span class="text-xs text-purple-600 dark:text-purple-400 block font-medium">Pax / Penerbangan</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN INTERACTIVE CANVAS CARD -->
+    <div class="bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
+
+      <!-- TOOLBAR / FILTER -->
+      <div id="controls-bar" class="flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-2">
+          <label for="filter-hub" class="font-medium text-[var(--foreground)]">Filter Asal:</label>
+          <select id="filter-hub" onchange="applyFilter()" class="bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)] rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500">
+            <option value="ALL">Semua Titik Asal</option>
+            <option value="CGK">CGK (Jakarta)</option>
+            <option value="SUB">SUB (Surabaya)</option>
+            <option value="DPS">DPS (Bali)</option>
+            <option value="UPG">UPG (Makassar)</option>
+            <option value="KNO">KNO (Medan)</option>
+            <option value="BPN">BPN (Balikpapan)</option>
+          </select>
+
+          <span class="text-[var(--muted-foreground)]">|</span>
+          <label for="threshold-slider" class="text-[var(--muted-foreground)] hidden sm:inline">Min. Pax:</label>
+          <input type="range" id="threshold-slider" min="10000" max="60000" step="5000" value="10000" oninput="updateThreshold(this.value)" class="w-24 accent-blue-600 cursor-pointer hidden sm:inline">
+          <span id="threshold-val" class="font-semibold text-[var(--foreground)] hidden sm:inline">≥ 10.000</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="resetHighlight()" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">
+            🔄 Reset Sorotan
+          </button>
+          <div class="flex items-center gap-1.5 text-[var(--muted-foreground)] text-xs">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-blue-500"></span> Asal
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 ml-1"></span> Tujuan
+          </div>
+        </div>
+      </div>
+
+      <!-- SANKEY SVG CONTAINER -->
+      <div class="relative w-full overflow-x-auto rounded-xl bg-[var(--background)] border border-[var(--border)] p-2">
+        <svg id="sankey-svg" viewBox="0 0 1000 640" class="w-full h-auto min-w-[760px] select-none"></svg>
+
+        <!-- FLOATING TOOLTIP -->
+        <div id="tooltip" class="absolute hidden pointer-events-none z-50 bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] rounded-xl p-3 shadow-xl text-xs max-w-xs transition-opacity duration-150"></div>
+      </div>
+
+      <!-- INSIGHT CALLOUT -->
+      <div id="insight-panel" class="bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 rounded-xl p-4">
+        <h4 id="insight-title" class="text-xs font-bold text-blue-900 dark:text-blue-300 uppercase tracking-wider mb-1">
+          💡 Analisis Koridor Penumpang (Arus Hub Terbesar)
+        </h4>
+        <p id="insight-text" class="text-xs leading-relaxed text-blue-800 dark:text-blue-200">
+          Koridor Jakarta (CGK) memegang peranan sebagai megahub sentral Indonesia dengan menyerap lebih dari 62% pergerakan penumpang domestik. Aliran terbesar terjadi pada poros segitiga emas: Jakarta ⇄ Denpasar (266k pax), Jakarta ⇄ Surabaya (202k pax), dan Jakarta ⇄ Medan (195k pax).
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Embedded Datasets
+    const rawData = {
+      hub_flows: [{"source": "DPS (Bali)", "target": "CGK (Jakarta)", "value": 137133, "flights": 999}, {"source": "CGK (Jakarta)", "target": "DPS (Bali)", "value": 129130, "flights": 985}, {"source": "SUB (Surabaya)", "target": "CGK (Jakarta)", "value": 102041, "flights": 758}, {"source": "CGK (Jakarta)", "target": "SUB (Surabaya)", "value": 100099, "flights": 744}, {"source": "KNO (Medan)", "target": "CGK (Jakarta)", "value": 99801, "flights": 660}, {"source": "CGK (Jakarta)", "target": "KNO (Medan)", "value": 95590, "flights": 666}, {"source": "CGK (Jakarta)", "target": "UPG (Makassar)", "value": 89414, "flights": 677}, {"source": "UPG (Makassar)", "target": "CGK (Jakarta)", "value": 66028, "flights": 669}, {"source": "CGK (Jakarta)", "target": "PLM (Palembang)", "value": 61470, "flights": 415}, {"source": "SUB (Surabaya)", "target": "DPS (Bali)", "value": 54750, "flights": 358}, {"source": "CGK (Jakarta)", "target": "PKU (Pekanbaru)", "value": 53776, "flights": 399}, {"source": "CGK (Jakarta)", "target": "BTH (Batam)", "value": 53095, "flights": 395}, {"source": "DPS (Bali)", "target": "SUB (Surabaya)", "value": 51559, "flights": 368}, {"source": "CGK (Jakarta)", "target": "YIA (Yogya)", "value": 49344, "flights": 373}, {"source": "BPN (Balikpapan)", "target": "CGK (Jakarta)", "value": 48252, "flights": 369}, {"source": "CGK (Jakarta)", "target": "BPN (Balikpapan)", "value": 47141, "flights": 362}, {"source": "CGK (Jakarta)", "target": "SRG (Semarang)", "value": 47130, "flights": 339}, {"source": "CGK (Jakarta)", "target": "PDG (Padang)", "value": 45690, "flights": 333}, {"source": "CGK (Jakarta)", "target": "BDJ (Banjarmasin)", "value": 45676, "flights": 327}, {"source": "CGK (Jakarta)", "target": "PNK (Pontianak)", "value": 42363, "flights": 302}, {"source": "SUB (Surabaya)", "target": "UPG (Makassar)", "value": 42002, "flights": 302}, {"source": "CGK (Jakarta)", "target": "TKG (TKG)", "value": 40208, "flights": 352}, {"source": "CGK (Jakarta)", "target": "LOP (Lombok)", "value": 33196, "flights": 241}, {"source": "SUB (Surabaya)", "target": "BDJ (Banjarmasin)", "value": 32194, "flights": 205}, {"source": "UPG (Makassar)", "target": "SUB (Surabaya)", "value": 31517, "flights": 305}, {"source": "BPN (Balikpapan)", "target": "SUB (Surabaya)", "value": 30992, "flights": 210}, {"source": "DPS (Bali)", "target": "LBJ (LBJ)", "value": 30711, "flights": 221}, {"source": "CGK (Jakarta)", "target": "DJB (DJB)", "value": 29283, "flights": 221}, {"source": "SUB (Surabaya)", "target": "BPN (Balikpapan)", "value": 28957, "flights": 203}, {"source": "CGK (Jakarta)", "target": "PGK (PGK)", "value": 26129, "flights": 192}, {"source": "SUB (Surabaya)", "target": "HLP (HLP)", "value": 25162, "flights": 217}, {"source": "CGK (Jakarta)", "target": "SOC (SOC)", "value": 23901, "flights": 190}, {"source": "DPS (Bali)", "target": "LOP (Lombok)", "value": 22859, "flights": 337}, {"source": "CGK (Jakarta)", "target": "MDC (Manado)", "value": 21499, "flights": 156}, {"source": "KNO (Medan)", "target": "BTH (Batam)", "value": 19802, "flights": 119}, {"source": "SUB (Surabaya)", "target": "LOP (Lombok)", "value": 19161, "flights": 125}, {"source": "CGK (Jakarta)", "target": "BKS (BKS)", "value": 19117, "flights": 139}, {"source": "BPN (Balikpapan)", "target": "YIA (Yogya)", "value": 18483, "flights": 119}, {"source": "UPG (Makassar)", "target": "KDI (KDI)", "value": 18012, "flights": 160}, {"source": "CGK (Jakarta)", "target": "BTJ (BTJ)", "value": 17148, "flights": 134}, {"source": "BPN (Balikpapan)", "target": "UPG (Makassar)", "value": 16614, "flights": 119}, {"source": "CGK (Jakarta)", "target": "DTB (DTB)", "value": 15505, "flights": 112}, {"source": "DPS (Bali)", "target": "UPG (Makassar)", "value": 15337, "flights": 118}, {"source": "CGK (Jakarta)", "target": "AAP (AAP)", "value": 15170, "flights": 111}, {"source": "BPN (Balikpapan)", "target": "TRK (TRK)", "value": 14004, "flights": 106}, {"source": "CGK (Jakarta)", "target": "KDI (KDI)", "value": 13831, "flights": 101}, {"source": "DPS (Bali)", "target": "YIA (Yogya)", "value": 13754, "flights": 116}, {"source": "SUB (Surabaya)", "target": "BTH (Batam)", "value": 13414, "flights": 84}, {"source": "SUB (Surabaya)", "target": "KOE (KOE)", "value": 12647, "flights": 86}, {"source": "UPG (Makassar)", "target": "YIA (Yogya)", "value": 12139, "flights": 111}, {"source": "CGK (Jakarta)", "target": "TJQ (TJQ)", "value": 11769, "flights": 84}, {"source": "SUB (Surabaya)", "target": "PNK (Pontianak)", "value": 11384, "flights": 72}, {"source": "UPG (Makassar)", "target": "DPS (Bali)", "value": 11367, "flights": 118}, {"source": "CGK (Jakarta)", "target": "AMQ (AMQ)", "value": 11134, "flights": 94}, {"source": "DPS (Bali)", "target": "HLP (HLP)", "value": 10980, "flights": 105}, {"source": "CGK (Jakarta)", "target": "PLW (PLW)", "value": 10969, "flights": 122}, {"source": "UPG (Makassar)", "target": "BPN (Balikpapan)", "value": 10918, "flights": 117}, {"source": "CGK (Jakarta)", "target": "KOE (KOE)", "value": 10892, "flights": 96}, {"source": "UPG (Makassar)", "target": "TTE (TTE)", "value": 10254, "flights": 94}],
+      island_flows: [{"source": "Jawa", "target": "Jawa", "value": 527628, "flights": 4190}, {"source": "Jawa", "target": "Sumatera", "value": 487319, "flights": 3626}, {"source": "Sumatera", "target": "Jawa", "value": 480967, "flights": 3637}, {"source": "Bali & Nusra", "target": "Jawa", "value": 330415, "flights": 2444}, {"source": "Jawa", "target": "Bali & Nusra", "value": 318222, "flights": 2381}, {"source": "Kalimantan", "target": "Jawa", "value": 310713, "flights": 2185}, {"source": "Jawa", "target": "Kalimantan", "value": 305976, "flights": 2192}, {"source": "Jawa", "target": "Sulawesi", "value": 209253, "flights": 1634}, {"source": "Bali & Nusra", "target": "Bali & Nusra", "value": 175902, "flights": 2036}, {"source": "Sulawesi", "target": "Jawa", "value": 172237, "flights": 1634}, {"source": "Sumatera", "target": "Sumatera", "value": 151204, "flights": 1059}, {"source": "Sulawesi", "target": "Sulawesi", "value": 91749, "flights": 749}, {"source": "Jawa", "target": "Lainnya", "value": 74544, "flights": 836}, {"source": "Lainnya", "target": "Jawa", "value": 74473, "flights": 825}, {"source": "Maluku & Papua", "target": "Sulawesi", "value": 65983, "flights": 591}, {"source": "Maluku & Papua", "target": "Maluku & Papua", "value": 63851, "flights": 643}, {"source": "Kalimantan", "target": "Kalimantan", "value": 63515, "flights": 696}, {"source": "Sulawesi", "target": "Maluku & Papua", "value": 60445, "flights": 618}, {"source": "Lainnya", "target": "Sulawesi", "value": 44416, "flights": 832}, {"source": "Maluku & Papua", "target": "Lainnya", "value": 42429, "flights": 3198}, {"source": "Jawa", "target": "Maluku & Papua", "value": 40257, "flights": 350}, {"source": "Lainnya", "target": "Maluku & Papua", "value": 39920, "flights": 3270}, {"source": "Maluku & Papua", "target": "Jawa", "value": 36486, "flights": 309}, {"source": "Sulawesi", "target": "Lainnya", "value": 35313, "flights": 843}],
+      pipeline_nodes: [{"id": "raw", "name": "Raw Data API SIASATI", "sub": "2.231 Baris Total", "stage": 0, "color": "#64748b"}, {"id": "sec", "name": "Lembar 3-6 (Sekunder)", "sub": "906 Baris Transit", "stage": 1, "color": "#94a3b8"}, {"id": "main", "name": "Lembar 1 & 2 (Rute Utama)", "sub": "1.325 Baris Terverifikasi", "stage": 1, "color": "#3b82f6"}, {"id": "dup", "name": "Duplikat Internasional", "sub": "52 Baris Dieliminasi", "stage": 2, "color": "#ef4444"}, {"id": "inc", "name": "SKEMA 1: INCLUDE", "sub": "1.273 Baris Domestik", "stage": 2, "color": "#2563eb"}, {"id": "p0", "name": "Penerbangan Kosong (P=0)", "sub": "276 Baris (1.173 Flights)", "stage": 3, "color": "#f59e0b"}, {"id": "exc", "name": "SKEMA 2: EXCLUDE", "sub": "997 Baris Pax Komersial", "stage": 3, "color": "#10b981"}],
+      pipeline_links: [{"source": "raw", "target": "sec", "value": 906, "desc": "906 Baris rute sekunder & koneksi non-langsung"}, {"source": "raw", "target": "main", "value": 1325, "desc": "1.325 Baris rute utama berpasangan"}, {"source": "main", "target": "dup", "value": 52, "desc": "52 Baris duplikat berlabel internasional"}, {"source": "main", "target": "inc", "value": 1273, "desc": "1.273 Baris bersih 100% domestik (48.119 flights)"}, {"source": "inc", "target": "p0", "value": 276, "desc": "276 Baris penumpang=0 (1.173 flights kargo/ferry)"}, {"source": "inc", "target": "exc", "value": 997, "desc": "997 Baris komersial murni (46.946 flights, 4.38M pax)"}]
+    };
+
+    // Color Maps
+    const colorMap = {
+      'CGK (Jakarta)': '#2563eb',
+      'SUB (Surabaya)': '#0d9488',
+      'DPS (Bali)': '#f59e0b',
+      'UPG (Makassar)': '#10b981',
+      'KNO (Medan)': '#8b5cf6',
+      'BPN (Balikpapan)': '#ec4899',
+      'BTH (Batam)': '#06b6d4',
+      'YIA (Yogya)': '#6366f1',
+      'BDJ (Banjarmasin)': '#14b8a6',
+      'LOP (Lombok)': '#f97316',
+      'PLM (Palembang)': '#84cc16',
+      'PKU (Pekanbaru)': '#a855f7',
+      'PDG (Padang)': '#3b82f6',
+      'PNK (Pontianak)': '#eab308',
+      'SRG (Semarang)': '#64748b',
+      'MDC (Manado)': '#ef4444',
+      // Islands
+      'Jawa': '#2563eb',
+      'Sumatera': '#10b981',
+      'Bali & Nusra': '#f59e0b',
+      'Kalimantan': '#ec4899',
+      'Sulawesi': '#8b5cf6',
+      'Maluku & Papua': '#06b6d4',
+      'Lainnya': '#94a3b8'
+    };
+
+    let currentView = 'hub';
+    let currentFilter = 'ALL';
+    let currentThreshold = 10000;
+    let selectedNode = null;
+
+    function switchView(view) {
+      currentView = view;
+      selectedNode = null;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-[var(--card)]', 'text-[var(--foreground)]', 'shadow-sm');
+        btn.classList.add('text-[var(--muted-foreground)]');
+      });
+      const activeBtn = document.getElementById('tab-btn-' + view);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-[var(--card)]', 'text-[var(--foreground)]', 'shadow-sm');
+        activeBtn.classList.remove('text-[var(--muted-foreground)]');
+      }
+
+      const controlsBar = document.getElementById('controls-bar');
+      const kpiStrip = document.getElementById('kpi-strip');
+      const insightTitle = document.getElementById('insight-title');
+      const insightText = document.getElementById('insight-text');
+
+      if (view === 'hub') {
+        controlsBar.style.display = 'flex';
+        kpiStrip.style.display = 'grid';
+        document.getElementById('kpi-pax').textContent = '1.941.399';
+        document.getElementById('kpi-flt').textContent = '14.869';
+        document.getElementById('kpi-top').textContent = 'DPS ⇄ CGK';
+        document.getElementById('kpi-top-sub').textContent = '266.263 Pax Gabungan';
+        document.getElementById('kpi-density').textContent = '130,6';
+        insightTitle.textContent = '💡 ANALISIS KORIDOR PENUMPANG (ARUS HUB TERBESAR)';
+        insightText.textContent = 'Koridor Jakarta (CGK) memegang peranan sebagai megahub sentral Indonesia dengan menyerap lebih dari 62% pergerakan penumpang domestik. Aliran terbesar terjadi pada poros segitiga emas: Jakarta ⇄ Denpasar (266k pax), Jakarta ⇄ Surabaya (202k pax), dan Jakarta ⇄ Medan (195k pax).';
+        renderBipartiteSankey(getFilteredHubData(), false);
+      } else if (view === 'island') {
+        controlsBar.style.display = 'none';
+        kpiStrip.style.display = 'grid';
+        document.getElementById('kpi-pax').textContent = '4.383.514';
+        document.getElementById('kpi-flt').textContent = '46.946';
+        document.getElementById('kpi-top').textContent = 'Jawa ⇄ Sumatera';
+        document.getElementById('kpi-top-sub').textContent = '968.795 Pax 2-Arah';
+        document.getElementById('kpi-density').textContent = '93,4';
+        insightTitle.textContent = '💡 ANALISIS KONEKTIVITAS WILAYAH ANTAR-PULAU';
+        insightText.textContent = 'Koridor Jawa ⇄ Sumatera merupakan jembatan udara terpadat di Indonesia dengan mendekati 1 juta penumpang, diikuti Jawa ⇄ Bali-Nusra (648k pax) dan Jawa ⇄ Kalimantan (616k pax). Arus intra-Jawa sendiri mencapai 527k pax dengan rute utama Surabaya, Semarang, dan Solo.';
+        renderBipartiteSankey(rawData.island_flows, true);
+      } else if (view === 'pipeline') {
+        controlsBar.style.display = 'none';
+        kpiStrip.style.display = 'grid';
+        document.getElementById('kpi-pax').textContent = '4.383.514';
+        document.getElementById('kpi-flt').textContent = '46.946 (Murni) / 48.119 (Inc)';
+        document.getElementById('kpi-top').textContent = '276 Baris (P=0)';
+        document.getElementById('kpi-top-sub').textContent = '1.173 Penerbangan Kargo/Ferry';
+        document.getElementById('kpi-density').textContent = '93,4 vs 91,1';
+        insightTitle.textContent = '💡 AUDIT PIPELINE DATA & PENJELASAN 2 SKEMA';
+        insightText.textContent = 'Mengapa Total Penumpang Skema INCLUDE dan EXCLUDE 100% IDENTIK? Karena data yang dikeluarkan pada Skema 2 bernilai penumpang = 0. Menghapus angka 0 tidak mengubah akumulasi penumpang sedikit pun (Total + 0 = Total). Namun, memisahkan 276 baris (1.173 penerbangan non-komersial) sangat krusial agar rasio okupansi kursi tidak terdistorsi (dari 91,1 menjadi 93,4 pax/flight).';
+        renderPipelineSankey();
+      }
+    }
+
+    function getFilteredHubData() {
+      return rawData.hub_flows.filter(d => {
+        const matchesFilter = currentFilter === 'ALL' || d.source.startsWith(currentFilter);
+        const matchesThreshold = d.value >= currentThreshold;
+        return matchesFilter && matchesThreshold;
+      });
+    }
+
+    function applyFilter() {
+      currentFilter = document.getElementById('filter-hub').value;
+      renderBipartiteSankey(getFilteredHubData(), false);
+    }
+
+    function updateThreshold(val) {
+      currentThreshold = parseInt(val);
+      document.getElementById('threshold-val').textContent = '≥ ' + Number(val).toLocaleString('id-ID');
+      renderBipartiteSankey(getFilteredHubData(), false);
+    }
+
+    function resetHighlight() {
+      selectedNode = null;
+      document.querySelectorAll('.flow-ribbon').forEach(r => {
+        r.style.opacity = '0.55';
+        r.style.stroke = 'none';
+      });
+      document.querySelectorAll('.node-bar').forEach(n => {
+        n.style.opacity = '1';
+      });
+    }
+
+    function renderBipartiteSankey(linksData, isIsland) {
+      const svg = document.getElementById('sankey-svg');
+      svg.innerHTML = '';
+
+      if (!linksData || linksData.length === 0) {
+        svg.innerHTML = `<text x="500" y="320" text-anchor="middle" fill="var(--muted-foreground)" font-size="14">Tidak ada data yang memenuhi kriteria filter.</text>`;
+        return;
+      }
+
+      const width = 1000;
+      const height = 640;
+      const padY = 40;
+      const padX = isIsland ? 160 : 190;
+      const nodeWidth = 22;
+      const gap = 12;
+
+      // Group sources and targets
+      const sourceMap = {};
+      const targetMap = {};
+      let totalValue = 0;
+
+      linksData.forEach(l => {
+        sourceMap[l.source] = (sourceMap[l.source] || 0) + l.value;
+        targetMap[l.target] = (targetMap[l.target] || 0) + l.value;
+        totalValue += l.value;
+      });
+
+      const sources = Object.keys(sourceMap).sort((a,b) => sourceMap[b] - sourceMap[a]);
+      const targets = Object.keys(targetMap).sort((a,b) => targetMap[b] - targetMap[a]);
+
+      // Usable height
+      const usableHeightS = height - (2 * padY) - ((sources.length - 1) * gap);
+      const usableHeightT = height - (2 * padY) - ((targets.length - 1) * gap);
+
+      const scaleS = usableHeightS / totalValue;
+      const scaleT = usableHeightT / totalValue;
+
+      // Position nodes
+      const sourceNodes = {};
+      let currY = padY;
+      sources.forEach(s => {
+        const h = Math.max(sourceMap[s] * scaleS, 14);
+        sourceNodes[s] = { x: padX, y: currY, height: h, value: sourceMap[s], name: s, isSource: true };
+        currY += h + gap;
+      });
+
+      const targetNodes = {};
+      currY = padY;
+      targets.forEach(t => {
+        const h = Math.max(targetMap[t] * scaleT, 14);
+        targetNodes[t] = { x: width - padX - nodeWidth, y: currY, height: h, value: targetMap[t], name: t, isSource: false };
+        currY += h + gap;
+      });
+
+      // Prepare link vertical offsets
+      const sOffsets = {};
+      const tOffsets = {};
+      sources.forEach(s => sOffsets[s] = 0);
+      targets.forEach(t => tOffsets[t] = 0);
+
+      // Defs for gradients
+      const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+      svg.appendChild(defs);
+
+      // Draw Ribbons
+      const sortedLinks = [...linksData].sort((a, b) => b.value - a.value);
+
+      sortedLinks.forEach((l, idx) => {
+        const sn = sourceNodes[l.source];
+        const tn = targetNodes[l.target];
+        if (!sn || !tn) return;
+
+        const linkHS = (l.value / sn.value) * sn.height;
+        const linkHT = (l.value / tn.value) * tn.height;
+
+        const y1 = sn.y + sOffsets[l.source];
+        const y2 = tn.y + tOffsets[l.target];
+
+        sOffsets[l.source] += linkHS;
+        tOffsets[l.target] += linkHT;
+
+        const x1 = sn.x + nodeWidth;
+        const x2 = tn.x;
+        const cx1 = x1 + (x2 - x1) * 0.45;
+        const cx2 = x2 - (x2 - x1) * 0.45;
+
+        const cSource = colorMap[l.source] || '#3b82f6';
+        const cTarget = colorMap[l.target] || '#10b981';
+
+        // Linear gradient ID
+        const gradId = `grad-${idx}`;
+        const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+        grad.setAttribute('id', gradId);
+        grad.setAttribute('gradientUnits', 'userSpaceOnUse');
+        grad.setAttribute('x1', x1); grad.setAttribute('y1', 0);
+        grad.setAttribute('x2', x2); grad.setAttribute('y2', 0);
+
+        const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        stop1.setAttribute('offset', '0%');
+        stop1.setAttribute('stop-color', cSource);
+        const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        stop2.setAttribute('offset', '100%');
+        stop2.setAttribute('stop-color', cTarget);
+        grad.appendChild(stop1); grad.appendChild(stop2);
+        defs.appendChild(grad);
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const d = `M ${x1} ${y1} C ${cx1} ${y1}, ${cx2} ${y2}, ${x2} ${y2} L ${x2} ${y2 + linkHT} C ${cx2} ${y2 + linkHT}, ${cx1} ${y1 + linkHS}, ${x1} ${y1 + linkHS} Z`;
+        path.setAttribute('d', d);
+        path.setAttribute('fill', `url(#${gradId})`);
+        path.setAttribute('opacity', '0.52');
+        path.setAttribute('class', 'flow-ribbon');
+        path.setAttribute('data-source', l.source);
+        path.setAttribute('data-target', l.target);
+
+        // Hover event
+        path.addEventListener('mouseenter', (e) => {
+          showTooltip(e, `
+            <div class="font-bold text-sm text-[var(--foreground)] border-b border-[var(--border)] pb-1 mb-1.5 flex items-center justify-between">
+              <span>${l.source} ➔ ${l.target}</span>
+              <span class="text-xs px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300">Rute Langsung</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">Volume Penumpang:</span><span class="font-bold">${Number(l.value).toLocaleString('id-ID')} pax</span></div>
+              <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">Frekuensi Terbang:</span><span class="font-semibold">${Number(l.flights).toLocaleString('id-ID')} flight</span></div>
+              <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">Kepadatan Rata-rata:</span><span class="font-semibold">${(l.flights > 0 ? (l.value/l.flights).toFixed(1) : '0')} pax/flight</span></div>
+              <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">Pangsa dari Total Arus:</span><span class="font-semibold text-emerald-600 dark:text-emerald-400">${((l.value/totalValue)*100).toFixed(1)}%</span></div>
+            </div>
+          `);
+          dimOthers(path);
+        });
+
+        path.addEventListener('mousemove', moveTooltip);
+        path.addEventListener('mouseleave', () => {
+          hideTooltip();
+          if (!selectedNode) resetHighlight();
+        });
+
+        svg.appendChild(path);
+      });
+
+      // Draw Nodes (Source & Target)
+      const allNodes = [...Object.values(sourceNodes), ...Object.values(targetNodes)];
+      allNodes.forEach(node => {
+        const col = colorMap[node.name] || (node.isSource ? '#2563eb' : '#10b981');
+
+        // Node Bar
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', node.x);
+        rect.setAttribute('y', node.y);
+        rect.setAttribute('width', nodeWidth);
+        rect.setAttribute('height', node.height);
+        rect.setAttribute('rx', 4);
+        rect.setAttribute('fill', col);
+        rect.setAttribute('class', 'node-bar');
+        rect.setAttribute('data-name', node.name);
+
+        rect.addEventListener('mouseenter', (e) => {
+          showTooltip(e, `
+            <div class="font-bold text-sm text-[var(--foreground)] border-b border-[var(--border)] pb-1 mb-1">
+              ${node.isSource ? '🛫 Titik Asal' : '🛬 Titik Tujuan'}: ${node.name}
+            </div>
+            <div class="space-y-1">
+              <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">Total Volume:</span><span class="font-bold">${Number(node.value).toLocaleString('id-ID')} pax</span></div>
+              <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">Pangsa Arus:</span><span class="font-semibold">${((node.value/totalValue)*100).toFixed(1)}%</span></div>
+            </div>
+          `);
+          highlightNodeFlows(node.name, node.isSource);
+        });
+        rect.addEventListener('mousemove', moveTooltip);
+        rect.addEventListener('mouseleave', () => {
+          hideTooltip();
+          if (!selectedNode) resetHighlight();
+        });
+        rect.addEventListener('click', () => {
+          selectedNode = node.name;
+          highlightNodeFlows(node.name, node.isSource);
+        });
+
+        svg.appendChild(rect);
+
+        // Node Label
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('y', node.y + (node.height / 2) + 4);
+        text.setAttribute('font-size', '11.5');
+        text.setAttribute('font-weight', '600');
+        text.setAttribute('fill', 'var(--foreground)');
+
+        if (node.isSource) {
+          text.setAttribute('x', node.x - 10);
+          text.setAttribute('text-anchor', 'end');
+          text.textContent = node.name;
+        } else {
+          text.setAttribute('x', node.x + nodeWidth + 10);
+          text.setAttribute('text-anchor', 'start');
+          text.textContent = node.name;
+        }
+        svg.appendChild(text);
+
+        // Value subtext
+        const sub = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        sub.setAttribute('y', node.y + (node.height / 2) + 16);
+        sub.setAttribute('font-size', '10');
+        sub.setAttribute('fill', 'var(--muted-foreground)');
+
+        if (node.isSource) {
+          sub.setAttribute('x', node.x - 10);
+          sub.setAttribute('text-anchor', 'end');
+          sub.textContent = `${(node.value/1000).toFixed(1)}k pax`;
+        } else {
+          sub.setAttribute('x', node.x + nodeWidth + 10);
+          sub.setAttribute('text-anchor', 'start');
+          sub.textContent = `${(node.value/1000).toFixed(1)}k pax`;
+        }
+        if (node.height > 20) svg.appendChild(sub);
+      });
+
+      // Headers (Asal / Tujuan)
+      const hAsal = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      hAsal.setAttribute('x', padX);
+      hAsal.setAttribute('y', 24);
+      hAsal.setAttribute('font-size', '12');
+      hAsal.setAttribute('font-weight', 'bold');
+      hAsal.setAttribute('fill', '#2563eb');
+      hAsal.textContent = isIsland ? '🛫 PULAU / WILAYAH ASAL' : '🛫 BANDARA ASAL (ORIGIN HUB)';
+      svg.appendChild(hAsal);
+
+      const hTujuan = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      hTujuan.setAttribute('x', width - padX);
+      hTujuan.setAttribute('y', 24);
+      hTujuan.setAttribute('text-anchor', 'end');
+      hTujuan.setAttribute('font-size', '12');
+      hTujuan.setAttribute('font-weight', 'bold');
+      hTujuan.setAttribute('fill', '#10b981');
+      hTujuan.textContent = isIsland ? '🛬 PULAU / WILAYAH TUJUAN' : '🛬 BANDARA TUJUAN (DESTINATION)';
+      svg.appendChild(hTujuan);
+    }
+
+    // MULTI-STAGE PIPELINE SANKEY (Tab 3)
+    function renderPipelineSankey() {
+      const svg = document.getElementById('sankey-svg');
+      svg.innerHTML = '';
+
+      const width = 1000;
+      const height = 620;
+      const stages = [
+        { name: '1. DATA MASUK (RAW)', x: 60 },
+        { name: '2. AUDIT SHEET', x: 310 },
+        { name: '3. ELIMINASI DUPLIKAT', x: 580 },
+        { name: '4. SKEMA 1 vs SKEMA 2', x: 840 }
+      ];
+
+      // Draw stage headers
+      stages.forEach(s => {
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', s.x + 35);
+        text.setAttribute('y', 26);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('font-size', '11.5');
+        text.setAttribute('font-weight', 'bold');
+        text.setAttribute('fill', 'var(--muted-foreground)');
+        text.textContent = s.name;
+        svg.appendChild(text);
+      });
+
+      // Nodes positioning manually calculated for clean layout
+      const pNodes = {
+        'raw':  { x: 20,  y: 160, w: 90, h: 260, col: '#475569', label: 'Raw API SIASATI', val: '2.231 Baris', pax: '5.109.832', flt: '55.120' },
+        'sec':  { x: 270, y: 70,  w: 80, h: 100, col: '#94a3b8', label: 'Lembar 3-6', val: '906 Baris', pax: '724.469', flt: '6.949' },
+        'main': { x: 270, y: 210, w: 80, h: 220, col: '#2563eb', label: 'Lembar 1 & 2', val: '1.325 Baris', pax: '4.385.363', flt: '48.171' },
+        'dup':  { x: 540, y: 150, w: 80, h: 45,  col: '#ef4444', label: 'Duplikat Int.', val: '52 Baris (0 Pax)', pax: '0 Pax', flt: '52' },
+        'inc':  { x: 540, y: 240, w: 80, h: 190, col: '#3b82f6', label: 'SKEMA 1 (Inc)', val: '1.273 Baris Dom', pax: '4.383.514', flt: '48.119' },
+        'p0':   { x: 800, y: 170, w: 85, h: 65,  col: '#f59e0b', label: 'Penumpang=0', val: '276 Baris (Kargo)', pax: '0 Pax', flt: '1.173' },
+        'exc':  { x: 800, y: 280, w: 85, h: 160, col: '#10b981', label: 'SKEMA 2 (Exc)', val: '997 Baris Murni', pax: '4.383.514', flt: '46.946' },
+      };
+
+      const pLinks = [
+        { s: 'raw', t: 'sec', y1: 170, h1: 70,  y2: 70,  h2: 100, col: '#94a3b8', label: '906 Rute Sekunder & Transit' },
+        { s: 'raw', t: 'main', y1: 250, h1: 170, y2: 210, h2: 220, col: '#3b82f6', label: '1.325 Rute Terverifikasi' },
+        { s: 'main', t: 'dup', y1: 220, h1: 25,  y2: 150, h2: 45,  col: '#ef4444', label: '52 Duplikat Internasional (Dikeluarkan)' },
+        { s: 'main', t: 'inc', y1: 255, h1: 175, y2: 240, h2: 190, col: '#2563eb', label: '1.273 Domestik Bersih (SKEMA 1)' },
+        { s: 'inc', t: 'p0',  y1: 250, h1: 40,  y2: 170, h2: 65,  col: '#f59e0b', label: '276 Rute Kargo/Ferry (Penumpang=0)' },
+        { s: 'inc', t: 'exc', y1: 300, h1: 130, y2: 280, h2: 160, col: '#10b981', label: '997 Komersial Penumpang (SKEMA 2)' },
+      ];
+
+      // Draw links
+      pLinks.forEach((l, idx) => {
+        const sn = pNodes[l.s];
+        const tn = pNodes[l.t];
+        const x1 = sn.x + sn.w;
+        const x2 = tn.x;
+        const cx1 = x1 + (x2 - x1) * 0.5;
+        const cx2 = x2 - (x2 - x1) * 0.5;
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const d = `M ${x1} ${l.y1} C ${cx1} ${l.y1}, ${cx2} ${l.y2}, ${x2} ${l.y2} L ${x2} ${l.y2 + l.h2} C ${cx2} ${l.y2 + l.h2}, ${cx1} ${l.y1 + l.h1}, ${x1} ${l.y1 + l.h1} Z`;
+        path.setAttribute('d', d);
+        path.setAttribute('fill', l.col);
+        path.setAttribute('opacity', '0.45');
+        path.setAttribute('class', 'flow-ribbon');
+
+        path.addEventListener('mouseenter', (e) => {
+          showTooltip(e, `
+            <div class="font-bold text-sm text-[var(--foreground)] border-b border-[var(--border)] pb-1 mb-1">
+              Aliran Filtering Pipeline
+            </div>
+            <div class="text-xs text-[var(--foreground)] mt-1 font-medium">${l.label}</div>
+          `);
+          dimOthers(path);
+        });
+        path.addEventListener('mousemove', moveTooltip);
+        path.addEventListener('mouseleave', () => { hideTooltip(); resetHighlight(); });
+
+        svg.appendChild(path);
+      });
+
+      // Draw nodes
+      Object.keys(pNodes).forEach(k => {
+        const n = pNodes[k];
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', n.x);
+        rect.setAttribute('y', n.y);
+        rect.setAttribute('width', n.w);
+        rect.setAttribute('height', n.h);
+        rect.setAttribute('rx', 8);
+        rect.setAttribute('fill', n.col);
+        rect.setAttribute('class', 'node-bar');
+
+        rect.addEventListener('mouseenter', (e) => {
+          showTooltip(e, `
+            <div class="font-bold text-sm text-[var(--foreground)] border-b border-[var(--border)] pb-1 mb-1.5 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full inline-block" style="background:${n.col}"></span>
+              <span>${n.label}</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">Ukuran Baris:</span><span class="font-bold">${n.val}</span></div>
+              <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">Total Penumpang:</span><span class="font-semibold">${n.pax}</span></div>
+              <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">Frekuensi Pesawat:</span><span class="font-semibold">${n.flt} flights</span></div>
+            </div>
+          `);
+        });
+        rect.addEventListener('mousemove', moveTooltip);
+        rect.addEventListener('mouseleave', hideTooltip);
+
+        svg.appendChild(rect);
+
+        // Text inside or beside node
+        const t1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        t1.setAttribute('x', n.x + (n.w / 2));
+        t1.setAttribute('y', n.y + 22);
+        t1.setAttribute('text-anchor', 'middle');
+        t1.setAttribute('font-size', '11');
+        t1.setAttribute('font-weight', 'bold');
+        t1.setAttribute('fill', '#ffffff');
+        t1.textContent = n.label;
+        svg.appendChild(t1);
+
+        const t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        t2.setAttribute('x', n.x + (n.w / 2));
+        t2.setAttribute('y', n.y + 38);
+        t2.setAttribute('text-anchor', 'middle');
+        t2.setAttribute('font-size', '9.5');
+        t2.setAttribute('fill', '#e2e8f0');
+        t2.textContent = n.val;
+        svg.appendChild(t2);
+
+        if (n.h > 80) {
+          const t3 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          t3.setAttribute('x', n.x + (n.w / 2));
+          t3.setAttribute('y', n.y + 54);
+          t3.setAttribute('text-anchor', 'middle');
+          t3.setAttribute('font-size', '9');
+          t3.setAttribute('fill', '#cbd5e1');
+          t3.textContent = n.pax;
+          svg.appendChild(t3);
+        }
+      });
+    }
+
+    // Helper functions for highlighting and tooltips
+    function dimOthers(activePath) {
+      document.querySelectorAll('.flow-ribbon').forEach(r => {
+        if (r !== activePath) {
+          r.style.opacity = '0.12';
+        }
+      });
+    }
+
+    function highlightNodeFlows(nodeName, isSource) {
+      document.querySelectorAll('.flow-ribbon').forEach(r => {
+        const matches = isSource ? r.getAttribute('data-source') === nodeName : r.getAttribute('data-target') === nodeName;
+        if (matches) {
+          r.style.opacity = '0.9';
+          r.style.stroke = 'var(--foreground)';
+          r.style.strokeWidth = '0.5px';
+        } else {
+          r.style.opacity = '0.1';
+          r.style.stroke = 'none';
+        }
+      });
+    }
+
+    const tooltip = document.getElementById('tooltip');
+
+    function showTooltip(e, content) {
+      tooltip.innerHTML = content;
+      tooltip.classList.remove('hidden');
+      moveTooltip(e);
+    }
+
+    function moveTooltip(e) {
+      const parentRect = document.getElementById('sankey-svg').parentElement.getBoundingClientRect();
+      let left = e.clientX - parentRect.left + 15;
+      let top = e.clientY - parentRect.top + 15;
+
+      if (left + 240 > parentRect.width) {
+        left = e.clientX - parentRect.left - 250;
+      }
+      if (top + 140 > parentRect.height) {
+        top = e.clientY - parentRect.top - 130;
+      }
+
+      tooltip.style.left = Math.max(10, left) + 'px';
+      tooltip.style.top = Math.max(10, top) + 'px';
+    }
+
+    function hideTooltip() {
+      tooltip.classList.add('hidden');
+    }
+
+    // Initial render
+    window.addEventListener('DOMContentLoaded', () => {
+      switchView('hub');
+    });
+  </script>
+</body>
+</html>
