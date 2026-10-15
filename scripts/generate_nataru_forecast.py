@@ -14,24 +14,23 @@ with open('scripts/mobility_data_bundle.json', 'r', encoding='utf-8') as f:
 df25 = pd.read_csv('siasati_ringkasan_harian_multimoda_2025.csv')
 df25['tanggal_dt'] = pd.to_datetime(df25['tanggal'])
 df25['dow'] = df25['tanggal_dt'].dt.dayofweek
-df25['md'] = df25['tanggal'].str[5:]
+df25['md'] = df25['tanggal_dt'].dt.strftime('%m-%d')
 p25_by_md = df25.set_index('md').to_dict(orient='index')
 
-# 2026 daily history strictly up to cutoff 2026-09-29
+# 2026 daily history up to latest available date (2026-10-13: 286 days)
 modes = ['UDARA', 'KA', 'BUS', 'ASDP', 'LAUT']
 daily_history_26 = bundle['daily_timeline']
 df26 = pd.DataFrame(daily_history_26)
 df26['date_dt'] = pd.to_datetime(df26['date'])
-df26 = df26[df26['date_dt'] <= '2026-09-29'].copy()
 df26.sort_values('date_dt', inplace=True)
 df26.reset_index(drop=True, inplace=True)
-df26['md'] = df26['date'].str[5:]
+latest_26_date = df26['date_dt'].max()
+df26['md'] = df26['date_dt'].dt.strftime('%m-%d')
 
-# Combine 2025 + 2026 into a single continuous training time series (637 days)
-s25_tot = df25[['tanggal', 'TOTAL_PENUMPANG'] + [f'pnp_{m}' for m in modes] + ['TOTAL_ARMADA'] + [f'arm_{m}' for m in modes]].rename(
-    columns={'tanggal': 'date', 'TOTAL_PENUMPANG': 'TOTAL', 'TOTAL_ARMADA': 'arm_TOTAL',
-             **{f'pnp_{m}': m for m in modes}}
-)
+# Combine 2025 + 2026 into a single continuous training time series (651 days)
+s25_tot = df25[['TOTAL_PENUMPANG'] + [f'pnp_{m}' for m in modes] + ['TOTAL_ARMADA'] + [f'arm_{m}' for m in modes]].copy()
+s25_tot['date'] = df25['tanggal_dt'].dt.strftime('%Y-%m-%d')
+s25_tot = s25_tot.rename(columns={'TOTAL_PENUMPANG': 'TOTAL', 'TOTAL_ARMADA': 'arm_TOTAL', **{f'pnp_{m}': m for m in modes}})
 s26_tot = df26[['date', 'TOTAL'] + modes + ['arm_TOTAL'] + [f'arm_{m}' for m in modes]]
 
 df_train_combined = pd.concat([s25_tot, s26_tot], ignore_index=True)
@@ -47,7 +46,7 @@ print("       + Damped Trend (phi=0.98) + Weekly Seasonality (s=7) + Nataru Cale
 print("=" * 80)
 print(f"Unified Training Data: {total_train_days} hari ({df_train_combined.index[0].strftime('%Y-%m-%d')} s.d. {df_train_combined.index[-1].strftime('%Y-%m-%d')})")
 print(f"  • Data 2025: 365 hari (1 Jan 2025 - 31 Des 2025)")
-print(f"  • Data 2026: 272 hari (1 Jan 2026 - 29 Sep 2026)")
+print(f"  • Data 2026: {len(df26)} hari (1 Jan 2026 - {latest_26_date.strftime('%d %b %Y')})")
 print("=" * 80)
 
 # Helper function to fit Holt-Winters strictly per requirements
@@ -123,15 +122,15 @@ for m in modes:
 # ==============================================================================
 # 3. FIT FINAL HOLT-WINTERS ON ENTIRE 637-DAY HISTORICAL DATA
 # ==============================================================================
-print("\n[LANGKAH 2/4] Fit Ulang Model Holt-Winters dengan Seluruh Data (637 Hari)...")
+print(f"\n[LANGKAH 2/4] Fit Ulang Model Holt-Winters dengan Seluruh Data ({total_train_days} Hari)...")
 hw_full_tot = fit_hw_model(df_train_combined['TOTAL'])
 hw_full_modes = {m: fit_hw_model(df_train_combined[m]) for m in modes}
 
 # ==============================================================================
 # 4. BENCHMARK NATARU 2025 (18 Days: 18-31 Des 2025 + 1-4 Jan 2025)
 # ==============================================================================
-des25_nataru = df25[df25['tanggal'].between('2025-12-18', '2025-12-31')]
-jan25_nataru = df25[df25['tanggal'].between('2025-01-01', '2025-01-04')]
+des25_nataru = df25[df25['tanggal_dt'].between('2025-12-18', '2025-12-31')]
+jan25_nataru = df25[df25['tanggal_dt'].between('2025-01-01', '2025-01-04')]
 df_nataru25 = pd.concat([des25_nataru, jan25_nataru])
 
 benchmark_2025 = {
@@ -139,11 +138,11 @@ benchmark_2025 = {
     'avg_daily_passengers': int(round(df_nataru25['TOTAL_PENUMPANG'].mean())),
     'total_armada': int(df_nataru25['TOTAL_ARMADA'].sum()),
     'xmas_peak_date': '2025-12-24',
-    'xmas_peak_val': int(df25.loc[df25['tanggal'] == '2025-12-24', 'TOTAL_PENUMPANG'].values[0]),
+    'xmas_peak_val': int(df25.loc[df25['tanggal_dt'] == '2025-12-24', 'TOTAL_PENUMPANG'].values[0]),
     'libur_peak_date': '2025-12-28',
-    'libur_peak_val': int(df25.loc[df25['tanggal'] == '2025-12-28', 'TOTAL_PENUMPANG'].values[0]),
+    'libur_peak_val': int(df25.loc[df25['tanggal_dt'] == '2025-12-28', 'TOTAL_PENUMPANG'].values[0]),
     'ny_peak_date': '2025-01-03',
-    'ny_peak_val': int(df25.loc[df25['tanggal'] == '2025-01-03', 'TOTAL_PENUMPANG'].values[0]),
+    'ny_peak_val': int(df25.loc[df25['tanggal_dt'] == '2025-01-03', 'TOTAL_PENUMPANG'].values[0]),
     'modes': {
         m: {
             'passengers': int(df_nataru25[f'pnp_{m}'].sum()),
@@ -157,19 +156,18 @@ benchmark_2025 = {
 # ==============================================================================
 # 5. NATARU CALENDAR SHOCK COMPUTATION (Nov 2025 DOW Baseline Reference)
 # ==============================================================================
-nov25 = df25[df25['tanggal'].between('2025-11-01', '2025-11-30')]
+nov25 = df25[df25['tanggal_dt'].between('2025-11-01', '2025-11-30')]
 nov_mean_tot = nov25.groupby('dow')['TOTAL_PENUMPANG'].mean().to_dict()
 nov_mean_modes = {m: nov25.groupby('dow')[f'pnp_{m}'].mean().to_dict() for m in modes}
-
 dow_names = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
 shock_factors_log = []
 
-# Generate exactly 100 days of future dates: 2026-09-30 to 2027-01-07
-forecast_start = datetime.date(2026, 9, 30)
+# Generate future dates starting immediately after the latest 2026 data point (2026-10-14 to 2027-01-07)
+forecast_start = (latest_26_date + datetime.timedelta(days=1)).date()
 forecast_end = datetime.date(2027, 1, 7)
-forecast_days = (forecast_end - forecast_start).days + 1  # Exactly 100 days
+forecast_days = (forecast_end - forecast_start).days + 1
 future_dates = [forecast_start + datetime.timedelta(days=i) for i in range(forecast_days)]
-
+print(f"Generated Forecast Horizon: {forecast_days} hari ({future_dates[0].strftime('%Y-%m-%d')} s.d. {future_dates[-1].strftime('%Y-%m-%d')})")
 # Generate Holt-Winters 100-day baseline forecasts
 hw_baseline_tot_series = hw_full_tot.forecast(forecast_days).values
 hw_baseline_mode_series = {m: hw_full_modes[m].forecast(forecast_days).values for m in modes}
@@ -414,9 +412,9 @@ bundle['timeline_2025'] = timeline_2025
 bundle['forecast_nataru'] = {
     'meta': {
         'model': "Holt-Winters Multiplicative Exponential Smoothing + Additive Trend + Damped Trend (phi=0.98) + Weekly Seasonality (s=7) + Nataru Calendar Shock",
-        'training_dataset': f"Gabungan Runtun Waktu Kontinu 2025 (365 hari) + 2026 (272 hari) = {total_train_days} Hari",
+        'training_dataset': f"Gabungan Runtun Waktu Kontinu 2025 (365 hari) + 2026 ({len(df26)} hari) = {total_train_days} Hari",
         'train_start': '2025-01-01',
-        'train_end': '2026-09-29',
+        'train_end': latest_26_date.strftime('%Y-%m-%d'),
         'train_days': total_train_days,
         'forecast_start': future_dates[0].strftime('%Y-%m-%d'),
         'forecast_end': future_dates[-1].strftime('%Y-%m-%d'),
