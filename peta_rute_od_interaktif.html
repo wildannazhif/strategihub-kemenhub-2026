@@ -21,29 +21,38 @@
       --muted-foreground: #94a3b8;
     }
     .route-arc {
-      transition: stroke-opacity 0.2s ease, stroke-width 0.2s ease;
+      transition: stroke-opacity 0.15s ease, stroke-width 0.15s ease;
       cursor: pointer;
     }
     .route-arc:hover {
       stroke-opacity: 1 !important;
-      filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.8));
+      stroke-width: 3.2px !important;
+      stroke: #38bdf8 !important;
     }
     .airport-marker {
-      transition: transform 0.2s ease, r 0.2s ease, filter 0.2s ease;
+      transition: stroke 0.15s ease, stroke-width 0.15s ease, r 0.15s ease;
       cursor: pointer;
+      pointer-events: all;
     }
     .airport-marker:hover {
-      transform: scale(1.4);
-      filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.9));
+      stroke: #ffffff !important;
+      stroke-width: 2.5px !important;
+      r: 6.5px !important;
+    }
+    .airport-marker.pinned-node {
+      stroke: #f59e0b !important;
+      stroke-width: 3px !important;
+      fill: #ffffff !important;
+      r: 7.5px !important;
     }
     .pulse-ring {
-      animation: pulseAnimation 2.5s infinite ease-out;
-      transform-origin: center;
+      animation: pulseAnimation 2s infinite ease-out;
       pointer-events: none;
     }
     @keyframes pulseAnimation {
-      0% { r: 6px; opacity: 0.9; }
-      100% { r: 24px; opacity: 0; }
+      0% { opacity: 0.8; stroke-width: 1px; }
+      50% { opacity: 0.3; stroke-width: 2px; }
+      100% { opacity: 0.8; stroke-width: 1px; }
     }
     /* SVG Map canvas drag cursor */
     #map-viewport {
@@ -1063,12 +1072,11 @@
       } else {
         clearAirportPin();
       }
-      renderMapElements();
     }
 
     function applyThreshold() {
       currentThreshold = parseInt(document.getElementById('pax-threshold').value);
-      renderMapElements();
+      renderRoutesOnly();
     }
 
     // Airport Pinning
@@ -1098,20 +1106,35 @@
       document.getElementById('pin-flt').textContent = Number(totalFlt).toLocaleString('id-ID') + ' flights';
       document.getElementById('pin-card').classList.remove('hidden');
 
-      renderMapElements();
+      // Update visual pin state on airport markers without DOM rebuild
+      Object.values(airportCircles).forEach(c => c.classList.remove('pinned-node'));
+      if (airportCircles[code]) {
+        airportCircles[code].classList.add('pinned-node');
+      }
+
+      renderRoutesOnly();
     }
 
     function clearAirportPin() {
       pinnedAirport = null;
       document.getElementById('pin-card').classList.add('hidden');
       document.getElementById('hub-select').value = 'ALL';
-      renderMapElements();
+      Object.values(airportCircles).forEach(c => c.classList.remove('pinned-node'));
+      renderRoutesOnly();
     }
 
-    // Core Map Rendering
+    const airportCircles = {};
+    let airportsRendered = false;
+
     function renderMapElements() {
-      routesLayer.innerHTML = '';
-      airportsLayer.innerHTML = '';
+      if (!airportsRendered) {
+        renderAirportsOnce();
+      }
+      renderRoutesOnly();
+    }
+
+    function renderRoutesOnly() {
+      const frag = document.createDocumentFragment();
 
       // 1. Filter Routes
       const visibleRoutes = mapData.routes.filter(r => {
@@ -1124,8 +1147,8 @@
       // Sort routes so heavier routes render on top
       visibleRoutes.sort((a, b) => a[currentMetric] - b[currentMetric]);
 
-      // 2. Draw Route Arcs
-      visibleRoutes.forEach((r, idx) => {
+      // 2. Draw Route Arcs into DocumentFragment
+      visibleRoutes.forEach((r) => {
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         const d = `M ${r.x1} ${r.y1} Q ${r.cx} ${r.cy} ${r.x2} ${r.y2}`;
         path.setAttribute('d', d);
@@ -1138,7 +1161,6 @@
         let strokeOp = 0.45;
 
         if (r.zp) {
-          // Zero passenger route (ferry/cargo)
           strokeCol = '#f59e0b';
           strokeW = 1.0;
           strokeOp = 0.7;
@@ -1162,7 +1184,6 @@
         path.setAttribute('stroke-width', strokeW);
         path.setAttribute('stroke-opacity', strokeOp);
 
-        // Tooltip Event
         path.addEventListener('mouseenter', (e) => {
           showTooltip(e, `
             <div class="font-bold text-sm text-white border-b border-slate-700 pb-1 mb-1.5 flex items-center justify-between">
@@ -1185,14 +1206,19 @@
         path.addEventListener('mousemove', moveTooltip);
         path.addEventListener('mouseleave', hideTooltip);
 
-        routesLayer.appendChild(path);
+        frag.appendChild(path);
       });
 
-      // 3. Draw Airport Nodes
+      // Atomic DOM Swap with zero flicker
+      routesLayer.replaceChildren(frag);
+    }
+
+    function renderAirportsOnce() {
+      airportsLayer.replaceChildren();
       const topHubs = ['CGK', 'SUB', 'DPS', 'UPG', 'KNO', 'BPN', 'BTH', 'YIA', 'BDJ', 'LOP'];
+      const frag = document.createDocumentFragment();
 
       Object.values(mapData.airports).forEach(apt => {
-        // Only draw airport if it has coordinates
         if (!apt.px || !apt.py) return;
 
         const isTop = topHubs.includes(apt.code);
@@ -1204,11 +1230,12 @@
           const pulse = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
           pulse.setAttribute('cx', apt.px);
           pulse.setAttribute('cy', apt.py);
+          pulse.setAttribute('r', radius + 4);
           pulse.setAttribute('fill', 'none');
           pulse.setAttribute('stroke', '#f59e0b');
           pulse.setAttribute('stroke-width', '1.5');
           pulse.setAttribute('class', 'pulse-ring');
-          airportsLayer.appendChild(pulse);
+          frag.appendChild(pulse);
         }
 
         // Airport circle marker
@@ -1220,6 +1247,7 @@
         circle.setAttribute('stroke', '#0f172a');
         circle.setAttribute('stroke-width', '1');
         circle.setAttribute('class', 'airport-marker');
+        circle.setAttribute('data-code', apt.code);
 
         circle.addEventListener('mouseenter', (e) => {
           showTooltip(e, `
@@ -1243,7 +1271,8 @@
           pinAirport(apt.code);
         });
 
-        airportsLayer.appendChild(circle);
+        airportCircles[apt.code] = circle;
+        frag.appendChild(circle);
 
         // Labels for Top Hubs
         if (isTop) {
@@ -1253,11 +1282,13 @@
           text.setAttribute('font-size', '9.5');
           text.setAttribute('font-weight', 'bold');
           text.setAttribute('fill', '#f8fafc');
-          text.setAttribute('filter', 'drop-shadow(0 1px 2px rgba(0,0,0,0.9))');
           text.textContent = apt.code;
-          airportsLayer.appendChild(text);
+          frag.appendChild(text);
         }
       });
+
+      airportsLayer.replaceChildren(frag);
+      airportsRendered = true;
     }
 
     // Tooltip helper

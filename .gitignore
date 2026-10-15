@@ -13,6 +13,9 @@ venv/
 *.tmp
 *.log
 pdf_page_*.png
+catboost_info/
+*_Styled.html
+*_no_code.html
 *.docx
 *.pptx
 *.pdf
