@@ -41,3 +41,5 @@ dashboard_utama/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+data_raw_cache/
