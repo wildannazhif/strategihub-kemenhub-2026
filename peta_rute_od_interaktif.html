@@ -877,85 +877,64 @@
         </div>
       </div>
 
-      <!-- TOP 5 CORRIDOR RANKING TABLE & GEOSPATIAL INSIGHTS -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 pt-2">
-        
-        <!-- Top 5 Corridors Table -->
-        <div class="lg:col-span-1 bg-[var(--background)] rounded-xl p-4 border border-[var(--border)]">
-          <h3 class="text-xs font-bold text-[var(--foreground)] uppercase tracking-wider mb-2 flex items-center justify-between">
-            <span>🏆 Top 5 Koridor Terpadat</span>
-            <span class="text-emerald-600 dark:text-emerald-400 font-semibold text-[11px]">Bulan September 2026</span>
-          </h3>
-          <div class="space-y-2 text-xs">
-            <div class="flex items-center justify-between p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]">
-              <div>
-                <span class="font-bold text-blue-600 dark:text-blue-400">1. DPS ➔ CGK</span>
-                <span class="text-[var(--muted-foreground)] block text-[11px]">Bali ke Jakarta (983 km)</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-[var(--foreground)]">137.133 Pax</span>
-                <span class="text-[var(--muted-foreground)] block text-[11px]">999 Penerbangan</span>
-              </div>
+      <!-- TOP 5 CORRIDOR RANKING -->
+      <div class="bg-[var(--background)] rounded-xl p-4 border border-[var(--border)]">
+        <h3 class="text-xs font-bold text-[var(--foreground)] uppercase tracking-wider mb-2.5 flex items-center justify-between">
+          <span>🏆 Top 5 Koridor Terpadat</span>
+          <span class="text-emerald-600 dark:text-emerald-400 font-semibold text-[11px]">Bulan September 2026</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 text-xs">
+          <div class="flex sm:flex-col justify-between p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)]">
+            <div>
+              <span class="font-bold text-blue-600 dark:text-blue-400">1. DPS ➔ CGK</span>
+              <span class="text-[var(--muted-foreground)] block text-[11px]">Bali ke Jakarta (983 km)</span>
             </div>
-            <div class="flex items-center justify-between p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]">
-              <div>
-                <span class="font-bold text-blue-600 dark:text-blue-400">2. CGK ➔ DPS</span>
-                <span class="text-[var(--muted-foreground)] block text-[11px]">Jakarta ke Bali (983 km)</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-[var(--foreground)]">129.130 Pax</span>
-                <span class="text-[var(--muted-foreground)] block text-[11px]">985 Penerbangan</span>
-              </div>
+            <div class="text-right sm:text-left sm:mt-1.5">
+              <span class="font-bold text-[var(--foreground)] block">137.133 Pax</span>
+              <span class="text-[var(--muted-foreground)] block text-[11px]">999 Penerbangan</span>
             </div>
-            <div class="flex items-center justify-between p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]">
-              <div>
-                <span class="font-bold text-emerald-600 dark:text-emerald-400">3. SUB ➔ CGK</span>
-                <span class="text-[var(--muted-foreground)] block text-[11px]">Surabaya ke Jakarta (692 km)</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-[var(--foreground)]">102.041 Pax</span>
-                <span class="text-[var(--muted-foreground)] block text-[11px]">758 Penerbangan</span>
-              </div>
+          </div>
+          <div class="flex sm:flex-col justify-between p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)]">
+            <div>
+              <span class="font-bold text-blue-600 dark:text-blue-400">2. CGK ➔ DPS</span>
+              <span class="text-[var(--muted-foreground)] block text-[11px]">Jakarta ke Bali (983 km)</span>
             </div>
-            <div class="flex items-center justify-between p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]">
-              <div>
-                <span class="font-bold text-emerald-600 dark:text-emerald-400">4. CGK ➔ SUB</span>
-                <span class="text-[var(--muted-foreground)] block text-[11px]">Jakarta ke Surabaya (692 km)</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-[var(--foreground)]">100.099 Pax</span>
-                <span class="text-[var(--muted-foreground)] block text-[11px]">744 Penerbangan</span>
-              </div>
+            <div class="text-right sm:text-left sm:mt-1.5">
+              <span class="font-bold text-[var(--foreground)] block">129.130 Pax</span>
+              <span class="text-[var(--muted-foreground)] block text-[11px]">985 Penerbangan</span>
             </div>
-            <div class="flex items-center justify-between p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]">
-              <div>
-                <span class="font-bold text-purple-600 dark:text-purple-400">5. KNO ➔ CGK</span>
-                <span class="text-[var(--muted-foreground)] block text-[11px]">Medan ke Jakarta (1.401 km)</span>
-              </div>
-              <div class="text-right">
-                <span class="font-bold text-[var(--foreground)]">99.801 Pax</span>
-                <span class="text-[var(--muted-foreground)] block text-[11px]">660 Penerbangan</span>
-              </div>
+          </div>
+          <div class="flex sm:flex-col justify-between p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)]">
+            <div>
+              <span class="font-bold text-emerald-600 dark:text-emerald-400">3. SUB ➔ CGK</span>
+              <span class="text-[var(--muted-foreground)] block text-[11px]">Surabaya ke Jakarta (692 km)</span>
+            </div>
+            <div class="text-right sm:text-left sm:mt-1.5">
+              <span class="font-bold text-[var(--foreground)] block">102.041 Pax</span>
+              <span class="text-[var(--muted-foreground)] block text-[11px]">758 Penerbangan</span>
+            </div>
+          </div>
+          <div class="flex sm:flex-col justify-between p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)]">
+            <div>
+              <span class="font-bold text-emerald-600 dark:text-emerald-400">4. CGK ➔ SUB</span>
+              <span class="text-[var(--muted-foreground)] block text-[11px]">Jakarta ke Surabaya (692 km)</span>
+            </div>
+            <div class="text-right sm:text-left sm:mt-1.5">
+              <span class="font-bold text-[var(--foreground)] block">100.099 Pax</span>
+              <span class="text-[var(--muted-foreground)] block text-[11px]">744 Penerbangan</span>
+            </div>
+          </div>
+          <div class="flex sm:flex-col justify-between p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)]">
+            <div>
+              <span class="font-bold text-purple-600 dark:text-purple-400">5. KNO ➔ CGK</span>
+              <span class="text-[var(--muted-foreground)] block text-[11px]">Medan ke Jakarta (1.401 km)</span>
+            </div>
+            <div class="text-right sm:text-left sm:mt-1.5">
+              <span class="font-bold text-[var(--foreground)] block">99.801 Pax</span>
+              <span class="text-[var(--muted-foreground)] block text-[11px]">660 Penerbangan</span>
             </div>
           </div>
         </div>
-
-        <!-- Geospatial Analysis Insight -->
-        <div class="lg:col-span-2 bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 rounded-xl p-4 text-xs leading-relaxed space-y-2.5">
-          <h3 class="font-bold text-blue-900 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1.5">
-            <span>🗺️ Insight Struktur Jaringan Penerbangan Indonesia (Hub-and-Spoke)</span>
-          </h3>
-          <p class="text-blue-900 dark:text-blue-200">
-            <strong>1. Pola Multi-Hub Sentris:</strong> Peta memperlihatkan bahwa Indonesia mengandalkan 4 gerbang megahub utama: <strong>CGK (Jakarta)</strong> sebagai *super-hub* nasional, <strong>SUB (Surabaya)</strong> sebagai poros Jawa Timur & Nusra, <strong>DPS (Bali)</strong> sebagai episentrum pariwisata, dan <strong>UPG (Makassar)</strong> sebagai *eastern gateway* penghubung 42 bandara perintis di Sulawesi, Maluku, dan Papua.
-          </p>
-          <p class="text-blue-900 dark:text-blue-200">
-            <strong>2. Dampak Skema 1 vs Skema 2 pada Peta:</strong> Pada <em>Skema 2 (EXCLUDE)</em>, peta menampilkan 997 koridor komersial riil yang padat penumpang. Ketika mengaktifkan <em>Skema 1 (INCLUDE)</em>, muncul 276 garis putus-putus berwarna amber (contohnya rute Balikpapan ⇄ Batam, Batam ⇄ Banjarmasin, atau rute logistik perintis Papua) yang merupakan penerbangan ferry, kargo khusus, atau inspeksi dengan penumpang = 0.
-          </p>
-          <p class="text-blue-900 dark:text-blue-200">
-            <strong>3. Kesimpulan Mentor:</strong> Menampilkan kedua skema di atas peta membuktikan bahwa eksklusi penumpang = 0 tidak menghilangkan satu titik konektivitas pun dari peta komersial, melainkan memperjelas mana koridor yang murni menggerakkan mobilitas manusia dan mana yang beroperasi sebagai jalur logistik/teknis.
-          </p>
-        </div>
-
       </div>
 
     </div>
