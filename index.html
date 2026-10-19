@@ -203,56 +203,7 @@
           <button id="nav-btn-od-sankey" onclick="switchTab('tab-od-sankey', 'Diagram Sankey OD Udara', this)" class="nav-btn w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent transition-all text-left">
             <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 shrink-0"></span>
             <span class="truncate font-semibold text-cyan-700 dark:text-cyan-400">Diagram Sankey OD</span>
-          </button>
         </nav>
-      </div>
-
-      <!-- Rentang Waktu Quick Filter -->
-      <div>
-        <div class="flex items-center justify-between px-2.5 mb-1.5">
-          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rentang Waktu</p>
-          <span class="text-[9px] text-slate-400 font-mono">1 Jan - 13 Okt</span>
-        </div>
-        <div class="space-y-1 bg-slate-50 dark:bg-slate-800/60 p-1.5 rounded-md border border-slate-200 dark:border-slate-800">
-          <button onclick="setTimelineFilter('all', this)" class="btn-range active w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold text-slate-900 dark:text-white bg-white dark:bg-slate-900 shadow-xs transition-all">
-            <span>Sepanjang 2026</span>
-            <span class="num-mono text-[10px] text-slate-500">286H</span>
-          </button>
-          <button onclick="setTimelineFilter('lebaran', this)" class="btn-range w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
-            <span>Puncak Lebaran</span>
-            <span class="num-mono text-[10px] text-slate-500">17H</span>
-          </button>
-          <button onclick="setTimelineFilter('libur_sekolah', this)" class="btn-range w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
-            <span>Libur Sekolah</span>
-            <span class="num-mono text-[10px] text-slate-500">31H</span>
-          </button>
-          <button onclick="setTimelineFilter('tahun_baru', this)" class="btn-range w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
-            <span>Tahun Baru</span>
-            <span class="num-mono text-[10px] text-slate-500">15H</span>
-          </button>
-          <button id="btn-range-custom" onclick="setTimelineFilter('custom', this)" class="btn-range w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
-            <span class="flex items-center gap-1.5">
-              <span>📅</span>
-              <span>Kustom Tanggal</span>
-            </span>
-            <span id="badge-custom-days" class="num-mono text-[10px] text-slate-500">Pilih</span>
-          </button>
-
-          <!-- Custom Date Input Form -->
-          <div id="panel-custom-range" class="hidden pt-2 border-t border-slate-200 dark:border-slate-700/60 space-y-2 px-1">
-            <div>
-              <label for="custom-start-date" class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-0.5">Dari Tanggal:</label>
-              <input type="date" id="custom-start-date" min="2026-01-01" max="2026-09-29" value="2026-03-01" onchange="applyCustomDateRange()" class="w-full text-xs font-mono bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
-            </div>
-            <div>
-              <label for="custom-end-date" class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-0.5">Sampai Tanggal:</label>
-              <input type="date" id="custom-end-date" min="2026-01-01" max="2026-09-29" value="2026-03-31" onchange="applyCustomDateRange()" class="w-full text-xs font-mono bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
-            </div>
-            <button type="button" onclick="applyCustomDateRange()" class="w-full py-1.5 px-2 rounded bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold transition-all shadow-xs flex items-center justify-center gap-1.5">
-              <span>✓ Terapkan Rentang</span>
-            </button>
-          </div>
-        </div>
       </div>
 
     </div>
@@ -425,7 +376,8 @@
       <div id="tab-timeline" class="tab-content space-y-6">
         
         <!-- Timeline Control Bar & Chart -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 shadow-2xs">
+          <!-- Heading & Active Range Indicator -->
           <div class="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-slate-100 dark:border-slate-800">
             <div>
               <div class="flex items-center gap-2.5 flex-wrap">
@@ -441,13 +393,74 @@
               </p>
             </div>
 
-            <button id="timeline-badge-info" onclick="focusCustomRange()" title="Klik untuk pilih rentang tanggal kustom di sidebar" class="text-xs font-mono text-slate-600 dark:text-slate-300 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 dark:bg-slate-800 dark:hover:bg-slate-700 px-3 py-1 rounded border border-slate-200 dark:border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer">
-              1 Jan 2026 - 13 Okt 2026 (286 Hari)
-            </button>
+            <div id="timeline-badge-info" class="text-xs font-mono text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center gap-2 shadow-2xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+              <span id="timeline-badge-text">1 Jan 2026 - 13 Okt 2026 (286 Hari)</span>
+            </div>
+          </div>
+
+          <!-- Quick Filter Rentang Waktu Toolbar (Horizontal) -->
+          <div class="mt-3.5 mb-2.5 p-2.5 bg-slate-50/80 dark:bg-slate-800/50 rounded-lg border border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <span class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <span>Rentang Waktu:</span>
+              </span>
+
+              <!-- Segmented Filter Buttons -->
+              <div class="inline-flex flex-wrap items-center bg-white dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-2xs gap-1">
+                <button type="button" onclick="setTimelineFilter('all', this)" class="btn-range active inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 shadow-xs transition-all">
+                  <span>Sepanjang 2026</span>
+                  <span class="num-mono text-[10px] px-1.5 py-0.2 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold">286H</span>
+                </button>
+                <button type="button" onclick="setTimelineFilter('lebaran', this)" class="btn-range inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                  <span>Puncak Lebaran</span>
+                  <span class="num-mono text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-medium">17H</span>
+                </button>
+                <button type="button" onclick="setTimelineFilter('libur_sekolah', this)" class="btn-range inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                  <span>Libur Sekolah</span>
+                  <span class="num-mono text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-medium">31H</span>
+                </button>
+                <button type="button" onclick="setTimelineFilter('tahun_baru', this)" class="btn-range inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                  <span>Tahun Baru</span>
+                  <span class="num-mono text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-medium">15H</span>
+                </button>
+                <button type="button" id="btn-range-custom" onclick="setTimelineFilter('custom', this)" class="btn-range inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                  <span>📅</span>
+                  <span>Kustom Tanggal</span>
+                  <span id="badge-custom-days" class="num-mono text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-medium">Pilih</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right helper badge -->
+            <div class="text-[11px] text-slate-400 dark:text-slate-500 hidden md:flex items-center gap-1 font-mono">
+              <span>Batas Data: 01 Jan - 13 Okt 2026</span>
+            </div>
+          </div>
+
+          <!-- Inline Custom Date Drawer (collapsible when 'custom' is active) -->
+          <div id="panel-custom-range" class="hidden mb-3 p-3 bg-blue-50/60 dark:bg-slate-800/80 rounded-lg border border-blue-200 dark:border-blue-900/60 transition-all">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex flex-wrap items-center gap-3">
+                <div class="flex items-center gap-2">
+                  <label for="custom-start-date" class="text-xs font-semibold text-slate-700 dark:text-slate-300">Dari Tanggal:</label>
+                  <input type="date" id="custom-start-date" min="2026-01-01" max="2026-10-13" value="2026-03-01" onchange="applyCustomDateRange()" class="text-xs font-mono bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md px-2.5 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-xs">
+                </div>
+                <div class="flex items-center gap-2">
+                  <label for="custom-end-date" class="text-xs font-semibold text-slate-700 dark:text-slate-300">Sampai Tanggal:</label>
+                  <input type="date" id="custom-end-date" min="2026-01-01" max="2026-10-13" value="2026-03-31" onchange="applyCustomDateRange()" class="text-xs font-mono bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md px-2.5 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-xs">
+                </div>
+                <button type="button" onclick="applyCustomDateRange()" class="py-1 px-3.5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer">
+                  <span>✓ Terapkan Rentang</span>
+                </button>
+              </div>
+              <span class="text-[11px] text-blue-600 dark:text-blue-400 font-medium">Rentang otomatis menyesuaikan data harian.</span>
+            </div>
           </div>
 
           <!-- Full-Width Chart Canvas -->
-          <div class="relative w-full h-[430px] pt-2">
+          <div class="relative w-full h-[430px] pt-1">
             <canvas id="chartTimelineCanvas"></canvas>
           </div>
 
@@ -2953,7 +2966,7 @@ function getFilteredTimelineData() {
   if (currentTimelineRange === 'tahun_baru') return all.filter(d => d.date >= '2026-01-01' && d.date <= '2026-01-15');
   if (currentTimelineRange === 'custom') {
     const s = customStartDate || '2026-01-01';
-    const e = customEndDate || '2026-09-29';
+    const e = customEndDate || '2026-10-13';
     return all.filter(d => d.date >= s && d.date <= e);
   }
   return all;
@@ -3049,12 +3062,15 @@ function renderTimelineChart() {
 
 function setTimelineFilter(rangeKey, btn) {
   currentTimelineRange = rangeKey;
+  if (!btn) {
+    btn = document.getElementById('btn-range-' + rangeKey) || document.querySelector(`.btn-range[onclick*="'${rangeKey}'"]`);
+  }
   document.querySelectorAll('.btn-range').forEach(b => {
-    b.classList.remove('active', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'font-semibold', 'shadow-xs');
+    b.classList.remove('active', 'bg-slate-100', 'dark:bg-slate-800', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'font-semibold', 'shadow-xs');
     b.classList.add('text-slate-600', 'dark:text-slate-400');
   });
   if (btn) {
-    btn.classList.add('active', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'font-semibold', 'shadow-xs');
+    btn.classList.add('active', 'bg-slate-100', 'dark:bg-slate-800', 'text-slate-900', 'dark:text-white', 'font-semibold', 'shadow-xs');
     btn.classList.remove('text-slate-600', 'dark:text-slate-400');
   }
 
@@ -3076,8 +3092,8 @@ function setTimelineFilter(rangeKey, btn) {
       'libur_sekolah': '15 Jun 2026 - 15 Jul 2026 (31 Hari)',
       'tahun_baru': '1 Jan 2026 - 15 Jan 2026 (15 Hari)'
     };
-    const infoBadge = document.getElementById('timeline-badge-info');
-    if (infoBadge) infoBadge.innerText = labelMap[rangeKey] || '';
+    const badgeText = document.getElementById('timeline-badge-text') || document.getElementById('timeline-badge-info');
+    if (badgeText) badgeText.innerText = labelMap[rangeKey] || '';
     renderTimelineChart();
   }
 }
@@ -3099,13 +3115,13 @@ function applyCustomDateRange(triggerRender = true) {
   if (!startEl || !endEl) return;
 
   let sVal = startEl.value || '2026-01-01';
-  let eVal = endEl.value || '2026-09-29';
+  let eVal = endEl.value || '2026-10-13';
 
   // Batasi agar sesuai batas dataset
   if (sVal < '2026-01-01') sVal = '2026-01-01';
-  if (sVal > '2026-09-29') sVal = '2026-09-29';
+  if (sVal > '2026-10-13') sVal = '2026-10-13';
   if (eVal < '2026-01-01') eVal = '2026-01-01';
-  if (eVal > '2026-09-29') eVal = '2026-09-29';
+  if (eVal > '2026-10-13') eVal = '2026-10-13';
 
   if (sVal > eVal) {
     const tmp = sVal;
@@ -3125,9 +3141,9 @@ function applyCustomDateRange(triggerRender = true) {
   const customBadge = document.getElementById('badge-custom-days');
   if (customBadge) customBadge.innerText = `${diffDays}H`;
 
-  const infoBadge = document.getElementById('timeline-badge-info');
-  if (infoBadge) {
-    infoBadge.innerText = `${formatDateIndo(sVal)} - ${formatDateIndo(eVal)} (${diffDays} Hari)`;
+  const badgeText = document.getElementById('timeline-badge-text') || document.getElementById('timeline-badge-info');
+  if (badgeText) {
+    badgeText.innerText = `${formatDateIndo(sVal)} - ${formatDateIndo(eVal)} (${diffDays} Hari)`;
   }
 
   if (currentTimelineRange !== 'custom') {
@@ -3139,12 +3155,14 @@ function applyCustomDateRange(triggerRender = true) {
 }
 
 function focusCustomRange() {
-  if (!isSidebarOpen) toggleSidebar();
   const btn = document.getElementById('btn-range-custom');
   if (btn) setTimelineFilter('custom', btn);
   const input = document.getElementById('custom-start-date');
   if (input) {
-    setTimeout(() => input.focus(), 150);
+    setTimeout(() => {
+      input.focus();
+      input.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
   }
 }
 
