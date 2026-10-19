@@ -393,7 +393,7 @@ print("\n[LANGKAH 4/4] Memperbarui bundle data JSON...")
 timeline_2025 = []
 for _, r in df25.iterrows():
     timeline_2025.append({
-        'date': r['tanggal'],
+        'date': r['tanggal_dt'].strftime('%Y-%m-%d'),
         'TOTAL': int(r['TOTAL_PENUMPANG']),
         'UDARA': int(r['pnp_UDARA']),
         'KA': int(r['pnp_KA']),
@@ -409,7 +409,13 @@ for _, r in df25.iterrows():
     })
 
 bundle['timeline_2025'] = timeline_2025
+existing_fc = bundle.get('forecast_nataru', {})
 bundle['forecast_nataru'] = {
+    'by_province': existing_fc.get('by_province', {}),
+    'champion_model': existing_fc.get('champion_model', {}),
+    'benchmarks': existing_fc.get('benchmarks', []),
+    'automodel_meta_summary': existing_fc.get('automodel_meta_summary', {}),
+    'provinces': existing_fc.get('provinces', []),
     'meta': {
         'model': "Holt-Winters Multiplicative Exponential Smoothing + Additive Trend + Damped Trend (phi=0.98) + Weekly Seasonality (s=7) + Nataru Calendar Shock",
         'training_dataset': f"Gabungan Runtun Waktu Kontinu 2025 (365 hari) + 2026 ({len(df26)} hari) = {total_train_days} Hari",
