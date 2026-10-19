@@ -1588,51 +1588,9 @@
       <!-- TAB: PETA RUTE OD UDARA INTERAKTIF                        -->
       <!-- ========================================================= -->
       <div id="tab-od-map" class="tab-content hidden space-y-4">
-        <!-- Header Banner & Navigation Pills -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-xs">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div class="flex items-center gap-2 mb-1 flex-wrap">
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                  ✈ OD Angkutan Udara
-                </span>
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                  September 2026
-                </span>
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                  227 Bandara Aktif (Pure Domestik)
-                </span>
-              </div>
-              <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-                Peta Geospasial Jaringan Rute Penerbangan Indonesia (2 Skema)
-              </h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Aliran busur rute (*great-circle arcs*), animasi pulsa radar hub, mode jaring radial (*spider-web*), serta komparasi interaktif Skema 1 (Include) vs Skema 2 (Exclude).
-              </p>
-            </div>
-
-            <!-- View Switcher & Fullscreen Action -->
-            <div class="flex items-center gap-2 shrink-0">
-              <div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold">
-                <button class="px-3 py-1.5 rounded-md bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs">
-                  🗺️ Peta Rute
-                </button>
-                <button onclick="switchTab('tab-od-sankey', 'Diagram Sankey OD Udara', document.getElementById('nav-btn-od-sankey'))" class="px-3 py-1.5 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
-                  🌊 Diagram Sankey
-                </button>
-              </div>
-
-              <a href="peta_rute_od_interaktif.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold shadow-xs transition-all" title="Buka di Jendela Baru / Layar Penuh">
-                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                <span>Layar Penuh</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
         <!-- Embedded Interactive Frame -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
-          <iframe id="iframe-od-map" src="peta_rute_od_interaktif.html" onload="syncODFramesTheme()" class="w-full h-[840px] border-0" loading="lazy" title="Peta Rute OD Interaktif"></iframe>
+          <iframe id="iframe-od-map" src="peta_rute_od_interaktif.html" onload="syncODFramesTheme()" class="w-full h-[860px] border-0" loading="lazy" title="Peta Rute OD Interaktif"></iframe>
         </div>
       </div>
 
