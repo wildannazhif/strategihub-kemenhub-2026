@@ -275,8 +275,6 @@ function setForecastModel(modelCode) {
 
 function setForecastScenario(scen) {
   currentForecastScenario = scen;
-  const select = document.getElementById('select-forecast-scen');
-  if (select && select.value !== scen) select.value = scen;
 
   renderForecastSummaryCards();
   renderForecastComparisonTable();

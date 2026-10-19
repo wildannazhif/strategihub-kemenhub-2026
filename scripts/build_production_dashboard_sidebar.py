@@ -1396,23 +1396,6 @@ def generate_dashboard():
 
           <!-- Bottom Row: Sleek Dropdowns Toolbar -->
           <div class="flex flex-wrap items-center gap-4 text-xs">
-            <!-- 1. Dropdown Skenario -->
-            <div class="flex items-center gap-2">
-              <label for="select-forecast-scen" class="text-slate-500 dark:text-slate-400 font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1">
-                <span>🎯 Skenario:</span>
-              </label>
-              <div class="relative">
-                <select id="select-forecast-scen" onchange="setForecastScenario(this.value)" class="bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-semibold rounded-md pl-3 pr-8 py-1.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none appearance-none cursor-pointer shadow-xs">
-                  <option value="moderat" selected>Moderat (Baseline Tren Normal)</option>
-                  <option value="optimis">Optimis (+12% Animo Masyarakat)</option>
-                  <option value="konservatif">Konservatif (Dampak Cuaca Ekstrem)</option>
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-              </div>
-            </div>
-
 
             <!-- 3. Dropdown Filter Garis Proyeksi (Moda) -->
             <div class="flex items-center gap-2">
@@ -1460,22 +1443,6 @@ def generate_dashboard():
               </div>
             </div>
 
-            <!-- 5. Dropdown Skenario Proyeksi -->
-            <div class="flex items-center gap-2">
-              <label for="select-forecast-scen" class="text-slate-500 dark:text-slate-400 font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1">
-                <span>🎯 Skenario:</span>
-              </label>
-              <div class="relative">
-                <select id="select-forecast-scen" onchange="setForecastScenario(this.value)" class="bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-semibold rounded-md pl-3 pr-8 py-1.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none appearance-none cursor-pointer shadow-xs">
-                  <option value="moderat" selected>Moderat (Baseline 1.0x)</option>
-                  <option value="optimis">Optimis (+7% Lonjakan)</option>
-                  <option value="konservatif">Konservatif (-5% Penurunan)</option>
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -3544,8 +3511,6 @@ let chartForecast = null;
 
 function setForecastScenario(scen) {{
   currentForecastScenario = scen;
-  const select = document.getElementById('select-forecast-scen');
-  if (select && select.value !== scen) select.value = scen;
 
   renderForecastSummaryCards();
   renderForecastComparisonTable();
