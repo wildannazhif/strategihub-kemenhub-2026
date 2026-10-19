@@ -1598,51 +1598,9 @@
       <!-- TAB: DIAGRAM SANKEY OD UDARA                              -->
       <!-- ========================================================= -->
       <div id="tab-od-sankey" class="tab-content hidden space-y-4">
-        <!-- Header Banner & Navigation Pills -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-xs">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div class="flex items-center gap-2 mb-1 flex-wrap">
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-100 dark:bg-cyan-950/60 text-cyan-800 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800">
-                  🌊 Aliran Multidimensi
-                </span>
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                  September 2026
-                </span>
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                  Hub & Antar-Pulau
-                </span>
-              </div>
-              <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
-                Diagram Alir Sankey: Arus Mobilitas Udara Nasional
-              </h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Visualisasi proporsional volume penumpang antar-hub bandara dan konektivitas kepulauan nusantara.
-              </p>
-            </div>
-
-            <!-- View Switcher & Fullscreen Action -->
-            <div class="flex items-center gap-2 shrink-0">
-              <div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold">
-                <button onclick="switchTab('tab-od-map', 'Peta Rute OD Penerbangan (2 Skema)', document.getElementById('nav-btn-od-map'))" class="px-3 py-1.5 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
-                  🗺️ Peta Rute
-                </button>
-                <button class="px-3 py-1.5 rounded-md bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs">
-                  🌊 Diagram Sankey
-                </button>
-              </div>
-
-              <a href="sankey_diagram_od.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold shadow-xs transition-all" title="Buka di Jendela Baru / Layar Penuh">
-                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                <span>Layar Penuh</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
         <!-- Embedded Interactive Frame -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
-          <iframe id="iframe-od-sankey" src="sankey_diagram_od.html" onload="syncODFramesTheme()" class="w-full h-[840px] border-0" loading="lazy" title="Diagram Sankey OD Udara"></iframe>
+          <iframe id="iframe-od-sankey" src="sankey_diagram_od.html" onload="syncODFramesTheme()" class="w-full h-[860px] border-0" loading="lazy" title="Diagram Sankey OD Udara"></iframe>
         </div>
       </div>
 
