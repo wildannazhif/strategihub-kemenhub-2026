@@ -1,11 +1,9 @@
 // TAB 8: FORECASTING NATARU 2026/2027 CONTROLLER
 // ---------------------------------------------------------------
-let currentForecastScenario = 'moderat';
-let currentForecastMetric = 'pnp'; // 'pnp' or 'arm'
-let currentForecastDirection = 'tot'; // 'tot', 'brg', 'dat'
+let currentForecastScenario = 'moderat'; // Standard baseline 1.0x
+let currentForecastMetric = 'pnp'; // 'pnp' (Penumpang Berangkat) or 'arm' (Armada Berangkat)
 let currentForecastModa = 'TOTAL';
 let currentForecastProv = 'ALL';
-let currentForecastModel = 'auto'; // 'auto' or specific model code
 let currentForecastRange = 'nataru'; // 'nataru', 'des', 'nov', 'okt', 'all'
 let currentSimArmadaPct = 10;
 let chartForecast = null;
@@ -19,59 +17,24 @@ const nataru_shocks = {
   '01-02': 1.2845, '01-03': 1.1538, '01-04': 1.3091
 };
 
-const scenario_mults = {
-  'moderat': 1.00,
-  'optimis': 1.07,
-  'konservatif': 0.95
-};
-
-const model_names_map = {
-  'auto': 'Auto-Model Champion',
-  'hw_mul_damped': 'Holt-Winters Mul Damped (phi=0.98)',
-  'hw_mul_std': 'Holt-Winters Mul Standar',
-  'hw_add_damped': 'Holt-Winters Add Damped (phi=0.98)',
-  'sarima': 'SARIMA (1,1,1)x(1,1,1,7)',
-  'arima': 'ARIMA (1,1,1) Non-Seasonal',
-  'holt_linear': 'Holt Linear Trend (No Seasonal)',
-  'ses': 'Simple Exp Smoothing (SES)',
-  'ridge': 'Linear Regression (Trend + DOW)',
-  'snaive': 'Seasonal Naive (Lag 7)',
-  'naive': 'Naive Random Walk (Lag 1)',
-  'ma7': '7-Day Moving Average'
-};
-
-function getSeriesKey(metric, direction, moda) {
+function getSeriesKey(metric, moda) {
   if (metric === 'pnp') {
-    if (direction === 'tot') return moda;
-    if (direction === 'brg') return moda === 'TOTAL' ? 'pbrg_TOTAL' : `pbrg_${moda}`;
-    if (direction === 'dat') return moda === 'TOTAL' ? 'pdat_TOTAL' : `pdat_${moda}`;
+    return moda === 'TOTAL' ? 'pbrg_TOTAL' : `pbrg_${moda}`;
   } else {
-    if (direction === 'tot') return moda === 'TOTAL' ? 'arm_TOTAL' : `arm_${moda}`;
-    if (direction === 'brg') return moda === 'TOTAL' ? 'abrg_TOTAL' : `abrg_${moda}`;
-    if (direction === 'dat') return moda === 'TOTAL' ? 'adat_TOTAL' : `adat_${moda}`;
+    return moda === 'TOTAL' ? 'abrg_TOTAL' : `abrg_${moda}`;
   }
-  return moda;
 }
 
-function getSeriesLabel(metric, direction) {
-  if (metric === 'pnp') {
-    if (direction === 'tot') return 'Total Penumpang (Dua Arah)';
-    if (direction === 'brg') return 'Penumpang Berangkat (Keberangkatan)';
-    if (direction === 'dat') return 'Penumpang Datang (Kedatangan)';
-  } else {
-    if (direction === 'tot') return 'Total Armada (Dua Arah)';
-    if (direction === 'brg') return 'Armada Berangkat (Keberangkatan)';
-    if (direction === 'dat') return 'Armada Datang (Kedatangan)';
-  }
-  return 'Penumpang';
+function getSeriesLabel(metric) {
+  return metric === 'pnp' ? 'Penumpang Berangkat' : 'Armada Berangkat';
 }
 
 function getUnitLabel(metric) {
-  return metric === 'pnp' ? 'orang' : 'trip';
+  return metric === 'pnp' ? 'penumpang berangkat' : 'trip berangkat';
 }
 
-function getHistoricalSeries(prov, metric, direction, moda) {
-  const key = getSeriesKey(metric, direction, moda);
+function getHistoricalSeries(prov, metric, moda) {
+  const key = getSeriesKey(metric, moda);
   if (prov === 'ALL') {
     return DATA.daily_timeline.filter(d => d.date <= '2026-09-29').map(d => d[key] ?? 0);
   }
@@ -79,13 +42,13 @@ function getHistoricalSeries(prov, metric, direction, moda) {
   return (pData && pData.history_2026 && pData.history_2026[key]) || [];
 }
 
-function get2025HistoricalSeries(prov, metric, direction, moda, labels) {
-  const key = getSeriesKey(metric, direction, moda);
+function get2025HistoricalSeries(prov, metric, moda, labels) {
+  const key = getSeriesKey(metric, moda);
   if (prov === 'ALL') {
     const map2025 = {};
     (DATA.timeline_2025 || []).forEach(r => {
       const md = r.date.slice(5);
-      map2025[md] = r[key] ?? r['TOTAL'] ?? 0;
+      map2025[md] = r[key] ?? 0;
     });
     return labels.map(d => map2025[d.slice(5)] ?? null);
   } else {
@@ -96,23 +59,20 @@ function get2025HistoricalSeries(prov, metric, direction, moda, labels) {
       const r25 = map25Md[md];
       if (r25 === undefined || r25 === null) return null;
       if (typeof r25 === 'number') {
-        if (direction === 'brg') return Math.round(r25 * (metric === 'pnp' ? 0.58 : 0.016));
-        if (direction === 'dat') return Math.round(r25 * (metric === 'pnp' ? 0.42 : 0.014));
-        if (metric === 'arm') return Math.round(r25 / 35);
-        return r25;
+        if (metric === 'pnp') return Math.round(r25 * 0.58);
+        return Math.round(r25 / 35 * 0.52);
       }
       return r25[key] ?? null;
     });
   }
 }
 
-function generateTimeSeriesForecast(histSeries, futureDates, modelCode, scenario = 'moderat') {
+function generateTimeSeriesForecast(histSeries, futureDates, modelCode) {
   const n = histSeries.length;
   if (!n || histSeries.every(v => v === 0)) {
     return futureDates.map(d => ({ date: d, val: 0, ci_upper: 0, ci_lower: 0, shock_factor: 1.0 }));
   }
 
-  const scenMult = scenario_mults[scenario] || 1.0;
   const lastVal = histSeries[n - 1];
   const last7 = histSeries.slice(-7);
   const mean7 = last7.reduce((a, b) => a + b, 0) / 7;
@@ -224,7 +184,7 @@ function generateTimeSeriesForecast(histSeries, futureDates, modelCode, scenario
   return futureDates.map((dateStr, i) => {
     const md = dateStr.slice(5);
     const shock = nataru_shocks[md] || 1.0;
-    const finalVal = Math.round(basePred[i] * shock * scenMult);
+    const finalVal = Math.round(basePred[i] * shock);
     const ciExpansion = Math.sqrt(1 + 0.005 * i);
     const ciUpper = Math.round(finalVal + 1.96 * estRmse * ciExpansion);
     const ciLower = Math.max(0, Math.round(finalVal - 1.96 * estRmse * ciExpansion));
@@ -261,28 +221,6 @@ function setForecastModa(moda) {
   renderForecastChart();
 }
 
-function setForecastModel(modelCode) {
-  currentForecastModel = modelCode;
-  const select = document.getElementById('select-forecast-model');
-  if (select && select.value !== modelCode) select.value = modelCode;
-
-  renderForecastSummaryCards();
-  renderForecastComparisonTable();
-  renderForecastChart();
-  renderForecastAccuracyBadges();
-  renderForecastTable();
-}
-
-function setForecastScenario(scen) {
-  currentForecastScenario = scen;
-
-  renderForecastSummaryCards();
-  renderForecastComparisonTable();
-  renderForecastChart();
-  renderForecastTable();
-  if (typeof renderArmadaSimulation === 'function') renderArmadaSimulation();
-}
-
 function setForecastTableRange(rangeKey, btn) {
   currentForecastRange = rangeKey;
   document.querySelectorAll('.btn-fc-tbl').forEach(b => {
@@ -301,39 +239,28 @@ function renderForecastAccuracyBadges() {
   const isPnp = currentForecastMetric === 'pnp';
   const pData = !isAll ? DATA.forecast_nataru.by_province?.[currentForecastProv] : null;
 
-  const benchList = isAll
-    ? (DATA.forecast_nataru.benchmarks || [])
-    : (pData?.benchmarks || DATA.forecast_nataru.benchmarks || []);
-
   const champ = isAll
     ? DATA.forecast_nataru.champion_model
     : (pData?.champion_model || DATA.forecast_nataru.champion_model);
 
-  const activeModelCode = currentForecastModel === 'auto' ? (champ?.code || 'hw_mul_damped') : currentForecastModel;
-  const activeBenchmark = benchList.find(b => b.model_code === activeModelCode) || benchList[0] || {
-    model_name: model_names_map[activeModelCode] || activeModelCode,
-    mape: 4.10,
-    rmse: 62051,
-    mae: 49146
-  };
+  const activeModelName = champ?.name || 'Holt-Winters Mul Damped';
+  const activeMape = champ?.mape || 4.10;
+  const activeRmse = champ?.rmse || 62051;
+  const activeMae = champ?.mae || 49146;
 
   const champNameEl = document.getElementById('fc-champion-name');
   if (champNameEl) {
-    if (currentForecastModel === 'auto') {
-      champNameEl.innerText = `Model Terpilih: ${champ?.name || activeBenchmark.model_name} (Auto-Model: MAPE ${decFmt(activeBenchmark.mape, 2)}%)`;
-    } else {
-      champNameEl.innerText = `Model Aktif: ${activeBenchmark.model_name} (MAPE ${decFmt(activeBenchmark.mape, 2)}%)`;
-    }
+    champNameEl.innerText = `Model Terpilih: ${activeModelName} (Auto-Model: MAPE ${decFmt(activeMape, 2)}%)`;
   }
 
   const mapeEl = document.getElementById('fc-metric-mape');
-  if (mapeEl) mapeEl.innerText = `${decFmt(activeBenchmark.mape, 2)}%`;
+  if (mapeEl) mapeEl.innerText = `${decFmt(activeMape, 2)}%`;
 
   const rmseEl = document.getElementById('fc-metric-rmse');
-  if (rmseEl) rmseEl.innerHTML = `${numFmt(activeBenchmark.rmse)} <span class="text-xs font-normal text-slate-500">${isPnp ? 'pnp' : 'trip'}/hari</span>`;
+  if (rmseEl) rmseEl.innerHTML = `${numFmt(activeRmse)} <span class="text-xs font-normal text-slate-500">${isPnp ? 'pnp' : 'trip'}/hari</span>`;
 
   const maeEl = document.getElementById('fc-metric-mae');
-  if (maeEl) maeEl.innerHTML = `${numFmt(activeBenchmark.mae)} <span class="text-xs font-normal text-slate-500">${isPnp ? 'pnp' : 'trip'}/hari</span>`;
+  if (maeEl) maeEl.innerHTML = `${numFmt(activeMae)} <span class="text-xs font-normal text-slate-500">${isPnp ? 'pnp' : 'trip'}/hari</span>`;
 
   const benchSec = document.getElementById('sec-forecast-benchmarks');
   if (benchSec && !benchSec.classList.contains('hidden')) {
@@ -400,7 +327,6 @@ function renderForecastSummaryCards() {
   if (!DATA.forecast_nataru) return;
   const isAll = currentForecastProv === 'ALL';
   const isPnp = currentForecastMetric === 'pnp';
-  const unit = getUnitLabel(currentForecastMetric);
   const oppMetric = isPnp ? 'arm' : 'pnp';
   const oppUnit = getUnitLabel(oppMetric);
 
@@ -408,12 +334,12 @@ function renderForecastSummaryCards() {
   const champ = isAll
     ? DATA.forecast_nataru.champion_model
     : (pData?.champion_model || DATA.forecast_nataru.champion_model);
-  const activeModelCode = currentForecastModel === 'auto' ? (champ?.code || 'hw_mul_damped') : currentForecastModel;
+  const activeModelCode = champ?.code || 'hw_mul_damped';
 
   const futureDates = (DATA.forecast_nataru.scenarios?.moderat || []).map(d => d.date);
-  const hist = getHistoricalSeries(currentForecastProv, currentForecastMetric, currentForecastDirection, 'TOTAL');
-  const fc = generateTimeSeriesForecast(hist, futureDates, activeModelCode, currentForecastScenario);
-  const s25 = get2025HistoricalSeries(currentForecastProv, currentForecastMetric, currentForecastDirection, 'TOTAL', futureDates);
+  const hist = getHistoricalSeries(currentForecastProv, currentForecastMetric, 'TOTAL');
+  const fc = generateTimeSeriesForecast(hist, futureDates, activeModelCode);
+  const s25 = get2025HistoricalSeries(currentForecastProv, currentForecastMetric, 'TOTAL', futureDates);
 
   let fcTot = 0, s25Tot = 0;
   let xmasRow = null, nyRow = null;
@@ -437,9 +363,10 @@ function renderForecastSummaryCards() {
   const avgDaily = Math.round(fcTot / 18);
   const yoyTotPct = s25Tot > 0 ? ((fcTot / s25Tot - 1) * 100) : 0;
 
-  const oppHist = getHistoricalSeries(currentForecastProv, oppMetric, currentForecastDirection, 'TOTAL');
-  const oppFc = generateTimeSeriesForecast(oppHist, futureDates, activeModelCode, currentForecastScenario);
-  const oppS25 = get2025HistoricalSeries(currentForecastProv, oppMetric, currentForecastDirection, 'TOTAL', futureDates);
+  // Opposing metric for Card 4 (Armada Berangkat jika Penumpang, Penumpang Berangkat jika Armada)
+  const oppHist = getHistoricalSeries(currentForecastProv, oppMetric, 'TOTAL');
+  const oppFc = generateTimeSeriesForecast(oppHist, futureDates, activeModelCode);
+  const oppS25 = get2025HistoricalSeries(currentForecastProv, oppMetric, 'TOTAL', futureDates);
 
   let oppMaxDay = { val: 0, date: '' }, opp25Val = 0;
   oppFc.forEach((d, i) => {
@@ -515,17 +442,23 @@ function renderForecastComparisonTable() {
   tbody.innerHTML = '';
 
   const isAll = currentForecastProv === 'ALL';
-  const unit = getUnitLabel(currentForecastMetric);
-  const metricLabel = getSeriesLabel(currentForecastMetric, currentForecastDirection);
+  const isPnp = currentForecastMetric === 'pnp';
+  const metricLabel = getSeriesLabel(currentForecastMetric);
 
   const pData = !isAll ? DATA.forecast_nataru.by_province?.[currentForecastProv] : null;
   const champ = isAll
     ? DATA.forecast_nataru.champion_model
     : (pData?.champion_model || DATA.forecast_nataru.champion_model);
-  const activeModelCode = currentForecastModel === 'auto' ? (champ?.code || 'hw_mul_damped') : currentForecastModel;
+  const activeModelCode = champ?.code || 'hw_mul_damped';
 
   const badgeEl = document.getElementById('fc-comp-prov-badge');
   if (badgeEl) badgeEl.innerText = `${isAll ? 'Nasional' : currentForecastProv} • ${metricLabel}`;
+
+  // Update table header labels
+  const th25 = document.getElementById('th-fc-comp-25');
+  if (th25) th25.innerText = `Realisasi 2025 (${isPnp ? 'Pnp Berangkat' : 'Trip Berangkat'})`;
+  const th26 = document.getElementById('th-fc-comp-26');
+  if (th26) th26.innerText = `Proyeksi 2026 (${isPnp ? 'Pnp Berangkat' : 'Trip Berangkat'})`;
 
   const modesMeta = [
     { key: 'UDARA', label: '✈ Udara (Penerbangan Domestik)', color: COLOR.UDARA, note: 'Kapasitas armada beroperasi optimal; tiket dinamis memfilter demand jarak jauh' },
@@ -540,9 +473,9 @@ function renderForecastComparisonTable() {
   const rowsData = [];
 
   modesMeta.forEach(m => {
-    const hist = getHistoricalSeries(currentForecastProv, currentForecastMetric, currentForecastDirection, m.key);
-    const fc = generateTimeSeriesForecast(hist, futureDates, activeModelCode, currentForecastScenario);
-    const s25 = get2025HistoricalSeries(currentForecastProv, currentForecastMetric, currentForecastDirection, m.key, futureDates);
+    const hist = getHistoricalSeries(currentForecastProv, currentForecastMetric, m.key);
+    const fc = generateTimeSeriesForecast(hist, futureDates, activeModelCode);
+    const s25 = get2025HistoricalSeries(currentForecastProv, currentForecastMetric, m.key, futureDates);
 
     let fcSum = 0, s25Sum = 0;
     fc.forEach((d, i) => {
@@ -605,7 +538,7 @@ function renderForecastComparisonTable() {
     <td class="py-3 px-3 text-right text-slate-900 dark:text-white">${totalDiff >= 0 ? '+' : ''}${numFmt(totalDiff)}</td>
     <td class="py-3 px-3 text-center text-xs ${totalYoyClass}">${totalYoy >= 0 ? '+' : ''}${decFmt(totalYoy, 1)}%</td>
     <td class="py-3 px-3 text-left font-sans text-[11px] text-slate-700 dark:text-slate-300 font-semibold">
-      Ekspansi mobilitas ${isAll ? 'nasional' : currentForecastProv} (${metricLabel})
+      Ekspansi mobilitas keberangkatan ${isAll ? 'nasional' : currentForecastProv} (${metricLabel})
     </td>
   `;
   tbody.appendChild(trTotal);
@@ -620,15 +553,15 @@ function renderForecastChart() {
   const isPnp = currentForecastMetric === 'pnp';
   const moda = currentForecastModa;
   const isAll = currentForecastProv === 'ALL';
-  const metricLabel = getSeriesLabel(currentForecastMetric, currentForecastDirection);
+  const metricLabel = getSeriesLabel(currentForecastMetric);
   const unitLabel = getUnitLabel(currentForecastMetric);
 
   const pData = !isAll ? DATA.forecast_nataru.by_province?.[currentForecastProv] : null;
   const champ = isAll
     ? DATA.forecast_nataru.champion_model
     : (pData?.champion_model || DATA.forecast_nataru.champion_model);
-  const activeModelCode = currentForecastModel === 'auto' ? (champ?.code || 'hw_mul_damped') : currentForecastModel;
-  const activeModelName = model_names_map[activeModelCode] || activeModelCode;
+  const activeModelCode = champ?.code || 'hw_mul_damped';
+  const activeModelName = champ?.name || 'Holt-Winters Mul Damped';
 
   const badgeEl = document.getElementById('fc-chart-scope-badge');
   if (badgeEl) badgeEl.innerText = `${isAll ? 'Nasional' : currentForecastProv} • ${metricLabel}`;
@@ -640,12 +573,12 @@ function renderForecastChart() {
     legendLabelEl.innerHTML = `<span class="w-3 h-0.5 border-t border-dashed border-indigo-500"></span> Proyeksi ${activeModelName}`;
   }
 
-  const hist = getHistoricalSeries(currentForecastProv, currentForecastMetric, currentForecastDirection, moda);
+  const hist = getHistoricalSeries(currentForecastProv, currentForecastMetric, moda);
   const histDates = (pData && pData.history_2026 && pData.history_2026.dates) || DATA.daily_timeline.filter(d => d.date <= '2026-09-29').map(d => d.date);
   const futureDates = (DATA.forecast_nataru.scenarios?.moderat || []).map(d => d.date);
   const allLabels = [...histDates, ...futureDates];
 
-  const fc = generateTimeSeriesForecast(hist, futureDates, activeModelCode, currentForecastScenario);
+  const fc = generateTimeSeriesForecast(hist, futureDates, activeModelCode);
   const lastHistVal = hist.length ? hist[hist.length - 1] : 0;
 
   const histData = [...hist, ...futureDates.map(() => null)];
@@ -655,7 +588,7 @@ function renderForecastChart() {
     ...fc.map(d => d.val)
   ];
 
-  const hist25Data = get2025HistoricalSeries(currentForecastProv, currentForecastMetric, currentForecastDirection, moda, allLabels);
+  const hist25Data = get2025HistoricalSeries(currentForecastProv, currentForecastMetric, moda, allLabels);
 
   const modaColor = moda === 'TOTAL' ? (isDark ? '#38bdf8' : '#0284c7') : (COLOR[moda] || '#6366f1');
   const forecastColor = '#6366f1';
@@ -805,16 +738,16 @@ function renderForecastTable() {
   const champ = isAll
     ? DATA.forecast_nataru.champion_model
     : (pData?.champion_model || DATA.forecast_nataru.champion_model);
-  const activeModelCode = currentForecastModel === 'auto' ? (champ?.code || 'hw_mul_damped') : currentForecastModel;
+  const activeModelCode = champ?.code || 'hw_mul_damped';
 
   const futureDates = (DATA.forecast_nataru.scenarios?.moderat || []).map(d => d.date);
-  const hist = getHistoricalSeries(currentForecastProv, currentForecastMetric, currentForecastDirection, currentForecastModa);
-  const fc = generateTimeSeriesForecast(hist, futureDates, activeModelCode, currentForecastScenario);
-  const s25 = get2025HistoricalSeries(currentForecastProv, currentForecastMetric, currentForecastDirection, currentForecastModa, futureDates);
+  const hist = getHistoricalSeries(currentForecastProv, currentForecastMetric, currentForecastModa);
+  const fc = generateTimeSeriesForecast(hist, futureDates, activeModelCode);
+  const s25 = get2025HistoricalSeries(currentForecastProv, currentForecastMetric, currentForecastModa, futureDates);
 
-  const oppHist = getHistoricalSeries(currentForecastProv, oppMetric, currentForecastDirection, currentForecastModa);
-  const oppFc = generateTimeSeriesForecast(oppHist, futureDates, activeModelCode, currentForecastScenario);
-  const oppS25 = get2025HistoricalSeries(currentForecastProv, oppMetric, currentForecastDirection, currentForecastModa, futureDates);
+  const oppHist = getHistoricalSeries(currentForecastProv, oppMetric, currentForecastModa);
+  const oppFc = generateTimeSeriesForecast(oppHist, futureDates, activeModelCode);
+  const oppS25 = get2025HistoricalSeries(currentForecastProv, oppMetric, currentForecastModa, futureDates);
 
   const rKey = currentForecastRange;
   const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];

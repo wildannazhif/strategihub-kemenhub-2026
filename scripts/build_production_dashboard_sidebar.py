@@ -1417,32 +1417,6 @@ def generate_dashboard():
               </div>
             </div>
 
-            <!-- 4. Dropdown Model Peramalan (11 Model Acuan PUSDATIN) -->
-            <div class="flex items-center gap-2">
-              <label for="select-forecast-model" class="text-slate-500 dark:text-slate-400 font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1">
-                <span>🤖 Model:</span>
-              </label>
-              <div class="relative">
-                <select id="select-forecast-model" onchange="setForecastModel(this.value)" class="bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-semibold rounded-md pl-3 pr-8 py-1.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none appearance-none cursor-pointer shadow-xs max-w-[240px] truncate">
-                  <option value="auto" selected>🏆 Model Terbaik (Auto-Model Champion)</option>
-                  <option value="hw_mul_damped">Holt-Winters Mul Damped (phi=0.98)</option>
-                  <option value="hw_mul_std">Holt-Winters Mul Standar</option>
-                  <option value="hw_add_damped">Holt-Winters Add Damped (phi=0.98)</option>
-                  <option value="sarima">SARIMA (1,1,1)x(1,1,1,7)</option>
-                  <option value="arima">ARIMA (1,1,1) Non-Seasonal</option>
-                  <option value="holt_linear">Holt Linear Trend (No Seasonal)</option>
-                  <option value="ses">Simple Exp Smoothing (SES)</option>
-                  <option value="ridge">Linear Regression (Trend + DOW)</option>
-                  <option value="snaive">Seasonal Naive (Lag 7)</option>
-                  <option value="naive">Naive Random Walk (Lag 1)</option>
-                  <option value="ma7">7-Day Moving Average</option>
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
 
@@ -1501,6 +1475,30 @@ def generate_dashboard():
           </div>
         </div>
 
+        <!-- Main Horizon Line Chart Card -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
+                Tren Berkelanjutan: Data Historis 2026 Tersambung ke Garis Proyeksi Nataru 2026/2027
+              </h3>
+              <p class="text-[11px] text-slate-500">
+                Garis solid mewakili realisasi riil (Jan - Sep). Garis putus-putus ungu mewakili proyeksi 1 model Holt-Winters terpadu (Okt - Jan 2027) dengan shock musiman Nataru dari data latih 2025 beserta pita keyakinan 95%.
+              </p>
+            </div>
+            <div class="flex items-center gap-3 text-[11px] font-mono flex-wrap">
+              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 bg-sky-600"></span> Realisasi 2026</span>
+              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-indigo-500"></span> Proyeksi Holt-Winters</span>
+              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-emerald-500"></span> Realisasi 2025 (Data Latih)</span>
+              <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-indigo-500/20 border border-indigo-400"></span> Rentang 95% CI</span>
+            </div>
+          </div>
+
+          <div class="h-[380px] w-full relative">
+            <canvas id="chartForecastCanvas"></canvas>
+          </div>
+        </div>
+
         <!-- Dedicated Multi-Modal Nataru 2026 vs 2025 Comparison Card -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-slate-100 dark:border-slate-800">
@@ -1543,29 +1541,6 @@ def generate_dashboard():
           </div>
         </div>
 
-        <!-- Main Horizon Line Chart Card -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                Tren Berkelanjutan: Data Historis 2026 Tersambung ke Garis Proyeksi Nataru 2026/2027
-              </h3>
-              <p class="text-[11px] text-slate-500">
-                Garis solid mewakili realisasi riil (Jan - Sep). Garis putus-putus ungu mewakili proyeksi 1 model Holt-Winters terpadu (Okt - Jan 2027) dengan shock musiman Nataru dari data latih 2025 beserta pita keyakinan 95%.
-              </p>
-            </div>
-            <div class="flex items-center gap-3 text-[11px] font-mono flex-wrap">
-              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 bg-sky-600"></span> Realisasi 2026</span>
-              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-indigo-500"></span> Proyeksi Holt-Winters</span>
-              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-0.5 border-t border-dashed border-emerald-500"></span> Realisasi 2025 (Data Latih)</span>
-              <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-indigo-500/20 border border-indigo-400"></span> Rentang 95% CI</span>
-            </div>
-          </div>
-
-          <div class="h-[380px] w-full relative">
-            <canvas id="chartForecastCanvas"></canvas>
-          </div>
-        </div>
 
         <!-- Card: Model Specification & Accuracy Validation (RMSE & MAPE) -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-4">
