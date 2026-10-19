@@ -1509,9 +1509,7 @@ def generate_dashboard():
                   Spesifikasi Model & Evaluasi Akurasi Pengujian (Backtest Holdout)
                 </h3>
               </div>
-              <p class="text-[11px] text-slate-500 mt-0.5">
-                Pengujian out-of-sample: 609 hari data latih gabungan 2025–2026 (1 Jan 2025 – 1 Sep 2026) vs 28 hari data uji (2 Sep – 29 Sep 2026)
-              </p>
+
             </div>
             <span class="text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
               Metode: 1 Model Holt-Winters Terpadu (phi=0.98, s=7) + Shock Kalender Nataru
