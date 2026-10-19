@@ -1499,49 +1499,6 @@ def generate_dashboard():
           </div>
         </div>
 
-        <!-- Dedicated Multi-Modal Nataru 2026 vs 2025 Comparison Card -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-slate-100 dark:border-slate-800">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
-                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                  Tabel Komparasi Angkutan Nataru 2026/2027 vs Realisasi Tahun Lalu (2025)
-                </h3>
-              </div>
-              <p class="text-[11px] text-slate-500 mt-0.5">
-                Perbandingan volume penumpang riil posko 18 hari (18 Des – 4 Jan) per moda transportasi serta estimasi pergeseran pangsa pasar
-              </p>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-semibold">
-                Benchmark Riil: Siasati 2025 (365 Hari)
-              </span>
-            </div>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse text-xs">
-              <thead class="bg-slate-50 dark:bg-slate-800 text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-700">
-                <tr>
-                  <th class="py-2.5 px-3">Moda Transportasi</th>
-                  <th class="py-2.5 px-3 text-right">Realisasi 2025 (Pnp)</th>
-                  <th class="py-2.5 px-3 text-right">Pangsa '25</th>
-                  <th class="py-2.5 px-3 text-right text-indigo-700 dark:text-indigo-400">Proyeksi 2026 (Pnp)</th>
-                  <th class="py-2.5 px-3 text-right text-indigo-700 dark:text-indigo-400">Pangsa '26</th>
-                  <th class="py-2.5 px-3 text-right font-semibold">Selisih (Δ Pnp)</th>
-                  <th class="py-2.5 px-3 text-center">Pertumbuhan YoY</th>
-                  <th class="py-2.5 px-3 text-left">Dinamika Operasional & Kapasitas</th>
-                </tr>
-              </thead>
-              <tbody id="tbody-forecast-comparison" class="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px] text-slate-800 dark:text-slate-200">
-                <!-- Populated dynamically by JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-
         <!-- Card: Model Specification & Accuracy Validation (RMSE & MAPE) -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
@@ -1612,6 +1569,49 @@ def generate_dashboard():
             </div>
           </div>
         </div>
+
+        <!-- Dedicated Multi-Modal Nataru 2026 vs 2025 Comparison Card -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-slate-100 dark:border-slate-800">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
+                  Tabel Komparasi Angkutan Nataru 2026/2027 vs Realisasi Tahun Lalu (2025)
+                </h3>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-0.5">
+                Perbandingan volume penumpang riil posko 18 hari (18 Des – 4 Jan) per moda transportasi serta estimasi pergeseran pangsa pasar
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-semibold">
+                Benchmark Riil: Siasati 2025 (365 Hari)
+              </span>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="bg-slate-50 dark:bg-slate-800 text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-700">
+                <tr>
+                  <th class="py-2.5 px-3">Moda Transportasi</th>
+                  <th class="py-2.5 px-3 text-right">Realisasi 2025 (Pnp)</th>
+                  <th class="py-2.5 px-3 text-right">Pangsa '25</th>
+                  <th class="py-2.5 px-3 text-right text-indigo-700 dark:text-indigo-400">Proyeksi 2026 (Pnp)</th>
+                  <th class="py-2.5 px-3 text-right text-indigo-700 dark:text-indigo-400">Pangsa '26</th>
+                  <th class="py-2.5 px-3 text-right font-semibold">Selisih (Δ Pnp)</th>
+                  <th class="py-2.5 px-3 text-center">Pertumbuhan YoY</th>
+                  <th class="py-2.5 px-3 text-left">Dinamika Operasional & Kapasitas</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-forecast-comparison" class="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px] text-slate-800 dark:text-slate-200">
+                <!-- Populated dynamically by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
 
         <!-- Section: Interactive Per-Prasarana / Simpul Simulation Panel -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-5">
