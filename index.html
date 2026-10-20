@@ -577,9 +577,9 @@
             <div class="flex flex-wrap items-center justify-between gap-3 pb-2.5">
               <div>
                 <h4 id="monthly-table-title" class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Akumulasi Bulanan per Moda Transportasi</h4>
-                <p id="monthly-table-subtitle" class="text-[11px] text-slate-500">Volume pergerakan dari Januari sampai dengan September 2026</p>
+                <p id="monthly-table-subtitle" class="text-[11px] text-slate-500">Volume pergerakan dari Januari sampai dengan Oktober 2026</p>
               </div>
-              <span id="monthly-table-badge" class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700">9 Bulan (Jan - Sep)</span>
+              <span id="monthly-table-badge" class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700">10 Bulan (Jan - Okt)</span>
             </div>
 
             <div class="overflow-x-auto mt-2">
@@ -601,9 +601,9 @@
               </table>
             </div>
 
-            <!-- Footnote Catatan September* -->
+            <!-- Footnote Catatan Oktober* -->
             <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-start gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-              <span class="font-bold text-amber-600 dark:text-amber-400 shrink-0">* Catatan September:</span>
+              <span class="font-bold text-amber-600 dark:text-amber-400 shrink-0">* Catatan Oktober:</span>
               <p class="leading-relaxed text-[11px]">
               Data bulan Oktober 2026 merupakan data berjalan s.d. 13 Oktober (13 hari kalender operasional).
               </p>
@@ -3588,7 +3588,7 @@ function renderProvinceGrowthWorkspace() {
 
     // Unified Table Rendering: Akumulasi Bulanan per Moda
     if (tableTitle) tableTitle.innerText = 'Akumulasi Bulanan per Moda Transportasi';
-    if (tableSub) tableSub.innerText = `Rincian volume ${mCfg.verb} di ${provLabel} (${activeModaLabel}) Januari s.d. September 2026`;
+    if (tableSub) tableSub.innerText = `Rincian volume ${mCfg.verb} di ${provLabel} (${activeModaLabel}) Januari s.d. Oktober 2026`;
     if (tableBadge) tableBadge.innerText = `Baseline Median: ${numFmt(scopeMedian)} ${mCfg.unit}/bln (1 Jan - 12 Mar)`;
 
     if (theadMonthly) {
