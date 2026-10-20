@@ -230,7 +230,7 @@
   <!-- Floating Action Button for Dashboard Information Sidebar -->
   <button onclick="switchTab('tab-tentang-data', 'Informasi & Kamus Rumus Dashboard', document.getElementById('nav-btn-tentang-data'))" class="fixed bottom-6 right-6 z-40 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2 border border-indigo-400 group" title="Buka Informasi & Kamus Rumus Dashboard">
     <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-    <span class="hidden sm:inline">📘 Metodologi Kepadatan</span>
+    <span class="hidden sm:inline">📘 Metodologi & Kamus Rumus</span>
     <span class="sm:hidden">📘 Metode</span>
   </button>
 
@@ -587,7 +587,7 @@
                 <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
                   <tr id="thead-monthly">
                     <th class="py-2.5 px-3">Bulan</th>
-                    <th class="py-2.5 px-3 text-right text-sky-700 dark:text-sky-400">Udara</th>
+                    <th class="py-2.5 px-3 text-right text-blue-900 dark:text-blue-300 font-bold">Udara</th>
                     <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400">Kereta Api</th>
                     <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Bus</th>
                     <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">ASDP</th>
@@ -913,7 +913,7 @@
               <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
                 <tr>
                   <th class="py-3 px-3.5 w-72">Indikator Kuantitatif</th>
-                  <th class="py-3 px-3 text-right text-sky-700 dark:text-sky-400">UDARA</th>
+                  <th class="py-3 px-3 text-right text-blue-900 dark:text-blue-300 font-bold">UDARA</th>
                   <th class="py-3 px-3 text-right text-amber-700 dark:text-amber-400">KERETA API</th>
                   <th class="py-3 px-3 text-right text-green-700 dark:text-green-400">BUS</th>
                   <th class="py-3 px-3 text-right text-purple-700 dark:text-purple-400">ASDP</th>
@@ -1003,7 +1003,7 @@
               <button onclick="filterSpatialModa('ALL', this)" class="map-moda-btn active px-2.5 py-1 rounded text-xs font-semibold bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-xs transition-all">
                 Semua Moda (1.014)
               </button>
-              <button onclick="filterSpatialModa('UDARA', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-sky-800 dark:text-sky-300 hover:bg-sky-50 dark:hover:bg-sky-950/40 border border-slate-200 dark:border-slate-700 transition-all">
+              <button onclick="filterSpatialModa('UDARA', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-blue-900 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700 transition-all">
                 ✈ Udara (257)
               </button>
               <button onclick="filterSpatialModa('KA', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-amber-800 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40 border border-slate-200 dark:border-slate-700 transition-all">
@@ -1658,6 +1658,7 @@
             <a href="#rumus-sec-7" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">7. Rekomendasi Armada (Persentil)</a>
             <a href="#rumus-sec-8" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">8. Model Nataru</a>
             <a href="#rumus-sec-9" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">9. Tabel Simpul</a>
+            <a href="#rumus-sec-10" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">10. Glosarium Singkatan</a>
           </div>
         </div>
 
@@ -1682,7 +1683,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
             <div class="p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80">
               <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Baris Tervalidasi</div>
-              <div class="text-lg font-black font-mono text-slate-900 dark:text-white mt-1">209.964 Baris</div>
+              <div class="text-lg font-black font-mono text-slate-900 dark:text-white mt-1">209.885 Baris</div>
               <div class="text-[11px] text-slate-500 mt-0.5">Dibersihkan dari 211.361 log mentah</div>
             </div>
             <div class="p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80">
@@ -1958,9 +1959,9 @@
             </div>
             <div class="text-[11px] text-slate-500 text-center">
               Jika $\Delta < 0 
-ightarrow \mathbf{H-|\Delta|}$ (Mudik) • Jika $\Delta = 0 
-ightarrow \mathbf{Hari\ H}$ • Jika $\Delta > 0 
-ightarrow \mathbf{H+|\Delta|}$ (Balik)
+\rightarrow \mathbf{H-|\Delta|}$ (Mudik) • Jika $\Delta = 0 
+\rightarrow \mathbf{Hari\ H}$ • Jika $\Delta > 0 
+\rightarrow \mathbf{H+|\Delta|}$ (Balik)
             </div>
           </div>
 
@@ -2452,6 +2453,90 @@ ightarrow \mathbf{H+|\Delta|}$ (Balik)
           </div>
         </div>
 
+
+        <!-- Section 10: Glosarium & Kamus Singkatan Resmi Kementerian Perhubungan -->
+        <div id="rumus-sec-10" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div class="flex items-center gap-2.5">
+              <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">
+                10. Glosarium & Kamus Singkatan Resmi Kementerian Perhubungan
+              </h3>
+            </div>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold">
+              Standar Terminologi PUSDATIN
+            </span>
+          </div>
+
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Daftar singkatan, akronim teknis, dan istilah resmi perhubungan yang digunakan di seluruh modul dashboard StrategiHub 2026.
+          </p>
+
+          <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+            <table class="w-full text-left text-xs font-sans">
+              <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-300">
+                <tr>
+                  <th class="p-2.5 w-32">Singkatan</th>
+                  <th class="p-2.5 w-56">Kepanjangan Resmi</th>
+                  <th class="p-2.5">Definisi & Ruang Lingkup Operasional</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-[11px]">
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-blue-900 dark:text-blue-300">KCJB / Whoosh</td>
+                  <td class="p-2.5 font-semibold">Kereta Cepat Jakarta - Bandung</td>
+                  <td class="p-2.5">Layanan kereta api berkecepatan tinggi pertama di Asia Tenggara rute Halim-Karawang-Padalarang-Tegalluar (operator: PT KCIC).</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">SIASATI</td>
+                  <td class="p-2.5 font-semibold">Sistem Informasi Angkutan dan Sarana Transportasi Indonesia</td>
+                  <td class="p-2.5">Sistem basis data terpadu Kementerian Perhubungan yang menghimpun log mobilitas harian 5 moda secara nasional.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-purple-600 dark:text-purple-400">ASDP</td>
+                  <td class="p-2.5 font-semibold">Angkutan Sungai, Danau, dan Penyeberangan</td>
+                  <td class="p-2.5">Layanan kapal feri ro-ro penyeberangan lintas antarpulau utama (misal: Merak-Bakauheni, Ketapang-Gilimanuk).</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-green-600 dark:text-green-400">AKAP</td>
+                  <td class="p-2.5 font-semibold">Antarkota Antarprovinsi (Moda Bus)</td>
+                  <td class="p-2.5">Trayek angkutan bus umum yang melayani perjalanan antarprovinsi melalui terminal tipe A terakreditasi.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-amber-600 dark:text-amber-400">KAI</td>
+                  <td class="p-2.5 font-semibold">PT Kereta Api Indonesia (Persero)</td>
+                  <td class="p-2.5">Badan Usaha Milik Negara operator perkeretaapian antarkota, aglomerasi, dan komuter di pulau Jawa dan Sumatera.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-rose-600 dark:text-rose-400">TBB</td>
+                  <td class="p-2.5 font-semibold">Tiba Bongkar Berangkat</td>
+                  <td class="p-2.5">Pola operasi darurat penyeberangan kapal ferry saat puncak arus mudik/balik: kapal hanya membongkar muatan di pelabuhan tujuan lalu langsung berangkat tanpa memuat balik guna mengurai antrean.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-cyan-600 dark:text-cyan-400">TCQSM</td>
+                  <td class="p-2.5 font-semibold">Transit Capacity and Quality of Service Manual</td>
+                  <td class="p-2.5">Buku standar rekayasa transportasi internasional diterbitkan oleh Transportation Research Board (TRB / TCRP Report 165).</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-slate-700 dark:text-slate-300">OD</td>
+                  <td class="p-2.5 font-semibold">Origin - Destination (Asal - Tujuan)</td>
+                  <td class="p-2.5">Matriks pergerakan penumpang yang memetakan bandara keberangkatan (*origin*) ke bandara kedatangan (*destination*).</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-slate-700 dark:text-slate-300">MAPE / WAPE</td>
+                  <td class="p-2.5 font-semibold">Mean / Weighted Absolute Percentage Error</td>
+                  <td class="p-2.5">Metrik statistik untuk mengukur tingkat kesalahan absolut persentase peramalan; semakin kecil nilainya (&lt;10%), semakin tinggi akurasinya.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-slate-700 dark:text-slate-300">LF Proxy</td>
+                  <td class="p-2.5 font-semibold">Load Factor Proxy (Penumpang per Armada)</td>
+                  <td class="p-2.5">Indikator rasio kepadatan muatan fisik penumpang rata-rata per satu satuan frekuensi sarana transportasi yang beroperasi.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
 
     </main>
@@ -2545,7 +2630,7 @@ let mapTileLayer = null;
 
 // Standard Functional Colors
 const COLOR = {
-  UDARA: '#0284c7', // Sky 600
+  UDARA: '#1e3a8a', // Deep Navy Blue (Membedakan tegas dari Laut Cyan #0891b2)
   KA: '#d97706',    // Amber 600
   BUS: '#16a34a',   // Green 600
   ASDP: '#9333ea',  // Purple 600
@@ -3411,7 +3496,7 @@ function renderProvinceGrowthWorkspace() {
     let datasets = [];
     if (isAllModa) {
       const modaKeys = [
-        { key: 'UDARA', label: 'Udara', color: (typeof COLOR !== 'undefined' && COLOR.UDARA) || '#0284c7' },
+        { key: 'UDARA', label: 'Udara', color: (typeof COLOR !== 'undefined' && COLOR.UDARA) || '#1e3a8a' },
         { key: 'KA', label: 'Kereta Api', color: (typeof COLOR !== 'undefined' && COLOR.KA) || '#d97706' },
         { key: 'BUS', label: 'Bus', color: (typeof COLOR !== 'undefined' && COLOR.BUS) || '#16a34a' },
         { key: 'ASDP', label: 'ASDP', color: (typeof COLOR !== 'undefined' && COLOR.ASDP) || '#9333ea' },
@@ -3425,7 +3510,7 @@ function renderProvinceGrowthWorkspace() {
         stack: 'provStack'
       }));
     } else {
-      const mColor = (typeof COLOR !== 'undefined' && COLOR[selectedModaForGrowth]) || '#0284c7';
+      const mColor = (typeof COLOR !== 'undefined' && COLOR[selectedModaForGrowth]) || '#1e3a8a';
       datasets = [{
         label: activeModaLabel,
         data: monthlyVals,
@@ -3509,7 +3594,7 @@ function renderProvinceGrowthWorkspace() {
     if (theadMonthly) {
       theadMonthly.innerHTML = `
         <th class="py-2.5 px-3">Bulan</th>
-        <th class="py-2.5 px-3 text-right text-sky-700 dark:text-sky-400 ${selectedModaForGrowth === 'UDARA' ? 'bg-sky-50 dark:bg-sky-950/40 font-bold' : ''}">Udara</th>
+        <th class="py-2.5 px-3 text-right text-blue-900 dark:text-blue-300 font-bold ${selectedModaForGrowth === 'UDARA' ? 'bg-blue-50 dark:bg-blue-950/40 font-bold text-blue-900 dark:text-blue-300' : ''}">Udara</th>
         <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400 ${selectedModaForGrowth === 'KA' ? 'bg-amber-50 dark:bg-amber-950/40 font-bold' : ''}">Kereta Api</th>
         <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400 ${selectedModaForGrowth === 'BUS' ? 'bg-green-50 dark:bg-green-950/40 font-bold' : ''}">Bus</th>
         <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400 ${selectedModaForGrowth === 'ASDP' ? 'bg-purple-50 dark:bg-purple-950/40 font-bold' : ''}">ASDP</th>
@@ -3543,7 +3628,7 @@ function renderProvinceGrowthWorkspace() {
 
         tr.innerHTML = `
           <td class="py-2.5 px-3 font-sans font-medium text-slate-900 dark:text-slate-200">${m.name}</td>
-          <td class="py-2.5 px-3 text-right ${selectedModaForGrowth === 'UDARA' ? 'bg-sky-50 dark:bg-sky-950/40 font-bold text-sky-700 dark:text-sky-300' : ''}">${numFmt(uVal)}</td>
+          <td class="py-2.5 px-3 text-right ${selectedModaForGrowth === 'UDARA' ? 'bg-blue-50 dark:bg-blue-950/40 font-bold text-blue-900 dark:text-blue-300' : ''}">${numFmt(uVal)}</td>
           <td class="py-2.5 px-3 text-right ${selectedModaForGrowth === 'KA' ? 'bg-amber-50 dark:bg-amber-950/40 font-bold text-amber-700 dark:text-amber-300' : ''}">${numFmt(kVal)}</td>
           <td class="py-2.5 px-3 text-right ${selectedModaForGrowth === 'BUS' ? 'bg-green-50 dark:bg-green-950/40 font-bold text-green-700 dark:text-green-300' : ''}">${numFmt(bVal)}</td>
           <td class="py-2.5 px-3 text-right ${selectedModaForGrowth === 'ASDP' ? 'bg-purple-50 dark:bg-purple-950/40 font-bold text-purple-700 dark:text-purple-300' : ''}">${numFmt(aVal)}</td>
@@ -3741,7 +3826,7 @@ function selectLebaranDate(dateStr) {
   if (container) {
     container.innerHTML = `
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-        <div class="text-[10px] font-bold text-sky-700 dark:text-sky-400">UDARA</div>
+        <div class="text-[10px] font-bold text-blue-900 dark:text-blue-300">UDARA</div>
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${numFmt(day[getMetricKey('UDARA')])}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
@@ -4310,7 +4395,7 @@ function initSpatialMap() {
           <span>Titik Simpul per Moda:</span>
         </div>
         <div class="space-y-0.5 text-[10px]">
-          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Udara (257)</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: #1e3a8a;"></span><span class="text-slate-600 dark:text-slate-300 font-semibold">Udara (257)</span></div>
           <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Kereta Api (193)</span></div>
           <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Bus (139)</span></div>
           <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">ASDP (158)</span></div>
