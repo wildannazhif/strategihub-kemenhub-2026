@@ -703,6 +703,7 @@ data_bundle = {
     'forecast_nataru': old_bundle.get('forecast_nataru', {}),
     'timeline_2025': old_bundle.get('timeline_2025', []),
     'simpul_recommendations': old_bundle.get('simpul_recommendations', []),
+    'simpul_scenario_metadata': old_bundle.get('simpul_scenario_metadata', {}),
     'province_monthly_data': province_monthly_data,
     'province_geojson': old_bundle.get('province_geojson', {})
 }

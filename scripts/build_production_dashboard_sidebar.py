@@ -452,85 +452,35 @@ def generate_dashboard():
         </div>
       </div>
 
-      <!-- Box 7: Penentuan Kebutuhan Tambahan Armada Simpul Berbasis Persentil Lonjakan Load Factor -->
-      <div class="space-y-3.5">
-        <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
-          <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-            7. Standar Penentuan Penambahan Armada Simpul (Persentil Lonjakan Load Factor)
-          </h4>
-          <p class="text-[11px] text-slate-500 mt-0.5">Penentuan persentase tambahan armada dihitung murni berbasis rasio lonjakan kepadatan per armada (Load Factor) dengan ambang persentil empiris nasional (TCQSM & TRB Standard):</p>
-        </div>
-
-        <!-- Tolok Ukur A -->
-        <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-3.5 space-y-2">
-          <div class="font-bold text-slate-900 dark:text-white text-xs flex items-center justify-between">
-            <span>A. Mengapa Menggunakan Lonjakan Load Factor (LF Puncak / LF Biasa)?</span>
-            <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300">TCQSM Standard</span>
+        <!-- Section 7: Skenario historis Armada Berangkat -->
+        <div id="rumus-sec-7" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">7. Skenario Penambahan Armada Berangkat — Rasio Normal Historis</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Skenario ini menargetkan beban historis Penumpang Berangkat per Armada Berangkat, bukan rekomendasi operasional final, kebutuhan sarana, atau bukti kapasitas nominal. Persentil nasional hanya mengelompokkan urgensi; persentil tidak menetapkan persentase tambahan. Angka skenario ini tidak diklaim sebagai persentase yang ditentukan TCQSM/TRB.</p>
+          <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2 text-xs">
+            <p><strong>Rasio Normal:</strong> median harian Penumpang Berangkat / median harian Armada Berangkat, masing-masing dihitung terpisah dari pengamatan 1 Januari–12 Maret 2026. Rasio dihitung dari median tanpa pembulatan awal.</p>
+            <p><strong>Puncak:</strong> tanggal Penumpang Berangkat tertinggi dalam 13–29 Maret 2026; jika seri, gunakan tanggal paling awal. Armada Berangkat puncak diambil pada tanggal yang sama, bukan maksimum tersendiri.</p>
+            <div class="font-mono">Rasio Normal = pnpBiasa / armBiasa<br>Rasio Puncak = pnpPuncak / armPuncak<br>loadRatio = Rasio Puncak / Rasio Normal</div>
           </div>
-          <p class="text-[11px] text-slate-600 dark:text-slate-300">
-            Kemacetan dan antrean tidak semata-mata diukur dari jumlah penumpang, melainkan dari <strong>rasio kepadatan penumpang per unit armada yang beroperasi (LF = Penumpang / Armada)</strong>. Ketika LF puncak melonjak jauh di atas LF biasa, kapasitas sarana gagal menyerap arus sehingga terjadi antrean dan penumpukan kendaraan.
-          </p>
-        </div>
-
-        <!-- Tolok Ukur B -->
-        <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-3.5 space-y-2.5">
-          <div class="font-bold text-slate-900 dark:text-white text-xs flex items-center justify-between">
-            <span>B. Ambang Batas Persentil Empiris Lonjakan Beban (1.010 Simpul Nasional)</span>
-            <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300">P50 • P75 • P90</span>
+          <div class="p-4 rounded-lg bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 space-y-2 text-xs">
+            <div class="font-bold">Formula skenario (nilai penuh, pembulatan hanya pada target):</div>
+            <div class="font-mono">requiredArm = ceil(pnpPuncak × armBiasa / pnpBiasa)<br>addArm = max(0, requiredArm − armPuncak)<br>totalArm = armPuncak + addArm<br>pctTambah = 100 × addArm / armPuncak</div>
+            <p>ceil membulatkan target ke atas ke bilangan bulat; nilai yang sudah bulat tidak ditambah lagi. Armada Berangkat yang sudah ada tidak dikurangi. Tambahan nol adalah hasil valid: 0%. Dua simpul dalam kategori urgensi yang sama dapat memiliki persentase skenario berbeda.</p>
           </div>
-          <div class="overflow-x-auto rounded border border-slate-200 dark:border-slate-700">
-            <table class="w-full text-left text-[11px] font-sans">
-              <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-600 dark:text-slate-400">
-                <tr>
-                  <th class="p-1.5">Klasifikasi Beban</th>
-                  <th class="p-1.5">Kriteria Persentil Empiris</th>
-                  <th class="p-1.5">Rekomendasi Tambahan (%)</th>
-                  <th class="p-1.5">Cakupan Simpul Nasional</th>
-                </tr>
-              </thead>
+          <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+            <table class="w-full text-left text-xs"><thead class="bg-slate-100 dark:bg-slate-800"><tr><th class="p-2.5">Status urgensi</th><th class="p-2.5">Kriteria nasional (untuk skenario valid)</th></tr></thead>
               <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
-                <tr>
-                  <td class="p-1.5 font-bold text-rose-600 dark:text-rose-400">🔴 Sangat Kritis</td>
-                  <td class="p-1.5 font-mono">Top 10% Terparah (&ge; P90 = 3,43x lipat)</td>
-                  <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+20%</td>
-                  <td class="p-1.5">87 Simpul (Bakauheni 4,3x, Gilimanuk 4,2x, Merak 3,8x, Giwangan 3,6x)</td>
-                </tr>
-                <tr>
-                  <td class="p-1.5 font-bold text-orange-600 dark:text-orange-400">🟠 Tinggi / Kritis</td>
-                  <td class="p-1.5 font-mono">P75 s.d. P90 (2,33x &ndash; 3,42x lipat)</td>
-                  <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+15%</td>
-                  <td class="p-1.5">122 Simpul (Pasar Senen 2,8x, Ketapang 2,6x, Poto Tano 2,5x)</td>
-                </tr>
-                <tr>
-                  <td class="p-1.5 font-bold text-amber-600 dark:text-amber-400">🟡 Padat</td>
-                  <td class="p-1.5 font-mono">P50 s.d. P75 (1,54x &ndash; 2,32x lipat)</td>
-                  <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+10%</td>
-                  <td class="p-1.5">211 Simpul (Juanda 1,9x, Gambir 1,8x, DPS Bali 1,6x, Soetta 1,5x)</td>
-                </tr>
-                <tr>
-                  <td class="p-1.5 font-bold text-emerald-600 dark:text-emerald-400">🟢 Terkendali</td>
-                  <td class="p-1.5 font-mono">&lt; P50 (&lt; 1,54x lipat / armada mencukupi)</td>
-                  <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+5%</td>
-                  <td class="p-1.5">590 Simpul (Simpul perintis & rute reguler stabil)</td>
-                </tr>
+                <tr><td class="p-2.5">Sangat Kritis</td><td class="p-2.5">loadRatio ≥ P90</td></tr>
+                <tr><td class="p-2.5">Tinggi / Kritis</td><td class="p-2.5">P75 ≤ loadRatio &lt; P90</td></tr>
+                <tr><td class="p-2.5">Padat</td><td class="p-2.5">P50 ≤ loadRatio &lt; P75</td></tr>
+                <tr><td class="p-2.5">Terkendali</td><td class="p-2.5">loadRatio &lt; P50, atau Penumpang Berangkat puncak &lt; 100 (pengecualian volume kecil didahulukan)</td></tr>
+                <tr><td class="p-2.5">Data tidak cukup</td><td class="p-2.5">Median normal tidak positif/tidak tersedia, atau Armada Berangkat pada tanggal puncak tidak positif/tidak tersedia</td></tr>
               </tbody>
             </table>
           </div>
+          <p class="text-xs text-slate-600 dark:text-slate-300">P50/P75/P90 dihitung dengan interpolasi linear dari loadRatio berpresisi penuh seluruh simpul valid nasional, termasuk simpul volume kecil. Ambang dan jumlah nasional tidak berubah saat pencarian, moda, status, atau halaman berubah. Data tidak cukup tetap terlihat dengan alasan, tetapi rasio skenario, target, tambahan, total, dan persentase ditampilkan — serta dikecualikan dari persentil dan agregat. Jika tidak ada skenario valid, ambang dan hasil agregat ditampilkan —.</p>
+          <div class="simpul-national-metadata p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 text-[11px] space-y-1">Metadata nasional dimuat dari data skenario.</div>
+          <p class="text-xs text-slate-500">Agregat hanya menjumlahkan skenario valid; persentase agregat = 100 × jumlah tambahan / jumlah Armada Berangkat puncak dari simpul valid, bukan rata-rata persentase simpul. Puncak tiap simpul dapat berbeda tanggal sehingga agregat bukan kebutuhan operasi serentak. Penerapan memerlukan kajian operator atas jadwal, keselamatan, sarana, dan kapasitas prasarana.</p>
         </div>
-
-        <!-- Tolok Ukur C: Rujukan Akademis -->
-        <div class="bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/60 rounded-lg p-3 space-y-1.5">
-          <div class="font-bold text-indigo-900 dark:text-indigo-200 text-xs flex items-center gap-1.5">
-            <span>📚 Landasan Akademis & Standar Rekayasa Transportasi:</span>
-          </div>
-          <div class="text-[10px] text-slate-600 dark:text-slate-300 space-y-1">
-            <div>• <strong>TRB TCQSM (TCRP Report 165):</strong> Kualitas layanan simpul ditentukan oleh rasio Passenger Load Factor terhadap kapasitas sarana.</div>
-            <div>• <strong>Ceder, A. (2015):</strong> <em>Public Transit Planning and Operation</em>. Penambahan frekuensi/armada jam puncak diformulasikan dari rasio defisit load factor.</div>
-            <div>• <strong>Jara-Díaz et al. (2017):</strong> <em>Transportation Research Part A</em>. Ukuran armada optimal dialokasikan proporsional terhadap rasio periode puncak vs normal.</div>
-          </div>
-        </div>
-      </div>
 
       <!-- Box 8: Rumus Model Prediktif Time Series Nataru 2026/2027 -->
       <div class="space-y-3">
@@ -570,24 +520,13 @@ def generate_dashboard():
         </div>
       </div>
 
-      <!-- Box 9: Formula Matematis Simulasi Tambahan Armada -->
-      <div class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-3.5 space-y-2">
-        <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          9. Formula Matematis Simulasi Tambahan Armada Simpul
-        </h4>
-        <div class="space-y-1.5 text-[11px] font-mono text-slate-700 dark:text-slate-300">
-          <div class="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-            <strong>Tambahan Armada (Trip/h)</strong> = Armada_Baseline × (Persentase / 100)
-          </div>
-          <div class="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-            <strong>Kapasitas Terbuka (Pnp)</strong> = Penumpang_Baseline × (Persentase / 100)
-          </div>
-          <div class="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-            <strong>Tingkat Kepadatan Baru (%)</strong> = Beban_Awal / (1 + Persentase / 100)
-          </div>
+        <!-- Section 9: Formula skenario Armada Berangkat -->
+        <div id="rumus-sec-9" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">9. Formula Skenario Penambahan Armada Berangkat</h3>
+          <div class="font-mono text-xs space-y-2">Rasio Normal = pnpBiasa / armBiasa<br>requiredArm = ceil(pnpPuncak × armBiasa / pnpBiasa)<br>addArm = max(0, requiredArm − armPuncak)<br>totalArm = armPuncak + addArm<br>pctTambah = 100 × addArm / armPuncak</div>
+          <p class="text-xs text-slate-600 dark:text-slate-300">pnpBiasa dan armBiasa adalah median harian terpisah Penumpang Berangkat dan Armada Berangkat pada 1 Januari–12 Maret 2026. pnpPuncak dan armPuncak berasal dari satu tanggal yang sama: maksimum Penumpang Berangkat pada 13–29 Maret 2026 (tanggal paling awal jika seri). Gunakan presisi penuh median dan rasio sebelum ceil; target yang sudah bulat tidak ditambah lagi. Tambahan tidak negatif dan Armada Berangkat yang sudah ada tidak dikurangi.</p>
+          <p class="text-xs text-slate-600 dark:text-slate-300">Satuan target, tambahan, dan total adalah Armada Berangkat per hari. Persentase adalah hasil skenario tiap simpul, bukan nilai tetap kategori persentil. Tambahan nol ditampilkan 0%. Jika median normal atau Armada Berangkat pada tanggal puncak tidak positif/tidak tersedia, seluruh hasil skenario adalah — dengan alasan Data tidak cukup, dan tidak masuk agregat. Skenario beban historis ini bukan kapasitas nominal atau rekomendasi operasional final.</p>
         </div>
-      </div>
 
     </div>
 
@@ -1620,11 +1559,11 @@ def generate_dashboard():
               <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
                 <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                  Tabel Rekomendasi Kebutuhan Penambahan Armada di Seluruh Simpul Prasarana Nasional (1.010 Simpul)
+                  Skenario Penambahan Armada Berangkat
                 </h3>
               </div>
               <p class="text-[11px] text-slate-500 mt-0.5">
-                Dihitung berbasis metodologi persentil lonjakan Load Factor (LF Puncak / LF Biasa) standar TCQSM TRB. Dilengkapi filter jumlah baris (Top 10 s.d. Semua Simpul), filter moda, status urgensi, dan pencarian cepat.
+                Skenario target beban historis dari Rasio Normal (Penumpang Berangkat / Armada Berangkat). Persentil nasional hanya mengelompokkan urgensi, bukan menentukan persentase. Bukan rekomendasi operasional final; kelayakan jadwal, keselamatan, sarana, dan prasarana perlu kajian operator.
               </p>
             </div>
             
@@ -1634,6 +1573,8 @@ def generate_dashboard():
             </button>
           </div>
 
+          <div class="simpul-national-metadata p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] space-y-1">Metadata nasional dimuat dari data skenario.</div>
+
           <!-- Highlight Summary Strip: 5 Modas (Dynamically Updated) -->
           <div id="simpulHighlightCards" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 text-xs">
             <!-- Rendered dynamically by JS -->
@@ -1642,52 +1583,53 @@ def generate_dashboard():
           <!-- Controls Bar 1: Filter Moda & Status Urgensi -->
           <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
             <div class="flex flex-wrap items-center gap-1.5 text-xs font-semibold" id="simpulFilterContainer">
-              <button type="button" onclick="filterSimpulModa('ALL', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-indigo-600 text-white shadow-xs font-bold transition-all">Semua Moda (1.010)</button>
-              <button type="button" onclick="filterSimpulModa('UDARA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">✈ Udara (230)</button>
-              <button type="button" onclick="filterSimpulModa('LAUT', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚢 Laut (209)</button>
-              <button type="button" onclick="filterSimpulModa('ASDP', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">⛴ ASDP Feri (196)</button>
-              <button type="button" onclick="filterSimpulModa('BUS', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚌 Bus AKAP (189)</button>
-              <button type="button" onclick="filterSimpulModa('KA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚆 Kereta Api (186)</button>
+              <button type="button" onclick="filterSimpulModa('ALL', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-indigo-600 text-white shadow-xs font-bold transition-all">Semua Moda</button>
+              <button type="button" onclick="filterSimpulModa('UDARA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">✈ Udara</button>
+              <button type="button" onclick="filterSimpulModa('LAUT', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚢 Laut</button>
+              <button type="button" onclick="filterSimpulModa('ASDP', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">⛴ Penyebrangan</button>
+              <button type="button" onclick="filterSimpulModa('BUS', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚌 Jalan</button>
+              <button type="button" onclick="filterSimpulModa('KA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚆 Perkeretaapian</button>
             </div>
             
             <div class="flex items-center gap-2">
               <label for="select-simpul-status" class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider shrink-0">Status:</label>
               <select id="select-simpul-status" onchange="setSimpulStatusFilter(this.value)" class="text-xs px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
                 <option value="ALL" selected>Semua Status Urgensi</option>
-                <option value="20">🔴 Sangat Kritis (+20%)</option>
-                <option value="15">🟠 Tinggi / Kritis (+15%)</option>
-                <option value="10">🟡 Padat (+10%)</option>
-                <option value="5">🟢 Terkendali (+5%)</option>
+                <option value="critical">Sangat Kritis</option>
+                <option value="high">Tinggi / Kritis</option>
+                <option value="medium">Padat</option>
+                <option value="controlled">Terkendali</option>
+                <option value="insufficient">Data tidak cukup</option>
               </select>
             </div>
           </div>
 
           <!-- Controls Bar 2: Limit Selector, Search & Sort -->
           <div class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-lg bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80">
-            <div class="flex flex-wrap items-center gap-3">
+            <div class="flex min-w-0 w-full sm:w-auto flex-wrap items-center gap-3">
               <!-- Limit Dropdown Requested by User -->
-              <div class="flex items-center gap-1.5">
+              <div class="flex max-w-full items-center gap-1.5">
                 <label for="select-simpul-limit" class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
                   <span>📊 Tampilkan:</span>
                 </label>
-                <select id="select-simpul-limit" onchange="setSimpulDisplayLimit(this.value)" class="text-xs font-bold px-2.5 py-1.5 rounded-md border border-indigo-300 dark:border-indigo-700 bg-white dark:bg-slate-800 text-indigo-700 dark:text-indigo-300 shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+                <select id="select-simpul-limit" onchange="setSimpulDisplayLimit(this.value)" class="min-w-0 text-xs font-bold px-2.5 py-1.5 rounded-md border border-indigo-300 dark:border-indigo-700 bg-white dark:bg-slate-800 text-indigo-700 dark:text-indigo-300 shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
                   <option value="10">🏆 Top 10 Simpul Utama</option>
                   <option value="25" selected>⭐ Top 25 Simpul Terpadat</option>
                   <option value="50">📍 Top 50 Simpul Nasional</option>
                   <option value="100">🌐 Top 100 Simpul Terbesar</option>
                   <option value="250">📋 Top 250 Simpul</option>
-                  <option value="all">🇮🇩 Semua Simpul (1.010 Simpul)</option>
+                  <option value="all">🇮🇩 Semua Simpul</option>
                 </select>
               </div>
 
               <!-- Sorting Dropdown -->
-              <div class="flex items-center gap-1.5">
+              <div class="flex max-w-full items-center gap-1.5">
                 <label for="select-simpul-sort" class="text-xs font-semibold text-slate-500">Urutkan:</label>
-                <select id="select-simpul-sort" onchange="setSimpulSortBy(this.value)" class="text-xs px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
-                  <option value="pnp_desc" selected>Penumpang Puncak (Tertinggi)</option>
+                <select id="select-simpul-sort" onchange="setSimpulSortBy(this.value)" class="min-w-0 text-xs px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+                  <option value="pnp_desc" selected>Penumpang Berangkat Puncak (Tertinggi)</option>
                   <option value="ratio_desc">Lonjakan Beban (Tertinggi)</option>
-                  <option value="pct_desc">% Tambah Armada (Tertinggi)</option>
-                  <option value="add_desc">Tambahan Unit Fisik (Terbanyak)</option>
+                  <option value="pct_desc">% Tambah Armada Berangkat (Tertinggi)</option>
+                  <option value="add_desc">Tambahan Armada Berangkat (Terbanyak)</option>
                   <option value="name_asc">Nama Simpul (A - Z)</option>
                 </select>
               </div>
@@ -1708,14 +1650,13 @@ def generate_dashboard():
                 <thead class="bg-slate-50 dark:bg-slate-800 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 sticky top-0 z-10 backdrop-blur-md">
                   <tr>
                     <th class="py-2.5 px-3">No & Simpul Prasarana</th>
-                    <th class="py-2.5 px-3">Keberangkatan Normal</th>
-                    <th class="py-2.5 px-3">Keberangkatan Puncak</th>
+                    <th class="py-2.5 px-3">Penumpang / Armada Berangkat Normal</th>
+                    <th class="py-2.5 px-3">Penumpang / Armada Berangkat Puncak</th>
                     <th class="py-2.5 px-3 text-center">Lonjakan Beban</th>
                     <th class="py-2.5 px-3 text-center">Status</th>
-                    <th class="py-2.5 px-3 text-center">Perlu Tambah (%)</th>
-                    <th class="py-2.5 px-3 text-right">Tambahan Unit</th>
-                    <th class="py-2.5 px-3 text-right">Total Operasi</th>
-                    <th class="py-2.5 px-3">Rekomendasi Aksi Lapangan Kemenhub</th>
+                    <th class="py-2.5 px-3 text-center">Skenario Tambahan (%)</th>
+                    <th class="py-2.5 px-3 text-right">Tambahan Armada Berangkat</th>
+                    <th class="py-2.5 px-3 text-right">Total Armada Berangkat Skenario</th>
                   </tr>
                 </thead>
                 <tbody id="tbody-simpul-matrix" class="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px] text-slate-800 dark:text-slate-200">
@@ -1727,7 +1668,7 @@ def generate_dashboard():
             <!-- Pagination & Navigation Controls -->
             <div class="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs">
               <span id="badge-simpul-count" class="font-mono text-slate-500">
-                Menampilkan 1 - 25 dari 1.010 Simpul Nasional
+                Memuat cakupan simpul nasional…
               </span>
 
               <div id="simpulPaginationNav" class="flex items-center gap-1.5">
@@ -1735,7 +1676,7 @@ def generate_dashboard():
                   &laquo; Sebelumnya
                 </button>
                 <span id="label-simpul-page" class="font-mono px-2 text-slate-600 dark:text-slate-400 font-semibold">
-                  Halaman 1 dari 41
+                  Halaman 1
                 </span>
                 <button type="button" id="btn-simpul-next" onclick="changeSimpulPage(1)" class="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all font-medium">
                   Berikutnya &raquo;
@@ -3637,7 +3578,7 @@ function setForecastScenario(scen) {{
   renderForecastComparisonTable();
   renderForecastChart();
   renderForecastTable();
-  renderArmadaSimulation();
+  renderSimpulSimulation();
 }}
 
 function setForecastMetric(metric) {{
@@ -4080,233 +4021,176 @@ function changeSimpulPage(delta) {{
   renderSimpulSimulation();
 }}
 
+function simpulNumber(value, digits = 0) {{
+  return Number.isFinite(value) ? value.toLocaleString('id-ID', {{ maximumFractionDigits: digits }}) : '—';
+}}
+
+function simpulPercent(value) {{
+  return Number.isFinite(value) ? (value > 0 ? '+' : '') + simpulNumber(value, 2) + '%' : '—';
+}}
+
+function simpulEscape(value) {{
+  return String(value ?? '').replace(/[&<>"']/g, c => ({{ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }}[c]));
+}}
+
+function summarizeSimpulScenario(rows) {{
+  const valid = rows.filter(s => s.scenarioValid === true);
+  const current = valid.reduce((sum, s) => sum + s.armPuncak, 0);
+  const additional = valid.reduce((sum, s) => sum + s.addArm, 0);
+  return {{ validCount: valid.length, insufficientCount: rows.length - valid.length,
+    current: valid.length ? current : null, additional: valid.length ? additional : null,
+    total: valid.length ? current + additional : null,
+    pct: current > 0 ? additional / current * 100 : null }};
+}}
+
+function renderSimpulNationalMetadata() {{
+  const meta = DATA.simpul_scenario_metadata;
+  const allData = DATA.simpul_recommendations || [];
+  const summary = summarizeSimpulScenario(allData);
+  const labels = {{ critical: 'Sangat Kritis', high: 'Tinggi / Kritis', medium: 'Padat', controlled: 'Terkendali', insufficient: 'Data tidak cukup' }};
+  document.querySelectorAll('.simpul-national-metadata').forEach(el => {{
+    if (!meta) {{
+      el.textContent = 'Metadata skenario nasional belum tersedia.';
+      return;
+    }}
+    const threshold = key => Number.isFinite(meta.thresholds?.[key]) ? simpulNumber(meta.thresholds[key], 6) + '×' : '—';
+    const counts = Object.entries(labels).map(([key, label]) => label + ': ' + simpulNumber(meta.counts?.[key])).join(' • ');
+    el.innerHTML =
+      '<div class="font-bold text-slate-900 dark:text-white">Persentil urgensi nasional (tetap untuk semua filter)</div>' +
+      '<div>P50: <strong>' + threshold('p50') + '</strong> • P75: <strong>' + threshold('p75') + '</strong> • P90: <strong>' + threshold('p90') + '</strong></div>' +
+      '<div>' + counts + '</div>' +
+      '<div>Cakupan nasional: ' + simpulNumber(meta.validCount) + ' skenario valid dari ' + simpulNumber(allData.length) + ' simpul; ' + simpulNumber(meta.insufficientCount) + ' data tidak cukup, dikecualikan dari persentil dan agregat.</div>' +
+      '<div>Skenario nasional: tambahan <strong>' + simpulNumber(summary.additional) + ' Armada Berangkat per hari (' + simpulPercent(summary.pct) + ')</strong>; penyebut ' + simpulNumber(summary.current) + ' Armada Berangkat puncak dari simpul valid. Total skenario: ' + simpulNumber(summary.total) + ' Armada Berangkat per hari.</div>' +
+      '<div>Normal: ' + simpulEscape(meta.baselineStart) + ' s.d. ' + simpulEscape(meta.baselineEnd) + '; jendela puncak: ' + simpulEscape(meta.peakStart) + ' s.d. ' + simpulEscape(meta.peakEnd) + '. Puncak tiap simpul dapat berbeda tanggal; agregat bukan operasi serentak pada satu hari.</div>';
+  }});
+  document.querySelectorAll('#simpulFilterContainer .simpul-filter-btn').forEach(btn => {{
+    const key = btn.getAttribute('onclick')?.match(/filterSimpulModa\\('([^']+)'/)?.[1];
+    const count = key === 'ALL' ? allData.length : allData.filter(s => s.moda === key).length;
+    const label = btn.textContent.replace(/\\s*\\([^)]*\\)\\s*$/, '');
+    btn.textContent = label + ' (' + simpulNumber(count) + ')';
+  }});
+  const allOption = document.querySelector('#select-simpul-limit option[value="all"]');
+  if (allOption) allOption.textContent = 'Semua Simpul (' + simpulNumber(allData.length) + ')';
+}}
+
 function renderDynamicSimpulHighlights(filteredData) {{
   const container = document.getElementById('simpulHighlightCards');
   if (!container) return;
-
   const modas = [
-    {{ key: 'ASDP', label: '⛴ ASDP Feri', color: 'rose' }},
-    {{ key: 'KA', label: '🚆 Kereta Api', color: 'amber' }},
-    {{ key: 'UDARA', label: '✈ Penerbangan', color: 'sky' }},
-    {{ key: 'BUS', label: '🚌 Bus AKAP', color: 'emerald' }},
-    {{ key: 'LAUT', label: '🚢 Kapal Laut', color: 'cyan' }},
+    {{ key: 'ASDP', label: 'Penyebrangan', color: 'rose' }},
+    {{ key: 'KA', label: 'Perkeretaapian', color: 'amber' }},
+    {{ key: 'UDARA', label: 'Udara', color: 'sky' }},
+    {{ key: 'BUS', label: 'Jalan', color: 'emerald' }},
+    {{ key: 'LAUT', label: 'Laut', color: 'cyan' }}
   ];
-
-  let html = '';
-  modas.forEach(m => {{
-    const sub = filteredData.filter(d => d.moda === m.key);
-    const count = sub.length;
-    const totalPuncakArm = sub.reduce((acc, c) => acc + (c.armPuncak || 0), 0);
-    const totalAddArm = sub.reduce((acc, c) => acc + (c.addArm || 0), 0);
-    const avgPct = totalPuncakArm > 0 ? (totalAddArm / totalPuncakArm * 100).toFixed(1) : '0';
-
-    html += `
-      <div class="bg-${{m.color}}-50/70 dark:bg-${{m.color}}-950/30 border border-${{m.color}}-200 dark:border-${{m.color}}-900/60 rounded-lg p-3">
-        <div class="flex items-center justify-between text-[10px] text-${{m.color}}-600 dark:text-${{m.color}}-400 font-bold uppercase">
-          <span>${{m.label}}</span>
-          <span>${{count}} Simpul</span>
-        </div>
-        <div class="font-mono font-black text-${{m.color}}-700 dark:text-${{m.color}}-300 text-lg mt-1">+${{avgPct}}% Armada</div>
-        <div class="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5">
-          Butuh <strong>+${{numFmt(totalAddArm)}} unit/hari</strong>
-        </div>
-      </div>
-    `;
-  }});
-
-  container.innerHTML = html;
+  container.innerHTML = modas.map(m => {{
+    const rows = filteredData.filter(s => s.moda === m.key);
+    const summary = summarizeSimpulScenario(rows);
+    return `<div class="bg-${{m.color}}-50/70 dark:bg-${{m.color}}-950/30 border border-${{m.color}}-200 dark:border-${{m.color}}-900/60 rounded-lg p-3">
+      <div class="font-bold text-xs">${{m.label}}</div>
+      <div class="font-mono font-black text-lg mt-1">${{simpulPercent(summary.pct)}}</div>
+      <div class="text-[11px]">Tambahan ${{simpulNumber(summary.additional)}} Armada Berangkat per hari</div>
+      <div class="text-[10px] text-slate-500 mt-1">${{summary.validCount}}/${{rows.length}} simpul valid; ${{summary.insufficientCount}} data tidak cukup. Penyebut: ${{simpulNumber(summary.current)}} Armada Berangkat puncak (simpul valid).</div>
+    </div>`;
+  }}).join('');
 }}
 
 function renderDynamicSimpulSummary(filteredData) {{
-  const elSum = document.getElementById('simpulOperationalSummary');
-  if (!elSum) return;
-
-  const totalSimpul = filteredData.length;
-  const totalAdd = filteredData.reduce((acc, c) => acc + (c.addArm || 0), 0);
-  const totalCur = filteredData.reduce((acc, c) => acc + (c.armPuncak || 0), 0);
-  const nationalAvgPct = totalCur > 0 ? (totalAdd / totalCur * 100).toFixed(1) : '0';
-
-  const criticalCount = filteredData.filter(d => d.pctTambah === 20).length;
-  const highCount = filteredData.filter(d => d.pctTambah === 15).length;
-  const medCount = filteredData.filter(d => d.pctTambah === 10).length;
-  const lowCount = filteredData.filter(d => d.pctTambah === 5).length;
-
-  elSum.innerHTML = `
-    <div class="flex items-start gap-2.5">
-      <span class="w-2.5 h-2.5 rounded-full bg-indigo-600 mt-1 shrink-0"></span>
-      <div class="space-y-1.5">
-        <div class="font-bold text-slate-900 dark:text-white text-xs">
-          Rangkuman Instruksi Operasional Terpadu (${{totalSimpul}} Simpul Terpilih):
-        </div>
-        <div class="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed space-y-1">
-          <div>
-            • <strong>Total Kebutuhan Tambahan Armada:</strong> Diperlukan penambahan <strong>+${{numFmt(totalAdd)}} armada fisik/hari (+${{nationalAvgPct}}%)</strong> untuk menjaga kelancaran arus mudik & balik dari total ${{numFmt(totalCur)}} armada operasi puncak.
-          </div>
-          <div>
-            • <strong>Distribusi Tingkat Urgensi:</strong> 
-            <span class="font-semibold text-rose-600 dark:text-rose-400">${{criticalCount}} Simpul Sangat Kritis (+20%)</span>, 
-            <span class="font-semibold text-orange-600 dark:text-orange-400">${{highCount}} Simpul Tinggi (+15%)</span>, 
-            <span class="font-semibold text-amber-600 dark:text-amber-400">${{medCount}} Simpul Padat (+10%)</span>, dan 
-            <span class="font-semibold text-emerald-600 dark:text-emerald-400">${{lowCount}} Simpul Terkendali/Siaga (+5%)</span>.
-          </div>
-          <div>
-            • <strong>Instruksi Utama Lapangan:</strong> Prioritaskan rekayasa *Tiba Bongkar Berangkat* di Pelabuhan Merak-Bakauheni & Ketapang-Gilimanuk, izin slot *extra flight* malam di CGK Soetta & DPS Bali, serta rangkaian Kereta Api Tambahan (KLB) di Pasar Senen & Gambir.
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+  const el = document.getElementById('simpulOperationalSummary');
+  if (!el) return;
+  const summary = summarizeSimpulScenario(filteredData);
+  const count = key => filteredData.filter(s => s.statusKey === key).length;
+  el.innerHTML = `<div class="space-y-1.5">
+    <div class="font-bold text-slate-900 dark:text-white">Rangkuman skenario sesuai filter (${{filteredData.length}} simpul, seluruh halaman)</div>
+    <div>Cakupan: ${{summary.validCount}} skenario valid; ${{summary.insufficientCount}} data tidak cukup dan tidak masuk agregat.</div>
+    <div>Tambahan: <strong>${{simpulNumber(summary.additional)}} Armada Berangkat per hari (${{simpulPercent(summary.pct)}})</strong>. Penyebut: ${{simpulNumber(summary.current)}} Armada Berangkat puncak pada simpul valid; total skenario: ${{simpulNumber(summary.total)}} Armada Berangkat per hari.</div>
+    <div>Urgensi terpilih: ${{count('critical')}} Sangat Kritis • ${{count('high')}} Tinggi / Kritis • ${{count('medium')}} Padat • ${{count('controlled')}} Terkendali • ${{count('insufficient')}} Data tidak cukup. Ambang nasional tidak dihitung ulang oleh filter.</div>
+    <div>Ini skenario target beban historis, bukan rekomendasi operasional final atau ukuran kapasitas nominal. Puncak simpul berbeda tanggal; agregat bukan kebutuhan serentak satu hari. Kelayakan jadwal, keselamatan, sarana, dan prasarana tetap perlu kajian operator.</div>
+  </div>`;
 }}
 
 function renderSimpulSimulation() {{
   const allData = DATA.simpul_recommendations || [];
+  renderSimpulNationalMetadata();
   const tbody = document.getElementById('tbody-simpul-matrix');
   if (!tbody) return;
-  tbody.innerHTML = '';
-
-  // 1. Filter
-  let filtered = allData.filter(s => {{
-    const matchModa = (simpulModaFilter === 'ALL' || s.moda === simpulModaFilter);
-    const matchStatus = (simpulStatusFilter === 'ALL' || String(s.pctTambah) === String(simpulStatusFilter));
-    const matchSearch = !simpulSearchQuery || 
-      (s.name && s.name.toLowerCase().includes(simpulSearchQuery)) ||
-      (s.prov && s.prov.toLowerCase().includes(simpulSearchQuery)) ||
-      (s.modaLabel && s.modaLabel.toLowerCase().includes(simpulSearchQuery));
+  const filtered = allData.filter(s => {{
+    const matchModa = simpulModaFilter === 'ALL' || s.moda === simpulModaFilter;
+    const matchStatus = simpulStatusFilter === 'ALL' || s.statusKey === simpulStatusFilter;
+    const modeLabel = ({{ UDARA: 'Udara', KA: 'Perkeretaapian', BUS: 'Jalan', ASDP: 'Penyebrangan', LAUT: 'Laut' }})[s.moda] || s.modaLabel;
+    const matchSearch = !simpulSearchQuery || [s.name, s.prov, modeLabel, s.modaLabel].some(value => String(value || '').toLowerCase().includes(simpulSearchQuery));
     return matchModa && matchStatus && matchSearch;
   }});
-
-  // 2. Sort
+  const descending = (a, b, key) => {{
+    const av = a[key], bv = b[key];
+    if (!Number.isFinite(av)) return Number.isFinite(bv) ? 1 : 0;
+    if (!Number.isFinite(bv)) return -1;
+    return bv - av;
+  }};
   filtered.sort((a, b) => {{
-    if (simpulSortBy === 'pnp_desc') return (b.pnpPuncak || 0) - (a.pnpPuncak || 0);
-    if (simpulSortBy === 'pnp_asc') return (a.pnpPuncak || 0) - (b.pnpPuncak || 0);
-    if (simpulSortBy === 'ratio_desc') return (b.loadRatio || 0) - (a.loadRatio || 0);
-    if (simpulSortBy === 'pct_desc') return (b.pctTambah - a.pctTambah) || ((b.pnpPuncak || 0) - (a.pnpPuncak || 0));
-    if (simpulSortBy === 'add_desc') return (b.addArm || 0) - (a.addArm || 0);
     if (simpulSortBy === 'name_asc') return a.name.localeCompare(b.name);
-    return 0;
+    if (simpulSortBy === 'pnp_asc') {{
+      if (!Number.isFinite(a.pnpPuncak)) return Number.isFinite(b.pnpPuncak) ? 1 : 0;
+      if (!Number.isFinite(b.pnpPuncak)) return -1;
+      return a.pnpPuncak - b.pnpPuncak;
+    }}
+    const key = ({{ pnp_desc: 'pnpPuncak', ratio_desc: 'loadRatio', pct_desc: 'pctTambah', add_desc: 'addArm' }})[simpulSortBy] || 'pnpPuncak';
+    return descending(a, b, key) || descending(a, b, 'pnpPuncak') || a.name.localeCompare(b.name);
   }});
-
   const totalFiltered = filtered.length;
-  let itemsToRender = filtered;
-  let totalPages = 1;
-
-  // 3. Pagination or Limit Handling
+  const limit = simpulDisplayLimit === 'all' ? Math.max(1, totalFiltered) : parseInt(simpulDisplayLimit, 10);
+  const totalPages = Math.max(1, Math.ceil(totalFiltered / limit));
+  simpulCurrentPage = Math.max(1, Math.min(simpulCurrentPage, totalPages));
+  const offset = simpulDisplayLimit === 'all' ? 0 : (simpulCurrentPage - 1) * limit;
+  const itemsToRender = filtered.slice(offset, offset + limit);
   const paginationNav = document.getElementById('simpulPaginationNav');
-  if (simpulDisplayLimit === 'all') {{
-    itemsToRender = filtered;
-    if (paginationNav) paginationNav.classList.add('hidden');
-  }} else {{
-    const limit = parseInt(simpulDisplayLimit, 10);
-    totalPages = Math.max(1, Math.ceil(totalFiltered / limit));
-    if (simpulCurrentPage > totalPages) simpulCurrentPage = totalPages;
-    if (simpulCurrentPage < 1) simpulCurrentPage = 1;
-
-    const startIdx = (simpulCurrentPage - 1) * limit;
-    const endIdx = startIdx + limit;
-    itemsToRender = filtered.slice(startIdx, endIdx);
-
-    if (paginationNav) {{
-      paginationNav.classList.remove('hidden');
-      const prevBtn = document.getElementById('btn-simpul-prev');
-      const nextBtn = document.getElementById('btn-simpul-next');
-      const pageLbl = document.getElementById('label-simpul-page');
-      if (prevBtn) prevBtn.disabled = (simpulCurrentPage <= 1);
-      if (nextBtn) nextBtn.disabled = (simpulCurrentPage >= totalPages);
-      if (pageLbl) pageLbl.innerText = `Halaman ${{simpulCurrentPage}} dari ${{totalPages}}`;
-    }}
-  }}
-
-  // 4. Update Badge Count
+  if (paginationNav) paginationNav.classList.toggle('hidden', simpulDisplayLimit === 'all');
+  const prevBtn = document.getElementById('btn-simpul-prev');
+  const nextBtn = document.getElementById('btn-simpul-next');
+  const pageLbl = document.getElementById('label-simpul-page');
+  if (prevBtn) prevBtn.disabled = simpulCurrentPage <= 1;
+  if (nextBtn) nextBtn.disabled = simpulCurrentPage >= totalPages;
+  if (pageLbl) pageLbl.innerText = 'Halaman ' + simpulCurrentPage + ' dari ' + totalPages;
   const badgeCount = document.getElementById('badge-simpul-count');
-  if (badgeCount) {{
-    if (totalFiltered === 0) {{
-      badgeCount.innerText = 'Tidak ada simpul yang cocok.';
-    }} else if (simpulDisplayLimit === 'all') {{
-      badgeCount.innerText = `Menampilkan Seluruh ${{totalFiltered}} Simpul (dari total ${{allData.length}} Simpul Nasional)`;
-    }} else {{
-      const limit = parseInt(simpulDisplayLimit, 10);
-      const start = (simpulCurrentPage - 1) * limit + 1;
-      const end = Math.min(simpulCurrentPage * limit, totalFiltered);
-      badgeCount.innerText = `Menampilkan ${{start}} - ${{end}} dari ${{totalFiltered}} Simpul (Total Terdaftar: ${{allData.length}} Simpul Nasional)`;
-    }}
-  }}
-
-  // 5. Update Dynamic Highlight Cards
+  if (badgeCount) badgeCount.innerText = totalFiltered
+    ? 'Menampilkan ' + (offset + 1) + ' - ' + Math.min(offset + limit, totalFiltered) + ' dari ' + totalFiltered + ' simpul (nasional: ' + allData.length + ')'
+    : 'Tidak ada simpul yang cocok.';
   renderDynamicSimpulHighlights(filtered);
-
-  // 6. Render Table Rows
-  if (itemsToRender.length === 0) {{
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="9" class="py-12 text-center text-slate-400 font-sans">
-          Tidak ada simpul prasarana yang memenuhi kriteria filter atau kata kunci pencarian.
-        </td>
-      </tr>
-    `;
-    renderDynamicSimpulSummary(filtered);
+  renderDynamicSimpulSummary(filtered);
+  tbody.innerHTML = '';
+  if (!itemsToRender.length) {{
+    tbody.innerHTML = '<tr><td colspan="8" class="py-12 text-center text-slate-400 font-sans">Tidak ada simpul prasarana yang memenuhi kriteria filter atau kata kunci pencarian.</td></tr>';
     return;
   }}
-
-  const offset = (simpulDisplayLimit === 'all') ? 0 : (simpulCurrentPage - 1) * parseInt(simpulDisplayLimit, 10);
-
   itemsToRender.forEach((s, idx) => {{
+    const valid = s.scenarioValid === true;
+    const modeLabel = ({{ UDARA: 'Udara', KA: 'Perkeretaapian', BUS: 'Jalan', ASDP: 'Penyebrangan', LAUT: 'Laut' }})[s.moda] || s.modaLabel;
+    const reason = valid ? '' : '<div class="text-[10px] text-slate-500 mt-1">' + simpulEscape(s.invalidReason || 'Data tidak cukup') + '</div>';
+    const normal = Number.isFinite(s.lfBiasa) ? simpulNumber(s.lfBiasa, 6) : '—';
+    const peak = Number.isFinite(s.lfPuncak) ? simpulNumber(s.lfPuncak, 6) : '—';
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
     tr.innerHTML = `
-      <td class="py-3 px-3 font-sans">
-        <div class="flex items-center gap-2">
-          <span class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500 shrink-0">${{offset + idx + 1}}</span>
-          <div>
-            <div class="font-bold text-slate-900 dark:text-white">${{s.name}}</div>
-            <div class="text-[10px] text-slate-500">${{s.prov}} • ${{s.modaLabel}}</div>
-          </div>
-        </div>
-      </td>
-      <td class="py-3 px-3 font-mono text-slate-600 dark:text-slate-400">
-        <div>${{numFmt(s.pnpBiasa)}} pnp/h</div>
-        <div class="text-[10px] text-slate-400 font-sans">${{numFmt(s.armBiasa)}} ${{s.saranaUnit}} (LF: ${{s.lfBiasa}})</div>
-      </td>
-      <td class="py-3 px-3 font-mono text-slate-900 dark:text-white font-semibold">
-        <div>${{numFmt(s.pnpPuncak)}} pnp/h</div>
-        <div class="text-[10px] text-rose-600 dark:text-rose-400 font-sans">${{numFmt(s.armPuncak)}} ${{s.saranaUnit}} (LF: ${{s.lfPuncak}})</div>
-      </td>
-      <td class="py-3 px-3 font-mono text-center">
-        <span class="font-bold text-indigo-600 dark:text-indigo-400 text-xs">${{s.loadRatio}}x</span>
-        <span class="text-[10px] text-slate-400 block font-sans">naik vs biasa</span>
-      </td>
-      <td class="py-3 px-3 text-center">
-        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${{s.statusBadge}}">${{s.statusText}}</span>
-      </td>
-      <td class="py-3 px-3 text-center font-mono">
-        <span class="px-2.5 py-1 rounded-md text-xs font-black bg-indigo-600 text-white shadow-xs">+${{s.pctTambah}}%</span>
-      </td>
-      <td class="py-3 px-3 text-right font-mono font-bold text-indigo-700 dark:text-indigo-400">
-        +${{numFmt(s.addArm)}}
-        <span class="text-[10px] font-normal text-slate-500 block font-sans">${{s.saranaUnit}}/hari</span>
-      </td>
-      <td class="py-3 px-3 text-right font-mono font-bold text-emerald-600 dark:text-emerald-400">
-        ${{numFmt(s.totalArm)}}
-        <span class="text-[10px] font-normal text-slate-500 block font-sans">operasi harian</span>
-      </td>
-      <td class="py-3 px-3 font-sans text-xs text-slate-600 dark:text-slate-300 max-w-[260px] leading-relaxed">
-        ${{s.fieldAction}}
-      </td>
+      <td class="py-3 px-3 font-sans"><div class="font-bold text-slate-900 dark:text-white">${{offset + idx + 1}}. ${{simpulEscape(s.name)}}</div><div class="text-[10px] text-slate-500">${{simpulEscape(s.prov)}} • ${{simpulEscape(modeLabel)}}</div></td>
+      <td class="py-3 px-3"><div>${{simpulNumber(s.pnpBiasa, 2)}} Penumpang Berangkat per hari</div><div class="text-[10px] text-slate-500">${{simpulNumber(s.armBiasa, 2)}} Armada Berangkat per hari</div><div class="text-[10px]">Rasio Normal: ${{normal}} Penumpang Berangkat / Armada Berangkat</div></td>
+      <td class="py-3 px-3"><div>${{simpulNumber(s.pnpPuncak)}} Penumpang Berangkat per hari</div><div class="text-[10px] text-rose-600 dark:text-rose-400">${{simpulNumber(s.armPuncak)}} Armada Berangkat per hari</div><div class="text-[10px] text-slate-500">Tanggal yang sama: ${{simpulEscape(s.peakDate || '—')}}</div><div class="text-[10px]">Rasio Puncak: ${{peak}}</div></td>
+      <td class="py-3 px-3 text-center"><strong>${{valid && Number.isFinite(s.loadRatio) ? simpulNumber(s.loadRatio, 6) + '×' : '—'}}</strong><div class="text-[10px] text-slate-500">Rasio Puncak / Rasio Normal</div></td>
+      <td class="py-3 px-3 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${{simpulEscape(s.statusBadge || '')}}">${{valid ? simpulEscape(s.statusText) : 'Data tidak cukup'}}</span>${{reason}}</td>
+      <td class="py-3 px-3 text-center font-bold text-indigo-700 dark:text-indigo-400">${{valid ? simpulPercent(s.pctTambah) : '—'}}</td>
+      <td class="py-3 px-3 text-right font-bold text-indigo-700 dark:text-indigo-400">${{valid ? simpulNumber(s.addArm) : '—'}}<div class="text-[10px] font-normal text-slate-500">Armada Berangkat per hari</div></td>
+      <td class="py-3 px-3 text-right font-bold text-emerald-600 dark:text-emerald-400">${{valid ? simpulNumber(s.totalArm) : '—'}}<div class="text-[10px] font-normal text-slate-500">Armada Berangkat per hari</div><div class="text-[10px] font-normal text-slate-500">Target hitung: ${{valid ? simpulNumber(s.requiredArm) : '—'}}</div></td>
     `;
     tbody.appendChild(tr);
   }});
-
-  // 7. Update Operational Summary
-  renderDynamicSimpulSummary(filtered);
 }}
 
-const renderArmadaSimulation = renderSimpulSimulation;
 
 function renderForecastWorkspace() {{
   renderForecastSummaryCards();
   renderForecastComparisonTable();
   renderForecastChart();
   renderForecastTable();
-  renderArmadaSimulation();
+  renderSimpulSimulation();
 }}
 
 // ---------------------------------------------------------------

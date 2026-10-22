@@ -1,10 +1,21 @@
-import os
+"""Historical Normal Ratio scenarios and surgical dashboard data synchronization."""
+
 import json
+import math
+import re
+from fractions import Fraction
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 
-RAW_CSV = r"c:\Users\USER\Documents\PUSDATIN\siasati_multimoda_2026.csv"
-BUNDLE_PATH = r"c:\Users\USER\Documents\PUSDATIN\scripts\mobility_data_bundle.json"
+BASE_DIR = Path(__file__).resolve().parent.parent
+RAW_CSV = BASE_DIR / "siasati_multimoda_2026.csv"
+BASELINE_START = "2026-01-01"
+BASELINE_END = "2026-03-12"
+PEAK_START = "2026-03-13"
+PEAK_END = "2026-03-29"
+SMALL_VOLUME_THRESHOLD = 100
 
 CUSTOM_ACTIONS = {
     ('ASDP', 'Bakauheni'): 'Pola operasi TBB (Tiba Bongkar Berangkat) tanpa memuat di Bakauheni untuk menguras antrean arus balik ke Jawa.',
@@ -39,195 +50,259 @@ CUSTOM_ACTIONS = {
     ('BUS', 'Giri Adipura'): 'Pemberangkatan teratur konvoi bus AKAP rute Wonogiri–Jabodetabek dan ramp check kelayakan rem/ban.'
 }
 
-def generate_recommendations():
-    print(f"Membaca dataset mentah: {RAW_CSV}...")
-    df = pd.read_csv(RAW_CSV, low_memory=False).drop_duplicates(keep='first')
+def normalize_province(value):
+    """Use the province spellings used by the pre-Lebaran baseline."""
+    if pd.isna(value):
+        return ""
+    value = str(value).strip()
+    if value.upper() == "SULAWESI SELATAN":
+        return "Sulawesi Selatan"
+    if value in {"D.I. Yogyakarta", "DI Yogyakarta", "D.I Yogyakarta", "DIY"}:
+        return "D.I Yogyakarta"
+    return value
 
-    key_cols = ['tanggal', 'caturwulan', 'moda', 'id_prasarana']
-    meta_cols = ['nama_prasarana', 'provinsi']
-    metrics = ['penumpang_datang', 'penumpang_berangkat', 'armada_datang', 'armada_berangkat']
 
-    agg_dict = {m: 'sum' for m in metrics}
-    for c in meta_cols:
-        agg_dict[c] = 'first'
+def _number(value):
+    if pd.isna(value) or not math.isfinite(value):
+        return None
+    return int(value) if value == int(value) else float(value)
 
-    df_clean = df.groupby(key_cols, as_index=False, dropna=False).agg(agg_dict)
 
-    # Baseline: Februari 2026
-    feb = df_clean[df_clean['tanggal'].between('2026-02-01', '2026-02-28')]
-    feb_hub = feb.groupby(['moda', 'nama_prasarana', 'provinsi']).agg(
-        pnp_brg_biasa=('penumpang_berangkat', 'mean'),
-        arm_brg_biasa=('armada_berangkat', 'mean')
+def _labels(moda, name):
+    labels = {
+        "UDARA": ("✈ Udara", "Pesawat Jet Komersial"),
+        "BUS": ("🚌 Bus AKAP", "Armada Bus Antar Kota"),
+        "ASDP": ("⛴ ASDP Feri", "Kapal Ro-Ro Feri"),
+        "LAUT": ("🚢 Laut", "Kapal Penumpang & Cepat"),
+    }
+    if moda == "KA":
+        upper_name = name.upper()
+        if "KCJB" in upper_name or "WHOOSH" in upper_name:
+            sarana_type = "Kereta Cepat Whoosh"
+        elif "KRL" in upper_name or "COMMUTER" in upper_name:
+            sarana_type = "KRL Commuter Line"
+        else:
+            sarana_type = "Rangkaian Kereta Api"
+        return "🚆 Kereta Api", sarana_type
+    return labels.get(moda, (moda, "Armada Berangkat"))
+
+
+STATUS = {
+    "critical": ("Sangat Kritis", "bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300"),
+    "high": ("Tinggi / Kritis", "bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300"),
+    "medium": ("Padat", "bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300"),
+    "controlled": ("Terkendali", "bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300"),
+    "insufficient": ("Data tidak cukup", "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"),
+}
+
+
+def build_recommendations(df, existing_items=None):
+    """Return node scenarios and national metadata from raw departure records.
+
+    Medians use observed baseline dates, including observed zero values. The
+    passenger peak and its Armada Berangkat always come from the same date.
+    Percentiles classify urgency only; they never prescribe an addition.
+    """
+    raw = df.drop_duplicates().copy()
+    raw["tanggal"] = pd.to_datetime(raw["tanggal"]).dt.strftime("%Y-%m-%d")
+    raw["provinsi"] = raw["provinsi"].map(normalize_province)
+    raw["nama_prasarana"] = raw["nama_prasarana"].fillna("").astype(str)
+    metrics = ["penumpang_berangkat", "armada_berangkat"]
+    for column in metrics:
+        raw[column] = pd.to_numeric(raw[column], errors="coerce")
+
+    id_keys = ["tanggal", "moda", "id_prasarana"]
+    grouped = raw.groupby(id_keys, dropna=False, sort=False)
+    daily_ids = grouped[metrics].sum(min_count=1).join(
+        grouped[["nama_prasarana", "provinsi"]].first()
     ).reset_index()
+    node_keys = ["moda", "nama_prasarana", "provinsi"]
+    daily = daily_ids.groupby(
+        node_keys + ["tanggal"], as_index=False, dropna=False
+    )[metrics].sum(min_count=1)
+    baseline = daily[daily["tanggal"].between(BASELINE_START, BASELINE_END)]
+    medians = baseline.groupby(node_keys, dropna=False)[metrics].median()
+    peak = daily[daily["tanggal"].between(PEAK_START, PEAK_END)]
+    maxima = peak.groupby(node_keys, dropna=False)[metrics].max()
+    active = maxima[
+        (maxima["penumpang_berangkat"] > 0) & (maxima["armada_berangkat"] > 0)
+    ].index
+    peak = peak.set_index(node_keys).loc[active].reset_index()
+    peak = peak.sort_values(
+        ["penumpang_berangkat", "tanggal"] + node_keys,
+        ascending=[False, True, True, True, True], kind="stable",
+    ).drop_duplicates(node_keys, keep="first").reset_index(drop=True)
 
-    # Peak: 13 - 29 Maret 2026
-    peak = df_clean[df_clean['tanggal'].between('2026-03-13', '2026-03-29')]
-    peak_hub = peak.groupby(['moda', 'nama_prasarana', 'provinsi']).agg(
-        pnp_brg_puncak=('penumpang_berangkat', 'max'),
-        arm_brg_puncak=('armada_berangkat', 'max')
-    ).reset_index()
-
-    merged = pd.merge(feb_hub, peak_hub, on=['moda', 'nama_prasarana', 'provinsi'], how='outer').fillna(0)
-    merged = merged[(merged['arm_brg_puncak'] > 0) & (merged['pnp_brg_puncak'] > 0)]
-    merged = merged.sort_values(by='pnp_brg_puncak', ascending=False).reset_index(drop=True)
-
-    print(f"Total simpul aktif keberangkatan: {len(merged)}")
-
-    # 1. Pra-kalkulasi rasio load factor untuk menentukan ambang persentil empiris nasional
-    temp_calc = []
-    for idx, r in merged.iterrows():
-        pb = int(round(r['pnp_brg_biasa']))
-        ab = int(round(r['arm_brg_biasa']))
-        pp = int(round(r['pnp_brg_puncak']))
-        ap = int(round(r['arm_brg_puncak']))
-        lfb = round(pb / ab, 1) if ab > 0 else 0
-        lfp = round(pp / ap, 1) if ap > 0 else 0
-        ratio = round(lfp / lfb, 2) if lfb > 0 else (2.5 if pp >= 5000 else 1.2)
-        temp_calc.append({'pb': pb, 'ab': ab, 'pp': pp, 'ap': ap, 'lfb': lfb, 'lfp': lfp, 'ratio': ratio})
-
-    all_ratios = np.array([x['ratio'] for x in temp_calc])
-    p50 = float(np.percentile(all_ratios, 50))
-    p75 = float(np.percentile(all_ratios, 75))
-    p90 = float(np.percentile(all_ratios, 90))
-    print(f"Ambang Persentil Lonjakan Load Factor: P50={p50:.2f}x, P75={p75:.2f}x, P90={p90:.2f}x")
-
+    existing = {
+        (item["moda"], item["name"], normalize_province(item.get("prov", ""))): item
+        for item in (existing_items or [])
+    }
     items = []
-    for idx, r in merged.iterrows():
-        moda = r['moda']
-        nama = r['nama_prasarana']
-        prov = r['provinsi']
-        calc = temp_calc[idx]
-        
-        pb = calc['pb']
-        ab = calc['ab']
-        pp = calc['pp']
-        ap = calc['ap']
-        lfb = calc['lfb']
-        lfp = calc['lfp']
-        ratio = calc['ratio']
-
-        # Penentuan Persentase Kebutuhan Tambahan Armada Berbasis Persentil Lonjakan Load Factor (TCQSM & TRB Standard)
-        # Simpul perintis sangat kecil (pp < 100) diklasifikasikan ke Terkendali karena tidak memicu defisit kapasitas nasional
-        if ratio >= p90 and pp >= 100:
-            pct = 20
-            status_text = 'Sangat Kritis'
-            status_badge = 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300'
-        elif ratio >= p75 and pp >= 100:
-            pct = 15
-            status_text = 'Tinggi / Kritis'
-            status_badge = 'bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300'
-        elif ratio >= p50 and pp >= 100:
-            pct = 10
-            status_text = 'Padat'
-            status_badge = 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300'
-        else:
-            pct = 5
-            status_text = 'Terkendali'
-            status_badge = 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300'
-        add_arm = int(round(ap * (pct / 100.0)))
-        total_arm = ap + add_arm
-
-        # Label & Moda configuration
-        if moda == 'UDARA':
-            moda_label = '✈ Udara'
-            sarana_type = 'Pesawat Jet Komersial'
-            sarana_unit = 'penerbangan'
-        elif moda == 'KA':
-            moda_label = '🚆 Kereta Api'
-            if 'KCJB' in nama.upper() or 'WHOOSH' in nama.upper():
-                sarana_type = 'Kereta Cepat Whoosh'
-            elif 'KRL' in nama.upper() or 'COMMUTER' in nama.upper():
-                sarana_type = 'KRL Commuter Line'
-            else:
-                sarana_type = 'Rangkaian Kereta Api'
-            sarana_unit = 'perjalanan KA'
-        elif moda == 'BUS':
-            moda_label = '🚌 Bus AKAP'
-            sarana_type = 'Armada Bus Antar Kota'
-            sarana_unit = 'trip bus'
-        elif moda == 'ASDP':
-            moda_label = '⛴ ASDP Feri'
-            sarana_type = 'Kapal Ro-Ro Feri'
-            sarana_unit = 'trip kapal'
-        else: # LAUT
-            moda_label = '🚢 Laut'
-            sarana_type = 'Kapal Penumpang & Cepat'
-            sarana_unit = 'trip kapal'
-
-        # Action rekomendasi
-        if (moda, nama) in CUSTOM_ACTIONS:
-            field_action = CUSTOM_ACTIONS[(moda, nama)]
-        else:
-            if moda == 'UDARA':
-                if pct >= 15:
-                    field_action = 'Pengajuan darurat slot extra flight ke Kemenhub/AirNav dan perpanjangan operasional bandara malam hari.'
-                elif pct == 10:
-                    field_action = 'Pemberian izin extra flight pada jam sepi/malam hari (red-eye flight) serta mitigasi antrean check-in.'
-                else:
-                    field_action = 'Penyiagaan stand-by aircraft perbantuan dan optimalisasi kelancaran bagasi terminal.'
-            elif moda == 'KA':
-                if pct >= 15:
-                    field_action = 'Pengoperasian Kereta Luar Biasa (KLB) Tambahan relasi padat dan penambahan panjang stamformasi maksimal.'
-                elif pct == 10:
-                    field_action = 'Optimalisasi kapasitas gerbong penumpang (stamformasi 10-12 kereta) dan pengaturan flow boarding gate.'
-                else:
-                    field_action = 'Penyiagaan rangkaian perbantuan dan pengetatan inspeksi keandalan wesel/sinyal stasiun.'
-            elif moda == 'ASDP':
-                if pct >= 20:
-                    field_action = 'Penerapan pola tiba-bongkar-berangkat (TBB), percepatan port time, dan pengerahan kapal feri kapasitas besar.'
-                elif pct == 15:
-                    field_action = 'Pengoperasian dermaga cadangan/ponton, percepatan giliran sandar, dan rekayasa buffer zone kendaraan.'
-                else:
-                    field_action = 'Penambahan trip pelayaran harian dan pengaturan pemisahan jalur antrean kendaraan roda dua vs roda empat.'
-            elif moda == 'BUS':
-                if pct >= 15:
-                    field_action = 'Pengerahan bus bantuan pariwisata cadangan dan pemberlakuan rekayasa drop-off zona peron cepat terminal.'
-                elif pct == 10:
-                    field_action = 'Pengaturan rotasi kedatangan bus antar kota agar tidak menumpuk dan pelaksanaan ramp check armada.'
-                else:
-                    field_action = 'Penyiagaan armada cadangan PO bus di pool terminal dan pengawasan tarif batas atas.'
-            else: # LAUT
-                if pct >= 15:
-                    field_action = 'Pemberian dispensasi penambahan trip kapal penumpang cepat dan pengawasan ketat manifes muatan.'
-                elif pct == 10:
-                    field_action = 'Optimalisasi ruang tunggu penumpang dermaga dan pengawasan ketat alat keselamatan (life jacket/sekoci).'
-                else:
-                    field_action = 'Penjadwalan extra trip kapal pelayaran rakyat dan koordinasi peringatan dini cuaca maritim BMKG.'
-
+    for index, row in peak.iterrows():
+        key = tuple(row[column] for column in node_keys)
+        moda, name, province = key
+        old = existing.get(key, {})
+        normal = medians.loc[key] if key in medians.index else None
+        pb = _number(normal["penumpang_berangkat"]) if normal is not None else None
+        ab = _number(normal["armada_berangkat"]) if normal is not None else None
+        pp = _number(row["penumpang_berangkat"])
+        ap = _number(row["armada_berangkat"])
+        reasons = []
+        if pb is None or pb <= 0:
+            reasons.append("Median Penumpang Berangkat baseline tidak tersedia atau tidak positif")
+        if ab is None or ab <= 0:
+            reasons.append("Median Armada Berangkat baseline tidak tersedia atau tidak positif")
+        if ap is None or ap <= 0:
+            reasons.append("Armada Berangkat pada tanggal puncak tidak tersedia atau tidak positif")
+        valid = not reasons
+        normal_ratio = pb / ab if pb is not None and pb > 0 and ab is not None and ab > 0 else None
+        peak_ratio = pp / ap if ap is not None and ap > 0 else None
+        load_ratio = peak_ratio / normal_ratio if valid else None
+        required = additional = total = percentage = None
+        if valid:
+            # Exact rational ceiling avoids 21 / (7 / 10) becoming 31.
+            target = Fraction(str(pp)) * Fraction(str(ab)) / Fraction(str(pb))
+            required = math.ceil(target)
+            additional = max(0, required - ap)
+            total = ap + additional
+            percentage = 100 * additional / ap
+        moda_label, sarana_type = _labels(moda, name)
         items.append({
-            'id': f'simpul_{idx+1}',
-            'name': nama,
-            'prov': prov,
-            'moda': moda,
-            'modaLabel': moda_label,
-            'saranaType': sarana_type,
-            'saranaUnit': sarana_unit,
-            'pnpBiasa': pb,
-            'armBiasa': ab,
-            'pnpPuncak': pp,
-            'armPuncak': ap,
-            'lfBiasa': lfb,
-            'lfPuncak': lfp,
-            'loadRatio': ratio,
-            'pctTambah': pct,
-            'addArm': add_arm,
-            'totalArm': total_arm,
-            'statusText': status_text,
-            'statusBadge': status_badge,
-            'fieldAction': field_action
+            "id": f"simpul_{index + 1}",
+            "name": name, "prov": province, "moda": moda,
+            "modaLabel": old.get("modaLabel", moda_label),
+            "saranaType": old.get("saranaType", sarana_type),
+            "saranaUnit": old.get("saranaUnit", "Armada Berangkat per hari"),
+            "pnpBiasa": pb, "armBiasa": ab, "pnpPuncak": pp, "armPuncak": ap,
+            "peakDate": row["tanggal"],
+            "lfBiasa": normal_ratio, "lfPuncak": peak_ratio, "loadRatio": load_ratio,
+            "scenarioValid": valid, "invalidReason": "; ".join(reasons),
+            "requiredArm": required, "addArm": additional, "totalArm": total,
+            "pctTambah": percentage,
+            "fieldAction": old.get("fieldAction", CUSTOM_ACTIONS.get(
+                (moda, name), "Optimalisasi jadwal armada dan monitoring lonjakan penumpang."
+            )),
         })
 
-    # Simpan ke bundle JSON
-    with open(BUNDLE_PATH, 'r', encoding='utf-8') as f:
-        bundle_data = json.load(f)
+    ratios = [item["loadRatio"] for item in items if item["scenarioValid"]]
+    thresholds = dict.fromkeys(("p50", "p75", "p90"))
+    if ratios:
+        thresholds.update(zip(thresholds, map(float, np.percentile(ratios, [50, 75, 90]))))
+    counts = dict.fromkeys(STATUS, 0)
+    for item in items:
+        if not item["scenarioValid"]:
+            status = "insufficient"
+        elif item["pnpPuncak"] < SMALL_VOLUME_THRESHOLD:
+            status = "controlled"
+        elif item["loadRatio"] >= thresholds["p90"]:
+            status = "critical"
+        elif item["loadRatio"] >= thresholds["p75"]:
+            status = "high"
+        elif item["loadRatio"] >= thresholds["p50"]:
+            status = "medium"
+        else:
+            status = "controlled"
+        item["statusKey"] = status
+        item["statusText"], item["statusBadge"] = STATUS[status]
+        counts[status] += 1
+    metadata = {
+        "baselineStart": BASELINE_START, "baselineEnd": BASELINE_END,
+        "peakStart": PEAK_START, "peakEnd": PEAK_END,
+        "validCount": len(ratios), "insufficientCount": counts["insufficient"],
+        "smallVolumeThreshold": SMALL_VOLUME_THRESHOLD,
+        "thresholds": thresholds, "counts": counts,
+    }
+    return items, metadata
 
-    bundle_data['simpul_recommendations'] = items
 
-    with open(BUNDLE_PATH, 'w', encoding='utf-8') as f:
-        json.dump(bundle_data, f, ensure_ascii=False)
+def replace_json_fields(text, updates, start=0):
+    """Replace only selected top-level JSON values, preserving all other bytes."""
+    decoder = json.JSONDecoder()
+    value, object_end = decoder.raw_decode(text, start)
+    if not isinstance(value, dict):
+        raise ValueError("Expected a JSON object")
+    cursor = start + 1
+    spans = {}
+    while True:
+        while text[cursor].isspace():
+            cursor += 1
+        if text[cursor] == "}":
+            closing = cursor
+            break
+        key, cursor = decoder.raw_decode(text, cursor)
+        while text[cursor].isspace():
+            cursor += 1
+        if text[cursor] != ":":
+            raise ValueError("Expected a JSON object key separator")
+        cursor += 1
+        while text[cursor].isspace():
+            cursor += 1
+        value_start = cursor
+        _, cursor = decoder.raw_decode(text, cursor)
+        spans[key] = (value_start, cursor)
+        while text[cursor].isspace():
+            cursor += 1
+        if text[cursor] == ",":
+            cursor += 1
+        elif text[cursor] != "}":
+            raise ValueError("Expected a JSON object field separator")
+    replacements = []
+    additions = []
+    for key, replacement in updates.items():
+        encoded = json.dumps(replacement, ensure_ascii=False, allow_nan=False)
+        if key in spans:
+            replacements.append((*spans[key], encoded))
+        else:
+            additions.append(json.dumps(key) + ": " + encoded)
+    if additions:
+        replacements.append((closing, closing, (", " if value else "") + ", ".join(additions)))
+    for left, right, replacement in sorted(replacements, reverse=True):
+        text = text[:left] + replacement + text[right:]
+    return text
 
-    print(f"Berhasil memperbarui {BUNDLE_PATH} dengan {len(items)} simpul rekomendasi!")
-    print(f"Ukuran file bundle sekarang: {os.path.getsize(BUNDLE_PATH) / 1024:.1f} KB")
 
-if __name__ == '__main__':
+def synchronize_recommendations(items, metadata, base_dir=BASE_DIR):
+    """Update the two scenario fields only, in both bundles and root pages."""
+    base_dir = Path(base_dir)
+    updates = {
+        "simpul_recommendations": items,
+        "simpul_scenario_metadata": metadata,
+    }
+    targets = [
+        (base_dir / "scripts" / "mobility_data_bundle.json", False),
+        (base_dir / "data" / "mobility_data_bundle.json", False),
+        (base_dir / "index.html", True),
+        (base_dir / "Dashboard_Mobilitas_Nasional_2026.html", True),
+    ]
+    pending = []
+    for path, embedded in targets:
+        with path.open("r", encoding="utf-8", newline="") as stream:
+            text = stream.read()
+        if embedded:
+            declaration = re.search(r"\bconst\s+DATA\s*=\s*", text)
+            if declaration is None:
+                raise ValueError(f"const DATA declaration not found in {path}")
+            start = declaration.end()
+        else:
+            start = len(text) - len(text.lstrip())
+        pending.append((path, replace_json_fields(text, updates, start)))
+    for path, text in pending:
+        with path.open("w", encoding="utf-8", newline="") as stream:
+            stream.write(text)
+
+
+def generate_recommendations():
+    with (BASE_DIR / "scripts" / "mobility_data_bundle.json").open(encoding="utf-8") as stream:
+        existing = json.load(stream).get("simpul_recommendations", [])
+    items, metadata = build_recommendations(
+        pd.read_csv(RAW_CSV, low_memory=False), existing
+    )
+    synchronize_recommendations(items, metadata)
+    print(
+        f"Skenario diperbarui: {metadata['validCount']} simpul valid, "
+        f"{metadata['insufficientCount']} simpul dengan data tidak cukup."
+    )
+
+
+if __name__ == "__main__":
     generate_recommendations()

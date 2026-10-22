@@ -56,9 +56,9 @@ TAB_CONTENT = """      <!-- ====================================================
             <a href="#rumus-sec-4" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">4. Modal Share</a>
             <a href="#rumus-sec-5" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">5. Arus Lebaran</a>
             <a href="#rumus-sec-6" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">6. Tren Provinsi</a>
-            <a href="#rumus-sec-7" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">7. Rekomendasi Armada (Persentil)</a>
+            <a href="#rumus-sec-7" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">7. Skenario Armada Berangkat</a>
             <a href="#rumus-sec-8" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">8. Model Nataru</a>
-            <a href="#rumus-sec-9" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">9. Tabel Simpul</a>
+            <a href="#rumus-sec-9" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">9. Formula Armada Berangkat</a>
           </div>
         </div>
 
@@ -465,180 +465,34 @@ TAB_CONTENT = """      <!-- ====================================================
           </div>
         </div>
 
-        <!-- Section 7: Standar Penambahan Armada (Persentil Load Factor) -->
+        <!-- Section 7: Skenario historis Armada Berangkat -->
         <div id="rumus-sec-7" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-            <div class="flex items-center gap-2.5">
-              <span class="w-3 h-3 rounded-full bg-rose-500"></span>
-              <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                7. Standar Penentuan Penambahan Armada Simpul (Persentil Lonjakan Load Factor TCQSM TRB)
-              </h3>
-            </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 font-bold">
-              Standar TCQSM & TRB
-            </span>
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">7. Skenario Penambahan Armada Berangkat — Rasio Normal Historis</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Skenario ini menargetkan beban historis Penumpang Berangkat per Armada Berangkat, bukan rekomendasi operasional final, kebutuhan sarana, atau bukti kapasitas nominal. Persentil nasional hanya mengelompokkan urgensi; persentil tidak menetapkan persentase tambahan. Angka skenario ini tidak diklaim sebagai persentase yang ditentukan TCQSM/TRB.</p>
+          <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2 text-xs">
+            <p><strong>Rasio Normal:</strong> median harian Penumpang Berangkat / median harian Armada Berangkat, masing-masing dihitung terpisah dari pengamatan 1 Januari–12 Maret 2026. Rasio dihitung dari median tanpa pembulatan awal.</p>
+            <p><strong>Puncak:</strong> tanggal Penumpang Berangkat tertinggi dalam 13–29 Maret 2026; jika seri, gunakan tanggal paling awal. Armada Berangkat puncak diambil pada tanggal yang sama, bukan maksimum tersendiri.</p>
+            <div class="font-mono">Rasio Normal = pnpBiasa / armBiasa<br>Rasio Puncak = pnpPuncak / armPuncak<br>loadRatio = Rasio Puncak / Rasio Normal</div>
           </div>
-
-          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-            Sesuai standar internasional <em>Transit Capacity and Quality of Service Manual (TCQSM, TCRP Report 165)</em> dan <em>Ceder (2015)</em>, kebutuhan armada tambahan dihitung dari rasio lonjakan kepadatan per armada (Load Factor Puncak terhadap Load Factor Biasa) dengan ambang persentil empiris $P_{50}, P_{75}, P_{90}$ dari 1.010 simpul nasional.
-          </p>
-
-          <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-            <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">A. Rasio Lonjakan Beban Armada Simpul:</div>
-            <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-indigo-600 dark:text-indigo-400 font-semibold text-sm">
-              $$\\text{Rasio Lonjakan LF} = \\frac{LF_{\\text{puncak}}}{LF_{\\text{biasa}}} = \\frac{P_{\\text{puncak}} / A_{\\text{puncak}}}{P_{\\text{biasa}} / A_{\\text{biasa}}}$$
-            </div>
+          <div class="p-4 rounded-lg bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 space-y-2 text-xs">
+            <div class="font-bold">Formula skenario (nilai penuh, pembulatan hanya pada target):</div>
+            <div class="font-mono">requiredArm = ceil(pnpPuncak × armBiasa / pnpBiasa)<br>addArm = max(0, requiredArm − armPuncak)<br>totalArm = armPuncak + addArm<br>pctTambah = 100 × addArm / armPuncak</div>
+            <p>ceil membulatkan target ke atas ke bilangan bulat; nilai yang sudah bulat tidak ditambah lagi. Armada Berangkat yang sudah ada tidak dikurangi. Tambahan nol adalah hasil valid: 0%. Dua simpul dalam kategori urgensi yang sama dapat memiliki persentase skenario berbeda.</p>
           </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">B. Tambahan Unit Armada Perbantuan:</div>
-              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-indigo-600 dark:text-indigo-400 font-semibold text-sm">
-                $$A_{\\text{tambah}} = \\left\\lceil A_{\\text{puncak}} \\times \\left( \\frac{\\%\\text{ Tambah}}{100} \\right) \\right\\rceil$$
-              </div>
-            </div>
-            <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">C. Total Armada Beroperasi Puncak:</div>
-              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 font-semibold text-sm">
-                $$A_{\\text{total}} = A_{\\text{puncak}} + A_{\\text{tambah}}$$
-              </div>
-            </div>
-          </div>
-
-          <!-- Matriks Persentil Table -->
           <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
-            <table class="w-full text-left text-xs font-sans">
-              <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-300">
-                <tr>
-                  <th class="p-2.5">Klasifikasi Status</th>
-                  <th class="p-2.5">Kriteria Persentil Empiris</th>
-                  <th class="p-2.5 text-center">Rekomendasi Tambah</th>
-                  <th class="p-2.5">Jumlah Simpul</th>
-                  <th class="p-2.5">Contoh Simpul Riil Lapangan</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-[11px]">
-                <tr>
-                  <td class="p-2.5 font-bold text-rose-600 dark:text-rose-400">🔴 Sangat Kritis</td>
-                  <td class="p-2.5 font-mono">$$\\text{Rasio} \\ge P_{90} = 3{,}43\\times$$ (Top 10%)</td>
-                  <td class="p-2.5 font-mono font-bold text-center text-indigo-600 dark:text-indigo-400">+20%</td>
-                  <td class="p-2.5 font-bold">87 Simpul</td>
-                  <td class="p-2.5">Bakauheni (4,3x), Gilimanuk (4,2x), Merak (3,8x), Giwangan (3,6x)</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-bold text-orange-600 dark:text-orange-400">🟠 Tinggi / Kritis</td>
-                  <td class="p-2.5 font-mono">$$P_{75} \\le \\text{Rasio} < P_{90}$$ ($$2{,}33\\times - 3{,}42\\times$$)</td>
-                  <td class="p-2.5 font-mono font-bold text-center text-indigo-600 dark:text-indigo-400">+15%</td>
-                  <td class="p-2.5 font-bold">122 Simpul</td>
-                  <td class="p-2.5">Pasar Senen (2,8x), Ketapang (2,6x), Poto Tano (2,5x)</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-bold text-amber-600 dark:text-amber-400">🟡 Padat</td>
-                  <td class="p-2.5 font-mono">$$P_{50} \\le \\text{Rasio} < P_{75}$$ ($$1{,}54\\times - 2{,}32\\times$$)</td>
-                  <td class="p-2.5 font-mono font-bold text-center text-indigo-600 dark:text-indigo-400">+10%</td>
-                  <td class="p-2.5 font-bold">211 Simpul</td>
-                  <td class="p-2.5">Juanda (1,9x), Gambir (1,8x), DPS Bali (1,6x), Soetta (1,5x)</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-bold text-emerald-600 dark:text-emerald-400">🟢 Terkendali</td>
-                  <td class="p-2.5 font-mono">$$\\text{Rasio} < P_{50} = 1{,}54\\times$$ (atau $$P < 100$$)</td>
-                  <td class="p-2.5 font-mono font-bold text-center text-indigo-600 dark:text-indigo-400">+5%</td>
-                  <td class="p-2.5 font-bold">590 Simpul</td>
-                  <td class="p-2.5">Simpul perintis lokal & rute reguler dengan armada memadai</td>
-                </tr>
+            <table class="w-full text-left text-xs"><thead class="bg-slate-100 dark:bg-slate-800"><tr><th class="p-2.5">Status urgensi</th><th class="p-2.5">Kriteria nasional (untuk skenario valid)</th></tr></thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                <tr><td class="p-2.5">Sangat Kritis</td><td class="p-2.5">loadRatio ≥ P90</td></tr>
+                <tr><td class="p-2.5">Tinggi / Kritis</td><td class="p-2.5">P75 ≤ loadRatio &lt; P90</td></tr>
+                <tr><td class="p-2.5">Padat</td><td class="p-2.5">P50 ≤ loadRatio &lt; P75</td></tr>
+                <tr><td class="p-2.5">Terkendali</td><td class="p-2.5">loadRatio &lt; P50, atau Penumpang Berangkat puncak &lt; 100 (pengecualian volume kecil didahulukan)</td></tr>
+                <tr><td class="p-2.5">Data tidak cukup</td><td class="p-2.5">Median normal tidak positif/tidak tersedia, atau Armada Berangkat pada tanggal puncak tidak positif/tidak tersedia</td></tr>
               </tbody>
             </table>
           </div>
-
-          <!-- Sumber Regulasi & Jurnal Ilmiah Rekomendasi Aksi Lapangan -->
-          <div class="space-y-3 pt-2">
-            
-            <!-- Box A: Regulasi Resmi Kemenhub RI -->
-            <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs space-y-2">
-              <div class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
-                <span>🏛 Landasan Regulasi Resmi Kemenhub RI untuk Aksi Lapangan:</span>
-              </div>
-              <div class="text-[11px] text-slate-600 dark:text-slate-300 space-y-1.5 leading-relaxed">
-                <div>• <strong>Pola TBB & Buffer Zone Pelabuhan ASDP:</strong> Didasarkan pada <em>Surat Keputusan Bersama (SKB) Tiga Menteri</em> (Kementerian Perhubungan, Korlantas Polri, dan Kementerian PUPR) tentang Pengaturan Lalu Lintas Jalan serta Penyeberangan Masa Angkutan Lebaran &amp; Nataru, yang menetapkan skema Tiba Bongkar Berangkat (TBB) tanpa muat di Bakauheni/Merak, pengalihan pelabuhan Ciwandan/BBJ, dan delaying system di rest area Tol Tangerang–Merak KM 43/68.</div>
-                <div>• <strong>Extra Flight & Slot Runway Bandara:</strong> Berpedoman pada <em>Surat Edaran Direktur Jenderal Perhubungan Udara</em> tentang Pengendalian Pengoperasian Pesawat Udara pada Periode Hari Raya, yang mengatur dispensasi slot terbang tambahan (extra flight / red-eye flight malam) serta jam operasi bandara 24 jam penuh.</div>
-                <div>• <strong>Kereta Luar Biasa (KLB) & Stamformasi KA:</strong> Berdasarkan <em>Instruksi Direktur Jenderal Perkeretaapian</em> tentang Penyelenggaraan Posko Angkutan Kereta Api Terpadu, yang mengatur pengoperasian rangkaian KLB Tambahan dan maksimasi formasi rangkaian 10–12 gerbong per perjalanan.</div>
-                <div>• <strong>Armada Bus Bantuan & Ramp Check:</strong> Mengacu pada <em>Surat Edaran Direktur Jenderal Perhubungan Darat</em> mengenai Kesiapan Angkutan Jalan, yang mewajibkan inspeksi keselamatan jalan (Ramp Check) dan penyiagaan armada bus pariwisata cadangan sebagai angkutan perbantuan di terminal tipe A.</div>
-              </div>
-            </div>
-
-            <!-- Box B: Rujukan Jurnal Ilmiah Peer-Reviewed dengan Tautan Langsung -->
-            <div class="p-4 rounded-lg bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/60 text-xs space-y-2.5">
-              <div class="font-bold text-indigo-900 dark:text-indigo-200 flex items-center justify-between">
-                <span class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
-                  <span>📚 Rujukan Jurnal Ilmiah Peer-Reviewed & Manual Standar Rekayasa Transportasi:</span>
-                </span>
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-200/60 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200">Klik tautan untuk membaca</span>
-              </div>
-              
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-[11px]">
-                
-                <!-- Jurnal 1: ASDP -->
-                <div class="p-2.5 rounded bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 space-y-1">
-                  <div class="font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                    <span>⛴ Penyeberangan ASDP (TBB & Buffer)</span>
-                    <a href="https://garuda.kemdiktisaintek.go.id/journal/view/41858" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold text-[10px]">Buka Jurnal ↗</a>
-                  </div>
-                  <div class="text-slate-600 dark:text-slate-300">
-                    <strong>Jurnal Penelitian Transportasi Darat</strong> (Badan Litbang Perhubungan, SINTA 2 / Garuda Kemdiktisaintek).
-                  </div>
-                  <div class="text-slate-500 text-[10px]">
-                    Evaluasi pola operasi dan kapasitas angkutan penyeberangan lintas Merak–Bakauheni pada periode puncak. Kajian internasional pendukung: <a href="https://doi.org/10.1057/s41278-020-00155-2" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-mono">Maritime Economics &amp; Logistics (Springer, 2020)</a> mengenai mitigasi antrean pelabuhan ferry Ro-Ro.
-                  </div>
-                </div>
-
-                <!-- Jurnal 2: Udara -->
-                <div class="p-2.5 rounded bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 space-y-1">
-                  <div class="font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                    <span>✈ Penerbangan Udara (Slot & Extra Flight)</span>
-                    <a href="https://doi.org/10.1016/j.jairtraman.2025.102751" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold text-[10px]">Buka Jurnal ↗</a>
-                  </div>
-                  <div class="text-slate-600 dark:text-slate-300">
-                    <strong>Journal of Air Transport Management</strong> (Elsevier / ScienceDirect, 2025).
-                  </div>
-                  <div class="text-slate-500 text-[10px]">
-                    <em>A novel slot optimization model for congested airports integrating IATA guidelines</em> (Zeng et al., 2025). Mengkaji manajemen slot bandara padat dan izin extra flight. Rujukan standar: <a href="https://www.iata.org/en/policy/slots/wasg/" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-mono">IATA Worldwide Airport Slot Guidelines (WASG)</a>.
-                  </div>
-                </div>
-
-                <!-- Jurnal 3: KA -->
-                <div class="p-2.5 rounded bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 space-y-1">
-                  <div class="font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                    <span>🚆 Kereta Api (KLB & Stamformasi)</span>
-                    <a href="https://doi.org/10.1016/j.cie.2025.111166" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold text-[10px]">Buka Jurnal ↗</a>
-                  </div>
-                  <div class="text-slate-600 dark:text-slate-300">
-                    <strong>Computers &amp; Industrial Engineering</strong> (Elsevier / ScienceDirect, 2025).
-                  </div>
-                  <div class="text-slate-500 text-[10px]">
-                    <em>Integrated optimization of line planning and additional trains scheduling during demand surges</em> (2025). Kajian pendukung: <a href="https://doi.org/10.1016/j.jrtpm.2024.100450" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-mono">Journal of Rail Transport Planning &amp; Management (Elsevier)</a> tentang optimasi stamformasi gerbong.
-                  </div>
-                </div>
-
-                <!-- Jurnal 4: Bus & Teori Armada -->
-                <div class="p-2.5 rounded bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 space-y-1">
-                  <div class="font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                    <span>🚌 Bus &amp; Optimasi Armada Transit</span>
-                    <a href="https://www.nationalacademies.org/publications/24766" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold text-[10px]">Buka Manual TRB ↗</a>
-                  </div>
-                  <div class="text-slate-600 dark:text-slate-300">
-                    <strong>TRB TCQSM (TCRP Report 165)</strong> &amp; <strong>Ceder (CRC Press, 2015)</strong>.
-                  </div>
-                  <div class="text-slate-500 text-[10px]">
-                    <em>Transit Capacity and Quality of Service Manual</em> Part 2 &amp; Part 7 (Terminal Circulation &amp; Reserve Bus Deployment). Landasan optimasi armada puncak: <a href="https://doi.org/10.1016/j.transa.2017.09.006" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-mono">Transportation Research Part A (Jara-Díaz et al., 2017)</a>.
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-          </div>
+          <p class="text-xs text-slate-600 dark:text-slate-300">P50/P75/P90 dihitung dengan interpolasi linear dari loadRatio berpresisi penuh seluruh simpul valid nasional, termasuk simpul volume kecil. Ambang dan jumlah nasional tidak berubah saat pencarian, moda, status, atau halaman berubah. Data tidak cukup tetap terlihat dengan alasan, tetapi rasio skenario, target, tambahan, total, dan persentase ditampilkan — serta dikecualikan dari persentil dan agregat. Jika tidak ada skenario valid, ambang dan hasil agregat ditampilkan —.</p>
+          <div class="simpul-national-metadata p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 text-[11px] space-y-1">Metadata nasional dimuat dari data skenario.</div>
+          <p class="text-xs text-slate-500">Agregat hanya menjumlahkan skenario valid; persentase agregat = 100 × jumlah tambahan / jumlah Armada Berangkat puncak dari simpul valid, bukan rata-rata persentase simpul. Puncak tiap simpul dapat berbeda tanggal sehingga agregat bukan kebutuhan operasi serentak. Penerapan memerlukan kajian operator atas jadwal, keselamatan, sarana, dan kapasitas prasarana.</p>
         </div>
 
         <!-- Section 8: Model Prediksi Time Series Holt-Winters Nataru -->
@@ -748,74 +602,12 @@ TAB_CONTENT = """      <!-- ====================================================
           </div>
         </div>
 
-        <!-- Section 9: Formula Matematis Simulasi Tambahan Armada -->
+        <!-- Section 9: Formula skenario Armada Berangkat -->
         <div id="rumus-sec-9" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-            <div class="flex items-center gap-2.5">
-              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-              <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                9. Formula Matematis Simulasi Intervensi Tambahan Armada Simpul
-              </h3>
-            </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">
-              Kapasitas Terbuka
-            </span>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">A. Tambahan Unit Armada:</div>
-              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 font-semibold text-xs">
-                $$A_{\\text{tambah}} = A_{\\text{biasa}} \\times \\left( \\frac{\\%\\text{ Tambah}}{100} \\right)$$
-              </div>
-            </div>
-            <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">B. Kapasitas Terbuka:</div>
-              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 font-semibold text-xs">
-                $$C_{\\text{terbuka}} = P_{\\text{biasa}} \\times \\left( \\frac{\\%\\text{ Tambah}}{100} \\right)$$
-              </div>
-            </div>
-            <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">C. Rasio Kepadatan Baru:</div>
-              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 font-semibold text-xs">
-                $$\\text{Beban Baru} = \\frac{\\text{Beban Awal}}{1 + \\left( \\frac{\\%\\text{ Tambah}}{100} \\right)}$$
-              </div>
-            </div>
-          </div>
-
-          <!-- Table of Notation -->
-          <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
-            <table class="w-full text-left text-xs font-sans">
-              <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-300">
-                <tr>
-                  <th class="p-2.5 w-28">Simbol</th>
-                  <th class="p-2.5 w-44">Nama Notasi</th>
-                  <th class="p-2.5 w-32">Satuan</th>
-                  <th class="p-2.5">Penjelasan Makna Operasional Lapangan</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-[11px]">
-                <tr>
-                  <td class="p-2.5 font-mono font-bold text-emerald-600 dark:text-emerald-400">$$A_{\\text{tambah}}$$</td>
-                  <td class="p-2.5 font-semibold">Tambahan Trip Armada</td>
-                  <td class="p-2.5 text-slate-500 font-mono">trip / flight / KA</td>
-                  <td class="p-2.5">Berapa unit pergerakan armada cadangan yang disuntikkan ke simpul per hari.</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-mono font-bold text-emerald-600 dark:text-emerald-400">$$C_{\\text{terbuka}}$$</td>
-                  <td class="p-2.5 font-semibold">Kapasitas Muat Terbuka</td>
-                  <td class="p-2.5 text-slate-500 font-mono">kursi / penumpang</td>
-                  <td class="p-2.5">Berapa banyak kuota tempat duduk atau ruang muat tambahan yang berhasil diciptakan.</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 font-mono font-bold text-emerald-600 dark:text-emerald-400">$$\\text{Beban Baru}$$</td>
-                  <td class="p-2.5 font-semibold">Tingkat Okupansi Baru</td>
-                  <td class="p-2.5 text-slate-500 font-mono">rasio relatif</td>
-                  <td class="p-2.5">Penurunan rasio kepadatan setelah intervensi penambahan armada diberlakukan.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">9. Formula Skenario Penambahan Armada Berangkat</h3>
+          <div class="font-mono text-xs space-y-2">Rasio Normal = pnpBiasa / armBiasa<br>requiredArm = ceil(pnpPuncak × armBiasa / pnpBiasa)<br>addArm = max(0, requiredArm − armPuncak)<br>totalArm = armPuncak + addArm<br>pctTambah = 100 × addArm / armPuncak</div>
+          <p class="text-xs text-slate-600 dark:text-slate-300">pnpBiasa dan armBiasa adalah median harian terpisah Penumpang Berangkat dan Armada Berangkat pada 1 Januari–12 Maret 2026. pnpPuncak dan armPuncak berasal dari satu tanggal yang sama: maksimum Penumpang Berangkat pada 13–29 Maret 2026 (tanggal paling awal jika seri). Gunakan presisi penuh median dan rasio sebelum ceil; target yang sudah bulat tidak ditambah lagi. Tambahan tidak negatif dan Armada Berangkat yang sudah ada tidak dikurangi.</p>
+          <p class="text-xs text-slate-600 dark:text-slate-300">Satuan target, tambahan, dan total adalah Armada Berangkat per hari. Persentase adalah hasil skenario tiap simpul, bukan nilai tetap kategori persentil. Tambahan nol ditampilkan 0%. Jika median normal atau Armada Berangkat pada tanggal puncak tidak positif/tidak tersedia, seluruh hasil skenario adalah — dengan alasan Data tidak cukup, dan tidak masuk agregat. Skenario beban historis ini bukan kapasitas nominal atau rekomendasi operasional final.</p>
         </div>
 
       </div>
@@ -826,6 +618,7 @@ KATEX_SCRIPT_TRIGGER = """
 // KATEX FORMULA RENDERING TRIGGER
 // ---------------------------------------------------------------
 function renderKaTeXFormulas() {
+  if (typeof renderSimpulNationalMetadata === 'function') renderSimpulNationalMetadata();
   const target = document.getElementById('tab-tentang-data');
   if (target && window.renderMathInElement) {
     window.renderMathInElement(target, {
