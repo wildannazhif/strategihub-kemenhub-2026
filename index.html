@@ -696,6 +696,62 @@
           </div>
         </div>
 
+        <section id="surge-alternatives" class="space-y-4" aria-labelledby="surge-alternatives-title">
+          <div>
+            <h3 id="surge-alternatives-title" class="text-sm font-bold text-slate-900 dark:text-white">Bandingkan 3 Alternatif Grafik Lonjakan</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Data penumpang sama dengan tabel di bawah. Baseline normal: median 1 Jan–12 Mar 2026.</p>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Urutan moda berdasarkan lonjakan tertinggi dari tiga puncak. Semua Moda merupakan agregat kelima moda dan dipisahkan di baris terakhir.</p>
+          </div>
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <article id="surge-dotplot-option" class="min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-5" aria-labelledby="surge-dotplot-title">
+              <div class="pb-3 border-b border-slate-100 dark:border-slate-800">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">Alternatif 1</span>
+                <h4 id="surge-dotplot-title" class="text-sm font-bold text-slate-900 dark:text-white mt-1">Dot Plot Horizontal</h4>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Posisi titik membandingkan besarnya lonjakan; bentuk dan warna membedakan periode.</p>
+              </div>
+              <div class="relative w-full h-[360px] mt-3">
+                <canvas id="chartSurgeDotCanvas" role="img" aria-label="Dot plot persentase lonjakan penumpang per moda pada tiga puncak Lebaran. Angka rinci tersedia pada tabel komparasi."></canvas>
+              </div>
+            </article>
+            <article id="surge-heatmap-option" class="min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-5" aria-labelledby="surge-heatmap-title">
+              <div class="pb-3 border-b border-slate-100 dark:border-slate-800">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">Alternatif 2</span>
+                <h4 id="surge-heatmap-title" class="text-sm font-bold text-slate-900 dark:text-white mt-1">Heatmap Moda × Periode</h4>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Angka di setiap sel menunjukkan lonjakan; satu skala warna berlaku untuk semua periode.</p>
+              </div>
+              <div id="surge-heatmap-content" class="overflow-x-auto mt-3"></div>
+            </article>
+            <article id="surge-small-multiples-option" class="xl:col-span-2 min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-5" aria-labelledby="surge-small-multiples-title">
+              <div class="pb-3 border-b border-slate-100 dark:border-slate-800">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">Alternatif 3</span>
+                <h4 id="surge-small-multiples-title" class="text-sm font-bold text-slate-900 dark:text-white mt-1">Tiga Panel Bar Horizontal</h4>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Satu panel per puncak, dengan skala persentase dan urutan moda yang sama agar panjang batang dapat dibandingkan langsung.</p>
+              </div>
+              <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mt-4">
+                <div class="min-w-0">
+                  <h5 class="text-xs font-bold text-purple-700 dark:text-purple-400">Mudik · 18 Mar / H-3</h5>
+                  <div class="relative w-full h-[300px] mt-2">
+                    <canvas id="chartSurgePeriod0Canvas" role="img" aria-label="Bar horizontal lonjakan penumpang saat puncak mudik 18 Maret 2026. Angka rinci tersedia pada tabel komparasi."></canvas>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <h5 class="text-xs font-bold text-sky-700 dark:text-sky-400">Balik 1 · 24 Mar / H+3</h5>
+                  <div class="relative w-full h-[300px] mt-2">
+                    <canvas id="chartSurgePeriod1Canvas" role="img" aria-label="Bar horizontal lonjakan penumpang saat puncak balik pertama 24 Maret 2026. Angka rinci tersedia pada tabel komparasi."></canvas>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <h5 class="text-xs font-bold text-rose-700 dark:text-rose-400">Balik 2 · 29 Mar / H+8</h5>
+                  <div class="relative w-full h-[300px] mt-2">
+                    <canvas id="chartSurgePeriod2Canvas" role="img" aria-label="Bar horizontal lonjakan penumpang saat puncak balik kedua 29 Maret 2026. Angka rinci tersedia pada tabel komparasi."></canvas>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">0% berarti sama dengan baseline normal. Lonjakan persentase terbesar tidak selalu berarti volume penumpang terbesar; arahkan kursor ke titik, sel, atau batang untuk melihat volume puncak dan baseline.</p>
+        </section>
+
         <!-- Dense Surge Data Table -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
@@ -2609,6 +2665,8 @@ let selectedModaForGrowth = 'ALL';
 let selectedMonthForGrowth = 3;
 let chartLebaranLine = null;
 let chartSurgeBar = null;
+let surgeAlternativeCharts = [];
+let surgeAlternativesTheme = null;
 let chartModalShareArea = null;
 let chartDonutNormal = null;
 let chartDonutPeak = null;
@@ -2663,6 +2721,7 @@ function toggleSidebar() {
     if (chartProvGrowth) chartProvGrowth.resize();
     if (chartLebaranLine) chartLebaranLine.resize();
     if (chartSurgeBar) chartSurgeBar.resize();
+    surgeAlternativeCharts.forEach(chart => chart.resize());
     if (chartModalShareArea) chartModalShareArea.resize();
     if (chartDonutNormal) chartDonutNormal.resize();
     if (chartDonutPeak) chartDonutPeak.resize();
@@ -2726,6 +2785,7 @@ function toggleTheme() {
     if (chartProvGrowth) chartProvGrowth.update();
     if (chartLebaranLine) chartLebaranLine.update();
     if (chartSurgeBar) chartSurgeBar.update();
+    renderSurgeAlternatives();
     if (chartModalShareArea) chartModalShareArea.update();
     if (chartLoadFactor) chartLoadFactor.update();
     if (chartForecast) chartForecast.update();
@@ -3994,7 +4054,417 @@ function renderLebaranWorkspace() {
       });
     }
   }
+  renderSurgeAlternatives();
 }
+
+function formatSurgePercent(value) {
+  return `${value > 0 ? '+' : ''}${decFmt(value, 1)}%`;
+}
+
+function surgeTooltipOptions(rows, periods, isDark) {
+  const rowFor = context => rows[context.raw.rowIndex ?? context.dataIndex];
+  const valueFor = context => rowFor(context).values[context.dataset.surgePeriodIndex];
+  return {
+    backgroundColor: isDark ? '#0f172a' : '#ffffff',
+    titleColor: isDark ? '#ffffff' : '#0f172a',
+    bodyColor: isDark ? '#cbd5e1' : '#334155',
+    borderColor: isDark ? '#475569' : '#cbd5e1',
+    borderWidth: 1,
+    padding: 10,
+    bodyFont: { family: 'JetBrains Mono', size: 10 },
+    titleFont: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' },
+    callbacks: {
+      title: items => `${rowFor(items[0]).label} · ${periods[items[0].dataset.surgePeriodIndex].label}`,
+      label: context => `Lonjakan: ${formatSurgePercent(valueFor(context).percent)}`,
+      afterLabel: context => [
+        `Puncak: ${numFmt(valueFor(context).peak)} penumpang`,
+        `Baseline: ${numFmt(rowFor(context).baseline)} penumpang/hari`
+      ]
+    }
+  };
+}
+
+const surgeAggregateDivider = {
+  id: 'surgeAggregateDivider',
+  afterDatasetsDraw(chart, args, options) {
+    const y = (chart.scales.y.getPixelForValue(options.lastModaIndex) + chart.scales.y.getPixelForValue(options.lastModaIndex + 1)) / 2;
+    const context = chart.ctx;
+    context.save();
+    context.strokeStyle = options.color;
+    context.lineWidth = 1;
+    context.setLineDash([4, 4]);
+    context.beginPath();
+    context.moveTo(chart.chartArea.left, y);
+    context.lineTo(chart.chartArea.right, y);
+    context.stroke();
+    context.restore();
+  }
+};
+
+function createSurgeSmallMultiples(rows, periods, scale, isDark) {
+  const textColor = isDark ? '#cbd5e1' : '#334155';
+  const borderColor = isDark ? '#334155' : '#e2e8f0';
+  const valueLabels = {
+    id: 'surgeBarValues',
+    afterDatasetsDraw(chart) {
+      const context = chart.ctx;
+      context.save();
+      context.fillStyle = textColor;
+      context.font = '10px "JetBrains Mono", monospace';
+      context.textBaseline = 'middle';
+      chart.getDatasetMeta(0).data.forEach((bar, rowIndex) => {
+        const value = chart.data.datasets[0].data[rowIndex];
+        context.textAlign = value < 0 ? 'right' : 'left';
+        context.fillText(formatSurgePercent(value), bar.x + (value < 0 ? -5 : 5), bar.y);
+      });
+      context.restore();
+    }
+  };
+  return periods.map((period, periodIndex) => new Chart(document.getElementById(`chartSurgePeriod${periodIndex}Canvas`), {
+    type: 'bar',
+    data: {
+      labels: rows.map(row => row.label),
+      datasets: [{
+        label: period.label,
+        surgePeriodIndex: periodIndex,
+        data: rows.map(row => row.values[periodIndex].percent),
+        backgroundColor: period.color,
+        borderColor: isDark ? '#e2e8f0' : '#0f172a',
+        borderWidth: context => context.dataIndex === rows.length - 1 ? 2 : 0,
+        borderRadius: 3,
+        maxBarThickness: 20
+      }]
+    },
+    plugins: [surgeAggregateDivider, valueLabels],
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      layout: { padding: { left: scale.min < 0 ? 48 : 0, right: 52 } },
+      interaction: { mode: 'nearest', intersect: true },
+      plugins: {
+        legend: { display: false },
+        tooltip: surgeTooltipOptions(rows, periods, isDark),
+        surgeAggregateDivider: { lastModaIndex: rows.length - 2, color: borderColor }
+      },
+      scales: {
+        x: {
+          min: scale.min,
+          max: scale.max,
+          grid: { color: borderColor },
+          border: { color: borderColor },
+          ticks: {
+            color: textColor,
+            maxTicksLimit: 4,
+            minRotation: 0,
+            maxRotation: 0,
+            font: { family: 'JetBrains Mono', size: 9 },
+            callback: value => `${numFmt(value)}%`
+          },
+          title: { display: true, text: 'Lonjakan (%)', color: textColor, font: { family: 'Plus Jakarta Sans', size: 10 } }
+        },
+        y: {
+          grid: { display: false },
+          border: { display: false },
+          ticks: {
+            autoSkip: false,
+            color: textColor,
+            font: context => ({ family: 'Plus Jakarta Sans', size: 10, weight: context.tick.value === rows.length - 1 ? '700' : '500' })
+          }
+        }
+      }
+    }
+  }));
+}
+
+function renderSurgeAlternatives() {
+  if (document.getElementById('tab-lebaran').classList.contains('hidden')) return;
+  const isDark = document.documentElement.classList.contains('dark');
+  if (surgeAlternativeCharts.length && surgeAlternativesTheme === isDark) {
+    surgeAlternativeCharts.forEach(chart => chart.resize());
+    return;
+  }
+  const periods = [
+    { label: 'Mudik · 18 Mar / H-3', shortLabel: 'Mudik', date: '18 Mar / H-3', color: '#9333ea', pointStyle: 'circle', percentKey: 'surge_mudik_pct', peakKey: 'peak_mudik' },
+    { label: 'Balik 1 · 24 Mar / H+3', shortLabel: 'Balik 1', date: '24 Mar / H+3', color: '#0284c7', pointStyle: 'rectRot', percentKey: 'surge_balik1_pct', peakKey: 'peak_balik1' },
+    { label: 'Balik 2 · 29 Mar / H+8', shortLabel: 'Balik 2', date: '29 Mar / H+8', color: '#f43f5e', pointStyle: 'triangle', percentKey: 'surge_balik2_pct', peakKey: 'peak_balik2' }
+  ];
+  const labels = { ASDP: 'ASDP', BUS: 'Bus', KA: 'Kereta Api', LAUT: 'Laut', UDARA: 'Udara', TOTAL: 'Semua Moda' };
+  const rowFor = key => ({
+    key,
+    label: labels[key],
+    baseline: DATA.surge_summary[key].baseline,
+    values: periods.map(period => ({ percent: DATA.surge_summary[key][period.percentKey], peak: DATA.surge_summary[key][period.peakKey] }))
+  });
+  const rows = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA'].map(rowFor);
+  rows.sort((left, right) => Math.max(...right.values.map(value => value.percent)) - Math.max(...left.values.map(value => value.percent)));
+  rows.push(rowFor('TOTAL'));
+  const percentages = rows.flatMap(row => row.values.map(value => value.percent));
+  const scale = {
+    min: Math.floor(Math.min(0, ...percentages) / 50) * 50,
+    max: Math.max(50, Math.ceil(Math.max(0, ...percentages) / 50) * 50)
+  };
+  surgeAlternativeCharts.forEach(chart => chart.destroy());
+  surgeAlternativeCharts = [createSurgeDotPlot(rows, periods, scale, isDark), ...createSurgeSmallMultiples(rows, periods, scale, isDark)];
+  renderSurgeHeatmap(rows, periods, scale, isDark);
+  surgeAlternativesTheme = isDark;
+}
+
+function createSurgeDotPlot(rows, periods, scale, isDark) {
+  const textColor = isDark ? '#cbd5e1' : '#334155';
+  const mutedColor = isDark ? '#94a3b8' : '#64748b';
+  const borderColor = isDark ? '#334155' : '#e2e8f0';
+  const fontFamily = "'Plus Jakarta Sans', sans-serif";
+  const monoFamily = "'JetBrains Mono', monospace";
+  const offsets = [-0.25, 0, 0.25];
+
+  return new Chart(document.getElementById('chartSurgeDotCanvas'), {
+    type: 'scatter',
+    data: {
+      datasets: periods.map((period, periodIndex) => ({
+        label: period.label,
+        surgePeriodIndex: periodIndex,
+        data: rows.map((row, rowIndex) => ({
+          x: row.values[periodIndex].percent,
+          y: rowIndex + offsets[periodIndex],
+          rowIndex
+        })),
+        showLine: false,
+        pointStyle: period.pointStyle,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        pointHitRadius: 8,
+        pointBackgroundColor: period.color,
+        pointBorderColor: isDark ? '#0f172a' : '#ffffff',
+        pointBorderWidth: 1.25,
+        backgroundColor: period.color,
+        borderColor: period.color
+      }))
+    },
+    plugins: [surgeAggregateDivider],
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      font: { family: fontFamily },
+      layout: { padding: { top: 4, right: 12, bottom: 0 } },
+      interaction: { mode: 'nearest', intersect: true },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          align: 'start',
+          labels: {
+            color: textColor,
+            usePointStyle: true,
+            pointStyleWidth: 12,
+            boxWidth: 12,
+            boxHeight: 10,
+            padding: 12,
+            font: { family: fontFamily, size: 10 }
+          }
+        },
+        tooltip: surgeTooltipOptions(rows, periods, isDark),
+        surgeAggregateDivider: {
+          lastModaIndex: rows.length - 2,
+          color: borderColor
+        }
+      },
+      scales: {
+        x: {
+          type: 'linear',
+          min: scale.min,
+          max: scale.max,
+          title: {
+            display: true,
+            text: 'Lonjakan terhadap baseline (%)',
+            color: mutedColor,
+            font: { family: fontFamily, size: 11 },
+            padding: { top: 8, bottom: 0 }
+          },
+          ticks: {
+            color: mutedColor,
+            maxTicksLimit: 7,
+            minRotation: 0,
+            maxRotation: 0,
+            font: { family: monoFamily, size: 10 },
+            callback: value => `${numFmt(value)}%`
+          },
+          grid: { color: borderColor },
+          border: { color: borderColor }
+        },
+        y: {
+          type: 'linear',
+          reverse: true,
+          min: -0.45,
+          max: rows.length - 0.55,
+          afterBuildTicks: axis => {
+            axis.ticks = rows.map((row, rowIndex) => ({ value: rowIndex }));
+          },
+          ticks: {
+            autoSkip: false,
+            stepSize: 1,
+            minRotation: 0,
+            maxRotation: 0,
+            padding: 8,
+            color: textColor,
+            font: context => ({
+              family: fontFamily,
+              size: 11,
+              weight: context.tick && context.tick.value === rows.length - 1 ? '700' : '500'
+            }),
+            callback: value => Number.isInteger(value) && rows[value] ? rows[value].label : ''
+          },
+          grid: { display: false },
+          border: { display: false }
+        }
+      }
+    }
+  });
+}
+
+function renderSurgeHeatmap(rows, periods, scale, isDark) {
+  const host = document.getElementById('surge-heatmap-content');
+  if (!host) return;
+  host.replaceChildren();
+
+  // Keep one quantitative color scale for every period and both themes.
+  const lowColor = [239, 246, 255];
+  const highColor = [30, 58, 138];
+  const darkText = [15, 23, 42];
+  const whiteText = [255, 255, 255];
+  const rgb = color => `rgb(${color.join(', ')})`;
+  const luminance = color => color.reduce((sum, channel, index) => {
+    const normalized = channel / 255;
+    const linear = normalized <= 0.04045
+      ? normalized / 12.92
+      : Math.pow((normalized + 0.055) / 1.055, 2.4);
+    return sum + linear * [0.2126, 0.7152, 0.0722][index];
+  }, 0);
+  const darkTextLuminance = luminance(darkText);
+  const colorAt = percent => {
+    const position = scale.max === scale.min
+      ? 0
+      : Math.max(0, Math.min(1, (percent - scale.min) / (scale.max - scale.min)));
+    return lowColor.map((channel, index) => Math.round(channel + (highColor[index] - channel) * position));
+  };
+  const foregroundFor = color => {
+    const backgroundLuminance = luminance(color);
+    const whiteContrast = 1.05 / (backgroundLuminance + 0.05);
+    const darkContrast = (backgroundLuminance + 0.05) / (darkTextLuminance + 0.05);
+    return whiteContrast >= darkContrast ? rgb(whiteText) : rgb(darkText);
+  };
+
+  const table = document.createElement('table');
+  table.className = 'w-full table-fixed border-separate text-sm text-slate-700 dark:text-slate-300';
+  table.style.minWidth = '400px';
+  table.style.borderSpacing = '3px';
+  table.style.fontFamily = "'Plus Jakarta Sans', sans-serif";
+  const caption = document.createElement('caption');
+  caption.className = 'sr-only';
+  caption.textContent = 'Peta warna lonjakan penumpang terhadap baseline normal per hari, menurut moda dan periode. Semua sel menggunakan skala warna yang sama.';
+  table.append(caption);
+
+  const head = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+  const modeHeader = document.createElement('th');
+  modeHeader.scope = 'col';
+  modeHeader.className = 'px-2 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400';
+  modeHeader.style.width = '31%';
+  modeHeader.textContent = 'Moda';
+  headerRow.append(modeHeader);
+  periods.forEach(period => {
+    const header = document.createElement('th');
+    header.scope = 'col';
+    header.className = 'px-1 py-3 text-center text-xs font-semibold text-slate-700 dark:text-slate-300';
+    const name = document.createElement('span');
+    name.className = 'block';
+    name.textContent = period.shortLabel;
+    const date = document.createElement('span');
+    date.className = 'mt-1 block text-[10px] font-normal text-slate-500 dark:text-slate-400';
+    date.textContent = period.date;
+    header.append(name, date);
+    headerRow.append(header);
+  });
+  head.append(headerRow);
+  table.append(head);
+
+  const body = document.createElement('tbody');
+  rows.forEach(row => {
+    const aggregate = row.key === 'TOTAL';
+    const label = aggregate ? 'Semua Moda' : row.label;
+    const tableRow = document.createElement('tr');
+    const rowHeader = document.createElement('th');
+    rowHeader.scope = 'row';
+    rowHeader.className = 'px-2 py-4 text-left text-xs text-slate-700 dark:text-slate-300';
+    rowHeader.style.overflowWrap = 'anywhere';
+    rowHeader.style.fontWeight = aggregate ? '800' : '600';
+    rowHeader.textContent = label;
+    if (aggregate) {
+      rowHeader.classList.add('border-t-2', 'border-slate-300', 'dark:border-slate-600');
+      rowHeader.style.borderTop = `2px solid ${isDark ? '#475569' : '#cbd5e1'}`;
+    }
+    tableRow.append(rowHeader);
+    periods.forEach((period, periodIndex) => {
+      const value = row.values[periodIndex];
+      const percentage = formatSurgePercent(value.percent);
+      const color = colorAt(value.percent);
+      const cell = document.createElement('td');
+      cell.className = 'rounded-md px-1 py-4 text-center text-sm';
+      cell.style.backgroundColor = rgb(color);
+      cell.style.color = foregroundFor(color);
+      cell.style.fontFamily = "'JetBrains Mono', monospace";
+      cell.style.fontVariantNumeric = 'tabular-nums';
+      cell.style.fontWeight = aggregate ? '800' : '600';
+      cell.textContent = percentage;
+      const description = `${label}; ${period.label}; lonjakan ${percentage}; penumpang puncak ${numFmt(value.peak)} penumpang; baseline normal ${numFmt(row.baseline)} penumpang/hari.`;
+      cell.title = description;
+      cell.setAttribute('aria-label', description);
+      cell.tabIndex = 0;
+      // Inset focus treatment stays visible even at the scroll container edge.
+      cell.addEventListener('focus', () => {
+        cell.style.outline = '3px solid #f59e0b';
+        cell.style.outlineOffset = '-3px';
+        cell.style.boxShadow = 'inset 0 0 0 4px #0f172a';
+      });
+      cell.addEventListener('blur', () => {
+        cell.style.outline = '';
+        cell.style.outlineOffset = '';
+        cell.style.boxShadow = '';
+      });
+      if (aggregate) {
+        cell.classList.add('border-t-2', 'border-slate-300', 'dark:border-slate-600');
+        cell.style.borderTop = `2px solid ${isDark ? '#475569' : '#cbd5e1'}`;
+      }
+      tableRow.append(cell);
+    });
+    body.append(tableRow);
+  });
+  table.append(body);
+
+  const legend = document.createElement('div');
+  legend.className = 'px-2 pb-2 pt-4 text-xs text-slate-500 dark:text-slate-400';
+  legend.style.minWidth = '400px';
+  legend.style.boxSizing = 'border-box';
+  const endpoints = document.createElement('div');
+  endpoints.className = 'mb-1 flex items-center justify-between gap-3';
+  const low = document.createElement('span');
+  low.textContent = formatSurgePercent(scale.min);
+  const high = document.createElement('span');
+  high.textContent = formatSurgePercent(scale.max);
+  endpoints.append(low, high);
+  const gradient = document.createElement('div');
+  gradient.className = 'h-2 rounded-full border border-slate-200 dark:border-slate-600';
+  gradient.style.background = `linear-gradient(to right, ${rgb(lowColor)}, ${rgb(highColor)})`;
+  gradient.setAttribute('aria-hidden', 'true');
+  const note = document.createElement('p');
+  note.className = 'mt-2 text-center text-[11px]';
+  note.textContent = 'Warna lebih pekat = lonjakan lebih tinggi';
+  legend.append(endpoints, gradient, note);
+  host.append(table, legend);
+}
+
 
 // Tab 3 (Pangsa Pasar Antar-Moda) removed
 function renderModalShareWorkspace() {}

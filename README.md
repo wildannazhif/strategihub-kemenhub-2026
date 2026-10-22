@@ -21,6 +21,7 @@ Dashboard ini terbagi menjadi **8 Modul Utama** yang dapat diakses melalui menu 
 
 1. **Kronologi Harian (272 Hari):** Tren pergerakan harian penumpang dan armada dari 1 Januari hingga 29 September 2026.
 2. **Puncak Lebaran 2026 (13 – 29 Maret 2026):** Analisis komparatif periode mudik dan balik Lebaran (H-8 s/d H+8, Hari H: 21 Maret 2026) dengan metrik lonjakan volume. Label **Semua Moda** pada grafik persentase lonjakan dan tabel komparasi menunjukkan agregat kelima moda transportasi.
+   * **Alternatif grafik lonjakan:** Dot plot horizontal, heatmap moda × periode, dan tiga panel bar horizontal tersedia di atas tabel komparasi. Ketiganya memakai data penumpang, urutan moda, dan skala persentase yang sama, dengan agregat **Semua Moda** dipisahkan di baris terakhir. Grafik awal tetap tersedia sebagai pembanding.
 3. **Pangsa Pasar Antar-Moda:** Distribusi pangsa pasar (*modal share*) penumpang nasional dan tren pergeseran preferensi moda.
 4. **Kinerja Load Factor (Rasio Beban Armada):** Analisis rasio penumpang per trip armada (P/A) untuk mengukur tingkat kepadatan fisik sarana.
 5. **Registri Simpul Transportasi (Top 30 Hubs):** Peringkat dan performa 30 simpul terpadat nasional (bandara, stasiun, terminal, pelabuhan).
