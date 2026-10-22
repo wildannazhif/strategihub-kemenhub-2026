@@ -169,7 +169,7 @@
           <!-- TAB 8: FORECASTING NATARU 2026/2027 -->
           <button onclick="switchTab('tab-forecasting', 'Proyeksi & Prediksi Nataru 2026/2027', this)" class="nav-btn w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent transition-all text-left">
             <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0"></span>
-            <span class="truncate font-semibold text-indigo-700 dark:text-indigo-400">Forecasting</span>
+            <span class="truncate font-semibold text-indigo-700 dark:text-indigo-400">Proyeksi Nataru</span>
           </button>
 
           <!-- TAB 9: REKOMENDASI PENAMBAHAN ARMADA (1.010 SIMPUL) -->
@@ -1346,7 +1346,7 @@
                 <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200">MAE & Rasio Error Absolut</span>
                 <span class="text-[10px] font-mono text-slate-500">Rerata: 1,221M pnp</span>
               </div>
-              <div class="text-2xl font-black font-mono text-slate-800 dark:text-slate-100">49.146 <span class="text-xs font-normal text-slate-500">pnp (5,08%)</span></div>
+              <div id="fc-metric-mae" class="text-2xl font-black font-mono text-slate-800 dark:text-slate-100">49.146 <span class="text-xs font-normal text-slate-500">pnp (5,08%)</span></div>
               <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
                 Rata-rata selisih volume absolut harian. Deviasi 49k pnp ini hanya mewakili 5,08% dari rata-rata pergerakan harian nasional.
               </p>
@@ -1652,13 +1652,13 @@
             <span class="text-[11px] font-bold text-indigo-300 uppercase tracking-wider mr-1">Lompat Cepat:</span>
             <a href="#rumus-sec-1" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">1. Integritas Data</a>
             <a href="#rumus-sec-2" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">2. Metrik Dasar</a>
-            <a href="#rumus-sec-3" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">3. Load Factor</a>
+            <a href="#rumus-sec-3" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">3. Load Factor (Okupansi)</a>
             <a href="#rumus-sec-4" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">4. Modal Share</a>
             <a href="#rumus-sec-5" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">5. Arus Lebaran</a>
             <a href="#rumus-sec-6" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">6. Tren Provinsi</a>
-            <a href="#rumus-sec-7" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">7. Rekomendasi Armada (Persentil)</a>
-            <a href="#rumus-sec-8" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">8. Model Nataru</a>
-            <a href="#rumus-sec-9" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">9. Tabel Simpul</a>
+            <a href="#rumus-sec-7" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">7. Rekomendasi Armada (1.010 Simpul)</a>
+            <a href="#rumus-sec-8" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">8. Peramalan Nataru (11 Model)</a>
+            <a href="#rumus-sec-9" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">9. Matriks OD Udara & Sankey</a>
             <a href="#rumus-sec-10" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">10. Glosarium Singkatan</a>
           </div>
         </div>
@@ -1808,7 +1808,7 @@
           </div>
 
           <p class="text-xs text-slate-600 dark:text-slate-300">
-            <em>Load Factor Proxy</em> mengukur intensitas okupansi fisik rata-rata per satu satuan pergerakan armada sarana transportasi.
+            <strong>Catatan Metodologi:</strong> Istilah <em>Load Factor Proxy</em> dalam dashboard operasional ini merepresentasikan <strong>Rata-Rata Okupansi Armada (Average Vehicle Occupancy / AVO)</strong> atau <em>Tingkat Kepadatan Penumpang per Armada</em>. Karena data SIASATI harian mencatat frekuensi pergerakan trip armada aktual (bukan kapasitas kursi statis / <em>seating capacity</em>), rasio \(LF = P_{\text{total}} / A_{\text{total}}\) digunakan sebagai proksi empiris paling akurat untuk mengukur densitas muatan riil sarana transportasi di lapangan.
           </p>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -2245,22 +2245,157 @@
           </div>
         </div>
 
-        <!-- Section 8: Model Prediksi Time Series Holt-Winters Nataru -->
+        <!-- Section 8: Evaluasi Turnamen 11 Model Peramalan & Model Holt-Winters Nataru -->
         <div id="rumus-sec-8" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
             <div class="flex items-center gap-2.5">
               <span class="w-3 h-3 rounded-full bg-purple-500"></span>
               <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                8. Rumus 1 Model Holt-Winters Terpadu (Damped Trend & Calendar Shocks)
+                8. Evaluasi Turnamen 11 Model Peramalan & Model Holt-Winters Terpadu Nataru
               </h3>
             </div>
             <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-bold">
-              Horizon 100 Hari Nataru
+              Horizon 100 Hari Nataru • 11 Model Acuan
             </span>
           </div>
 
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Untuk memproyeksikan lonjakan mobilitas <strong>Nataru 2026/2027 (30 September 2026 s.d. 7 Januari 2027 / Horizon 100 Hari)</strong>, PUSDATIN Kemenhub menyelenggarakan uji komparasi dan turnamen pemodelan terhadap <strong>11 Model Peramalan Time Series</strong> berbasis <em>holdout testing 28 hari</em> dari total data latih <strong>637 hari kontinu</strong> (365 hari 2025 + 272 hari 2026 s.d. 29 September).
+          </p>
+
+          <!-- Tabel Benchmark 11 Model -->
+          <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+            <table class="w-full text-left text-xs font-sans">
+              <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-300 text-[11px]">
+                <tr>
+                  <th class="p-2.5 text-center w-12">Rank</th>
+                  <th class="p-2.5">Model Peramalan (11 Model Acuan PUSDATIN)</th>
+                  <th class="p-2.5 text-right">MAPE (%)</th>
+                  <th class="p-2.5 text-right">WAPE (%)</th>
+                  <th class="p-2.5 text-right">RMSE (pnp)</th>
+                  <th class="p-2.5 text-right">MAE (pnp)</th>
+                  <th class="p-2.5 text-center">Akurasi Arah</th>
+                  <th class="p-2.5 text-center">Status Keputusan</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-[11px]">
+                <tr class="bg-emerald-50/80 dark:bg-emerald-950/40 font-bold border-l-4 border-l-emerald-600">
+                  <td class="p-2.5 text-center text-emerald-700 dark:text-emerald-400">1</td>
+                  <td class="p-2.5 text-slate-900 dark:text-white">Holt-Winters Multiplicative Damped (φ=0.98)</td>
+                  <td class="p-2.5 text-right font-mono text-emerald-600 dark:text-emerald-400">4,06%</td>
+                  <td class="p-2.5 text-right font-mono text-emerald-600 dark:text-emerald-400">4,00%</td>
+                  <td class="p-2.5 text-right font-mono">60.232</td>
+                  <td class="p-2.5 text-right font-mono">48.905</td>
+                  <td class="p-2.5 text-center font-mono">89,3%</td>
+                  <td class="p-2.5 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700">🏆 Model Terpilih (Champion)</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">2</td>
+                  <td class="p-2.5">Holt-Winters Multiplicative Standar (No Damping)</td>
+                  <td class="p-2.5 text-right font-mono">3,34%</td>
+                  <td class="p-2.5 text-right font-mono">3,39%</td>
+                  <td class="p-2.5 text-right font-mono">54.924</td>
+                  <td class="p-2.5 text-right font-mono">41.374</td>
+                  <td class="p-2.5 text-center font-mono">89,3%</td>
+                  <td class="p-2.5 text-center"><span class="text-amber-600 dark:text-amber-400 text-[10px]">Rawan Divergensi H-100</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">3</td>
+                  <td class="p-2.5">Holt-Winters Additive Damped</td>
+                  <td class="p-2.5 text-right font-mono">4,63%</td>
+                  <td class="p-2.5 text-right font-mono">4,52%</td>
+                  <td class="p-2.5 text-right font-mono">69.617</td>
+                  <td class="p-2.5 text-right font-mono">55.187</td>
+                  <td class="p-2.5 text-center font-mono">89,3%</td>
+                  <td class="p-2.5 text-center"><span class="text-slate-400 text-[10px]">Kandidat Alternatif</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">4</td>
+                  <td class="p-2.5">SARIMA (1,1,1)×(1,1,1)₇</td>
+                  <td class="p-2.5 text-right font-mono">5,87%</td>
+                  <td class="p-2.5 text-right font-mono">5,94%</td>
+                  <td class="p-2.5 text-right font-mono">83.614</td>
+                  <td class="p-2.5 text-right font-mono">72.529</td>
+                  <td class="p-2.5 text-center font-mono">57,1%</td>
+                  <td class="p-2.5 text-center"><span class="text-slate-400 text-[10px]">Kandidat Alternatif</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">5</td>
+                  <td class="p-2.5">ARIMA (1,1,1) Non-Seasonal</td>
+                  <td class="p-2.5 text-right font-mono">11,17%</td>
+                  <td class="p-2.5 text-right font-mono">10,73%</td>
+                  <td class="p-2.5 text-right font-mono">151.818</td>
+                  <td class="p-2.5 text-right font-mono">131.008</td>
+                  <td class="p-2.5 text-center font-mono">53,6%</td>
+                  <td class="p-2.5 text-center"><span class="text-rose-500 text-[10px]">Tidak Memadai</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">6</td>
+                  <td class="p-2.5">Holt's Linear Trend (No Seasonal)</td>
+                  <td class="p-2.5 text-right font-mono">6,24%</td>
+                  <td class="p-2.5 text-right font-mono">6,51%</td>
+                  <td class="p-2.5 text-right font-mono">103.284</td>
+                  <td class="p-2.5 text-right font-mono">79.534</td>
+                  <td class="p-2.5 text-center font-mono">50,0%</td>
+                  <td class="p-2.5 text-center"><span class="text-slate-400 text-[10px]">Kandidat Alternatif</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">7</td>
+                  <td class="p-2.5">Simple Exponential Smoothing (SES)</td>
+                  <td class="p-2.5 text-right font-mono">6,15%</td>
+                  <td class="p-2.5 text-right font-mono">6,38%</td>
+                  <td class="p-2.5 text-right font-mono">100.170</td>
+                  <td class="p-2.5 text-right font-mono">77.936</td>
+                  <td class="p-2.5 text-center font-mono">3,6%</td>
+                  <td class="p-2.5 text-center"><span class="text-slate-400 text-[10px]">Kandidat Alternatif</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">8</td>
+                  <td class="p-2.5">Linear Regression (Trend + DOW)</td>
+                  <td class="p-2.5 text-right font-mono">16,76%</td>
+                  <td class="p-2.5 text-right font-mono">16,47%</td>
+                  <td class="p-2.5 text-right font-mono">208.674</td>
+                  <td class="p-2.5 text-right font-mono">201.091</td>
+                  <td class="p-2.5 text-center font-mono">89,3%</td>
+                  <td class="p-2.5 text-center"><span class="text-rose-500 text-[10px]">Tidak Memadai</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">9</td>
+                  <td class="p-2.5">Seasonal Naive (Lag 7)</td>
+                  <td class="p-2.5 text-right font-mono">13,51%</td>
+                  <td class="p-2.5 text-right font-mono">13,19%</td>
+                  <td class="p-2.5 text-right font-mono">188.309</td>
+                  <td class="p-2.5 text-right font-mono">161.035</td>
+                  <td class="p-2.5 text-center font-mono">60,7%</td>
+                  <td class="p-2.5 text-center"><span class="text-rose-500 text-[10px]">Baseline Pembanding</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">10</td>
+                  <td class="p-2.5">Naive / Random Walk (Lag 1)</td>
+                  <td class="p-2.5 text-right font-mono">7,10%</td>
+                  <td class="p-2.5 text-right font-mono">7,48%</td>
+                  <td class="p-2.5 text-right font-mono">118.759</td>
+                  <td class="p-2.5 text-right font-mono">91.365</td>
+                  <td class="p-2.5 text-center font-mono">0,0%</td>
+                  <td class="p-2.5 text-center"><span class="text-rose-500 text-[10px]">Baseline Pembanding</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">11</td>
+                  <td class="p-2.5">7-Day Moving Average (MA7)</td>
+                  <td class="p-2.5 text-right font-mono">10,55%</td>
+                  <td class="p-2.5 text-right font-mono">10,11%</td>
+                  <td class="p-2.5 text-right font-mono">141.982</td>
+                  <td class="p-2.5 text-right font-mono">123.434</td>
+                  <td class="p-2.5 text-center font-mono">3,6%</td>
+                  <td class="p-2.5 text-center"><span class="text-rose-500 text-[10px]">Baseline Pembanding</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Formulasi Model Champion -->
           <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-            <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">Formulasi Model Prediksi Time Series:</div>
+            <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">Formulasi Matematis Model Terpilih (Holt-Winters Damped + Calendar Shock):</div>
             <div class="text-center py-2.5 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-indigo-600 dark:text-indigo-400 font-semibold text-sm">
               $$\hat{y}_{t+h} = \left( \ell_t + \sum_{i=1}^{h} \phi^i b_t \right) \times s_{t+h-m(k+1)} \times \prod W_{\text{shock}}$$
             </div>
@@ -2272,7 +2407,7 @@
           <!-- Metrik Evaluasi Akurasi -->
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
             <div class="p-3.5 rounded-lg bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60">
-              <div class="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase">MAPE (Akurasi Tinggi)</div>
+              <div class="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase">MAPE (Presisi Sangat Tinggi)</div>
               <div class="text-xl font-black font-mono text-emerald-700 dark:text-emerald-400 mt-1">4,10%</div>
               <div class="text-[10px] font-mono text-slate-500 mt-0.5">$$\frac{100\%}{n} \sum \left|\frac{y-\hat{y}}{y}\right|$$</div>
             </div>
@@ -2315,7 +2450,7 @@
                   <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$\ell_t$$</td>
                   <td class="p-2.5 font-semibold">Tingkat Level Dasar</td>
                   <td class="p-2.5 text-slate-500 font-mono">orang</td>
-                  <td class="p-2.5">Estimasi tingkat pergerakan dasar pada waktu cutoff terkini setelah memperhitungkan data latih 635 hari.</td>
+                  <td class="p-2.5">Estimasi tingkat pergerakan dasar pada waktu cutoff terkini setelah memperhitungkan data latih 637 hari (365H 2025 + 272H 2026).</td>
                 </tr>
                 <tr>
                   <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$b_t$$</td>
@@ -2352,58 +2487,78 @@
           </div>
         </div>
 
-                <!-- Section 9: Formula Perhitungan Kolom Tabel Rekomendasi Armada 1.010 Simpul -->
+        <!-- Section 9: Formulasi Matriks Asal-Tujuan (Origin-Destination / OD) Udara & Aliran Sankey -->
         <div id="rumus-sec-9" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
             <div class="flex items-center gap-2.5">
-              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-500"></span>
               <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                9. Formula Perhitungan Kolom Tabel Rekomendasi Armada (1.010 Simpul Nasional)
+                9. Formulasi Matriks Asal-Tujuan (Origin-Destination / OD) Udara & Aliran Sankey
               </h3>
             </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">
-              Tab 8 • Registry Simpul
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold">
+              Modul OD Udara • Peta Rute & Sankey
             </span>
           </div>
 
           <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-            Menjabarkan formulasi matematis eksak dari setiap kolom angka yang ditampilkan pada <strong>Tabel Rekomendasi Kebutuhan Penambahan Armada 1.010 Simpul Nasional</strong> dan kartu ringkasan eksekutif (Tab 8).
+            Menjabarkan metodologi pembentukan <strong>Matriks Origin-Destination (OD) Udara Nasional</strong> dan pemodelan konservasi aliran pada <strong>Diagram Sankey</strong> serta <strong>Peta Rute Interaktif</strong> (September 2026) berdasarkan dua skema audit konsistensi data penerbangan.
           </p>
 
+          <!-- Dua Skema Analisis -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 rounded-lg bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-amber-800 dark:text-amber-300">Skema 1: INCLUDE (Jaringan Koridor Penuh)</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-200/60 dark:bg-amber-900 text-amber-800 dark:text-amber-200">1.273 Rute</span>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                Mencakup seluruh pergerakan pesawat udara di ruang udara nasional, termasuk penerbangan penumpang reguler, penerbangan perintis, carter, kargo logistik murni (30.192 ton), dan repositioning/ferry flight dengan volume penumpang \(P = 0\).
+              </p>
+            </div>
+            <div class="p-4 rounded-lg bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-emerald-800 dark:text-emerald-300">Skema 2: EXCLUDE (Komersial Penumpang Riil - Rekomendasi Mentor)</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-200/60 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">997 Rute</span>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                Menyaring anomali rute berpenumpang nol (\(P = 0\)) dan memfokuskan analisis hanya pada koridor komersial yang mengangkut penumpang aktif. Total penumpang nasional pada kedua skema <strong>100% identik dan konsisten (4.383.514 pax/bulan)</strong>.
+              </p>
+            </div>
+          </div>
+
+          <!-- Formula Matriks OD & Konservasi Aliran Sankey -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">A. Beban Okupansi Normal & Puncak (Kolom Normal & Puncak):</div>
+              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">A. Produksi Asal & Tarikan Tujuan OD:</div>
               <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-indigo-600 dark:text-indigo-400 font-semibold text-xs">
-                $$LF_{\text{biasa}} = \frac{P_{\text{biasa}}}{A_{\text{biasa}}}, \quad LF_{\text{puncak}} = \frac{P_{\text{puncak}}}{A_{\text{puncak}}}$$
+                $$O_i = \sum_{j} T_{ij}, \quad D_j = \sum_{i} T_{ij}$$
               </div>
+              <p class="text-[10px] text-slate-500">Jumlah pergerakan keluar dari asal \(i\) dan masuk ke tujuan \(j\).</p>
             </div>
             <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">B. Lonjakan Beban Okupansi (Kolom "Lonjakan Beban"):</div>
+              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">B. Total Arus Nasional & Konservasi Aliran:</div>
               <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-indigo-600 dark:text-indigo-400 font-semibold text-xs">
-                $$\text{Load Ratio} = \frac{LF_{\text{puncak}}}{LF_{\text{biasa}}}$$
+                $$T_{\text{total}} = \sum_{i} \sum_{j} T_{ij} = \sum_{i} O_i = \sum_{j} D_j$$
               </div>
+              <p class="text-[10px] text-slate-500">Prinsip konservasi massa aliran Sankey (Total Outflow = Total Inflow).</p>
             </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">C. Tambahan Unit Armada Fisik (Kolom "Tambahan Unit"):</div>
-              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 font-semibold text-xs">
-                $$A_{\text{tambah}} = \left\lceil A_{\text{puncak}} \times \left( \frac{\%\text{ Tambah}}{100} \right) \right\rceil$$
+              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">C. Pangsa Arus Koridor (Corridor Share %):</div>
+              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-amber-600 dark:text-amber-400 font-semibold text-xs">
+                $$\text{Share}_{ij} = \left( \frac{T_{ij}}{T_{\text{total}}} \right) \times 100\%$$
               </div>
+              <p class="text-[10px] text-slate-500">Porsi kontribusi rute spesifik terhadap seluruh mobilitas udara nasional.</p>
             </div>
             <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">D. Total Armada Beroperasi Harian (Kolom "Total Operasi"):</div>
-              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 font-semibold text-xs">
-                $$A_{\text{total}} = A_{\text{puncak}} + A_{\text{tambah}}$$
+              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">D. Kepadatan Okupansi Koridor (Pax per Penerbangan):</div>
+              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-cyan-600 dark:text-cyan-400 font-semibold text-xs">
+                $$\text{Density}_{ij} = \frac{T_{ij}}{F_{ij}}$$
               </div>
-            </div>
-          </div>
-
-          <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-            <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">E. Persentase Tambahan Armada Rata-rata Terpilih (Kartu Rangkuman Atas):</div>
-            <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-semibold text-xs">
-              $$\%\text{ Tambah Rata-rata Terpilih} = \left( \frac{\sum A_{\text{tambah}}}{\sum A_{\text{puncak}}} \right) \times 100\%$$
+              <p class="text-[10px] text-slate-500">Rerata penumpang per satu penerbangan rute \(i \to j\) (Nasional: 130,6 pax/flight).</p>
             </div>
           </div>
 
@@ -2412,48 +2567,53 @@
             <table class="w-full text-left text-xs font-sans">
               <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-300">
                 <tr>
-                  <th class="p-2.5 w-32">Simbol</th>
-                  <th class="p-2.5 w-44">Nama Kolom / Variabel</th>
+                  <th class="p-2.5 w-28">Simbol</th>
+                  <th class="p-2.5 w-44">Nama Variabel</th>
                   <th class="p-2.5 w-32">Satuan</th>
                   <th class="p-2.5">Penjelasan Makna Operasional Lapangan</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-[11px]">
                 <tr>
-                  <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$A_{\text{tambah}}$$</td>
-                  <td class="p-2.5 font-semibold">Tambahan Unit</td>
-                  <td class="p-2.5 text-slate-500 font-mono">unit sarana / hari</td>
-                  <td class="p-2.5">Jumlah fisik perjalanan armada perbantuan harian yang wajib disediakan (flight, trip KA, trip bus, trip kapal).</td>
+                  <td class="p-2.5 font-mono font-bold text-amber-600 dark:text-amber-400">$$T_{ij}$$</td>
+                  <td class="p-2.5 font-semibold">Volume Aliran Koridor</td>
+                  <td class="p-2.5 text-slate-500 font-mono">penumpang / bulan</td>
+                  <td class="p-2.5">Jumlah penumpang riil yang terbang dari bandara asal \(i\) menuju bandara tujuan \(j\) (misal CGK ➔ DPS: 135.210 pax).</td>
                 </tr>
                 <tr>
-                  <td class="p-2.5 font-mono font-bold text-emerald-600 dark:text-emerald-400">$$A_{\text{total}}$$</td>
-                  <td class="p-2.5 font-semibold">Total Operasi</td>
-                  <td class="p-2.5 text-slate-500 font-mono">operasi / hari</td>
-                  <td class="p-2.5">Kapasitas total perjalanan armada harian gabungan (armada reguler puncak + armada tambahan perbantuan).</td>
+                  <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$O_i$$</td>
+                  <td class="p-2.5 font-semibold">Produksi Asal (Origin)</td>
+                  <td class="p-2.5 text-slate-500 font-mono">penumpang / bulan</td>
+                  <td class="p-2.5">Total penumpang yang berangkat meninggalkan bandara asal \(i\) ke seluruh destinasi domestik.</td>
                 </tr>
                 <tr>
-                  <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$LF_{\text{biasa}}$$</td>
-                  <td class="p-2.5 font-semibold">LF Normal (Keberangkatan)</td>
-                  <td class="p-2.5 text-slate-500 font-mono">pnp / armada</td>
-                  <td class="p-2.5">Rasio rata-rata penumpang per satu armada keberangkatan pada bulan acuan normal (Februari 2026).</td>
+                  <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$D_j$$</td>
+                  <td class="p-2.5 font-semibold">Tarikan Tujuan (Destination)</td>
+                  <td class="p-2.5 text-slate-500 font-mono">penumpang / bulan</td>
+                  <td class="p-2.5">Total penumpang yang tiba mendarat di bandara tujuan \(j\) dari seluruh bandara keberangkatan.</td>
                 </tr>
                 <tr>
-                  <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$LF_{\text{puncak}}$$</td>
-                  <td class="p-2.5 font-semibold">LF Puncak (Keberangkatan)</td>
-                  <td class="p-2.5 text-slate-500 font-mono">pnp / armada</td>
-                  <td class="p-2.5">Rasio maksimum penumpang per satu armada keberangkatan pada hari puncak arus mudik/balik Lebaran.</td>
+                  <td class="p-2.5 font-mono font-bold text-cyan-600 dark:text-cyan-400">$$F_{ij}$$</td>
+                  <td class="p-2.5 font-semibold">Frekuensi Penerbangan</td>
+                  <td class="p-2.5 text-slate-500 font-mono">flight / bulan</td>
+                  <td class="p-2.5">Jumlah operasional jadwal terbang pesawat komersial pada rute \(i \to j\) (Nasional: 14.869 s.d. 46.946 flights).</td>
                 </tr>
                 <tr>
-                  <td class="p-2.5 font-mono font-bold text-slate-800 dark:text-slate-200">$$\%\text{ Tambah}$$</td>
-                  <td class="p-2.5 font-semibold">Perlu Tambah (%)</td>
+                  <td class="p-2.5 font-mono font-bold text-amber-600 dark:text-amber-400">$$\text{Share}_{ij}$$</td>
+                  <td class="p-2.5 font-semibold">Pangsa Koridor</td>
                   <td class="p-2.5 text-slate-500 font-mono">%</td>
-                  <td class="p-2.5">Tingkat persentase penambahan armada berdasarkan kuantil persentil (20%, 15%, 10%, atau 5%).</td>
+                  <td class="p-2.5">Proporsi arus penumpang rute tertentu terhadap mobilitas nasional (koridor tersibuk DPS ⇄ CGK menguasai porsi tertinggi).</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-slate-800 dark:text-slate-200">$$\text{Density}_{ij}$$</td>
+                  <td class="p-2.5 font-semibold">Kepadatan Pesawat</td>
+                  <td class="p-2.5 text-slate-500 font-mono">pax / flight</td>
+                  <td class="p-2.5">Tingkat pengisian rata-rata per penerbangan komersial, menjadi indikator efisiensi okupansi armada maskapai.</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-
 
         <!-- Section 10: Glosarium & Kamus Singkatan Resmi Kementerian Perhubungan -->
         <div id="rumus-sec-10" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
