@@ -359,7 +359,7 @@
               <span class="text-xs text-slate-500 font-medium" id="strip-unit-arm">trip berangkat</span>
             </div>
             <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-desc-arm">
-              Pesawat, Kereta, Bus, Feri, Kapal Laut
+              Udara, Perkeretaapian, Jalan, Penyebrangan, Laut
             </div>
           </div>
 
@@ -389,7 +389,7 @@
                 </span>
               </div>
               <p id="timeline-chart-desc" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Volume harian agregat penumpang: Udara, Kereta Api, Bus, Penyeberangan ASDP, dan Laut (01 Jan s.d. 13 Okt 2026)
+                Volume harian agregat penumpang: Udara, Perkeretaapian, Jalan, Penyebrangan, dan Laut (01 Jan s.d. 13 Okt 2026)
               </p>
             </div>
 
@@ -511,9 +511,9 @@
                   <select id="sel-moda-growth" onchange="onModaGrowthSelectChange()" class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2.5 py-1.5 text-slate-900 dark:text-slate-100 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-xs cursor-pointer">
                     <option value="ALL" selected>Semua Moda (5 Moda)</option>
                     <option value="UDARA">Udara</option>
-                    <option value="KA">Kereta Api</option>
-                    <option value="BUS">Bus</option>
-                    <option value="ASDP">ASDP</option>
+                    <option value="KA">Perkeretaapian</option>
+                    <option value="BUS">Jalan</option>
+                    <option value="ASDP">Penyebrangan</option>
                     <option value="LAUT">Laut</option>
                   </select>
                 </div>
@@ -588,9 +588,9 @@
                   <tr id="thead-monthly">
                     <th class="py-2.5 px-3">Bulan</th>
                     <th class="py-2.5 px-3 text-right text-blue-900 dark:text-blue-300 font-bold">Udara</th>
-                    <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400">Kereta Api</th>
-                    <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Bus</th>
-                    <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">ASDP</th>
+                    <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400">Perkeretaapian</th>
+                    <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Jalan</th>
+                    <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">Penyebrangan</th>
                     <th class="py-2.5 px-3 text-right text-cyan-700 dark:text-cyan-400">Laut</th>
                     <th class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">Total</th>
                     <th class="py-2.5 px-3 text-right text-slate-700 dark:text-slate-300" title="Lonjakan terhadap Baseline Median Pra-Lebaran 1 Jan - 12 Mar 2026">vs Median (1 Jan - 12 Mar)</th>
@@ -819,19 +819,19 @@
               Semua Moda
             </button>
             <button onclick="filterHubModa('UDARA', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Bandar Udara
+              Udara
             </button>
             <button onclick="filterHubModa('KA', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Stasiun Kereta Api
+              Perkeretaapian
             </button>
             <button onclick="filterHubModa('BUS', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Bus
+              Jalan
             </button>
             <button onclick="filterHubModa('ASDP', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Pelabuhan ASDP
+              Penyebrangan
             </button>
             <button onclick="filterHubModa('LAUT', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Pelabuhan Laut
+              Laut
             </button>
           </div>
 
@@ -915,9 +915,9 @@
                 <tr>
                   <th class="py-3 px-3.5 w-72">Indikator Kuantitatif</th>
                   <th class="py-3 px-3 text-right text-blue-900 dark:text-blue-300 font-bold">UDARA</th>
-                  <th class="py-3 px-3 text-right text-amber-700 dark:text-amber-400">KERETA API</th>
-                  <th class="py-3 px-3 text-right text-green-700 dark:text-green-400">BUS</th>
-                  <th class="py-3 px-3 text-right text-purple-700 dark:text-purple-400">ASDP</th>
+                  <th class="py-3 px-3 text-right text-amber-700 dark:text-amber-400">PERKERETAAPIAN</th>
+                  <th class="py-3 px-3 text-right text-green-700 dark:text-green-400">JALAN</th>
+                  <th class="py-3 px-3 text-right text-purple-700 dark:text-purple-400">PENYEBRANGAN</th>
                   <th class="py-3 px-3 text-right text-cyan-700 dark:text-cyan-400">LAUT</th>
                   <th class="py-3 px-3 text-right font-bold text-slate-900 dark:text-white">TOTAL NASIONAL</th>
                 </tr>
@@ -948,7 +948,7 @@
                 </span>
               </div>
               <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Heatmap intensitas mobilitas batas wilayah 38 provinsi terpadu dengan sebaran 1.014 titik simpul transportasi nasional (Udara, KA, Bus, ASDP, dan Laut)
+                Heatmap intensitas mobilitas batas wilayah 38 provinsi terpadu dengan sebaran 1.014 titik simpul transportasi nasional (Udara, Perkeretaapian, Jalan, Penyebrangan, dan Laut)
               </p>
             </div>
 
@@ -1008,13 +1008,13 @@
                 ✈ Udara (257)
               </button>
               <button onclick="filterSpatialModa('KA', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-amber-800 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40 border border-slate-200 dark:border-slate-700 transition-all">
-                🚆 Kereta Api (193)
+                🚆 Perkeretaapian (193)
               </button>
               <button onclick="filterSpatialModa('BUS', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-green-800 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-950/40 border border-slate-200 dark:border-slate-700 transition-all">
-                🚌 Bus (139)
+                🚌 Jalan (139)
               </button>
               <button onclick="filterSpatialModa('ASDP', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-purple-800 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/40 border border-slate-200 dark:border-slate-700 transition-all">
-                ⛴ ASDP (158)
+                ⛴ Penyebrangan (158)
               </button>
               <button onclick="filterSpatialModa('LAUT', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-cyan-800 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/40 border border-slate-200 dark:border-slate-700 transition-all">
                 🚢 Laut (267)
@@ -1166,11 +1166,11 @@
               <div class="relative">
                 <select id="select-forecast-moda" onchange="setForecastModa(this.value)" class="bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-semibold rounded-md pl-3 pr-8 py-1.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none appearance-none cursor-pointer shadow-xs">
                   <option value="TOTAL" selected>Total Multimoda (Semua Moda)</option>
-                  <option value="UDARA">✈ Udara (Penerbangan Domestik)</option>
-                  <option value="KA">🚆 Perkeretaapian (KAI)</option>
-                  <option value="BUS">🚌 Bus</option>
-                  <option value="ASDP">⛴ ASDP (Penyeberangan Feri)</option>
-                  <option value="LAUT">🚢 Transportasi Laut (Kapal Pelni)</option>
+                  <option value="UDARA">✈ Udara</option>
+                  <option value="KA">🚆 Perkeretaapian</option>
+                  <option value="BUS">🚌 Jalan</option>
+                  <option value="ASDP">⛴ Penyebrangan</option>
+                  <option value="LAUT">🚢 Laut</option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -1356,10 +1356,10 @@
             <div class="p-3.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
               <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200 block">Akurasi Per Moda (Uji 28H)</span>
               <div class="space-y-1 text-[11px] font-mono pt-0.5">
-                <div class="flex justify-between items-center"><span>🚌 Bus:</span> <span class="font-bold text-emerald-600">2,4%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 2,5%)</span></div>
+                <div class="flex justify-between items-center"><span>🚌 Jalan:</span> <span class="font-bold text-emerald-600">2,4%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 2,5%)</span></div>
                 <div class="flex justify-between items-center"><span>🚢 Laut:</span> <span class="font-bold text-emerald-600">4,6%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 4,5%)</span></div>
-                <div class="flex justify-between items-center"><span>🚆 Kereta Api:</span> <span class="font-bold text-emerald-600">9,3%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 10,2%)</span></div>
-                <div class="flex justify-between items-center"><span>⛴ ASDP:</span> <span class="font-bold text-emerald-600">12,7%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 10,9%)</span></div>
+                <div class="flex justify-between items-center"><span>🚆 Perkeretaapian:</span> <span class="font-bold text-emerald-600">9,3%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 10,2%)</span></div>
+                <div class="flex justify-between items-center"><span>⛴ Penyebrangan:</span> <span class="font-bold text-emerald-600">12,7%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 10,9%)</span></div>
                 <div class="flex justify-between items-center"><span>✈ Udara:</span> <span class="font-bold text-amber-600">22,7%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 18,8%)</span></div>
               </div>
             </div>
@@ -1491,9 +1491,9 @@
               <button type="button" onclick="filterSimpulModa('ALL', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-indigo-600 text-white shadow-xs font-bold transition-all">Semua Moda (1.010)</button>
               <button type="button" onclick="filterSimpulModa('UDARA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">✈ Udara (230)</button>
               <button type="button" onclick="filterSimpulModa('LAUT', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚢 Laut (209)</button>
-              <button type="button" onclick="filterSimpulModa('ASDP', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">⛴ ASDP Feri (196)</button>
-              <button type="button" onclick="filterSimpulModa('BUS', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚌 Bus AKAP (189)</button>
-              <button type="button" onclick="filterSimpulModa('KA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚆 Kereta Api (186)</button>
+              <button type="button" onclick="filterSimpulModa('ASDP', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">⛴ Penyebrangan (196)</button>
+              <button type="button" onclick="filterSimpulModa('BUS', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚌 Jalan (189)</button>
+              <button type="button" onclick="filterSimpulModa('KA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚆 Perkeretaapian (186)</button>
             </div>
             
             <div class="flex items-center gap-2">
@@ -1700,7 +1700,7 @@
             <div class="p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80">
               <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cakupan Moda</div>
               <div class="text-lg font-black font-mono text-slate-900 dark:text-white mt-1">5 Moda Transportasi</div>
-              <div class="text-[11px] text-slate-500 mt-0.5">Udara, KA, Bus, ASDP, Laut</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Udara, Perkeretaapian, Jalan, Penyebrangan, Laut</div>
             </div>
           </div>
         </div>
@@ -1842,7 +1842,7 @@
                   <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$LF$$</td>
                   <td class="p-2.5 font-semibold">Load Factor Proxy</td>
                   <td class="p-2.5 text-slate-500 font-mono">pnp / armada</td>
-                  <td class="p-2.5">Rata-rata penumpang yang dimuat per satu perjalanan armada (flight, trip bus, trip KA, kapal).</td>
+                  <td class="p-2.5">Rata-rata penumpang yang dimuat per satu perjalanan armada (flight udara, trip jalan, trip perkeretaapian, kapal laut/penyebrangan).</td>
                 </tr>
                 <tr>
                   <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$LF_{\text{puncak}}$$</td>
@@ -1887,7 +1887,7 @@
               $$\text{MS}_{m} = \left( \frac{P_{m}}{\sum_{k \in M} P_{k}} \right) \times 100\%$$
             </div>
             <div class="text-[11px] text-slate-500 text-center">
-              Di mana: $$\sum_{k \in M} P_{k} = P_{\text{Udara}} + P_{\text{KA}} + P_{\text{Bus}} + P_{\text{ASDP}} + P_{\text{Laut}}$$
+              Di mana: $$\sum_{k \in M} P_{k} = P_{\text{Udara}} + P_{\text{Jalan}} + P_{\text{Penyebrangan}} + P_{\text{Laut}} + P_{\text{Perkeretaapian}}$$
             </div>
           </div>
 
@@ -1907,7 +1907,7 @@
                   <td class="p-2.5 font-mono font-bold text-emerald-600 dark:text-emerald-400">$$\text{MS}_{m}$$</td>
                   <td class="p-2.5 font-semibold">Modal Share Moda m</td>
                   <td class="p-2.5 text-slate-500 font-mono">%</td>
-                  <td class="p-2.5">Porsi kontribusi moda $m$ terhadap mobilitas nasional (contoh: Udara 32,0%, ASDP 23,4%).</td>
+                  <td class="p-2.5">Porsi kontribusi moda $m$ terhadap mobilitas nasional (contoh: Udara 32,0%, Penyebrangan 23,4%).</td>
                 </tr>
                 <tr>
                   <td class="p-2.5 font-mono font-bold text-emerald-600 dark:text-emerald-400">$$P_{m}$$</td>
@@ -2062,7 +2062,7 @@
                   <td class="p-2.5 font-mono font-bold text-blue-600 dark:text-blue-400">$$\text{Share}_{m, \text{prov}}$$</td>
                   <td class="p-2.5 font-semibold">Pangsa Moda Dominan</td>
                   <td class="p-2.5 text-slate-500 font-mono">%</td>
-                  <td class="p-2.5">Porsi moda utama di provinsi tersebut (contoh: Jatim dominan KA/Bus, Bali dominan Udara, Kepri dominan Laut).</td>
+                  <td class="p-2.5">Porsi moda utama di provinsi tersebut (contoh: Jatim dominan Perkeretaapian/Jalan, Bali dominan Udara, Kepri dominan Laut/Penyebrangan).</td>
                 </tr>
               </tbody>
             </table>
@@ -2164,10 +2164,10 @@
                 <span>🏛 Landasan Regulasi Resmi Kemenhub RI untuk Aksi Lapangan:</span>
               </div>
               <div class="text-[11px] text-slate-600 dark:text-slate-300 space-y-1.5 leading-relaxed">
-                <div>• <strong>Pola TBB & Buffer Zone Pelabuhan ASDP:</strong> Didasarkan pada <em>Surat Keputusan Bersama (SKB) Tiga Menteri</em> (Kementerian Perhubungan, Korlantas Polri, dan Kementerian PUPR) tentang Pengaturan Lalu Lintas Jalan serta Penyeberangan Masa Angkutan Lebaran &amp; Nataru, yang menetapkan skema Tiba Bongkar Berangkat (TBB) tanpa muat di Bakauheni/Merak, pengalihan pelabuhan Ciwandan/BBJ, dan delaying system di rest area Tol Tangerang–Merak KM 43/68.</div>
+                <div>• <strong>Pola TBB & Buffer Zone Moda Penyebrangan:</strong> Didasarkan pada <em>Surat Keputusan Bersama (SKB) Tiga Menteri</em> (Kementerian Perhubungan, Korlantas Polri, dan Kementerian PUPR) tentang Pengaturan Lalu Lintas Jalan serta Penyeberangan Masa Angkutan Lebaran &amp; Nataru, yang menetapkan skema Tiba Bongkar Berangkat (TBB) tanpa muat di Bakauheni/Merak, pengalihan pelabuhan Ciwandan/BBJ, dan delaying system di rest area Tol Tangerang–Merak KM 43/68.</div>
                 <div>• <strong>Extra Flight & Slot Runway Bandara:</strong> Berpedoman pada <em>Surat Edaran Direktur Jenderal Perhubungan Udara</em> tentang Pengendalian Pengoperasian Pesawat Udara pada Periode Hari Raya, yang mengatur dispensasi slot terbang tambahan (extra flight / red-eye flight malam) serta jam operasi bandara 24 jam penuh.</div>
-                <div>• <strong>Kereta Luar Biasa (KLB) & Stamformasi KA:</strong> Berdasarkan <em>Instruksi Direktur Jenderal Perkeretaapian</em> tentang Penyelenggaraan Posko Angkutan Kereta Api Terpadu, yang mengatur pengoperasian rangkaian KLB Tambahan dan maksimasi formasi rangkaian 10–12 gerbong per perjalanan.</div>
-                <div>• <strong>Armada Bus Bantuan & Ramp Check:</strong> Mengacu pada <em>Surat Edaran Direktur Jenderal Perhubungan Darat</em> mengenai Kesiapan Angkutan Jalan, yang mewajibkan inspeksi keselamatan jalan (Ramp Check) dan penyiagaan armada bus pariwisata cadangan sebagai angkutan perbantuan di terminal tipe A.</div>
+                <div>• <strong>Kereta Luar Biasa (KLB) & Stamformasi Moda Perkeretaapian:</strong> Berdasarkan <em>Instruksi Direktur Jenderal Perkeretaapian</em> tentang Penyelenggaraan Posko Angkutan Kereta Api Terpadu, yang mengatur pengoperasian rangkaian KLB Tambahan dan maksimasi formasi rangkaian 10–12 gerbong per perjalanan.</div>
+                <div>• <strong>Armada Bantuan & Ramp Check Moda Jalan:</strong> Mengacu pada <em>Surat Edaran Direktur Jenderal Perhubungan Darat</em> mengenai Kesiapan Angkutan Jalan, yang mewajibkan inspeksi keselamatan jalan (Ramp Check) dan penyiagaan armada bus pariwisata cadangan sebagai angkutan perbantuan di terminal tipe A.</div>
               </div>
             </div>
 
@@ -2186,7 +2186,7 @@
                 <!-- Jurnal 1: ASDP -->
                 <div class="p-2.5 rounded bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 space-y-1">
                   <div class="font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                    <span>⛴ Penyeberangan ASDP (TBB & Buffer)</span>
+                    <span>⛴ Penyebrangan (TBB & Buffer)</span>
                     <a href="https://garuda.kemdiktisaintek.go.id/journal/view/41858" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold text-[10px]">Buka Jurnal ↗</a>
                   </div>
                   <div class="text-slate-600 dark:text-slate-300">
@@ -2214,7 +2214,7 @@
                 <!-- Jurnal 3: KA -->
                 <div class="p-2.5 rounded bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 space-y-1">
                   <div class="font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                    <span>🚆 Kereta Api (KLB & Stamformasi)</span>
+                    <span>🚆 Perkeretaapian (KLB & Stamformasi)</span>
                     <a href="https://doi.org/10.1016/j.cie.2025.111166" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold text-[10px]">Buka Jurnal ↗</a>
                   </div>
                   <div class="text-slate-600 dark:text-slate-300">
@@ -2228,7 +2228,7 @@
                 <!-- Jurnal 4: Bus & Teori Armada -->
                 <div class="p-2.5 rounded bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 space-y-1">
                   <div class="font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                    <span>🚌 Bus &amp; Optimasi Armada Transit</span>
+                    <span>🚌 Jalan &amp; Optimasi Armada Transit</span>
                     <a href="https://www.nationalacademies.org/publications/24766" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold text-[10px]">Buka Manual TRB ↗</a>
                   </div>
                   <div class="text-slate-600 dark:text-slate-300">
@@ -2660,7 +2660,7 @@
                 </tr>
                 <tr>
                   <td class="p-2.5 font-mono font-bold text-green-600 dark:text-green-400">AKAP</td>
-                  <td class="p-2.5 font-semibold">Antarkota Antarprovinsi (Moda Bus)</td>
+                  <td class="p-2.5 font-semibold">Antarkota Antarprovinsi (Moda Jalan)</td>
                   <td class="p-2.5">Trayek angkutan bus umum yang melayani perjalanan antarprovinsi melalui terminal tipe A terakreditasi.</td>
                 </tr>
                 <tr>
@@ -2796,6 +2796,14 @@ const COLOR = {
   ASDP: '#9333ea',  // Purple 600
   LAUT: '#0891b2',  // Cyan 600
   TOTAL: '#0f172a'  // Dark/White
+};
+
+const MODA_DISPLAY_NAME = {
+  'UDARA': 'Udara',
+  'BUS': 'Jalan',
+  'ASDP': 'Penyebrangan',
+  'LAUT': 'Laut',
+  'KA': 'Perkeretaapian'
 };
 
 // ---------------------------------------------------------------
@@ -3227,9 +3235,9 @@ function renderTimelineChart() {
   const datasets = [
     { label: 'Total Multimoda', data: raw.map(d => d[getMetricKey('TOTAL')]), borderColor: totalColor, borderWidth: 2, pointRadius: 0, tension: 0.15, hidden: !timelineVisibility[0] },
     { label: 'Udara', data: raw.map(d => d[getMetricKey('UDARA')]), borderColor: COLOR.UDARA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
-    { label: 'Kereta Api', data: raw.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
-    { label: 'Bus', data: raw.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
-    { label: 'ASDP', data: raw.map(d => d[getMetricKey('ASDP')]), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
+    { label: 'Perkeretaapian', data: raw.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
+    { label: 'Jalan', data: raw.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
+    { label: 'Penyebrangan', data: raw.map(d => d[getMetricKey('ASDP')]), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
     { label: 'Laut', data: raw.map(d => d[getMetricKey('LAUT')]), borderColor: COLOR.LAUT, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
   ];
 
@@ -3564,9 +3572,9 @@ function renderProvinceGrowthWorkspace() {
 
   const MODA_NAMES = {
     'UDARA': 'Udara',
-    'KA': 'Kereta Api',
-    'BUS': 'Bus',
-    'ASDP': 'ASDP',
+    'KA': 'Perkeretaapian',
+    'BUS': 'Jalan',
+    'ASDP': 'Penyebrangan',
     'LAUT': 'Laut'
   };
 
@@ -3656,9 +3664,9 @@ function renderProvinceGrowthWorkspace() {
     if (isAllModa) {
       const modaKeys = [
         { key: 'UDARA', label: 'Udara', color: (typeof COLOR !== 'undefined' && COLOR.UDARA) || '#1e3a8a' },
-        { key: 'KA', label: 'Kereta Api', color: (typeof COLOR !== 'undefined' && COLOR.KA) || '#d97706' },
-        { key: 'BUS', label: 'Bus', color: (typeof COLOR !== 'undefined' && COLOR.BUS) || '#16a34a' },
-        { key: 'ASDP', label: 'ASDP', color: (typeof COLOR !== 'undefined' && COLOR.ASDP) || '#9333ea' },
+        { key: 'KA', label: 'Perkeretaapian', color: (typeof COLOR !== 'undefined' && COLOR.KA) || '#d97706' },
+        { key: 'BUS', label: 'Jalan', color: (typeof COLOR !== 'undefined' && COLOR.BUS) || '#16a34a' },
+        { key: 'ASDP', label: 'Penyebrangan', color: (typeof COLOR !== 'undefined' && COLOR.ASDP) || '#9333ea' },
         { key: 'LAUT', label: 'Laut', color: (typeof COLOR !== 'undefined' && COLOR.LAUT) || '#0891b2' }
       ];
       datasets = modaKeys.map(mInfo => ({
@@ -3754,9 +3762,9 @@ function renderProvinceGrowthWorkspace() {
       theadMonthly.innerHTML = `
         <th class="py-2.5 px-3">Bulan</th>
         <th class="py-2.5 px-3 text-right text-blue-900 dark:text-blue-300 font-bold ${selectedModaForGrowth === 'UDARA' ? 'bg-blue-50 dark:bg-blue-950/40 font-bold text-blue-900 dark:text-blue-300' : ''}">Udara</th>
-        <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400 ${selectedModaForGrowth === 'KA' ? 'bg-amber-50 dark:bg-amber-950/40 font-bold' : ''}">Kereta Api</th>
-        <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400 ${selectedModaForGrowth === 'BUS' ? 'bg-green-50 dark:bg-green-950/40 font-bold' : ''}">Bus</th>
-        <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400 ${selectedModaForGrowth === 'ASDP' ? 'bg-purple-50 dark:bg-purple-950/40 font-bold' : ''}">ASDP</th>
+        <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400 ${selectedModaForGrowth === 'KA' ? 'bg-amber-50 dark:bg-amber-950/40 font-bold' : ''}">Perkeretaapian</th>
+        <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400 ${selectedModaForGrowth === 'BUS' ? 'bg-green-50 dark:bg-green-950/40 font-bold' : ''}">Jalan</th>
+        <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400 ${selectedModaForGrowth === 'ASDP' ? 'bg-purple-50 dark:bg-purple-950/40 font-bold' : ''}">Penyebrangan</th>
         <th class="py-2.5 px-3 text-right text-cyan-700 dark:text-cyan-400 ${selectedModaForGrowth === 'LAUT' ? 'bg-cyan-50 dark:bg-cyan-950/40 font-bold' : ''}">Laut</th>
         <th class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">Total</th>
         <th class="py-2.5 px-3 text-right text-slate-700 dark:text-slate-300" title="Lonjakan terhadap Baseline Median Pra-Lebaran 1 Jan - 12 Mar 2026">vs Median (1 Jan - 12 Mar)</th>
@@ -3989,15 +3997,15 @@ function selectLebaranDate(dateStr) {
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${numFmt(day[getMetricKey('UDARA')])}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-        <div class="text-[10px] font-bold text-amber-700 dark:text-amber-400">KERETA API</div>
+        <div class="text-[10px] font-bold text-amber-700 dark:text-amber-400">PERKERETAAPIAN</div>
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${numFmt(day[getMetricKey('KA')])}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-        <div class="text-[10px] font-bold text-green-700 dark:text-green-400">BUS</div>
+        <div class="text-[10px] font-bold text-green-700 dark:text-green-400">JALAN</div>
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${numFmt(day[getMetricKey('BUS')])}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-        <div class="text-[10px] font-bold text-purple-700 dark:text-purple-400">ASDP</div>
+        <div class="text-[10px] font-bold text-purple-700 dark:text-purple-400">PENYEBRANGAN</div>
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${numFmt(day[getMetricKey('ASDP')])}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
@@ -4064,9 +4072,9 @@ function renderLebaranWorkspace() {
       datasets: [
         { label: 'Total', data: ld.map(d => d[getMetricKey('TOTAL')]), borderColor: isDark ? '#ffffff' : '#0f172a', borderWidth: 2, pointRadius: 2, tension: 0.15, hidden: true },
         { label: 'Udara', data: ld.map(d => d[getMetricKey('UDARA')]), borderColor: COLOR.UDARA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
-        { label: 'Kereta Api', data: ld.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
-        { label: 'Bus', data: ld.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
-        { label: 'ASDP', data: ld.map(d => d[getMetricKey('ASDP')]), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
+        { label: 'Perkeretaapian', data: ld.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
+        { label: 'Jalan', data: ld.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
+        { label: 'Penyebrangan', data: ld.map(d => d[getMetricKey('ASDP')]), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
         { label: 'Laut', data: ld.map(d => d[getMetricKey('LAUT')]), borderColor: COLOR.LAUT, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
       ]
     },
@@ -4108,7 +4116,7 @@ function renderLebaranWorkspace() {
   });
 
   const modas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA', 'TOTAL'];
-  const labelsSurge = ['ASDP', 'Bus', 'Kereta Api', 'Laut', 'Udara', 'Semua Moda'];
+  const labelsSurge = ['Penyebrangan', 'Jalan', 'Perkeretaapian', 'Laut', 'Udara', 'Semua Moda'];
   const tbody = document.getElementById('tbody-surge');
   if (tbody) {
     tbody.innerHTML = '';
@@ -4144,7 +4152,7 @@ function renderLebaranSurgeHeatmap() {
     { label: 'Balik 1 · 24 Mar / H+3', shortLabel: 'Balik 1', date: '24 Mar / H+3', percentKey: 'surge_balik1_pct', peakKey: 'peak_balik1' },
     { label: 'Balik 2 · 29 Mar / H+8', shortLabel: 'Balik 2', date: '29 Mar / H+8', percentKey: 'surge_balik2_pct', peakKey: 'peak_balik2' }
   ];
-  const labels = { ASDP: 'ASDP', BUS: 'Bus', KA: 'Kereta Api', LAUT: 'Laut', UDARA: 'Udara', TOTAL: 'Semua Moda' };
+  const labels = { ASDP: 'Penyebrangan', BUS: 'Jalan', KA: 'Perkeretaapian', LAUT: 'Laut', UDARA: 'Udara', TOTAL: 'Semua Moda' };
   const rowFor = key => ({
     key,
     label: labels[key],
@@ -4357,7 +4365,7 @@ function renderLoadFactorWorkspace() {
   if (tblBadge) tblBadge.innerText = provLabel;
 
   const allModas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA'];
-  const modaLabels = { 'ASDP': 'ASDP', 'BUS': 'Bus', 'KA': 'Kereta Api', 'LAUT': 'Laut', 'UDARA': 'Udara' };
+  const modaLabels = { 'ASDP': 'Penyebrangan', 'BUS': 'Jalan', 'KA': 'Perkeretaapian', 'LAUT': 'Laut', 'UDARA': 'Udara' };
 
   let activeModas = allModas.filter(m => lfData[m] && (lfData[m].baseline_lf > 0 || lfData[m].mudik_lf > 0 || lfData[m].balik_lf > 0));
   if (activeModas.length === 0) activeModas = allModas;
@@ -4538,7 +4546,7 @@ function renderHubsTable() {
       <td class="py-2.5 px-3 font-sans font-semibold text-slate-900 dark:text-slate-100">${h.nama_prasarana}</td>
       <td class="py-2.5 px-3">
         <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-bold text-white" style="background-color: ${color}">
-          ${h.moda}
+          ${MODA_DISPLAY_NAME[h.moda] || h.moda}
         </span>
       </td>
       <td class="py-2.5 px-3 font-sans text-slate-600 dark:text-slate-300">${h.provinsi}</td>
@@ -4704,9 +4712,9 @@ function initSpatialMap() {
         </div>
         <div class="space-y-0.5 text-[10px]">
           <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: #1e3a8a;"></span><span class="text-slate-600 dark:text-slate-300 font-semibold">Udara (257)</span></div>
-          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Kereta Api (193)</span></div>
-          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Bus (139)</span></div>
-          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">ASDP (158)</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Perkeretaapian (193)</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Jalan (139)</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Penyebrangan (158)</span></div>
           <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Laut (267)</span></div>
         </div>
       </div>
@@ -4964,7 +4972,7 @@ function renderSpatialMapNodes() {
       <div class="p-3 text-xs font-sans space-y-2 max-w-[280px]">
         <div class="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-700 pb-1.5">
           <span class="font-bold text-slate-900 dark:text-white truncate">${n.nama}</span>
-          <span class="px-1.5 py-0.2 rounded text-[10px] font-bold text-white shrink-0" style="background-color: ${color}">${n.m}</span>
+          <span class="px-1.5 py-0.2 rounded text-[10px] font-bold text-white shrink-0" style="background-color: ${color}">${MODA_DISPLAY_NAME[n.m] || n.m}</span>
         </div>
         <div class="flex items-center justify-between text-[11px] text-slate-500">
           <span>${n.p} • Tipe: ${n.tipe}</span>
@@ -5231,11 +5239,11 @@ function updateModaDropdownOptions(prov) {
   const activeModes = getActiveModesForProv(prov);
   const modesMeta = [
     { key: 'TOTAL', label: 'Total Multimoda (Semua Moda)' },
-    { key: 'UDARA', label: '✈ Udara (Penerbangan Domestik)' },
-    { key: 'KA', label: '🚆 Perkeretaapian (KAI)' },
-    { key: 'BUS', label: '🚌 Bus' },
-    { key: 'ASDP', label: '⛴ ASDP (Penyeberangan Feri)' },
-    { key: 'LAUT', label: '🚢 Transportasi Laut (Kapal Pelni)' },
+    { key: 'UDARA', label: '✈ Udara' },
+    { key: 'KA', label: '🚆 Perkeretaapian' },
+    { key: 'BUS', label: '🚌 Jalan' },
+    { key: 'ASDP', label: '⛴ Penyebrangan' },
+    { key: 'LAUT', label: '🚢 Laut' },
   ];
 
   const currentVal = select.value;
@@ -5561,11 +5569,11 @@ function renderForecastComparisonTable() {
   if (th26) th26.innerText = `Proyeksi 2026 (${isPnp ? 'Pnp Berangkat' : 'Trip Berangkat'})`;
 
   const modesMeta = [
-    { key: 'UDARA', label: '✈ Udara (Penerbangan Domestik)', color: COLOR.UDARA, note: 'Kapasitas armada beroperasi optimal; tiket dinamis memfilter demand jarak jauh' },
-    { key: 'KA', label: '🚆 Kereta Api (KAI)', color: COLOR.KA, note: 'Tingkat isian stabil tinggi (load factor 90%+); seluruh kuota KA favorit terjual' },
-    { key: 'BUS', label: '🚌 Bus', color: COLOR.BUS, note: 'Rute Trans Jawa & jalan tol primadona; armada reguler & cadangan siaga penuh' },
-    { key: 'ASDP', label: '⛴ ASDP (Penyeberangan Feri)', color: COLOR.ASDP, note: 'Lonjakan kendaraan pribadi tinggi di lintasan penyeberangan utama' },
-    { key: 'LAUT', label: '🚢 Laut (Kapal Penumpang Pelni)', color: COLOR.LAUT, note: 'Pertumbuhan pergerakan antarpulau & rute perintis Indonesia Timur' },
+    { key: 'UDARA', label: '✈ Udara', color: COLOR.UDARA, note: 'Kapasitas armada beroperasi optimal; tiket dinamis memfilter demand jarak jauh' },
+    { key: 'KA', label: '🚆 Perkeretaapian', color: COLOR.KA, note: 'Tingkat isian stabil tinggi (load factor 90%+); seluruh kuota KA favorit terjual' },
+    { key: 'BUS', label: '🚌 Jalan', color: COLOR.BUS, note: 'Rute Trans Jawa & jalan tol primadona; armada reguler & cadangan siaga penuh' },
+    { key: 'ASDP', label: '⛴ Penyebrangan', color: COLOR.ASDP, note: 'Lonjakan kendaraan pribadi tinggi di lintasan penyeberangan utama' },
+    { key: 'LAUT', label: '🚢 Laut', color: COLOR.LAUT, note: 'Pertumbuhan pergerakan antarpulau & rute perintis Indonesia Timur' },
   ];
 
   const futureDates = (DATA.forecast_nataru.scenarios?.moderat || []).map(d => d.date);
@@ -6035,11 +6043,11 @@ function renderDynamicSimpulHighlights(filteredData) {
   if (!container) return;
 
   const modas = [
-    { key: 'ASDP', label: '⛴ ASDP Feri', color: 'rose' },
-    { key: 'KA', label: '🚆 Kereta Api', color: 'amber' },
-    { key: 'UDARA', label: '✈ Penerbangan', color: 'sky' },
-    { key: 'BUS', label: '🚌 Bus AKAP', color: 'emerald' },
-    { key: 'LAUT', label: '🚢 Kapal Laut', color: 'cyan' },
+    { key: 'ASDP', label: '⛴ Penyebrangan', color: 'rose' },
+    { key: 'KA', label: '🚆 Perkeretaapian', color: 'amber' },
+    { key: 'UDARA', label: '✈ Udara', color: 'sky' },
+    { key: 'BUS', label: '🚌 Jalan', color: 'emerald' },
+    { key: 'LAUT', label: '🚢 Laut', color: 'cyan' },
   ];
 
   let html = '';
@@ -6100,7 +6108,7 @@ function renderDynamicSimpulSummary(filteredData) {
             <span class="font-semibold text-emerald-600 dark:text-emerald-400">${lowCount} Simpul Terkendali/Siaga (+5%)</span>.
           </div>
           <div>
-            • <strong>Instruksi Utama Lapangan:</strong> Prioritaskan rekayasa *Tiba Bongkar Berangkat* di Pelabuhan Merak-Bakauheni & Ketapang-Gilimanuk, izin slot *extra flight* malam di CGK Soetta & DPS Bali, serta rangkaian Kereta Api Tambahan (KLB) di Pasar Senen & Gambir.
+            • <strong>Instruksi Utama Lapangan:</strong> Prioritaskan rekayasa *Tiba Bongkar Berangkat* di Pelabuhan Merak-Bakauheni & Ketapang-Gilimanuk, izin slot *extra flight* malam di CGK Soetta & DPS Bali, serta rangkaian Perkeretaapian Tambahan (KLB) di Pasar Senen & Gambir.
           </div>
         </div>
       </div>
@@ -6208,7 +6216,7 @@ function renderSimpulSimulation() {
           <span class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500 shrink-0">${offset + idx + 1}</span>
           <div>
             <div class="font-bold text-slate-900 dark:text-white">${s.name}</div>
-            <div class="text-[10px] text-slate-500">${s.prov} • ${s.modaLabel}</div>
+            <div class="text-[10px] text-slate-500">${s.prov} • ${(MODA_DISPLAY_NAME[s.moda] || s.modaLabel)}</div>
           </div>
         </div>
       </td>
@@ -6266,7 +6274,7 @@ function renderForecastWorkspace() {
 // ---------------------------------------------------------------
 function exportActiveCSV() {
   const raw = getFilteredTimelineData();
-  let csv = 'tanggal,udara_pnp,ka_pnp,bus_pnp,asdp_pnp,laut_pnp,total_pnp,udara_arm,ka_arm,bus_arm,asdp_arm,laut_arm,total_arm\n';
+  let csv = 'tanggal,udara_pnp,perkeretaapian_pnp,jalan_pnp,penyebrangan_pnp,laut_pnp,total_pnp,udara_arm,perkeretaapian_arm,jalan_arm,penyebrangan_arm,laut_arm,total_arm\n';
   raw.forEach(d => {
     csv += `${d.date},${d.UDARA},${d.KA},${d.BUS},${d.ASDP},${d.LAUT},${d.TOTAL},${d.arm_UDARA},${d.arm_KA},${d.arm_BUS},${d.arm_ASDP},${d.arm_LAUT},${d.arm_TOTAL}\n`;
   });

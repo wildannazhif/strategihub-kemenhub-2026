@@ -169,7 +169,7 @@
           <!-- TAB 8: FORECASTING NATARU 2026/2027 -->
           <button onclick="switchTab('tab-forecasting', 'Proyeksi & Prediksi Nataru 2026/2027', this)" class="nav-btn w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent transition-all text-left">
             <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0"></span>
-            <span class="truncate font-semibold text-indigo-700 dark:text-indigo-400">Forecasting</span>
+            <span class="truncate font-semibold text-indigo-700 dark:text-indigo-400">Proyeksi Nataru</span>
           </button>
 
           <!-- TAB 9: REKOMENDASI PENAMBAHAN ARMADA (1.010 SIMPUL) -->
@@ -203,56 +203,7 @@
           <button id="nav-btn-od-sankey" onclick="switchTab('tab-od-sankey', 'Diagram Sankey OD Udara', this)" class="nav-btn w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent transition-all text-left">
             <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 shrink-0"></span>
             <span class="truncate font-semibold text-cyan-700 dark:text-cyan-400">Diagram Sankey OD</span>
-          </button>
         </nav>
-      </div>
-
-      <!-- Rentang Waktu Quick Filter -->
-      <div>
-        <div class="flex items-center justify-between px-2.5 mb-1.5">
-          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rentang Waktu</p>
-          <span class="text-[9px] text-slate-400 font-mono">1 Jan - 13 Okt</span>
-        </div>
-        <div class="space-y-1 bg-slate-50 dark:bg-slate-800/60 p-1.5 rounded-md border border-slate-200 dark:border-slate-800">
-          <button onclick="setTimelineFilter('all', this)" class="btn-range active w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold text-slate-900 dark:text-white bg-white dark:bg-slate-900 shadow-xs transition-all">
-            <span>Sepanjang 2026</span>
-            <span class="num-mono text-[10px] text-slate-500">286H</span>
-          </button>
-          <button onclick="setTimelineFilter('lebaran', this)" class="btn-range w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
-            <span>Puncak Lebaran</span>
-            <span class="num-mono text-[10px] text-slate-500">17H</span>
-          </button>
-          <button onclick="setTimelineFilter('libur_sekolah', this)" class="btn-range w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
-            <span>Libur Sekolah</span>
-            <span class="num-mono text-[10px] text-slate-500">31H</span>
-          </button>
-          <button onclick="setTimelineFilter('tahun_baru', this)" class="btn-range w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
-            <span>Tahun Baru</span>
-            <span class="num-mono text-[10px] text-slate-500">15H</span>
-          </button>
-          <button id="btn-range-custom" onclick="setTimelineFilter('custom', this)" class="btn-range w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
-            <span class="flex items-center gap-1.5">
-              <span>📅</span>
-              <span>Kustom Tanggal</span>
-            </span>
-            <span id="badge-custom-days" class="num-mono text-[10px] text-slate-500">Pilih</span>
-          </button>
-
-          <!-- Custom Date Input Form -->
-          <div id="panel-custom-range" class="hidden pt-2 border-t border-slate-200 dark:border-slate-700/60 space-y-2 px-1">
-            <div>
-              <label for="custom-start-date" class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-0.5">Dari Tanggal:</label>
-              <input type="date" id="custom-start-date" min="2026-01-01" max="2026-09-29" value="2026-03-01" onchange="applyCustomDateRange()" class="w-full text-xs font-mono bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
-            </div>
-            <div>
-              <label for="custom-end-date" class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-0.5">Sampai Tanggal:</label>
-              <input type="date" id="custom-end-date" min="2026-01-01" max="2026-09-29" value="2026-03-31" onchange="applyCustomDateRange()" class="w-full text-xs font-mono bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
-            </div>
-            <button type="button" onclick="applyCustomDateRange()" class="w-full py-1.5 px-2 rounded bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold transition-all shadow-xs flex items-center justify-center gap-1.5">
-              <span>✓ Terapkan Rentang</span>
-            </button>
-          </div>
-        </div>
       </div>
 
     </div>
@@ -279,7 +230,7 @@
   <!-- Floating Action Button for Dashboard Information Sidebar -->
   <button onclick="switchTab('tab-tentang-data', 'Informasi & Kamus Rumus Dashboard', document.getElementById('nav-btn-tentang-data'))" class="fixed bottom-6 right-6 z-40 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2 border border-indigo-400 group" title="Buka Informasi & Kamus Rumus Dashboard">
     <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-    <span class="hidden sm:inline">📘 Metodologi Kepadatan</span>
+    <span class="hidden sm:inline">📘 Metodologi & Kamus Rumus</span>
     <span class="sm:hidden">📘 Metode</span>
   </button>
 
@@ -408,7 +359,7 @@
               <span class="text-xs text-slate-500 font-medium" id="strip-unit-arm">trip berangkat</span>
             </div>
             <div class="text-[11px] text-slate-500 mt-1 num-mono" id="strip-desc-arm">
-              Pesawat, Kereta, Bus, Feri, Kapal Laut
+              Udara, Perkeretaapian, Jalan, Penyebrangan, Laut
             </div>
           </div>
 
@@ -425,7 +376,8 @@
       <div id="tab-timeline" class="tab-content space-y-6">
         
         <!-- Timeline Control Bar & Chart -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 shadow-2xs">
+          <!-- Heading & Active Range Indicator -->
           <div class="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-slate-100 dark:border-slate-800">
             <div>
               <div class="flex items-center gap-2.5 flex-wrap">
@@ -437,17 +389,78 @@
                 </span>
               </div>
               <p id="timeline-chart-desc" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Volume harian agregat penumpang: Udara, Kereta Api, Bus, Penyeberangan ASDP, dan Laut (01 Jan s.d. 13 Okt 2026)
+                Volume harian agregat penumpang: Udara, Perkeretaapian, Jalan, Penyebrangan, dan Laut (01 Jan s.d. 13 Okt 2026)
               </p>
             </div>
 
-            <button id="timeline-badge-info" onclick="focusCustomRange()" title="Klik untuk pilih rentang tanggal kustom di sidebar" class="text-xs font-mono text-slate-600 dark:text-slate-300 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 dark:bg-slate-800 dark:hover:bg-slate-700 px-3 py-1 rounded border border-slate-200 dark:border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer">
-              1 Jan 2026 - 13 Okt 2026 (286 Hari)
-            </button>
+            <div id="timeline-badge-info" class="text-xs font-mono text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center gap-2 shadow-2xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+              <span id="timeline-badge-text">1 Jan 2026 - 13 Okt 2026 (286 Hari)</span>
+            </div>
+          </div>
+
+          <!-- Quick Filter Rentang Waktu Toolbar (Horizontal) -->
+          <div class="mt-3.5 mb-2.5 p-2.5 bg-slate-50/80 dark:bg-slate-800/50 rounded-lg border border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <span class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <span>Rentang Waktu:</span>
+              </span>
+
+              <!-- Segmented Filter Buttons -->
+              <div class="inline-flex flex-wrap items-center bg-white dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-2xs gap-1">
+                <button type="button" onclick="setTimelineFilter('all', this)" class="btn-range active inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 shadow-xs transition-all">
+                  <span>Sepanjang 2026</span>
+                  <span class="num-mono text-[10px] px-1.5 py-0.2 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold">286H</span>
+                </button>
+                <button type="button" onclick="setTimelineFilter('lebaran', this)" class="btn-range inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                  <span>Puncak Lebaran</span>
+                  <span class="num-mono text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-medium">17H</span>
+                </button>
+                <button type="button" onclick="setTimelineFilter('libur_sekolah', this)" class="btn-range inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                  <span>Libur Sekolah</span>
+                  <span class="num-mono text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-medium">31H</span>
+                </button>
+                <button type="button" onclick="setTimelineFilter('tahun_baru', this)" class="btn-range inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                  <span>Tahun Baru</span>
+                  <span class="num-mono text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-medium">15H</span>
+                </button>
+                <button type="button" id="btn-range-custom" onclick="setTimelineFilter('custom', this)" class="btn-range inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+                  <span>📅</span>
+                  <span>Kustom Tanggal</span>
+                  <span id="badge-custom-days" class="num-mono text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-medium">Pilih</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right helper badge -->
+            <div class="text-[11px] text-slate-400 dark:text-slate-500 hidden md:flex items-center gap-1 font-mono">
+              <span>Batas Data: 01 Jan - 13 Okt 2026</span>
+            </div>
+          </div>
+
+          <!-- Inline Custom Date Drawer (collapsible when 'custom' is active) -->
+          <div id="panel-custom-range" class="hidden mb-3 p-3 bg-blue-50/60 dark:bg-slate-800/80 rounded-lg border border-blue-200 dark:border-blue-900/60 transition-all">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex flex-wrap items-center gap-3">
+                <div class="flex items-center gap-2">
+                  <label for="custom-start-date" class="text-xs font-semibold text-slate-700 dark:text-slate-300">Dari Tanggal:</label>
+                  <input type="date" id="custom-start-date" min="2026-01-01" max="2026-10-13" value="2026-03-01" onchange="applyCustomDateRange()" class="text-xs font-mono bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md px-2.5 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-xs">
+                </div>
+                <div class="flex items-center gap-2">
+                  <label for="custom-end-date" class="text-xs font-semibold text-slate-700 dark:text-slate-300">Sampai Tanggal:</label>
+                  <input type="date" id="custom-end-date" min="2026-01-01" max="2026-10-13" value="2026-03-31" onchange="applyCustomDateRange()" class="text-xs font-mono bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md px-2.5 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-xs">
+                </div>
+                <button type="button" onclick="applyCustomDateRange()" class="py-1 px-3.5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer">
+                  <span>✓ Terapkan Rentang</span>
+                </button>
+              </div>
+              <span class="text-[11px] text-blue-600 dark:text-blue-400 font-medium">Rentang otomatis menyesuaikan data harian.</span>
+            </div>
           </div>
 
           <!-- Full-Width Chart Canvas -->
-          <div class="relative w-full h-[430px] pt-2">
+          <div class="relative w-full h-[430px] pt-1">
             <canvas id="chartTimelineCanvas"></canvas>
           </div>
 
@@ -498,9 +511,9 @@
                   <select id="sel-moda-growth" onchange="onModaGrowthSelectChange()" class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2.5 py-1.5 text-slate-900 dark:text-slate-100 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-xs cursor-pointer">
                     <option value="ALL" selected>Semua Moda (5 Moda)</option>
                     <option value="UDARA">Udara</option>
-                    <option value="KA">Kereta Api</option>
-                    <option value="BUS">Bus</option>
-                    <option value="ASDP">ASDP</option>
+                    <option value="KA">Perkeretaapian</option>
+                    <option value="BUS">Jalan</option>
+                    <option value="ASDP">Penyebrangan</option>
                     <option value="LAUT">Laut</option>
                   </select>
                 </div>
@@ -564,9 +577,9 @@
             <div class="flex flex-wrap items-center justify-between gap-3 pb-2.5">
               <div>
                 <h4 id="monthly-table-title" class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">Akumulasi Bulanan per Moda Transportasi</h4>
-                <p id="monthly-table-subtitle" class="text-[11px] text-slate-500">Volume pergerakan dari Januari sampai dengan September 2026</p>
+                <p id="monthly-table-subtitle" class="text-[11px] text-slate-500">Volume pergerakan dari Januari sampai dengan Oktober 2026</p>
               </div>
-              <span id="monthly-table-badge" class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700">9 Bulan (Jan - Sep)</span>
+              <span id="monthly-table-badge" class="text-xs font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700">10 Bulan (Jan - Okt)</span>
             </div>
 
             <div class="overflow-x-auto mt-2">
@@ -574,10 +587,10 @@
                 <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
                   <tr id="thead-monthly">
                     <th class="py-2.5 px-3">Bulan</th>
-                    <th class="py-2.5 px-3 text-right text-sky-700 dark:text-sky-400">Udara</th>
-                    <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400">Kereta Api</th>
-                    <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Bus</th>
-                    <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">ASDP</th>
+                    <th class="py-2.5 px-3 text-right text-blue-900 dark:text-blue-300 font-bold">Udara</th>
+                    <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400">Perkeretaapian</th>
+                    <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400">Jalan</th>
+                    <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400">Penyebrangan</th>
                     <th class="py-2.5 px-3 text-right text-cyan-700 dark:text-cyan-400">Laut</th>
                     <th class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">Total</th>
                     <th class="py-2.5 px-3 text-right text-slate-700 dark:text-slate-300" title="Lonjakan terhadap Baseline Median Pra-Lebaran 1 Jan - 12 Mar 2026">vs Median (1 Jan - 12 Mar)</th>
@@ -588,9 +601,9 @@
               </table>
             </div>
 
-            <!-- Footnote Catatan September* -->
+            <!-- Footnote Catatan Oktober* -->
             <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-start gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-              <span class="font-bold text-amber-600 dark:text-amber-400 shrink-0">* Catatan September:</span>
+              <span class="font-bold text-amber-600 dark:text-amber-400 shrink-0">* Catatan Oktober:</span>
               <p class="leading-relaxed text-[11px]">
               Data bulan Oktober 2026 merupakan data berjalan s.d. 13 Oktober (13 hari kalender operasional).
               </p>
@@ -806,19 +819,19 @@
               Semua Moda
             </button>
             <button onclick="filterHubModa('UDARA', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Bandar Udara
+              Udara
             </button>
             <button onclick="filterHubModa('KA', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Stasiun Kereta Api
+              Perkeretaapian
             </button>
             <button onclick="filterHubModa('BUS', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Bus
+              Jalan
             </button>
             <button onclick="filterHubModa('ASDP', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Pelabuhan ASDP
+              Penyebrangan
             </button>
             <button onclick="filterHubModa('LAUT', this)" class="hub-tab-btn px-3 py-1.5 rounded-md font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-              Pelabuhan Laut
+              Laut
             </button>
           </div>
 
@@ -901,10 +914,10 @@
               <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
                 <tr>
                   <th class="py-3 px-3.5 w-72">Indikator Kuantitatif</th>
-                  <th class="py-3 px-3 text-right text-sky-700 dark:text-sky-400">UDARA</th>
-                  <th class="py-3 px-3 text-right text-amber-700 dark:text-amber-400">KERETA API</th>
-                  <th class="py-3 px-3 text-right text-green-700 dark:text-green-400">BUS</th>
-                  <th class="py-3 px-3 text-right text-purple-700 dark:text-purple-400">ASDP</th>
+                  <th class="py-3 px-3 text-right text-blue-900 dark:text-blue-300 font-bold">UDARA</th>
+                  <th class="py-3 px-3 text-right text-amber-700 dark:text-amber-400">PERKERETAAPIAN</th>
+                  <th class="py-3 px-3 text-right text-green-700 dark:text-green-400">JALAN</th>
+                  <th class="py-3 px-3 text-right text-purple-700 dark:text-purple-400">PENYEBRANGAN</th>
                   <th class="py-3 px-3 text-right text-cyan-700 dark:text-cyan-400">LAUT</th>
                   <th class="py-3 px-3 text-right font-bold text-slate-900 dark:text-white">TOTAL NASIONAL</th>
                 </tr>
@@ -935,7 +948,7 @@
                 </span>
               </div>
               <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Heatmap intensitas mobilitas batas wilayah 38 provinsi terpadu dengan sebaran 1.014 titik simpul transportasi nasional (Udara, KA, Bus, ASDP, dan Laut)
+                Heatmap intensitas mobilitas batas wilayah 38 provinsi terpadu dengan sebaran 1.014 titik simpul transportasi nasional (Udara, Perkeretaapian, Jalan, Penyebrangan, dan Laut)
               </p>
             </div>
 
@@ -991,17 +1004,17 @@
               <button onclick="filterSpatialModa('ALL', this)" class="map-moda-btn active px-2.5 py-1 rounded text-xs font-semibold bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-xs transition-all">
                 Semua Moda (1.014)
               </button>
-              <button onclick="filterSpatialModa('UDARA', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-sky-800 dark:text-sky-300 hover:bg-sky-50 dark:hover:bg-sky-950/40 border border-slate-200 dark:border-slate-700 transition-all">
+              <button onclick="filterSpatialModa('UDARA', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-blue-900 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700 transition-all">
                 ✈ Udara (257)
               </button>
               <button onclick="filterSpatialModa('KA', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-amber-800 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40 border border-slate-200 dark:border-slate-700 transition-all">
-                🚆 Kereta Api (193)
+                🚆 Perkeretaapian (193)
               </button>
               <button onclick="filterSpatialModa('BUS', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-green-800 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-950/40 border border-slate-200 dark:border-slate-700 transition-all">
-                🚌 Bus (139)
+                🚌 Jalan (139)
               </button>
               <button onclick="filterSpatialModa('ASDP', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-purple-800 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/40 border border-slate-200 dark:border-slate-700 transition-all">
-                ⛴ ASDP (158)
+                ⛴ Penyebrangan (158)
               </button>
               <button onclick="filterSpatialModa('LAUT', this)" class="map-moda-btn px-2.5 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-cyan-800 dark:text-cyan-300 hover:bg-cyan-50 dark:hover:bg-cyan-950/40 border border-slate-200 dark:border-slate-700 transition-all">
                 🚢 Laut (267)
@@ -1153,11 +1166,11 @@
               <div class="relative">
                 <select id="select-forecast-moda" onchange="setForecastModa(this.value)" class="bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-semibold rounded-md pl-3 pr-8 py-1.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none appearance-none cursor-pointer shadow-xs">
                   <option value="TOTAL" selected>Total Multimoda (Semua Moda)</option>
-                  <option value="UDARA">✈ Udara (Penerbangan Domestik)</option>
-                  <option value="KA">🚆 Perkeretaapian (KAI)</option>
-                  <option value="BUS">🚌 Bus</option>
-                  <option value="ASDP">⛴ ASDP (Penyeberangan Feri)</option>
-                  <option value="LAUT">🚢 Transportasi Laut (Kapal Pelni)</option>
+                  <option value="UDARA">✈ Udara</option>
+                  <option value="KA">🚆 Perkeretaapian</option>
+                  <option value="BUS">🚌 Jalan</option>
+                  <option value="ASDP">⛴ Penyebrangan</option>
+                  <option value="LAUT">🚢 Laut</option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -1333,7 +1346,7 @@
                 <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200">MAE & Rasio Error Absolut</span>
                 <span class="text-[10px] font-mono text-slate-500">Rerata: 1,221M pnp</span>
               </div>
-              <div class="text-2xl font-black font-mono text-slate-800 dark:text-slate-100">49.146 <span class="text-xs font-normal text-slate-500">pnp (5,08%)</span></div>
+              <div id="fc-metric-mae" class="text-2xl font-black font-mono text-slate-800 dark:text-slate-100">49.146 <span class="text-xs font-normal text-slate-500">pnp (5,08%)</span></div>
               <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
                 Rata-rata selisih volume absolut harian. Deviasi 49k pnp ini hanya mewakili 5,08% dari rata-rata pergerakan harian nasional.
               </p>
@@ -1343,10 +1356,10 @@
             <div class="p-3.5 rounded-md bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
               <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200 block">Akurasi Per Moda (Uji 28H)</span>
               <div class="space-y-1 text-[11px] font-mono pt-0.5">
-                <div class="flex justify-between items-center"><span>🚌 Bus:</span> <span class="font-bold text-emerald-600">2,4%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 2,5%)</span></div>
+                <div class="flex justify-between items-center"><span>🚌 Jalan:</span> <span class="font-bold text-emerald-600">2,4%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 2,5%)</span></div>
                 <div class="flex justify-between items-center"><span>🚢 Laut:</span> <span class="font-bold text-emerald-600">4,6%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 4,5%)</span></div>
-                <div class="flex justify-between items-center"><span>🚆 Kereta Api:</span> <span class="font-bold text-emerald-600">9,3%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 10,2%)</span></div>
-                <div class="flex justify-between items-center"><span>⛴ ASDP:</span> <span class="font-bold text-emerald-600">12,7%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 10,9%)</span></div>
+                <div class="flex justify-between items-center"><span>🚆 Perkeretaapian:</span> <span class="font-bold text-emerald-600">9,3%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 10,2%)</span></div>
+                <div class="flex justify-between items-center"><span>⛴ Penyebrangan:</span> <span class="font-bold text-emerald-600">12,7%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 10,9%)</span></div>
                 <div class="flex justify-between items-center"><span>✈ Udara:</span> <span class="font-bold text-amber-600">22,7%</span> <span class="text-[9px] text-slate-400 font-sans">(WAPE 18,8%)</span></div>
               </div>
             </div>
@@ -1478,9 +1491,9 @@
               <button type="button" onclick="filterSimpulModa('ALL', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-indigo-600 text-white shadow-xs font-bold transition-all">Semua Moda (1.010)</button>
               <button type="button" onclick="filterSimpulModa('UDARA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">✈ Udara (230)</button>
               <button type="button" onclick="filterSimpulModa('LAUT', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚢 Laut (209)</button>
-              <button type="button" onclick="filterSimpulModa('ASDP', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">⛴ ASDP Feri (196)</button>
-              <button type="button" onclick="filterSimpulModa('BUS', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚌 Bus AKAP (189)</button>
-              <button type="button" onclick="filterSimpulModa('KA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚆 Kereta Api (186)</button>
+              <button type="button" onclick="filterSimpulModa('ASDP', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">⛴ Penyebrangan (196)</button>
+              <button type="button" onclick="filterSimpulModa('BUS', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚌 Jalan (189)</button>
+              <button type="button" onclick="filterSimpulModa('KA', this)" class="simpul-filter-btn px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all font-semibold">🚆 Perkeretaapian (186)</button>
             </div>
             
             <div class="flex items-center gap-2">
@@ -1639,13 +1652,14 @@
             <span class="text-[11px] font-bold text-indigo-300 uppercase tracking-wider mr-1">Lompat Cepat:</span>
             <a href="#rumus-sec-1" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">1. Integritas Data</a>
             <a href="#rumus-sec-2" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">2. Metrik Dasar</a>
-            <a href="#rumus-sec-3" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">3. Load Factor</a>
+            <a href="#rumus-sec-3" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">3. Load Factor (Okupansi)</a>
             <a href="#rumus-sec-4" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">4. Modal Share</a>
             <a href="#rumus-sec-5" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">5. Arus Lebaran</a>
             <a href="#rumus-sec-6" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">6. Tren Provinsi</a>
-            <a href="#rumus-sec-7" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">7. Rekomendasi Armada (Persentil)</a>
-            <a href="#rumus-sec-8" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">8. Model Nataru</a>
-            <a href="#rumus-sec-9" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">9. Tabel Simpul</a>
+            <a href="#rumus-sec-7" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">7. Rekomendasi Armada (1.010 Simpul)</a>
+            <a href="#rumus-sec-8" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">8. Peramalan Nataru (11 Model)</a>
+            <a href="#rumus-sec-9" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">9. Matriks OD Udara & Sankey</a>
+            <a href="#rumus-sec-10" class="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 transition-all text-slate-200">10. Glosarium Singkatan</a>
           </div>
         </div>
 
@@ -1670,7 +1684,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
             <div class="p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80">
               <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Baris Tervalidasi</div>
-              <div class="text-lg font-black font-mono text-slate-900 dark:text-white mt-1">209.964 Baris</div>
+              <div class="text-lg font-black font-mono text-slate-900 dark:text-white mt-1">209.885 Baris</div>
               <div class="text-[11px] text-slate-500 mt-0.5">Dibersihkan dari 211.361 log mentah</div>
             </div>
             <div class="p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80">
@@ -1686,7 +1700,7 @@
             <div class="p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80">
               <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cakupan Moda</div>
               <div class="text-lg font-black font-mono text-slate-900 dark:text-white mt-1">5 Moda Transportasi</div>
-              <div class="text-[11px] text-slate-500 mt-0.5">Udara, KA, Bus, ASDP, Laut</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Udara, Perkeretaapian, Jalan, Penyebrangan, Laut</div>
             </div>
           </div>
         </div>
@@ -1794,7 +1808,7 @@
           </div>
 
           <p class="text-xs text-slate-600 dark:text-slate-300">
-            <em>Load Factor Proxy</em> mengukur intensitas okupansi fisik rata-rata per satu satuan pergerakan armada sarana transportasi.
+            <strong>Catatan Metodologi:</strong> Istilah <em>Load Factor Proxy</em> dalam dashboard operasional ini merepresentasikan <strong>Rata-Rata Okupansi Armada (Average Vehicle Occupancy / AVO)</strong> atau <em>Tingkat Kepadatan Penumpang per Armada</em>. Karena data SIASATI harian mencatat frekuensi pergerakan trip armada aktual (bukan kapasitas kursi statis / <em>seating capacity</em>), rasio \(LF = P_{\text{total}} / A_{\text{total}}\) digunakan sebagai proksi empiris paling akurat untuk mengukur densitas muatan riil sarana transportasi di lapangan.
           </p>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1828,7 +1842,7 @@
                   <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$LF$$</td>
                   <td class="p-2.5 font-semibold">Load Factor Proxy</td>
                   <td class="p-2.5 text-slate-500 font-mono">pnp / armada</td>
-                  <td class="p-2.5">Rata-rata penumpang yang dimuat per satu perjalanan armada (flight, trip bus, trip KA, kapal).</td>
+                  <td class="p-2.5">Rata-rata penumpang yang dimuat per satu perjalanan armada (flight udara, trip jalan, trip perkeretaapian, kapal laut/penyebrangan).</td>
                 </tr>
                 <tr>
                   <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$LF_{\text{puncak}}$$</td>
@@ -1873,7 +1887,7 @@
               $$\text{MS}_{m} = \left( \frac{P_{m}}{\sum_{k \in M} P_{k}} \right) \times 100\%$$
             </div>
             <div class="text-[11px] text-slate-500 text-center">
-              Di mana: $$\sum_{k \in M} P_{k} = P_{\text{Udara}} + P_{\text{KA}} + P_{\text{Bus}} + P_{\text{ASDP}} + P_{\text{Laut}}$$
+              Di mana: $$\sum_{k \in M} P_{k} = P_{\text{Udara}} + P_{\text{Jalan}} + P_{\text{Penyebrangan}} + P_{\text{Laut}} + P_{\text{Perkeretaapian}}$$
             </div>
           </div>
 
@@ -1893,7 +1907,7 @@
                   <td class="p-2.5 font-mono font-bold text-emerald-600 dark:text-emerald-400">$$\text{MS}_{m}$$</td>
                   <td class="p-2.5 font-semibold">Modal Share Moda m</td>
                   <td class="p-2.5 text-slate-500 font-mono">%</td>
-                  <td class="p-2.5">Porsi kontribusi moda $m$ terhadap mobilitas nasional (contoh: Udara 32,0%, ASDP 23,4%).</td>
+                  <td class="p-2.5">Porsi kontribusi moda $m$ terhadap mobilitas nasional (contoh: Udara 32,0%, Penyebrangan 23,4%).</td>
                 </tr>
                 <tr>
                   <td class="p-2.5 font-mono font-bold text-emerald-600 dark:text-emerald-400">$$P_{m}$$</td>
@@ -1946,9 +1960,9 @@
             </div>
             <div class="text-[11px] text-slate-500 text-center">
               Jika $\Delta < 0 
-ightarrow \mathbf{H-|\Delta|}$ (Mudik) • Jika $\Delta = 0 
-ightarrow \mathbf{Hari\ H}$ • Jika $\Delta > 0 
-ightarrow \mathbf{H+|\Delta|}$ (Balik)
+\rightarrow \mathbf{H-|\Delta|}$ (Mudik) • Jika $\Delta = 0 
+\rightarrow \mathbf{Hari\ H}$ • Jika $\Delta > 0 
+\rightarrow \mathbf{H+|\Delta|}$ (Balik)
             </div>
           </div>
 
@@ -2048,7 +2062,7 @@ ightarrow \mathbf{H+|\Delta|}$ (Balik)
                   <td class="p-2.5 font-mono font-bold text-blue-600 dark:text-blue-400">$$\text{Share}_{m, \text{prov}}$$</td>
                   <td class="p-2.5 font-semibold">Pangsa Moda Dominan</td>
                   <td class="p-2.5 text-slate-500 font-mono">%</td>
-                  <td class="p-2.5">Porsi moda utama di provinsi tersebut (contoh: Jatim dominan KA/Bus, Bali dominan Udara, Kepri dominan Laut).</td>
+                  <td class="p-2.5">Porsi moda utama di provinsi tersebut (contoh: Jatim dominan Perkeretaapian/Jalan, Bali dominan Udara, Kepri dominan Laut/Penyebrangan).</td>
                 </tr>
               </tbody>
             </table>
@@ -2150,10 +2164,10 @@ ightarrow \mathbf{H+|\Delta|}$ (Balik)
                 <span>🏛 Landasan Regulasi Resmi Kemenhub RI untuk Aksi Lapangan:</span>
               </div>
               <div class="text-[11px] text-slate-600 dark:text-slate-300 space-y-1.5 leading-relaxed">
-                <div>• <strong>Pola TBB & Buffer Zone Pelabuhan ASDP:</strong> Didasarkan pada <em>Surat Keputusan Bersama (SKB) Tiga Menteri</em> (Kementerian Perhubungan, Korlantas Polri, dan Kementerian PUPR) tentang Pengaturan Lalu Lintas Jalan serta Penyeberangan Masa Angkutan Lebaran &amp; Nataru, yang menetapkan skema Tiba Bongkar Berangkat (TBB) tanpa muat di Bakauheni/Merak, pengalihan pelabuhan Ciwandan/BBJ, dan delaying system di rest area Tol Tangerang–Merak KM 43/68.</div>
+                <div>• <strong>Pola TBB & Buffer Zone Moda Penyebrangan:</strong> Didasarkan pada <em>Surat Keputusan Bersama (SKB) Tiga Menteri</em> (Kementerian Perhubungan, Korlantas Polri, dan Kementerian PUPR) tentang Pengaturan Lalu Lintas Jalan serta Penyeberangan Masa Angkutan Lebaran &amp; Nataru, yang menetapkan skema Tiba Bongkar Berangkat (TBB) tanpa muat di Bakauheni/Merak, pengalihan pelabuhan Ciwandan/BBJ, dan delaying system di rest area Tol Tangerang–Merak KM 43/68.</div>
                 <div>• <strong>Extra Flight & Slot Runway Bandara:</strong> Berpedoman pada <em>Surat Edaran Direktur Jenderal Perhubungan Udara</em> tentang Pengendalian Pengoperasian Pesawat Udara pada Periode Hari Raya, yang mengatur dispensasi slot terbang tambahan (extra flight / red-eye flight malam) serta jam operasi bandara 24 jam penuh.</div>
-                <div>• <strong>Kereta Luar Biasa (KLB) & Stamformasi KA:</strong> Berdasarkan <em>Instruksi Direktur Jenderal Perkeretaapian</em> tentang Penyelenggaraan Posko Angkutan Kereta Api Terpadu, yang mengatur pengoperasian rangkaian KLB Tambahan dan maksimasi formasi rangkaian 10–12 gerbong per perjalanan.</div>
-                <div>• <strong>Armada Bus Bantuan & Ramp Check:</strong> Mengacu pada <em>Surat Edaran Direktur Jenderal Perhubungan Darat</em> mengenai Kesiapan Angkutan Jalan, yang mewajibkan inspeksi keselamatan jalan (Ramp Check) dan penyiagaan armada bus pariwisata cadangan sebagai angkutan perbantuan di terminal tipe A.</div>
+                <div>• <strong>Kereta Luar Biasa (KLB) & Stamformasi Moda Perkeretaapian:</strong> Berdasarkan <em>Instruksi Direktur Jenderal Perkeretaapian</em> tentang Penyelenggaraan Posko Angkutan Kereta Api Terpadu, yang mengatur pengoperasian rangkaian KLB Tambahan dan maksimasi formasi rangkaian 10–12 gerbong per perjalanan.</div>
+                <div>• <strong>Armada Bantuan & Ramp Check Moda Jalan:</strong> Mengacu pada <em>Surat Edaran Direktur Jenderal Perhubungan Darat</em> mengenai Kesiapan Angkutan Jalan, yang mewajibkan inspeksi keselamatan jalan (Ramp Check) dan penyiagaan armada bus pariwisata cadangan sebagai angkutan perbantuan di terminal tipe A.</div>
               </div>
             </div>
 
@@ -2172,7 +2186,7 @@ ightarrow \mathbf{H+|\Delta|}$ (Balik)
                 <!-- Jurnal 1: ASDP -->
                 <div class="p-2.5 rounded bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 space-y-1">
                   <div class="font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                    <span>⛴ Penyeberangan ASDP (TBB & Buffer)</span>
+                    <span>⛴ Penyebrangan (TBB & Buffer)</span>
                     <a href="https://garuda.kemdiktisaintek.go.id/journal/view/41858" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold text-[10px]">Buka Jurnal ↗</a>
                   </div>
                   <div class="text-slate-600 dark:text-slate-300">
@@ -2200,7 +2214,7 @@ ightarrow \mathbf{H+|\Delta|}$ (Balik)
                 <!-- Jurnal 3: KA -->
                 <div class="p-2.5 rounded bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 space-y-1">
                   <div class="font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                    <span>🚆 Kereta Api (KLB & Stamformasi)</span>
+                    <span>🚆 Perkeretaapian (KLB & Stamformasi)</span>
                     <a href="https://doi.org/10.1016/j.cie.2025.111166" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold text-[10px]">Buka Jurnal ↗</a>
                   </div>
                   <div class="text-slate-600 dark:text-slate-300">
@@ -2214,7 +2228,7 @@ ightarrow \mathbf{H+|\Delta|}$ (Balik)
                 <!-- Jurnal 4: Bus & Teori Armada -->
                 <div class="p-2.5 rounded bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 space-y-1">
                   <div class="font-bold text-slate-900 dark:text-white flex items-center justify-between">
-                    <span>🚌 Bus &amp; Optimasi Armada Transit</span>
+                    <span>🚌 Jalan &amp; Optimasi Armada Transit</span>
                     <a href="https://www.nationalacademies.org/publications/24766" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold text-[10px]">Buka Manual TRB ↗</a>
                   </div>
                   <div class="text-slate-600 dark:text-slate-300">
@@ -2231,22 +2245,157 @@ ightarrow \mathbf{H+|\Delta|}$ (Balik)
           </div>
         </div>
 
-        <!-- Section 8: Model Prediksi Time Series Holt-Winters Nataru -->
+        <!-- Section 8: Evaluasi Turnamen 11 Model Peramalan & Model Holt-Winters Nataru -->
         <div id="rumus-sec-8" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
             <div class="flex items-center gap-2.5">
               <span class="w-3 h-3 rounded-full bg-purple-500"></span>
               <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                8. Rumus 1 Model Holt-Winters Terpadu (Damped Trend & Calendar Shocks)
+                8. Evaluasi Turnamen 11 Model Peramalan & Model Holt-Winters Terpadu Nataru
               </h3>
             </div>
             <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-bold">
-              Horizon 100 Hari Nataru
+              Horizon 100 Hari Nataru • 11 Model Acuan
             </span>
           </div>
 
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Untuk memproyeksikan lonjakan mobilitas <strong>Nataru 2026/2027 (30 September 2026 s.d. 7 Januari 2027 / Horizon 100 Hari)</strong>, PUSDATIN Kemenhub menyelenggarakan uji komparasi dan turnamen pemodelan terhadap <strong>11 Model Peramalan Time Series</strong> berbasis <em>holdout testing 28 hari</em> dari total data latih <strong>637 hari kontinu</strong> (365 hari 2025 + 272 hari 2026 s.d. 29 September).
+          </p>
+
+          <!-- Tabel Benchmark 11 Model -->
+          <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+            <table class="w-full text-left text-xs font-sans">
+              <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-300 text-[11px]">
+                <tr>
+                  <th class="p-2.5 text-center w-12">Rank</th>
+                  <th class="p-2.5">Model Peramalan (11 Model Acuan PUSDATIN)</th>
+                  <th class="p-2.5 text-right">MAPE (%)</th>
+                  <th class="p-2.5 text-right">WAPE (%)</th>
+                  <th class="p-2.5 text-right">RMSE (pnp)</th>
+                  <th class="p-2.5 text-right">MAE (pnp)</th>
+                  <th class="p-2.5 text-center">Akurasi Arah</th>
+                  <th class="p-2.5 text-center">Status Keputusan</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-[11px]">
+                <tr class="bg-emerald-50/80 dark:bg-emerald-950/40 font-bold border-l-4 border-l-emerald-600">
+                  <td class="p-2.5 text-center text-emerald-700 dark:text-emerald-400">1</td>
+                  <td class="p-2.5 text-slate-900 dark:text-white">Holt-Winters Multiplicative Damped (φ=0.98)</td>
+                  <td class="p-2.5 text-right font-mono text-emerald-600 dark:text-emerald-400">4,06%</td>
+                  <td class="p-2.5 text-right font-mono text-emerald-600 dark:text-emerald-400">4,00%</td>
+                  <td class="p-2.5 text-right font-mono">60.232</td>
+                  <td class="p-2.5 text-right font-mono">48.905</td>
+                  <td class="p-2.5 text-center font-mono">89,3%</td>
+                  <td class="p-2.5 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700">🏆 Model Terpilih (Champion)</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">2</td>
+                  <td class="p-2.5">Holt-Winters Multiplicative Standar (No Damping)</td>
+                  <td class="p-2.5 text-right font-mono">3,34%</td>
+                  <td class="p-2.5 text-right font-mono">3,39%</td>
+                  <td class="p-2.5 text-right font-mono">54.924</td>
+                  <td class="p-2.5 text-right font-mono">41.374</td>
+                  <td class="p-2.5 text-center font-mono">89,3%</td>
+                  <td class="p-2.5 text-center"><span class="text-amber-600 dark:text-amber-400 text-[10px]">Rawan Divergensi H-100</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">3</td>
+                  <td class="p-2.5">Holt-Winters Additive Damped</td>
+                  <td class="p-2.5 text-right font-mono">4,63%</td>
+                  <td class="p-2.5 text-right font-mono">4,52%</td>
+                  <td class="p-2.5 text-right font-mono">69.617</td>
+                  <td class="p-2.5 text-right font-mono">55.187</td>
+                  <td class="p-2.5 text-center font-mono">89,3%</td>
+                  <td class="p-2.5 text-center"><span class="text-slate-400 text-[10px]">Kandidat Alternatif</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">4</td>
+                  <td class="p-2.5">SARIMA (1,1,1)×(1,1,1)₇</td>
+                  <td class="p-2.5 text-right font-mono">5,87%</td>
+                  <td class="p-2.5 text-right font-mono">5,94%</td>
+                  <td class="p-2.5 text-right font-mono">83.614</td>
+                  <td class="p-2.5 text-right font-mono">72.529</td>
+                  <td class="p-2.5 text-center font-mono">57,1%</td>
+                  <td class="p-2.5 text-center"><span class="text-slate-400 text-[10px]">Kandidat Alternatif</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">5</td>
+                  <td class="p-2.5">ARIMA (1,1,1) Non-Seasonal</td>
+                  <td class="p-2.5 text-right font-mono">11,17%</td>
+                  <td class="p-2.5 text-right font-mono">10,73%</td>
+                  <td class="p-2.5 text-right font-mono">151.818</td>
+                  <td class="p-2.5 text-right font-mono">131.008</td>
+                  <td class="p-2.5 text-center font-mono">53,6%</td>
+                  <td class="p-2.5 text-center"><span class="text-rose-500 text-[10px]">Tidak Memadai</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">6</td>
+                  <td class="p-2.5">Holt's Linear Trend (No Seasonal)</td>
+                  <td class="p-2.5 text-right font-mono">6,24%</td>
+                  <td class="p-2.5 text-right font-mono">6,51%</td>
+                  <td class="p-2.5 text-right font-mono">103.284</td>
+                  <td class="p-2.5 text-right font-mono">79.534</td>
+                  <td class="p-2.5 text-center font-mono">50,0%</td>
+                  <td class="p-2.5 text-center"><span class="text-slate-400 text-[10px]">Kandidat Alternatif</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">7</td>
+                  <td class="p-2.5">Simple Exponential Smoothing (SES)</td>
+                  <td class="p-2.5 text-right font-mono">6,15%</td>
+                  <td class="p-2.5 text-right font-mono">6,38%</td>
+                  <td class="p-2.5 text-right font-mono">100.170</td>
+                  <td class="p-2.5 text-right font-mono">77.936</td>
+                  <td class="p-2.5 text-center font-mono">3,6%</td>
+                  <td class="p-2.5 text-center"><span class="text-slate-400 text-[10px]">Kandidat Alternatif</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">8</td>
+                  <td class="p-2.5">Linear Regression (Trend + DOW)</td>
+                  <td class="p-2.5 text-right font-mono">16,76%</td>
+                  <td class="p-2.5 text-right font-mono">16,47%</td>
+                  <td class="p-2.5 text-right font-mono">208.674</td>
+                  <td class="p-2.5 text-right font-mono">201.091</td>
+                  <td class="p-2.5 text-center font-mono">89,3%</td>
+                  <td class="p-2.5 text-center"><span class="text-rose-500 text-[10px]">Tidak Memadai</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">9</td>
+                  <td class="p-2.5">Seasonal Naive (Lag 7)</td>
+                  <td class="p-2.5 text-right font-mono">13,51%</td>
+                  <td class="p-2.5 text-right font-mono">13,19%</td>
+                  <td class="p-2.5 text-right font-mono">188.309</td>
+                  <td class="p-2.5 text-right font-mono">161.035</td>
+                  <td class="p-2.5 text-center font-mono">60,7%</td>
+                  <td class="p-2.5 text-center"><span class="text-rose-500 text-[10px]">Baseline Pembanding</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">10</td>
+                  <td class="p-2.5">Naive / Random Walk (Lag 1)</td>
+                  <td class="p-2.5 text-right font-mono">7,10%</td>
+                  <td class="p-2.5 text-right font-mono">7,48%</td>
+                  <td class="p-2.5 text-right font-mono">118.759</td>
+                  <td class="p-2.5 text-right font-mono">91.365</td>
+                  <td class="p-2.5 text-center font-mono">0,0%</td>
+                  <td class="p-2.5 text-center"><span class="text-rose-500 text-[10px]">Baseline Pembanding</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-center text-slate-400">11</td>
+                  <td class="p-2.5">7-Day Moving Average (MA7)</td>
+                  <td class="p-2.5 text-right font-mono">10,55%</td>
+                  <td class="p-2.5 text-right font-mono">10,11%</td>
+                  <td class="p-2.5 text-right font-mono">141.982</td>
+                  <td class="p-2.5 text-right font-mono">123.434</td>
+                  <td class="p-2.5 text-center font-mono">3,6%</td>
+                  <td class="p-2.5 text-center"><span class="text-rose-500 text-[10px]">Baseline Pembanding</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Formulasi Model Champion -->
           <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-            <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">Formulasi Model Prediksi Time Series:</div>
+            <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">Formulasi Matematis Model Terpilih (Holt-Winters Damped + Calendar Shock):</div>
             <div class="text-center py-2.5 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-indigo-600 dark:text-indigo-400 font-semibold text-sm">
               $$\hat{y}_{t+h} = \left( \ell_t + \sum_{i=1}^{h} \phi^i b_t \right) \times s_{t+h-m(k+1)} \times \prod W_{\text{shock}}$$
             </div>
@@ -2258,7 +2407,7 @@ ightarrow \mathbf{H+|\Delta|}$ (Balik)
           <!-- Metrik Evaluasi Akurasi -->
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
             <div class="p-3.5 rounded-lg bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60">
-              <div class="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase">MAPE (Akurasi Tinggi)</div>
+              <div class="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase">MAPE (Presisi Sangat Tinggi)</div>
               <div class="text-xl font-black font-mono text-emerald-700 dark:text-emerald-400 mt-1">4,10%</div>
               <div class="text-[10px] font-mono text-slate-500 mt-0.5">$$\frac{100\%}{n} \sum \left|\frac{y-\hat{y}}{y}\right|$$</div>
             </div>
@@ -2301,7 +2450,7 @@ ightarrow \mathbf{H+|\Delta|}$ (Balik)
                   <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$\ell_t$$</td>
                   <td class="p-2.5 font-semibold">Tingkat Level Dasar</td>
                   <td class="p-2.5 text-slate-500 font-mono">orang</td>
-                  <td class="p-2.5">Estimasi tingkat pergerakan dasar pada waktu cutoff terkini setelah memperhitungkan data latih 635 hari.</td>
+                  <td class="p-2.5">Estimasi tingkat pergerakan dasar pada waktu cutoff terkini setelah memperhitungkan data latih 637 hari (365H 2025 + 272H 2026).</td>
                 </tr>
                 <tr>
                   <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$b_t$$</td>
@@ -2338,58 +2487,78 @@ ightarrow \mathbf{H+|\Delta|}$ (Balik)
           </div>
         </div>
 
-                <!-- Section 9: Formula Perhitungan Kolom Tabel Rekomendasi Armada 1.010 Simpul -->
+        <!-- Section 9: Formulasi Matriks Asal-Tujuan (Origin-Destination / OD) Udara & Aliran Sankey -->
         <div id="rumus-sec-9" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
             <div class="flex items-center gap-2.5">
-              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-500"></span>
               <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                9. Formula Perhitungan Kolom Tabel Rekomendasi Armada (1.010 Simpul Nasional)
+                9. Formulasi Matriks Asal-Tujuan (Origin-Destination / OD) Udara & Aliran Sankey
               </h3>
             </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">
-              Tab 8 • Registry Simpul
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold">
+              Modul OD Udara • Peta Rute & Sankey
             </span>
           </div>
 
           <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-            Menjabarkan formulasi matematis eksak dari setiap kolom angka yang ditampilkan pada <strong>Tabel Rekomendasi Kebutuhan Penambahan Armada 1.010 Simpul Nasional</strong> dan kartu ringkasan eksekutif (Tab 8).
+            Menjabarkan metodologi pembentukan <strong>Matriks Origin-Destination (OD) Udara Nasional</strong> dan pemodelan konservasi aliran pada <strong>Diagram Sankey</strong> serta <strong>Peta Rute Interaktif</strong> (September 2026) berdasarkan dua skema audit konsistensi data penerbangan.
           </p>
 
+          <!-- Dua Skema Analisis -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 rounded-lg bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-amber-800 dark:text-amber-300">Skema 1: INCLUDE (Jaringan Koridor Penuh)</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-200/60 dark:bg-amber-900 text-amber-800 dark:text-amber-200">1.273 Rute</span>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                Mencakup seluruh pergerakan pesawat udara di ruang udara nasional, termasuk penerbangan penumpang reguler, penerbangan perintis, carter, kargo logistik murni (30.192 ton), dan repositioning/ferry flight dengan volume penumpang \(P = 0\).
+              </p>
+            </div>
+            <div class="p-4 rounded-lg bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-emerald-800 dark:text-emerald-300">Skema 2: EXCLUDE (Komersial Penumpang Riil - Rekomendasi Mentor)</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-200/60 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">997 Rute</span>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                Menyaring anomali rute berpenumpang nol (\(P = 0\)) dan memfokuskan analisis hanya pada koridor komersial yang mengangkut penumpang aktif. Total penumpang nasional pada kedua skema <strong>100% identik dan konsisten (4.383.514 pax/bulan)</strong>.
+              </p>
+            </div>
+          </div>
+
+          <!-- Formula Matriks OD & Konservasi Aliran Sankey -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">A. Beban Okupansi Normal & Puncak (Kolom Normal & Puncak):</div>
+              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">A. Produksi Asal & Tarikan Tujuan OD:</div>
               <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-indigo-600 dark:text-indigo-400 font-semibold text-xs">
-                $$LF_{\text{biasa}} = \frac{P_{\text{biasa}}}{A_{\text{biasa}}}, \quad LF_{\text{puncak}} = \frac{P_{\text{puncak}}}{A_{\text{puncak}}}$$
+                $$O_i = \sum_{j} T_{ij}, \quad D_j = \sum_{i} T_{ij}$$
               </div>
+              <p class="text-[10px] text-slate-500">Jumlah pergerakan keluar dari asal \(i\) dan masuk ke tujuan \(j\).</p>
             </div>
             <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">B. Lonjakan Beban Okupansi (Kolom "Lonjakan Beban"):</div>
+              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">B. Total Arus Nasional & Konservasi Aliran:</div>
               <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-indigo-600 dark:text-indigo-400 font-semibold text-xs">
-                $$\text{Load Ratio} = \frac{LF_{\text{puncak}}}{LF_{\text{biasa}}}$$
+                $$T_{\text{total}} = \sum_{i} \sum_{j} T_{ij} = \sum_{i} O_i = \sum_{j} D_j$$
               </div>
+              <p class="text-[10px] text-slate-500">Prinsip konservasi massa aliran Sankey (Total Outflow = Total Inflow).</p>
             </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">C. Tambahan Unit Armada Fisik (Kolom "Tambahan Unit"):</div>
-              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 font-semibold text-xs">
-                $$A_{\text{tambah}} = \left\lceil A_{\text{puncak}} \times \left( \frac{\%\text{ Tambah}}{100} \right) \right\rceil$$
+              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">C. Pangsa Arus Koridor (Corridor Share %):</div>
+              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-amber-600 dark:text-amber-400 font-semibold text-xs">
+                $$\text{Share}_{ij} = \left( \frac{T_{ij}}{T_{\text{total}}} \right) \times 100\%$$
               </div>
+              <p class="text-[10px] text-slate-500">Porsi kontribusi rute spesifik terhadap seluruh mobilitas udara nasional.</p>
             </div>
             <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">D. Total Armada Beroperasi Harian (Kolom "Total Operasi"):</div>
-              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 font-semibold text-xs">
-                $$A_{\text{total}} = A_{\text{puncak}} + A_{\text{tambah}}$$
+              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">D. Kepadatan Okupansi Koridor (Pax per Penerbangan):</div>
+              <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-cyan-600 dark:text-cyan-400 font-semibold text-xs">
+                $$\text{Density}_{ij} = \frac{T_{ij}}{F_{ij}}$$
               </div>
-            </div>
-          </div>
-
-          <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-            <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">E. Persentase Tambahan Armada Rata-rata Terpilih (Kartu Rangkuman Atas):</div>
-            <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-semibold text-xs">
-              $$\%\text{ Tambah Rata-rata Terpilih} = \left( \frac{\sum A_{\text{tambah}}}{\sum A_{\text{puncak}}} \right) \times 100\%$$
+              <p class="text-[10px] text-slate-500">Rerata penumpang per satu penerbangan rute \(i \to j\) (Nasional: 130,6 pax/flight).</p>
             </div>
           </div>
 
@@ -2398,42 +2567,131 @@ ightarrow \mathbf{H+|\Delta|}$ (Balik)
             <table class="w-full text-left text-xs font-sans">
               <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-300">
                 <tr>
-                  <th class="p-2.5 w-32">Simbol</th>
-                  <th class="p-2.5 w-44">Nama Kolom / Variabel</th>
+                  <th class="p-2.5 w-28">Simbol</th>
+                  <th class="p-2.5 w-44">Nama Variabel</th>
                   <th class="p-2.5 w-32">Satuan</th>
                   <th class="p-2.5">Penjelasan Makna Operasional Lapangan</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-[11px]">
                 <tr>
-                  <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$A_{\text{tambah}}$$</td>
-                  <td class="p-2.5 font-semibold">Tambahan Unit</td>
-                  <td class="p-2.5 text-slate-500 font-mono">unit sarana / hari</td>
-                  <td class="p-2.5">Jumlah fisik perjalanan armada perbantuan harian yang wajib disediakan (flight, trip KA, trip bus, trip kapal).</td>
+                  <td class="p-2.5 font-mono font-bold text-amber-600 dark:text-amber-400">$$T_{ij}$$</td>
+                  <td class="p-2.5 font-semibold">Volume Aliran Koridor</td>
+                  <td class="p-2.5 text-slate-500 font-mono">penumpang / bulan</td>
+                  <td class="p-2.5">Jumlah penumpang riil yang terbang dari bandara asal \(i\) menuju bandara tujuan \(j\) (misal CGK ➔ DPS: 135.210 pax).</td>
                 </tr>
                 <tr>
-                  <td class="p-2.5 font-mono font-bold text-emerald-600 dark:text-emerald-400">$$A_{\text{total}}$$</td>
-                  <td class="p-2.5 font-semibold">Total Operasi</td>
-                  <td class="p-2.5 text-slate-500 font-mono">operasi / hari</td>
-                  <td class="p-2.5">Kapasitas total perjalanan armada harian gabungan (armada reguler puncak + armada tambahan perbantuan).</td>
+                  <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$O_i$$</td>
+                  <td class="p-2.5 font-semibold">Produksi Asal (Origin)</td>
+                  <td class="p-2.5 text-slate-500 font-mono">penumpang / bulan</td>
+                  <td class="p-2.5">Total penumpang yang berangkat meninggalkan bandara asal \(i\) ke seluruh destinasi domestik.</td>
                 </tr>
                 <tr>
-                  <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$LF_{\text{biasa}}$$</td>
-                  <td class="p-2.5 font-semibold">LF Normal (Keberangkatan)</td>
-                  <td class="p-2.5 text-slate-500 font-mono">pnp / armada</td>
-                  <td class="p-2.5">Rasio rata-rata penumpang per satu armada keberangkatan pada bulan acuan normal (Februari 2026).</td>
+                  <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$D_j$$</td>
+                  <td class="p-2.5 font-semibold">Tarikan Tujuan (Destination)</td>
+                  <td class="p-2.5 text-slate-500 font-mono">penumpang / bulan</td>
+                  <td class="p-2.5">Total penumpang yang tiba mendarat di bandara tujuan \(j\) dari seluruh bandara keberangkatan.</td>
                 </tr>
                 <tr>
-                  <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">$$LF_{\text{puncak}}$$</td>
-                  <td class="p-2.5 font-semibold">LF Puncak (Keberangkatan)</td>
-                  <td class="p-2.5 text-slate-500 font-mono">pnp / armada</td>
-                  <td class="p-2.5">Rasio maksimum penumpang per satu armada keberangkatan pada hari puncak arus mudik/balik Lebaran.</td>
+                  <td class="p-2.5 font-mono font-bold text-cyan-600 dark:text-cyan-400">$$F_{ij}$$</td>
+                  <td class="p-2.5 font-semibold">Frekuensi Penerbangan</td>
+                  <td class="p-2.5 text-slate-500 font-mono">flight / bulan</td>
+                  <td class="p-2.5">Jumlah operasional jadwal terbang pesawat komersial pada rute \(i \to j\) (Nasional: 14.869 s.d. 46.946 flights).</td>
                 </tr>
                 <tr>
-                  <td class="p-2.5 font-mono font-bold text-slate-800 dark:text-slate-200">$$\%\text{ Tambah}$$</td>
-                  <td class="p-2.5 font-semibold">Perlu Tambah (%)</td>
+                  <td class="p-2.5 font-mono font-bold text-amber-600 dark:text-amber-400">$$\text{Share}_{ij}$$</td>
+                  <td class="p-2.5 font-semibold">Pangsa Koridor</td>
                   <td class="p-2.5 text-slate-500 font-mono">%</td>
-                  <td class="p-2.5">Tingkat persentase penambahan armada berdasarkan kuantil persentil (20%, 15%, 10%, atau 5%).</td>
+                  <td class="p-2.5">Proporsi arus penumpang rute tertentu terhadap mobilitas nasional (koridor tersibuk DPS ⇄ CGK menguasai porsi tertinggi).</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-slate-800 dark:text-slate-200">$$\text{Density}_{ij}$$</td>
+                  <td class="p-2.5 font-semibold">Kepadatan Pesawat</td>
+                  <td class="p-2.5 text-slate-500 font-mono">pax / flight</td>
+                  <td class="p-2.5">Tingkat pengisian rata-rata per penerbangan komersial, menjadi indikator efisiensi okupansi armada maskapai.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 10: Glosarium & Kamus Singkatan Resmi Kementerian Perhubungan -->
+        <div id="rumus-sec-10" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div class="flex items-center gap-2.5">
+              <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">
+                10. Glosarium & Kamus Singkatan Resmi Kementerian Perhubungan
+              </h3>
+            </div>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold">
+              Standar Terminologi PUSDATIN
+            </span>
+          </div>
+
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Daftar singkatan, akronim teknis, dan istilah resmi perhubungan yang digunakan di seluruh modul dashboard StrategiHub 2026.
+          </p>
+
+          <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+            <table class="w-full text-left text-xs font-sans">
+              <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-300">
+                <tr>
+                  <th class="p-2.5 w-32">Singkatan</th>
+                  <th class="p-2.5 w-56">Kepanjangan Resmi</th>
+                  <th class="p-2.5">Definisi & Ruang Lingkup Operasional</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-[11px]">
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-blue-900 dark:text-blue-300">KCJB / Whoosh</td>
+                  <td class="p-2.5 font-semibold">Kereta Cepat Jakarta - Bandung</td>
+                  <td class="p-2.5">Layanan kereta api berkecepatan tinggi pertama di Asia Tenggara rute Halim-Karawang-Padalarang-Tegalluar (operator: PT KCIC).</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">SIASATI</td>
+                  <td class="p-2.5 font-semibold">Sistem Informasi Angkutan dan Sarana Transportasi Indonesia</td>
+                  <td class="p-2.5">Sistem basis data terpadu Kementerian Perhubungan yang menghimpun log mobilitas harian 5 moda secara nasional.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-purple-600 dark:text-purple-400">ASDP</td>
+                  <td class="p-2.5 font-semibold">Angkutan Sungai, Danau, dan Penyeberangan</td>
+                  <td class="p-2.5">Layanan kapal feri ro-ro penyeberangan lintas antarpulau utama (misal: Merak-Bakauheni, Ketapang-Gilimanuk).</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-green-600 dark:text-green-400">AKAP</td>
+                  <td class="p-2.5 font-semibold">Antarkota Antarprovinsi (Moda Jalan)</td>
+                  <td class="p-2.5">Trayek angkutan bus umum yang melayani perjalanan antarprovinsi melalui terminal tipe A terakreditasi.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-amber-600 dark:text-amber-400">KAI</td>
+                  <td class="p-2.5 font-semibold">PT Kereta Api Indonesia (Persero)</td>
+                  <td class="p-2.5">Badan Usaha Milik Negara operator perkeretaapian antarkota, aglomerasi, dan komuter di pulau Jawa dan Sumatera.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-rose-600 dark:text-rose-400">TBB</td>
+                  <td class="p-2.5 font-semibold">Tiba Bongkar Berangkat</td>
+                  <td class="p-2.5">Pola operasi darurat penyeberangan kapal ferry saat puncak arus mudik/balik: kapal hanya membongkar muatan di pelabuhan tujuan lalu langsung berangkat tanpa memuat balik guna mengurai antrean.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-cyan-600 dark:text-cyan-400">TCQSM</td>
+                  <td class="p-2.5 font-semibold">Transit Capacity and Quality of Service Manual</td>
+                  <td class="p-2.5">Buku standar rekayasa transportasi internasional diterbitkan oleh Transportation Research Board (TRB / TCRP Report 165).</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-slate-700 dark:text-slate-300">OD</td>
+                  <td class="p-2.5 font-semibold">Origin - Destination (Asal - Tujuan)</td>
+                  <td class="p-2.5">Matriks pergerakan penumpang yang memetakan bandara keberangkatan (*origin*) ke bandara kedatangan (*destination*).</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-slate-700 dark:text-slate-300">MAPE / WAPE</td>
+                  <td class="p-2.5 font-semibold">Mean / Weighted Absolute Percentage Error</td>
+                  <td class="p-2.5">Metrik statistik untuk mengukur tingkat kesalahan absolut persentase peramalan; semakin kecil nilainya (&lt;10%), semakin tinggi akurasinya.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-slate-700 dark:text-slate-300">LF Proxy</td>
+                  <td class="p-2.5 font-semibold">Load Factor Proxy (Penumpang per Armada)</td>
+                  <td class="p-2.5">Indikator rasio kepadatan muatan fisik penumpang rata-rata per satu satuan frekuensi sarana transportasi yang beroperasi.</td>
                 </tr>
               </tbody>
             </table>
@@ -2532,12 +2790,20 @@ let mapTileLayer = null;
 
 // Standard Functional Colors
 const COLOR = {
-  UDARA: '#0284c7', // Sky 600
+  UDARA: '#1e3a8a', // Deep Navy Blue (Membedakan tegas dari Laut Cyan #0891b2)
   KA: '#d97706',    // Amber 600
   BUS: '#16a34a',   // Green 600
   ASDP: '#9333ea',  // Purple 600
   LAUT: '#0891b2',  // Cyan 600
   TOTAL: '#0f172a'  // Dark/White
+};
+
+const MODA_DISPLAY_NAME = {
+  'UDARA': 'Udara',
+  'BUS': 'Jalan',
+  'ASDP': 'Penyebrangan',
+  'LAUT': 'Laut',
+  'KA': 'Perkeretaapian'
 };
 
 // ---------------------------------------------------------------
@@ -2952,7 +3218,7 @@ function getFilteredTimelineData() {
   if (currentTimelineRange === 'tahun_baru') return all.filter(d => d.date >= '2026-01-01' && d.date <= '2026-01-15');
   if (currentTimelineRange === 'custom') {
     const s = customStartDate || '2026-01-01';
-    const e = customEndDate || '2026-09-29';
+    const e = customEndDate || '2026-10-13';
     return all.filter(d => d.date >= s && d.date <= e);
   }
   return all;
@@ -2969,9 +3235,9 @@ function renderTimelineChart() {
   const datasets = [
     { label: 'Total Multimoda', data: raw.map(d => d[getMetricKey('TOTAL')]), borderColor: totalColor, borderWidth: 2, pointRadius: 0, tension: 0.15, hidden: !timelineVisibility[0] },
     { label: 'Udara', data: raw.map(d => d[getMetricKey('UDARA')]), borderColor: COLOR.UDARA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
-    { label: 'Kereta Api', data: raw.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
-    { label: 'Bus', data: raw.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
-    { label: 'ASDP', data: raw.map(d => d[getMetricKey('ASDP')]), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
+    { label: 'Perkeretaapian', data: raw.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
+    { label: 'Jalan', data: raw.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
+    { label: 'Penyebrangan', data: raw.map(d => d[getMetricKey('ASDP')]), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
     { label: 'Laut', data: raw.map(d => d[getMetricKey('LAUT')]), borderColor: COLOR.LAUT, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
   ];
 
@@ -3048,12 +3314,15 @@ function renderTimelineChart() {
 
 function setTimelineFilter(rangeKey, btn) {
   currentTimelineRange = rangeKey;
+  if (!btn) {
+    btn = document.getElementById('btn-range-' + rangeKey) || document.querySelector(`.btn-range[onclick*="'${rangeKey}'"]`);
+  }
   document.querySelectorAll('.btn-range').forEach(b => {
-    b.classList.remove('active', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'font-semibold', 'shadow-xs');
+    b.classList.remove('active', 'bg-slate-100', 'dark:bg-slate-800', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'font-semibold', 'shadow-xs');
     b.classList.add('text-slate-600', 'dark:text-slate-400');
   });
   if (btn) {
-    btn.classList.add('active', 'bg-white', 'dark:bg-slate-900', 'text-slate-900', 'dark:text-white', 'font-semibold', 'shadow-xs');
+    btn.classList.add('active', 'bg-slate-100', 'dark:bg-slate-800', 'text-slate-900', 'dark:text-white', 'font-semibold', 'shadow-xs');
     btn.classList.remove('text-slate-600', 'dark:text-slate-400');
   }
 
@@ -3075,8 +3344,8 @@ function setTimelineFilter(rangeKey, btn) {
       'libur_sekolah': '15 Jun 2026 - 15 Jul 2026 (31 Hari)',
       'tahun_baru': '1 Jan 2026 - 15 Jan 2026 (15 Hari)'
     };
-    const infoBadge = document.getElementById('timeline-badge-info');
-    if (infoBadge) infoBadge.innerText = labelMap[rangeKey] || '';
+    const badgeText = document.getElementById('timeline-badge-text') || document.getElementById('timeline-badge-info');
+    if (badgeText) badgeText.innerText = labelMap[rangeKey] || '';
     renderTimelineChart();
   }
 }
@@ -3098,13 +3367,13 @@ function applyCustomDateRange(triggerRender = true) {
   if (!startEl || !endEl) return;
 
   let sVal = startEl.value || '2026-01-01';
-  let eVal = endEl.value || '2026-09-29';
+  let eVal = endEl.value || '2026-10-13';
 
   // Batasi agar sesuai batas dataset
   if (sVal < '2026-01-01') sVal = '2026-01-01';
-  if (sVal > '2026-09-29') sVal = '2026-09-29';
+  if (sVal > '2026-10-13') sVal = '2026-10-13';
   if (eVal < '2026-01-01') eVal = '2026-01-01';
-  if (eVal > '2026-09-29') eVal = '2026-09-29';
+  if (eVal > '2026-10-13') eVal = '2026-10-13';
 
   if (sVal > eVal) {
     const tmp = sVal;
@@ -3124,9 +3393,9 @@ function applyCustomDateRange(triggerRender = true) {
   const customBadge = document.getElementById('badge-custom-days');
   if (customBadge) customBadge.innerText = `${diffDays}H`;
 
-  const infoBadge = document.getElementById('timeline-badge-info');
-  if (infoBadge) {
-    infoBadge.innerText = `${formatDateIndo(sVal)} - ${formatDateIndo(eVal)} (${diffDays} Hari)`;
+  const badgeText = document.getElementById('timeline-badge-text') || document.getElementById('timeline-badge-info');
+  if (badgeText) {
+    badgeText.innerText = `${formatDateIndo(sVal)} - ${formatDateIndo(eVal)} (${diffDays} Hari)`;
   }
 
   if (currentTimelineRange !== 'custom') {
@@ -3138,12 +3407,14 @@ function applyCustomDateRange(triggerRender = true) {
 }
 
 function focusCustomRange() {
-  if (!isSidebarOpen) toggleSidebar();
   const btn = document.getElementById('btn-range-custom');
   if (btn) setTimelineFilter('custom', btn);
   const input = document.getElementById('custom-start-date');
   if (input) {
-    setTimeout(() => input.focus(), 150);
+    setTimeout(() => {
+      input.focus();
+      input.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
   }
 }
 
@@ -3301,9 +3572,9 @@ function renderProvinceGrowthWorkspace() {
 
   const MODA_NAMES = {
     'UDARA': 'Udara',
-    'KA': 'Kereta Api',
-    'BUS': 'Bus',
-    'ASDP': 'ASDP',
+    'KA': 'Perkeretaapian',
+    'BUS': 'Jalan',
+    'ASDP': 'Penyebrangan',
     'LAUT': 'Laut'
   };
 
@@ -3392,10 +3663,10 @@ function renderProvinceGrowthWorkspace() {
     let datasets = [];
     if (isAllModa) {
       const modaKeys = [
-        { key: 'UDARA', label: 'Udara', color: (typeof COLOR !== 'undefined' && COLOR.UDARA) || '#0284c7' },
-        { key: 'KA', label: 'Kereta Api', color: (typeof COLOR !== 'undefined' && COLOR.KA) || '#d97706' },
-        { key: 'BUS', label: 'Bus', color: (typeof COLOR !== 'undefined' && COLOR.BUS) || '#16a34a' },
-        { key: 'ASDP', label: 'ASDP', color: (typeof COLOR !== 'undefined' && COLOR.ASDP) || '#9333ea' },
+        { key: 'UDARA', label: 'Udara', color: (typeof COLOR !== 'undefined' && COLOR.UDARA) || '#1e3a8a' },
+        { key: 'KA', label: 'Perkeretaapian', color: (typeof COLOR !== 'undefined' && COLOR.KA) || '#d97706' },
+        { key: 'BUS', label: 'Jalan', color: (typeof COLOR !== 'undefined' && COLOR.BUS) || '#16a34a' },
+        { key: 'ASDP', label: 'Penyebrangan', color: (typeof COLOR !== 'undefined' && COLOR.ASDP) || '#9333ea' },
         { key: 'LAUT', label: 'Laut', color: (typeof COLOR !== 'undefined' && COLOR.LAUT) || '#0891b2' }
       ];
       datasets = modaKeys.map(mInfo => ({
@@ -3406,7 +3677,7 @@ function renderProvinceGrowthWorkspace() {
         stack: 'provStack'
       }));
     } else {
-      const mColor = (typeof COLOR !== 'undefined' && COLOR[selectedModaForGrowth]) || '#0284c7';
+      const mColor = (typeof COLOR !== 'undefined' && COLOR[selectedModaForGrowth]) || '#1e3a8a';
       datasets = [{
         label: activeModaLabel,
         data: monthlyVals,
@@ -3484,16 +3755,16 @@ function renderProvinceGrowthWorkspace() {
 
     // Unified Table Rendering: Akumulasi Bulanan per Moda
     if (tableTitle) tableTitle.innerText = 'Akumulasi Bulanan per Moda Transportasi';
-    if (tableSub) tableSub.innerText = `Rincian volume ${mCfg.verb} di ${provLabel} (${activeModaLabel}) Januari s.d. September 2026`;
+    if (tableSub) tableSub.innerText = `Rincian volume ${mCfg.verb} di ${provLabel} (${activeModaLabel}) Januari s.d. Oktober 2026`;
     if (tableBadge) tableBadge.innerText = `Baseline Median: ${numFmt(scopeMedian)} ${mCfg.unit}/bln (1 Jan - 12 Mar)`;
 
     if (theadMonthly) {
       theadMonthly.innerHTML = `
         <th class="py-2.5 px-3">Bulan</th>
-        <th class="py-2.5 px-3 text-right text-sky-700 dark:text-sky-400 ${selectedModaForGrowth === 'UDARA' ? 'bg-sky-50 dark:bg-sky-950/40 font-bold' : ''}">Udara</th>
-        <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400 ${selectedModaForGrowth === 'KA' ? 'bg-amber-50 dark:bg-amber-950/40 font-bold' : ''}">Kereta Api</th>
-        <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400 ${selectedModaForGrowth === 'BUS' ? 'bg-green-50 dark:bg-green-950/40 font-bold' : ''}">Bus</th>
-        <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400 ${selectedModaForGrowth === 'ASDP' ? 'bg-purple-50 dark:bg-purple-950/40 font-bold' : ''}">ASDP</th>
+        <th class="py-2.5 px-3 text-right text-blue-900 dark:text-blue-300 font-bold ${selectedModaForGrowth === 'UDARA' ? 'bg-blue-50 dark:bg-blue-950/40 font-bold text-blue-900 dark:text-blue-300' : ''}">Udara</th>
+        <th class="py-2.5 px-3 text-right text-amber-700 dark:text-amber-400 ${selectedModaForGrowth === 'KA' ? 'bg-amber-50 dark:bg-amber-950/40 font-bold' : ''}">Perkeretaapian</th>
+        <th class="py-2.5 px-3 text-right text-green-700 dark:text-green-400 ${selectedModaForGrowth === 'BUS' ? 'bg-green-50 dark:bg-green-950/40 font-bold' : ''}">Jalan</th>
+        <th class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400 ${selectedModaForGrowth === 'ASDP' ? 'bg-purple-50 dark:bg-purple-950/40 font-bold' : ''}">Penyebrangan</th>
         <th class="py-2.5 px-3 text-right text-cyan-700 dark:text-cyan-400 ${selectedModaForGrowth === 'LAUT' ? 'bg-cyan-50 dark:bg-cyan-950/40 font-bold' : ''}">Laut</th>
         <th class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white">Total</th>
         <th class="py-2.5 px-3 text-right text-slate-700 dark:text-slate-300" title="Lonjakan terhadap Baseline Median Pra-Lebaran 1 Jan - 12 Mar 2026">vs Median (1 Jan - 12 Mar)</th>
@@ -3524,7 +3795,7 @@ function renderProvinceGrowthWorkspace() {
 
         tr.innerHTML = `
           <td class="py-2.5 px-3 font-sans font-medium text-slate-900 dark:text-slate-200">${m.name}</td>
-          <td class="py-2.5 px-3 text-right ${selectedModaForGrowth === 'UDARA' ? 'bg-sky-50 dark:bg-sky-950/40 font-bold text-sky-700 dark:text-sky-300' : ''}">${numFmt(uVal)}</td>
+          <td class="py-2.5 px-3 text-right ${selectedModaForGrowth === 'UDARA' ? 'bg-blue-50 dark:bg-blue-950/40 font-bold text-blue-900 dark:text-blue-300' : ''}">${numFmt(uVal)}</td>
           <td class="py-2.5 px-3 text-right ${selectedModaForGrowth === 'KA' ? 'bg-amber-50 dark:bg-amber-950/40 font-bold text-amber-700 dark:text-amber-300' : ''}">${numFmt(kVal)}</td>
           <td class="py-2.5 px-3 text-right ${selectedModaForGrowth === 'BUS' ? 'bg-green-50 dark:bg-green-950/40 font-bold text-green-700 dark:text-green-300' : ''}">${numFmt(bVal)}</td>
           <td class="py-2.5 px-3 text-right ${selectedModaForGrowth === 'ASDP' ? 'bg-purple-50 dark:bg-purple-950/40 font-bold text-purple-700 dark:text-purple-300' : ''}">${numFmt(aVal)}</td>
@@ -3722,19 +3993,19 @@ function selectLebaranDate(dateStr) {
   if (container) {
     container.innerHTML = `
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-        <div class="text-[10px] font-bold text-sky-700 dark:text-sky-400">UDARA</div>
+        <div class="text-[10px] font-bold text-blue-900 dark:text-blue-300">UDARA</div>
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${numFmt(day[getMetricKey('UDARA')])}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-        <div class="text-[10px] font-bold text-amber-700 dark:text-amber-400">KERETA API</div>
+        <div class="text-[10px] font-bold text-amber-700 dark:text-amber-400">PERKERETAAPIAN</div>
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${numFmt(day[getMetricKey('KA')])}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-        <div class="text-[10px] font-bold text-green-700 dark:text-green-400">BUS</div>
+        <div class="text-[10px] font-bold text-green-700 dark:text-green-400">JALAN</div>
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${numFmt(day[getMetricKey('BUS')])}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-        <div class="text-[10px] font-bold text-purple-700 dark:text-purple-400">ASDP</div>
+        <div class="text-[10px] font-bold text-purple-700 dark:text-purple-400">PENYEBRANGAN</div>
         <div class="num-mono text-xs font-bold text-slate-900 dark:text-white">${numFmt(day[getMetricKey('ASDP')])}</div>
       </div>
       <div class="p-2 rounded bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
@@ -3801,9 +4072,9 @@ function renderLebaranWorkspace() {
       datasets: [
         { label: 'Total', data: ld.map(d => d[getMetricKey('TOTAL')]), borderColor: isDark ? '#ffffff' : '#0f172a', borderWidth: 2, pointRadius: 2, tension: 0.15, hidden: true },
         { label: 'Udara', data: ld.map(d => d[getMetricKey('UDARA')]), borderColor: COLOR.UDARA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
-        { label: 'Kereta Api', data: ld.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
-        { label: 'Bus', data: ld.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
-        { label: 'ASDP', data: ld.map(d => d[getMetricKey('ASDP')]), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
+        { label: 'Perkeretaapian', data: ld.map(d => d[getMetricKey('KA')]), borderColor: COLOR.KA, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
+        { label: 'Jalan', data: ld.map(d => d[getMetricKey('BUS')]), borderColor: COLOR.BUS, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
+        { label: 'Penyebrangan', data: ld.map(d => d[getMetricKey('ASDP')]), borderColor: COLOR.ASDP, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
         { label: 'Laut', data: ld.map(d => d[getMetricKey('LAUT')]), borderColor: COLOR.LAUT, borderWidth: 1.5, pointRadius: 0, tension: 0.15 },
       ]
     },
@@ -3845,7 +4116,7 @@ function renderLebaranWorkspace() {
   });
 
   const modas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA', 'TOTAL'];
-  const labelsSurge = ['ASDP', 'Bus', 'Kereta Api', 'Laut', 'Udara', 'Semua Moda'];
+  const labelsSurge = ['Penyebrangan', 'Jalan', 'Perkeretaapian', 'Laut', 'Udara', 'Semua Moda'];
   const tbody = document.getElementById('tbody-surge');
   if (tbody) {
     tbody.innerHTML = '';
@@ -3881,7 +4152,7 @@ function renderLebaranSurgeHeatmap() {
     { label: 'Balik 1 · 24 Mar / H+3', shortLabel: 'Balik 1', date: '24 Mar / H+3', percentKey: 'surge_balik1_pct', peakKey: 'peak_balik1' },
     { label: 'Balik 2 · 29 Mar / H+8', shortLabel: 'Balik 2', date: '29 Mar / H+8', percentKey: 'surge_balik2_pct', peakKey: 'peak_balik2' }
   ];
-  const labels = { ASDP: 'ASDP', BUS: 'Bus', KA: 'Kereta Api', LAUT: 'Laut', UDARA: 'Udara', TOTAL: 'Semua Moda' };
+  const labels = { ASDP: 'Penyebrangan', BUS: 'Jalan', KA: 'Perkeretaapian', LAUT: 'Laut', UDARA: 'Udara', TOTAL: 'Semua Moda' };
   const rowFor = key => ({
     key,
     label: labels[key],
@@ -4094,7 +4365,7 @@ function renderLoadFactorWorkspace() {
   if (tblBadge) tblBadge.innerText = provLabel;
 
   const allModas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA'];
-  const modaLabels = { 'ASDP': 'ASDP', 'BUS': 'Bus', 'KA': 'Kereta Api', 'LAUT': 'Laut', 'UDARA': 'Udara' };
+  const modaLabels = { 'ASDP': 'Penyebrangan', 'BUS': 'Jalan', 'KA': 'Perkeretaapian', 'LAUT': 'Laut', 'UDARA': 'Udara' };
 
   let activeModas = allModas.filter(m => lfData[m] && (lfData[m].baseline_lf > 0 || lfData[m].mudik_lf > 0 || lfData[m].balik_lf > 0));
   if (activeModas.length === 0) activeModas = allModas;
@@ -4275,7 +4546,7 @@ function renderHubsTable() {
       <td class="py-2.5 px-3 font-sans font-semibold text-slate-900 dark:text-slate-100">${h.nama_prasarana}</td>
       <td class="py-2.5 px-3">
         <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-bold text-white" style="background-color: ${color}">
-          ${h.moda}
+          ${MODA_DISPLAY_NAME[h.moda] || h.moda}
         </span>
       </td>
       <td class="py-2.5 px-3 font-sans text-slate-600 dark:text-slate-300">${h.provinsi}</td>
@@ -4440,10 +4711,10 @@ function initSpatialMap() {
           <span>Titik Simpul per Moda:</span>
         </div>
         <div class="space-y-0.5 text-[10px]">
-          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Udara (257)</span></div>
-          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Kereta Api (193)</span></div>
-          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Bus (139)</span></div>
-          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">ASDP (158)</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: #1e3a8a;"></span><span class="text-slate-600 dark:text-slate-300 font-semibold">Udara (257)</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Perkeretaapian (193)</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Jalan (139)</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Penyebrangan (158)</span></div>
           <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-600 shrink-0"></span><span class="text-slate-600 dark:text-slate-300">Laut (267)</span></div>
         </div>
       </div>
@@ -4701,7 +4972,7 @@ function renderSpatialMapNodes() {
       <div class="p-3 text-xs font-sans space-y-2 max-w-[280px]">
         <div class="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-700 pb-1.5">
           <span class="font-bold text-slate-900 dark:text-white truncate">${n.nama}</span>
-          <span class="px-1.5 py-0.2 rounded text-[10px] font-bold text-white shrink-0" style="background-color: ${color}">${n.m}</span>
+          <span class="px-1.5 py-0.2 rounded text-[10px] font-bold text-white shrink-0" style="background-color: ${color}">${MODA_DISPLAY_NAME[n.m] || n.m}</span>
         </div>
         <div class="flex items-center justify-between text-[11px] text-slate-500">
           <span>${n.p} • Tipe: ${n.tipe}</span>
@@ -4968,11 +5239,11 @@ function updateModaDropdownOptions(prov) {
   const activeModes = getActiveModesForProv(prov);
   const modesMeta = [
     { key: 'TOTAL', label: 'Total Multimoda (Semua Moda)' },
-    { key: 'UDARA', label: '✈ Udara (Penerbangan Domestik)' },
-    { key: 'KA', label: '🚆 Perkeretaapian (KAI)' },
-    { key: 'BUS', label: '🚌 Bus' },
-    { key: 'ASDP', label: '⛴ ASDP (Penyeberangan Feri)' },
-    { key: 'LAUT', label: '🚢 Transportasi Laut (Kapal Pelni)' },
+    { key: 'UDARA', label: '✈ Udara' },
+    { key: 'KA', label: '🚆 Perkeretaapian' },
+    { key: 'BUS', label: '🚌 Jalan' },
+    { key: 'ASDP', label: '⛴ Penyebrangan' },
+    { key: 'LAUT', label: '🚢 Laut' },
   ];
 
   const currentVal = select.value;
@@ -5298,11 +5569,11 @@ function renderForecastComparisonTable() {
   if (th26) th26.innerText = `Proyeksi 2026 (${isPnp ? 'Pnp Berangkat' : 'Trip Berangkat'})`;
 
   const modesMeta = [
-    { key: 'UDARA', label: '✈ Udara (Penerbangan Domestik)', color: COLOR.UDARA, note: 'Kapasitas armada beroperasi optimal; tiket dinamis memfilter demand jarak jauh' },
-    { key: 'KA', label: '🚆 Kereta Api (KAI)', color: COLOR.KA, note: 'Tingkat isian stabil tinggi (load factor 90%+); seluruh kuota KA favorit terjual' },
-    { key: 'BUS', label: '🚌 Bus', color: COLOR.BUS, note: 'Rute Trans Jawa & jalan tol primadona; armada reguler & cadangan siaga penuh' },
-    { key: 'ASDP', label: '⛴ ASDP (Penyeberangan Feri)', color: COLOR.ASDP, note: 'Lonjakan kendaraan pribadi tinggi di lintasan penyeberangan utama' },
-    { key: 'LAUT', label: '🚢 Laut (Kapal Penumpang Pelni)', color: COLOR.LAUT, note: 'Pertumbuhan pergerakan antarpulau & rute perintis Indonesia Timur' },
+    { key: 'UDARA', label: '✈ Udara', color: COLOR.UDARA, note: 'Kapasitas armada beroperasi optimal; tiket dinamis memfilter demand jarak jauh' },
+    { key: 'KA', label: '🚆 Perkeretaapian', color: COLOR.KA, note: 'Tingkat isian stabil tinggi (load factor 90%+); seluruh kuota KA favorit terjual' },
+    { key: 'BUS', label: '🚌 Jalan', color: COLOR.BUS, note: 'Rute Trans Jawa & jalan tol primadona; armada reguler & cadangan siaga penuh' },
+    { key: 'ASDP', label: '⛴ Penyebrangan', color: COLOR.ASDP, note: 'Lonjakan kendaraan pribadi tinggi di lintasan penyeberangan utama' },
+    { key: 'LAUT', label: '🚢 Laut', color: COLOR.LAUT, note: 'Pertumbuhan pergerakan antarpulau & rute perintis Indonesia Timur' },
   ];
 
   const futureDates = (DATA.forecast_nataru.scenarios?.moderat || []).map(d => d.date);
@@ -5772,11 +6043,11 @@ function renderDynamicSimpulHighlights(filteredData) {
   if (!container) return;
 
   const modas = [
-    { key: 'ASDP', label: '⛴ ASDP Feri', color: 'rose' },
-    { key: 'KA', label: '🚆 Kereta Api', color: 'amber' },
-    { key: 'UDARA', label: '✈ Penerbangan', color: 'sky' },
-    { key: 'BUS', label: '🚌 Bus AKAP', color: 'emerald' },
-    { key: 'LAUT', label: '🚢 Kapal Laut', color: 'cyan' },
+    { key: 'ASDP', label: '⛴ Penyebrangan', color: 'rose' },
+    { key: 'KA', label: '🚆 Perkeretaapian', color: 'amber' },
+    { key: 'UDARA', label: '✈ Udara', color: 'sky' },
+    { key: 'BUS', label: '🚌 Jalan', color: 'emerald' },
+    { key: 'LAUT', label: '🚢 Laut', color: 'cyan' },
   ];
 
   let html = '';
@@ -5837,7 +6108,7 @@ function renderDynamicSimpulSummary(filteredData) {
             <span class="font-semibold text-emerald-600 dark:text-emerald-400">${lowCount} Simpul Terkendali/Siaga (+5%)</span>.
           </div>
           <div>
-            • <strong>Instruksi Utama Lapangan:</strong> Prioritaskan rekayasa *Tiba Bongkar Berangkat* di Pelabuhan Merak-Bakauheni & Ketapang-Gilimanuk, izin slot *extra flight* malam di CGK Soetta & DPS Bali, serta rangkaian Kereta Api Tambahan (KLB) di Pasar Senen & Gambir.
+            • <strong>Instruksi Utama Lapangan:</strong> Prioritaskan rekayasa *Tiba Bongkar Berangkat* di Pelabuhan Merak-Bakauheni & Ketapang-Gilimanuk, izin slot *extra flight* malam di CGK Soetta & DPS Bali, serta rangkaian Perkeretaapian Tambahan (KLB) di Pasar Senen & Gambir.
           </div>
         </div>
       </div>
@@ -5945,7 +6216,7 @@ function renderSimpulSimulation() {
           <span class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500 shrink-0">${offset + idx + 1}</span>
           <div>
             <div class="font-bold text-slate-900 dark:text-white">${s.name}</div>
-            <div class="text-[10px] text-slate-500">${s.prov} • ${s.modaLabel}</div>
+            <div class="text-[10px] text-slate-500">${s.prov} • ${(MODA_DISPLAY_NAME[s.moda] || s.modaLabel)}</div>
           </div>
         </div>
       </td>
@@ -6003,7 +6274,7 @@ function renderForecastWorkspace() {
 // ---------------------------------------------------------------
 function exportActiveCSV() {
   const raw = getFilteredTimelineData();
-  let csv = 'tanggal,udara_pnp,ka_pnp,bus_pnp,asdp_pnp,laut_pnp,total_pnp,udara_arm,ka_arm,bus_arm,asdp_arm,laut_arm,total_arm\n';
+  let csv = 'tanggal,udara_pnp,perkeretaapian_pnp,jalan_pnp,penyebrangan_pnp,laut_pnp,total_pnp,udara_arm,perkeretaapian_arm,jalan_arm,penyebrangan_arm,laut_arm,total_arm\n';
   raw.forEach(d => {
     csv += `${d.date},${d.UDARA},${d.KA},${d.BUS},${d.ASDP},${d.LAUT},${d.TOTAL},${d.arm_UDARA},${d.arm_KA},${d.arm_BUS},${d.arm_ASDP},${d.arm_LAUT},${d.arm_TOTAL}\n`;
   });
