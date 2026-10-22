@@ -1415,7 +1415,7 @@
               <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
                 Tabel Rincian Harian Prediksi Mobilitas Multimoda (Horizon 100 Hari)
               </h4>
-              <p class="text-[11px] text-slate-500">Estimasi volume harian, batas rentang interval 95% CI, persentase lonjakan, dan alokasi armada</p>
+              <p class="text-[11px] text-slate-500">Estimasi volume harian, batas rentang interval 95% CI, dan persentase lonjakan</p>
             </div>
 
             <!-- Table Range Filter -->
@@ -1440,8 +1440,6 @@
                   <th class="py-2.5 px-3 text-center">Pertumbuhan YoY</th>
                   <th class="py-2.5 px-3 text-right">Rentang 95% CI</th>
                   <th class="py-2.5 px-3 text-center">Status Lonjakan</th>
-                  <th class="py-2.5 px-3 text-right">Armada Proyeksi</th>
-                  <th class="py-2.5 px-3 text-right text-slate-500">Armada 2025</th>
                 </tr>
               </thead>
               <tbody id="tbody-forecast" class="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px] text-slate-800 dark:text-slate-200">
@@ -5802,7 +5800,6 @@ function renderForecastTable() {
 
   const isAll = currentForecastProv === 'ALL';
   const isPnp = currentForecastMetric === 'pnp';
-  const oppMetric = isPnp ? 'arm' : 'pnp';
   const pData = !isAll ? DATA.forecast_nataru.by_province?.[currentForecastProv] : null;
   const champ = isAll
     ? DATA.forecast_nataru.champion_model
@@ -5812,9 +5809,6 @@ function renderForecastTable() {
   const futureDates = (DATA.forecast_nataru.scenarios?.moderat || []).map(d => d.date);
   const hist = getHistoricalSeries(currentForecastProv, currentForecastMetric, currentForecastModa);
   const fc = generateTimeSeriesForecast(hist, futureDates, activeModelCode);
-
-  const oppHist = getHistoricalSeries(currentForecastProv, oppMetric, currentForecastModa);
-  const oppFc = generateTimeSeriesForecast(oppHist, futureDates, activeModelCode);
 
   const map2025 = {};
   if (isAll) {
@@ -5862,8 +5856,6 @@ function renderForecastTable() {
     const yoyVal = val25 > 0 ? ((row.val / val25 - 1.0) * 100) : 0;
     const yoyClass = yoyVal >= 0 ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-rose-600 dark:text-rose-400 font-bold';
 
-    const oppRow = oppFc[i] || { val: 0 };
-
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
     tr.innerHTML = `
@@ -5874,8 +5866,6 @@ function renderForecastTable() {
       <td class="py-2 px-2.5 text-center ${yoyClass}">${val25 > 0 ? ((yoyVal >= 0 ? '+' : '') + decFmt(yoyVal, 1) + '%') : '-'}</td>
       <td class="py-2 px-2.5 text-right text-slate-500 text-[10px]">${numFmt(row.ci_lower)} - ${numFmt(row.ci_upper)}</td>
       <td class="py-2 px-2.5 text-center">${badgeStatus}</td>
-      <td class="py-2 px-2.5 text-right text-slate-700 dark:text-slate-300 font-semibold">${numFmt(oppRow.val)}</td>
-      <td class="py-2 px-2.5 text-right text-slate-500">-</td>
     `;
     tbody.appendChild(tr);
   });
