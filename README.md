@@ -30,32 +30,22 @@ Dashboard ini terbagi menjadi **8 Modul Utama** yang dapat diakses melalui menu 
 8. **Proyeksi Mobilitas Multimoda Q4 & Libur Nataru 2026/2027 (Horizon 100 Hari):**
    * **Model Prediktif Time Series:** Menggabungkan tren historis, siklus musiman akhir tahun (*end-of-year seasonal waves*), serta *event shocks* Natal 2026 dan Tahun Baru 2027.
    * **3 Skenario Prediksi:** Moderat (*Baseline*), Optimis (+12% Animo Wisata), dan Konservatif (Antisipasi Cuaca Ekstrem).
-   * **Skenario Penambahan Armada Berangkat:** Target dihitung dari Rasio Normal historis setiap simpul, bukan tambahan persentase tetap berdasarkan kategori. Persentil nasional tetap digunakan untuk mengelompokkan urgensi.
-   * **Sidebar Informasi & Kamus Rumus Dashboard:** Kompendium formula matematis lengkap untuk seluruh plot grafik, metrik dasar, rasio load factor, modal share, surge rate Lebaran 2026, indeks musiman mingguan, tolok ukur kepadatan simpul, formulasi model prediktif Nataru, hingga skenario penambahan Armada Berangkat.
+   * **Simulasi Kebutuhan Armada Berdasarkan Prasarana / Simpul:** Simulator kebutuhan penambahan kapal feri di pelabuhan (Merak, Bakauheni, Ketapang), kereta api di stasiun (Pasar Senen, Gambir, Yogyakarta), penerbangan di bandara (Ngurah Rai, Soekarno-Hatta), dan bus di terminal (Purabaya).
+   * **Sidebar Informasi & Kamus Rumus Dashboard:** Kompendium formula matematis lengkap untuk seluruh plot grafik, metrik dasar, rasio load factor, modal share, surge rate Lebaran 2026, indeks musiman mingguan, tolok ukur kepadatan simpul, formulasi model prediktif Nataru, hingga simulasi kapasitas armada.
    * **Rumus Perhitungan di Setiap Plot:** Setiap grafik, tabel, dan kartu KPI dilengkapi badge formula matematis transparan dan tautan rujukan langsung ke Informasi Dashboard.
 
 ---
 
-## Status Urgensi dan Skenario Penambahan Armada Berangkat
+## 📊 Metodologi Penentuan Status Kepadatan Simpul
 
-Baseline menggunakan **median harian Penumpang Berangkat** dan **median harian Armada Berangkat**, dihitung terpisah dari pengamatan **1 Januari–12 Maret 2026**. Rasio Normal adalah hasil pembagian kedua median tersebut, tanpa pembulatan awal.
-
-Tanggal puncak dipilih dari Penumpang Berangkat tertinggi pada **13–29 Maret 2026**; jika seri, digunakan tanggal paling awal. Armada Berangkat puncak diambil pada **tanggal yang sama**, bukan maksimum Armada Berangkat pada tanggal lain.
-
-```text
-Target Armada Berangkat = ceil(Penumpang Berangkat puncak × median Armada Berangkat / median Penumpang Berangkat)
-Tambahan Armada Berangkat = max(0, target − Armada Berangkat puncak)
-Total Armada Berangkat skenario = Armada Berangkat puncak + tambahan
-Persentase tambahan = 100 × tambahan / Armada Berangkat puncak
-```
-
-`ceil` membulatkan ke atas ke bilangan bulat; perhitungan menggunakan nilai penuh. Armada Berangkat yang sudah ada tidak dikurangi, sehingga tambahan **0%** merupakan hasil valid.
-
-**Pengelompokan urgensi tetap memakai persentil empiris nasional** dari `Rasio Puncak / Rasio Normal`: P90 ke atas = Sangat Kritis; P75–P90 = Tinggi / Kritis; P50–P75 = Padat; di bawah P50 = Terkendali. Batas bawah setiap kelompok termasuk dalam kelompok tersebut. Pengecualian volume kecil tetap didahulukan: Penumpang Berangkat puncak di bawah 100 masuk Terkendali. Simpul valid bervolume kecil tetap masuk populasi persentil. Persentil menggunakan interpolasi linear dan tidak dihitung ulang oleh filter. **Kategori tidak menentukan persentase tambahan.**
-
-Median normal yang tidak tersedia/tidak positif, atau Armada Berangkat pada tanggal puncak yang tidak tersedia/tidak positif, menghasilkan **Data tidak cukup**. Baris tetap terlihat beserta alasannya, tetapi target, tambahan, total, dan persentase bernilai kosong (`—`), bukan angka sintetis, serta dikecualikan dari persentil dan agregat.
-
-Agregat hanya memakai simpul valid: persentase agregat = 100 × total tambahan / total Armada Berangkat puncak dari simpul valid, bukan rata-rata persentase simpul. Tanggal puncak berbeda antarsimpul; agregat **bukan kebutuhan operasi serentak pada satu hari**. Ini skenario target beban historis, bukan bukti kapasitas nominal atau rekomendasi operasional final; penerapannya memerlukan kajian operator.
+Status kesibukan simpul ditentukan melalui **3 tolok ukur matematis dan operasional**:
+1. **Rasio Beban per Armada ($\frac{\text{Penumpang}}{\text{Trip Armada}}$):** Membandingkan rasio hari normal vs hari puncak. Contoh: Pelabuhan Bakauheni melonjak dari 206 pnp/kapal menjadi **614 pnp/kapal** saat puncak.
+2. **Persentase Lonjakan vs Hari Normal (*Surge %*):**
+   * 🔴 **Sangat Kritis (95% – 99%):** Lonjakan > +80% s/d +200% (Merak +92%, Bakauheni +195%, Pasar Senen +88%).
+   * 🟠 **Padat Tinggi / Siaga (85% – 94%):** Lonjakan +50% s/d +80% (Gambir +56%, Yogyakarta +61%, Ngurah Rai).
+   * 🟡 **Sibuk Terkendali (65% – 84%):** Lonjakan +25% s/d +50% (Purabaya +49%, Batam Center +59%).
+   * 🟢 **Stabil / Normal (< 65%):** Lonjakan < +25%.
+3. **Batas Kapasitas Fisik Prasarana:** Daya tampung kantong parkir buffer zone pelabuhan, batas kursi gerbong KA, batas utilisasi runway slot bandara (98%), dan waktu tunggu peron terminal bus.
 
 ---
 
@@ -78,21 +68,9 @@ Agregat hanya memakai simpul valid: persentase agregat = 100 × total tambahan /
 2. **Jalankan Dashboard:**
    Cukup buka file `index.html` atau `Dashboard_Mobilitas_Nasional_2026.html` langsung di Google Chrome, Microsoft Edge, atau browser lainnya.
 
-3. **Menghitung Ulang Skenario dari CSV Operasional Lokal:**
-   ```bash
-   python scripts/generate_simpul_recommendations.py
-   ```
-   Perintah ini memperbarui `simpul_recommendations` dan `simpul_scenario_metadata` pada kedua bundle JSON dan kedua file HTML, tanpa membangun ulang template atau mengganti bagian dashboard lainnya.
-
-4. **Membangun Ulang Template Lengkap (Opsional):**
+3. **Membangun Ulang dari Data Mentah (Opsional):**
    ```bash
    python scripts/build_production_dashboard_sidebar.py
-   ```
-   Rebuild template menimpa kedua file HTML. Untuk sekadar memperbarui skenario pada dashboard saat ini, gunakan perintah pada langkah 3.
-
-5. **Menjalankan Pengujian Perhitungan Skenario:**
-   ```bash
-   python -m unittest discover -s tests -v
    ```
 
 ---

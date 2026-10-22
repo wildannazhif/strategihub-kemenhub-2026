@@ -1,11 +1,8 @@
+import os
 import json
 import re
 import pandas as pd
-
-if __package__:
-    from .generate_simpul_recommendations import build_recommendations, normalize_province
-else:
-    from generate_simpul_recommendations import build_recommendations, normalize_province
+import numpy as np
 
 print("=" * 80)
 print("PEMBARUAN RENTANG BASELINE MEDIAN: 1 JANUARI 2026 HINGGA 12 MARET 2026")
@@ -14,12 +11,26 @@ print("=" * 80)
 # 1. Load siasati_multimoda_2026.csv
 raw_csv = "siasati_multimoda_2026.csv"
 print(f"1. Membaca dataset mentah: {raw_csv}...")
-df_source = pd.read_csv(raw_csv, low_memory=False)
-df_raw = df_source.drop_duplicates(keep='first').copy()
+df_raw = pd.read_csv(raw_csv, low_memory=False).drop_duplicates(keep='first')
 
-df_raw['provinsi'] = df_raw['provinsi'].apply(normalize_province)
+def clean_prov(p):
+    p = str(p).strip()
+    if p.upper() == 'SULAWESI SELATAN': return 'Sulawesi Selatan'
+    if p in ['D.I. Yogyakarta', 'DI Yogyakarta', 'D.I Yogyakarta', 'DIY']: return 'D.I Yogyakarta'
+    return p
+
+df_raw['provinsi'] = df_raw['provinsi'].apply(clean_prov)
 df_raw['date_dt'] = pd.to_datetime(df_raw['tanggal'])
 df_raw['month'] = df_raw['date_dt'].dt.month
+
+key_cols = ['tanggal', 'caturwulan', 'moda', 'id_prasarana']
+meta_cols = ['nama_prasarana', 'provinsi']
+metrics = ['penumpang_datang', 'penumpang_berangkat', 'armada_datang', 'armada_berangkat']
+agg_dict = {m: 'sum' for m in metrics}
+for c in meta_cols: agg_dict[c] = 'first'
+df_clean = df_raw.groupby(key_cols, as_index=False, dropna=False).agg(agg_dict)
+df_clean['total_penumpang'] = df_clean['penumpang_datang'] + df_clean['penumpang_berangkat']
+df_clean['total_armada'] = df_clean['armada_datang'] + df_clean['armada_berangkat']
 
 # 2. Load bundle JSON
 bundle_path = "scripts/mobility_data_bundle.json"
@@ -159,14 +170,100 @@ bundle['metrics_summary'] = new_metrics_summary
 print("   • metrics_summary (6 kombinasi) diperbarui.")
 
 # ==============================================================================
-# D. UPDATE SKENARIO NORMAL RATIO HISTORIS
+# D. UPDATE SIMPUL RECOMMENDATIONS (1.010 SIMPUL)
 # ==============================================================================
-simpul_items, scenario_metadata = build_recommendations(
-    df_source, bundle.get('simpul_recommendations', [])
-)
+df_clean_pre = df_clean[df_clean['tanggal'].between('2026-01-01', '2026-03-12')].copy()
+med_hub = df_clean_pre.groupby(['moda', 'nama_prasarana', 'provinsi']).agg(
+    pnp_brg_biasa=('penumpang_berangkat', 'median'),
+    arm_brg_biasa=('armada_berangkat', 'median')
+).reset_index()
+
+peak = df_clean[df_clean['tanggal'].between('2026-03-13', '2026-03-29')]
+peak_hub = peak.groupby(['moda', 'nama_prasarana', 'provinsi']).agg(
+    pnp_brg_puncak=('penumpang_berangkat', 'max'),
+    arm_brg_puncak=('armada_berangkat', 'max')
+).reset_index()
+
+merged = pd.merge(med_hub, peak_hub, on=['moda', 'nama_prasarana', 'provinsi'], how='outer').fillna(0)
+merged = merged[(merged['arm_brg_puncak'] > 0) & (merged['pnp_brg_puncak'] > 0)]
+merged = merged.sort_values(by='pnp_brg_puncak', ascending=False).reset_index(drop=True)
+
+# Preserve existing actions mapping from current bundle
+existing_actions = { (item['moda'], item['name']): item['fieldAction'] for item in bundle.get('simpul_recommendations', []) }
+
+simpul_items = []
+for idx, r in merged.iterrows():
+    moda = r['moda']
+    nama = r['nama_prasarana']
+    prov = r['provinsi']
+    
+    pb = int(round(r['pnp_brg_biasa']))
+    ab = int(round(r['arm_brg_biasa']))
+    pp = int(round(r['pnp_brg_puncak']))
+    ap = int(round(r['arm_brg_puncak']))
+
+    lfb = round(pb / ab, 1) if ab > 0 else 0
+    lfp = round(pp / ap, 1) if ap > 0 else 0
+    ratio = round(lfp / lfb, 2) if lfb > 0 else (2.5 if pp >= 5000 else 1.2)
+
+    if ratio >= 3.0 or (ratio >= 2.0 and pp >= 20000):
+        pct = 20
+        status_text = 'Sangat Kritis'
+        status_badge = 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300'
+    elif ratio >= 1.8 or (ratio >= 1.4 and pp >= 10000):
+        pct = 15
+        status_text = 'Tinggi / Kritis'
+        status_badge = 'bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300'
+    elif ratio >= 1.2 or pp >= 5000:
+        pct = 10
+        status_text = 'Padat Tinggi'
+        status_badge = 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300'
+    else:
+        pct = 5
+        status_text = 'Terkendali'
+        status_badge = 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300'
+
+    add_arm = int(round(ap * (pct / 100.0)))
+    total_arm = ap + add_arm
+
+    if moda == 'UDARA': moda_label, sarana_type, sarana_unit = '✈ Udara', 'Pesawat Jet Komersial', 'penerbangan'
+    elif moda == 'KA':
+        moda_label = '🚆 Kereta Api'
+        if 'KCJB' in nama.upper() or 'WHOOSH' in nama.upper(): sarana_type = 'Kereta Cepat Whoosh'
+        elif 'KRL' in nama.upper() or 'COMMUTER' in nama.upper(): sarana_type = 'KRL Commuter Line'
+        else: sarana_type = 'Rangkaian Kereta Api'
+        sarana_unit = 'perjalanan KA'
+    elif moda == 'BUS': moda_label, sarana_type, sarana_unit = '🚌 Bus AKAP', 'Armada Bus Antar Kota', 'trip bus'
+    elif moda == 'ASDP': moda_label, sarana_type, sarana_unit = '⛴ ASDP Feri', 'Kapal Feri Ro-Ro', 'trip kapal feri'
+    else: moda_label, sarana_type, sarana_unit = '🚢 Laut', 'Kapal Penumpang Pelni/Perintis', 'call kapal laut'
+
+    field_action = existing_actions.get((moda, nama), 'Optimalisasi jadwal armada dan monitoring lonjakan penumpang.')
+
+    simpul_items.append({
+        'id': f'simpul_{idx+1}',
+        'name': nama,
+        'prov': prov,
+        'moda': moda,
+        'modaLabel': moda_label,
+        'saranaType': sarana_type,
+        'saranaUnit': sarana_unit,
+        'pnpBiasa': pb,
+        'armBiasa': ab,
+        'pnpPuncak': pp,
+        'armPuncak': ap,
+        'lfBiasa': lfb,
+        'lfPuncak': lfp,
+        'loadRatio': ratio,
+        'pctTambah': pct,
+        'addArm': add_arm,
+        'totalArm': total_arm,
+        'statusText': status_text,
+        'statusBadge': status_badge,
+        'fieldAction': field_action
+    })
+
 bundle['simpul_recommendations'] = simpul_items
-bundle['simpul_scenario_metadata'] = scenario_metadata
-print(f"   • skenario simpul ({len(simpul_items)} simpul) diperbarui.")
+print(f"   • simpul_recommendations ({len(simpul_items)} simpul) diperbarui.")
 
 # ==============================================================================
 # E. UPDATE PROVINCE MONTHLY DATA (BASELINE 1 JAN - 12 MAR 2026)

@@ -927,5 +927,5 @@ function renderForecastWorkspace() {
   renderForecastComparisonTable();
   renderForecastChart();
   renderForecastTable();
-  if (typeof renderSimpulSimulation === 'function') renderSimpulSimulation();
+  if (typeof renderArmadaSimulation === 'function') renderArmadaSimulation();
 }
