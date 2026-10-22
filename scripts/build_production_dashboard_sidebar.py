@@ -2735,7 +2735,7 @@ function renderLebaranWorkspace() {{
   if (!chartSurgeBar) {{
     const ctxSurge = document.getElementById('chartSurgeBarCanvas').getContext('2d');
     const modas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA', 'TOTAL'];
-    const labelsSurge = ['ASDP', 'Bus', 'Kereta Api', 'Laut', 'Udara', 'TOTAL'];
+    const labelsSurge = ['ASDP', 'Bus', 'Kereta Api', 'Laut', 'Udara', 'Semua Moda'];
     chartSurgeBar = new Chart(ctxSurge, {{
       type: 'bar',
       data: {{
