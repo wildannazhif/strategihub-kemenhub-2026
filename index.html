@@ -667,7 +667,7 @@
 
         <!-- Dynamic Curves vs Surge Comparison -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div class="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
+          <div class="lg:col-span-6 min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
             <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100 dark:border-slate-800">
               <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
                 Dinamika Harian 5 Moda Angkutan Lebaran 2026
@@ -686,71 +686,16 @@
             </div>
           </div>
 
-          <div class="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
-            <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight pb-3 border-b border-slate-100 dark:border-slate-800">
+          <section id="surge-heatmap-panel" class="lg:col-span-6 min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5" aria-labelledby="surge-heatmap-title">
+            <h3 id="surge-heatmap-title" class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight pb-3 border-b border-slate-100 dark:border-slate-800">
               Persentase Lonjakan (%) terhadap Baseline Normal (Median 1 Jan - 12 Mar 2026)
             </h3>
-            <div class="relative w-full h-[320px] mt-3">
-              <canvas id="chartSurgeBarCanvas"></canvas>
-            </div>
-          </div>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-2">Heatmap penumpang per moda pada tiga puncak Lebaran. Data sama dengan tabel komparasi di bawah.</p>
+            <div id="surge-heatmap-content" class="overflow-x-auto mt-3"></div>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-2">Moda diurutkan menurut lonjakan tertinggi. Semua Moda merupakan agregat kelima moda; 0% berarti sama dengan baseline normal.</p>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Arahkan kursor ke sel untuk melihat volume puncak dan baseline penumpang.</p>
+          </section>
         </div>
-
-        <section id="surge-alternatives" class="space-y-4" aria-labelledby="surge-alternatives-title">
-          <div>
-            <h3 id="surge-alternatives-title" class="text-sm font-bold text-slate-900 dark:text-white">Bandingkan 3 Alternatif Grafik Lonjakan</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Data penumpang sama dengan tabel di bawah. Baseline normal: median 1 Jan–12 Mar 2026.</p>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Urutan moda berdasarkan lonjakan tertinggi dari tiga puncak. Semua Moda merupakan agregat kelima moda dan dipisahkan di baris terakhir.</p>
-          </div>
-          <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-            <article id="surge-dotplot-option" class="min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-5" aria-labelledby="surge-dotplot-title">
-              <div class="pb-3 border-b border-slate-100 dark:border-slate-800">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">Alternatif 1</span>
-                <h4 id="surge-dotplot-title" class="text-sm font-bold text-slate-900 dark:text-white mt-1">Dot Plot Horizontal</h4>
-                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Posisi titik membandingkan besarnya lonjakan; bentuk dan warna membedakan periode.</p>
-              </div>
-              <div class="relative w-full h-[360px] mt-3">
-                <canvas id="chartSurgeDotCanvas" role="img" aria-label="Dot plot persentase lonjakan penumpang per moda pada tiga puncak Lebaran. Angka rinci tersedia pada tabel komparasi."></canvas>
-              </div>
-            </article>
-            <article id="surge-heatmap-option" class="min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-5" aria-labelledby="surge-heatmap-title">
-              <div class="pb-3 border-b border-slate-100 dark:border-slate-800">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">Alternatif 2</span>
-                <h4 id="surge-heatmap-title" class="text-sm font-bold text-slate-900 dark:text-white mt-1">Heatmap Moda × Periode</h4>
-                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Angka di setiap sel menunjukkan lonjakan; satu skala warna berlaku untuk semua periode.</p>
-              </div>
-              <div id="surge-heatmap-content" class="overflow-x-auto mt-3"></div>
-            </article>
-            <article id="surge-small-multiples-option" class="xl:col-span-2 min-w-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-5" aria-labelledby="surge-small-multiples-title">
-              <div class="pb-3 border-b border-slate-100 dark:border-slate-800">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">Alternatif 3</span>
-                <h4 id="surge-small-multiples-title" class="text-sm font-bold text-slate-900 dark:text-white mt-1">Tiga Panel Bar Horizontal</h4>
-                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Satu panel per puncak, dengan skala persentase dan urutan moda yang sama agar panjang batang dapat dibandingkan langsung.</p>
-              </div>
-              <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mt-4">
-                <div class="min-w-0">
-                  <h5 class="text-xs font-bold text-purple-700 dark:text-purple-400">Mudik · 18 Mar / H-3</h5>
-                  <div class="relative w-full h-[300px] mt-2">
-                    <canvas id="chartSurgePeriod0Canvas" role="img" aria-label="Bar horizontal lonjakan penumpang saat puncak mudik 18 Maret 2026. Angka rinci tersedia pada tabel komparasi."></canvas>
-                  </div>
-                </div>
-                <div class="min-w-0">
-                  <h5 class="text-xs font-bold text-sky-700 dark:text-sky-400">Balik 1 · 24 Mar / H+3</h5>
-                  <div class="relative w-full h-[300px] mt-2">
-                    <canvas id="chartSurgePeriod1Canvas" role="img" aria-label="Bar horizontal lonjakan penumpang saat puncak balik pertama 24 Maret 2026. Angka rinci tersedia pada tabel komparasi."></canvas>
-                  </div>
-                </div>
-                <div class="min-w-0">
-                  <h5 class="text-xs font-bold text-rose-700 dark:text-rose-400">Balik 2 · 29 Mar / H+8</h5>
-                  <div class="relative w-full h-[300px] mt-2">
-                    <canvas id="chartSurgePeriod2Canvas" role="img" aria-label="Bar horizontal lonjakan penumpang saat puncak balik kedua 29 Maret 2026. Angka rinci tersedia pada tabel komparasi."></canvas>
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-          <p class="text-[11px] text-slate-500 dark:text-slate-400">0% berarti sama dengan baseline normal. Lonjakan persentase terbesar tidak selalu berarti volume penumpang terbesar; arahkan kursor ke titik, sel, atau batang untuk melihat volume puncak dan baseline.</p>
-        </section>
 
         <!-- Dense Surge Data Table -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
@@ -2664,9 +2609,6 @@ let selectedProvinceForGrowth = 'ALL';
 let selectedModaForGrowth = 'ALL';
 let selectedMonthForGrowth = 3;
 let chartLebaranLine = null;
-let chartSurgeBar = null;
-let surgeAlternativeCharts = [];
-let surgeAlternativesTheme = null;
 let chartModalShareArea = null;
 let chartDonutNormal = null;
 let chartDonutPeak = null;
@@ -2720,8 +2662,6 @@ function toggleSidebar() {
     if (chartDOW) chartDOW.resize();
     if (chartProvGrowth) chartProvGrowth.resize();
     if (chartLebaranLine) chartLebaranLine.resize();
-    if (chartSurgeBar) chartSurgeBar.resize();
-    surgeAlternativeCharts.forEach(chart => chart.resize());
     if (chartModalShareArea) chartModalShareArea.resize();
     if (chartDonutNormal) chartDonutNormal.resize();
     if (chartDonutPeak) chartDonutPeak.resize();
@@ -2784,8 +2724,7 @@ function toggleTheme() {
     if (chartDOW) chartDOW.update();
     if (chartProvGrowth) chartProvGrowth.update();
     if (chartLebaranLine) chartLebaranLine.update();
-    if (chartSurgeBar) chartSurgeBar.update();
-    renderSurgeAlternatives();
+    renderLebaranSurgeHeatmap();
     if (chartModalShareArea) chartModalShareArea.update();
     if (chartLoadFactor) chartLoadFactor.update();
     if (chartForecast) chartForecast.update();
@@ -4008,187 +3947,42 @@ function renderLebaranWorkspace() {
     }
   });
 
-  if (!chartSurgeBar) {
-    const ctxSurge = document.getElementById('chartSurgeBarCanvas').getContext('2d');
-    const modas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA', 'TOTAL'];
-    const labelsSurge = ['ASDP', 'Bus', 'Kereta Api', 'Laut', 'Udara', 'Semua Moda'];
-    chartSurgeBar = new Chart(ctxSurge, {
-      type: 'bar',
-      data: {
-        labels: labelsSurge,
-        datasets: [
-          { label: 'Mudik 18 Mar / H-3 (%)', data: modas.map(m => DATA.surge_summary[m].surge_mudik_pct), backgroundColor: '#9333ea', borderRadius: 3 },
-          { label: 'Balik 24 Mar / H+3 (%)', data: modas.map(m => DATA.surge_summary[m].surge_balik1_pct), backgroundColor: '#0284c7', borderRadius: 3 },
-          { label: 'Balik 29 Mar / H+8 (%)', data: modas.map(m => DATA.surge_summary[m].surge_balik2_pct), backgroundColor: '#f43f5e', borderRadius: 3 },
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: isDark ? '#cbd5e1' : '#475569' } } },
-        scales: {
-          x: { grid: { display: false }, ticks: { color: isDark ? '#94a3b8' : '#64748b' } },
-          y: { grid: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)' }, ticks: { color: isDark ? '#94a3b8' : '#64748b', font: { family: 'JetBrains Mono' }, callback: v => '+' + v + '%' } }
-        }
-      }
+  const modas = ['ASDP', 'BUS', 'KA', 'LAUT', 'UDARA', 'TOTAL'];
+  const labelsSurge = ['ASDP', 'Bus', 'Kereta Api', 'Laut', 'Udara', 'Semua Moda'];
+  const tbody = document.getElementById('tbody-surge');
+  if (tbody) {
+    tbody.innerHTML = '';
+    modas.forEach((m, idx) => {
+      const s = DATA.surge_summary[m];
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
+      tr.innerHTML = `
+        <td class="py-2.5 px-3 font-sans font-semibold text-slate-900 dark:text-slate-100">${labelsSurge[idx]}</td>
+        <td class="py-2.5 px-3 text-right">${numFmt(s.baseline)}</td>
+        <td class="py-2.5 px-3 text-right font-bold text-purple-700 dark:text-purple-400">${numFmt(s.peak_mudik)}</td>
+        <td class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400 font-semibold">+${decFmt(s.surge_mudik_pct, 1)}%</td>
+        <td class="py-2.5 px-3 text-right font-bold text-rose-700 dark:text-rose-400">${numFmt(s.peak_balik1)}</td>
+        <td class="py-2.5 px-3 text-right text-rose-700 dark:text-rose-400 font-semibold">+${decFmt(s.surge_balik1_pct, 1)}%</td>
+        <td class="py-2.5 px-3 text-right">${numFmt(s.peak_balik2)}</td>
+        <td class="py-2.5 px-3 text-right">+${decFmt(s.surge_balik2_pct, 1)}%</td>
+      `;
+      tbody.appendChild(tr);
     });
-
-    const tbody = document.getElementById('tbody-surge');
-    if (tbody) {
-      tbody.innerHTML = '';
-      modas.forEach((m, idx) => {
-        const s = DATA.surge_summary[m];
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors';
-        tr.innerHTML = `
-          <td class="py-2.5 px-3 font-sans font-semibold text-slate-900 dark:text-slate-100">${labelsSurge[idx]}</td>
-          <td class="py-2.5 px-3 text-right">${numFmt(s.baseline)}</td>
-          <td class="py-2.5 px-3 text-right font-bold text-purple-700 dark:text-purple-400">${numFmt(s.peak_mudik)}</td>
-          <td class="py-2.5 px-3 text-right text-purple-700 dark:text-purple-400 font-semibold">+${decFmt(s.surge_mudik_pct, 1)}%</td>
-          <td class="py-2.5 px-3 text-right font-bold text-rose-700 dark:text-rose-400">${numFmt(s.peak_balik1)}</td>
-          <td class="py-2.5 px-3 text-right text-rose-700 dark:text-rose-400 font-semibold">+${decFmt(s.surge_balik1_pct, 1)}%</td>
-          <td class="py-2.5 px-3 text-right">${numFmt(s.peak_balik2)}</td>
-          <td class="py-2.5 px-3 text-right">+${decFmt(s.surge_balik2_pct, 1)}%</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
   }
-  renderSurgeAlternatives();
+  renderLebaranSurgeHeatmap();
 }
 
 function formatSurgePercent(value) {
   return `${value > 0 ? '+' : ''}${decFmt(value, 1)}%`;
 }
 
-function surgeTooltipOptions(rows, periods, isDark) {
-  const rowFor = context => rows[context.raw.rowIndex ?? context.dataIndex];
-  const valueFor = context => rowFor(context).values[context.dataset.surgePeriodIndex];
-  return {
-    backgroundColor: isDark ? '#0f172a' : '#ffffff',
-    titleColor: isDark ? '#ffffff' : '#0f172a',
-    bodyColor: isDark ? '#cbd5e1' : '#334155',
-    borderColor: isDark ? '#475569' : '#cbd5e1',
-    borderWidth: 1,
-    padding: 10,
-    bodyFont: { family: 'JetBrains Mono', size: 10 },
-    titleFont: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' },
-    callbacks: {
-      title: items => `${rowFor(items[0]).label} · ${periods[items[0].dataset.surgePeriodIndex].label}`,
-      label: context => `Lonjakan: ${formatSurgePercent(valueFor(context).percent)}`,
-      afterLabel: context => [
-        `Puncak: ${numFmt(valueFor(context).peak)} penumpang`,
-        `Baseline: ${numFmt(rowFor(context).baseline)} penumpang/hari`
-      ]
-    }
-  };
-}
-
-const surgeAggregateDivider = {
-  id: 'surgeAggregateDivider',
-  afterDatasetsDraw(chart, args, options) {
-    const y = (chart.scales.y.getPixelForValue(options.lastModaIndex) + chart.scales.y.getPixelForValue(options.lastModaIndex + 1)) / 2;
-    const context = chart.ctx;
-    context.save();
-    context.strokeStyle = options.color;
-    context.lineWidth = 1;
-    context.setLineDash([4, 4]);
-    context.beginPath();
-    context.moveTo(chart.chartArea.left, y);
-    context.lineTo(chart.chartArea.right, y);
-    context.stroke();
-    context.restore();
-  }
-};
-
-function createSurgeSmallMultiples(rows, periods, scale, isDark) {
-  const textColor = isDark ? '#cbd5e1' : '#334155';
-  const borderColor = isDark ? '#334155' : '#e2e8f0';
-  const valueLabels = {
-    id: 'surgeBarValues',
-    afterDatasetsDraw(chart) {
-      const context = chart.ctx;
-      context.save();
-      context.fillStyle = textColor;
-      context.font = '10px "JetBrains Mono", monospace';
-      context.textBaseline = 'middle';
-      chart.getDatasetMeta(0).data.forEach((bar, rowIndex) => {
-        const value = chart.data.datasets[0].data[rowIndex];
-        context.textAlign = value < 0 ? 'right' : 'left';
-        context.fillText(formatSurgePercent(value), bar.x + (value < 0 ? -5 : 5), bar.y);
-      });
-      context.restore();
-    }
-  };
-  return periods.map((period, periodIndex) => new Chart(document.getElementById(`chartSurgePeriod${periodIndex}Canvas`), {
-    type: 'bar',
-    data: {
-      labels: rows.map(row => row.label),
-      datasets: [{
-        label: period.label,
-        surgePeriodIndex: periodIndex,
-        data: rows.map(row => row.values[periodIndex].percent),
-        backgroundColor: period.color,
-        borderColor: isDark ? '#e2e8f0' : '#0f172a',
-        borderWidth: context => context.dataIndex === rows.length - 1 ? 2 : 0,
-        borderRadius: 3,
-        maxBarThickness: 20
-      }]
-    },
-    plugins: [surgeAggregateDivider, valueLabels],
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: false,
-      layout: { padding: { left: scale.min < 0 ? 48 : 0, right: 52 } },
-      interaction: { mode: 'nearest', intersect: true },
-      plugins: {
-        legend: { display: false },
-        tooltip: surgeTooltipOptions(rows, periods, isDark),
-        surgeAggregateDivider: { lastModaIndex: rows.length - 2, color: borderColor }
-      },
-      scales: {
-        x: {
-          min: scale.min,
-          max: scale.max,
-          grid: { color: borderColor },
-          border: { color: borderColor },
-          ticks: {
-            color: textColor,
-            maxTicksLimit: 4,
-            minRotation: 0,
-            maxRotation: 0,
-            font: { family: 'JetBrains Mono', size: 9 },
-            callback: value => `${numFmt(value)}%`
-          },
-          title: { display: true, text: 'Lonjakan (%)', color: textColor, font: { family: 'Plus Jakarta Sans', size: 10 } }
-        },
-        y: {
-          grid: { display: false },
-          border: { display: false },
-          ticks: {
-            autoSkip: false,
-            color: textColor,
-            font: context => ({ family: 'Plus Jakarta Sans', size: 10, weight: context.tick.value === rows.length - 1 ? '700' : '500' })
-          }
-        }
-      }
-    }
-  }));
-}
-
-function renderSurgeAlternatives() {
+function renderLebaranSurgeHeatmap() {
   if (document.getElementById('tab-lebaran').classList.contains('hidden')) return;
   const isDark = document.documentElement.classList.contains('dark');
-  if (surgeAlternativeCharts.length && surgeAlternativesTheme === isDark) {
-    surgeAlternativeCharts.forEach(chart => chart.resize());
-    return;
-  }
   const periods = [
-    { label: 'Mudik · 18 Mar / H-3', shortLabel: 'Mudik', date: '18 Mar / H-3', color: '#9333ea', pointStyle: 'circle', percentKey: 'surge_mudik_pct', peakKey: 'peak_mudik' },
-    { label: 'Balik 1 · 24 Mar / H+3', shortLabel: 'Balik 1', date: '24 Mar / H+3', color: '#0284c7', pointStyle: 'rectRot', percentKey: 'surge_balik1_pct', peakKey: 'peak_balik1' },
-    { label: 'Balik 2 · 29 Mar / H+8', shortLabel: 'Balik 2', date: '29 Mar / H+8', color: '#f43f5e', pointStyle: 'triangle', percentKey: 'surge_balik2_pct', peakKey: 'peak_balik2' }
+    { label: 'Mudik · 18 Mar / H-3', shortLabel: 'Mudik', date: '18 Mar / H-3', percentKey: 'surge_mudik_pct', peakKey: 'peak_mudik' },
+    { label: 'Balik 1 · 24 Mar / H+3', shortLabel: 'Balik 1', date: '24 Mar / H+3', percentKey: 'surge_balik1_pct', peakKey: 'peak_balik1' },
+    { label: 'Balik 2 · 29 Mar / H+8', shortLabel: 'Balik 2', date: '29 Mar / H+8', percentKey: 'surge_balik2_pct', peakKey: 'peak_balik2' }
   ];
   const labels = { ASDP: 'ASDP', BUS: 'Bus', KA: 'Kereta Api', LAUT: 'Laut', UDARA: 'Udara', TOTAL: 'Semua Moda' };
   const rowFor = key => ({
@@ -4205,123 +3999,7 @@ function renderSurgeAlternatives() {
     min: Math.floor(Math.min(0, ...percentages) / 50) * 50,
     max: Math.max(50, Math.ceil(Math.max(0, ...percentages) / 50) * 50)
   };
-  surgeAlternativeCharts.forEach(chart => chart.destroy());
-  surgeAlternativeCharts = [createSurgeDotPlot(rows, periods, scale, isDark), ...createSurgeSmallMultiples(rows, periods, scale, isDark)];
   renderSurgeHeatmap(rows, periods, scale, isDark);
-  surgeAlternativesTheme = isDark;
-}
-
-function createSurgeDotPlot(rows, periods, scale, isDark) {
-  const textColor = isDark ? '#cbd5e1' : '#334155';
-  const mutedColor = isDark ? '#94a3b8' : '#64748b';
-  const borderColor = isDark ? '#334155' : '#e2e8f0';
-  const fontFamily = "'Plus Jakarta Sans', sans-serif";
-  const monoFamily = "'JetBrains Mono', monospace";
-  const offsets = [-0.25, 0, 0.25];
-
-  return new Chart(document.getElementById('chartSurgeDotCanvas'), {
-    type: 'scatter',
-    data: {
-      datasets: periods.map((period, periodIndex) => ({
-        label: period.label,
-        surgePeriodIndex: periodIndex,
-        data: rows.map((row, rowIndex) => ({
-          x: row.values[periodIndex].percent,
-          y: rowIndex + offsets[periodIndex],
-          rowIndex
-        })),
-        showLine: false,
-        pointStyle: period.pointStyle,
-        pointRadius: 5,
-        pointHoverRadius: 7,
-        pointHitRadius: 8,
-        pointBackgroundColor: period.color,
-        pointBorderColor: isDark ? '#0f172a' : '#ffffff',
-        pointBorderWidth: 1.25,
-        backgroundColor: period.color,
-        borderColor: period.color
-      }))
-    },
-    plugins: [surgeAggregateDivider],
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: false,
-      font: { family: fontFamily },
-      layout: { padding: { top: 4, right: 12, bottom: 0 } },
-      interaction: { mode: 'nearest', intersect: true },
-      plugins: {
-        legend: {
-          display: true,
-          position: 'top',
-          align: 'start',
-          labels: {
-            color: textColor,
-            usePointStyle: true,
-            pointStyleWidth: 12,
-            boxWidth: 12,
-            boxHeight: 10,
-            padding: 12,
-            font: { family: fontFamily, size: 10 }
-          }
-        },
-        tooltip: surgeTooltipOptions(rows, periods, isDark),
-        surgeAggregateDivider: {
-          lastModaIndex: rows.length - 2,
-          color: borderColor
-        }
-      },
-      scales: {
-        x: {
-          type: 'linear',
-          min: scale.min,
-          max: scale.max,
-          title: {
-            display: true,
-            text: 'Lonjakan terhadap baseline (%)',
-            color: mutedColor,
-            font: { family: fontFamily, size: 11 },
-            padding: { top: 8, bottom: 0 }
-          },
-          ticks: {
-            color: mutedColor,
-            maxTicksLimit: 7,
-            minRotation: 0,
-            maxRotation: 0,
-            font: { family: monoFamily, size: 10 },
-            callback: value => `${numFmt(value)}%`
-          },
-          grid: { color: borderColor },
-          border: { color: borderColor }
-        },
-        y: {
-          type: 'linear',
-          reverse: true,
-          min: -0.45,
-          max: rows.length - 0.55,
-          afterBuildTicks: axis => {
-            axis.ticks = rows.map((row, rowIndex) => ({ value: rowIndex }));
-          },
-          ticks: {
-            autoSkip: false,
-            stepSize: 1,
-            minRotation: 0,
-            maxRotation: 0,
-            padding: 8,
-            color: textColor,
-            font: context => ({
-              family: fontFamily,
-              size: 11,
-              weight: context.tick && context.tick.value === rows.length - 1 ? '700' : '500'
-            }),
-            callback: value => Number.isInteger(value) && rows[value] ? rows[value].label : ''
-          },
-          grid: { display: false },
-          border: { display: false }
-        }
-      }
-    }
-  });
 }
 
 function renderSurgeHeatmap(rows, periods, scale, isDark) {
@@ -4330,9 +4008,9 @@ function renderSurgeHeatmap(rows, periods, scale, isDark) {
   host.replaceChildren();
 
   // Keep one quantitative color scale for every period and both themes.
-  const lowColor = [239, 246, 255];
-  const highColor = [30, 58, 138];
-  const darkText = [15, 23, 42];
+  const lowColor = [255, 228, 230];
+  const highColor = [153, 27, 27];
+  const darkText = [0, 0, 0];
   const whiteText = [255, 255, 255];
   const rgb = color => `rgb(${color.join(', ')})`;
   const luminance = color => color.reduce((sum, channel, index) => {
@@ -4460,7 +4138,7 @@ function renderSurgeHeatmap(rows, periods, scale, isDark) {
   gradient.setAttribute('aria-hidden', 'true');
   const note = document.createElement('p');
   note.className = 'mt-2 text-center text-[11px]';
-  note.textContent = 'Warna lebih pekat = lonjakan lebih tinggi';
+  note.textContent = 'Merah lebih pekat = lonjakan lebih tinggi';
   legend.append(endpoints, gradient, note);
   host.append(table, legend);
 }
