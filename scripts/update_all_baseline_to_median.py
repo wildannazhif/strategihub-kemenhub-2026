@@ -177,24 +177,31 @@ for idx, r in merged.iterrows():
 
     # Tingkatan Kebutuhan Armada
     if ratio >= 3.0 or (ratio >= 2.0 and pp >= 20000):
-        pct = 20
         status_text = 'Sangat Kritis'
         status_badge = 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300'
     elif ratio >= 1.8 or (ratio >= 1.4 and pp >= 10000):
-        pct = 15
         status_text = 'Tinggi / Kritis'
         status_badge = 'bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300'
     elif ratio >= 1.2 or pp >= 5000:
-        pct = 10
         status_text = 'Padat Tinggi'
         status_badge = 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300'
     else:
-        pct = 5
         status_text = 'Terkendali'
         status_badge = 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300'
 
-    add_arm = int(round(ap * (pct / 100.0)))
-    total_arm = ap + add_arm
+    # Logika Kebutuhan Trip Armada Saat Lonjakan
+    # Agar beban per trip (penumpang per armada) tetap sama seperti hari biasa:
+    # Trip yang dibutuhkan = (Penumpang lonjakan / Penumpang hari biasa) * Trip hari biasa
+    if pb > 0 and ab > 0 and ap > 0:
+        needed = int((pp / pb) * ab)
+        add_arm = max(0, needed - ap)
+        total_arm = ap + add_arm
+        pct = int(round((add_arm / ap) * 100))
+    else:
+        needed = ap
+        add_arm = 0
+        total_arm = ap
+        pct = 0
 
     if moda == 'UDARA':
         moda_label = '✈ Udara'

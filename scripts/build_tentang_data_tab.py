@@ -492,15 +492,15 @@ TAB_CONTENT = """      <!-- ====================================================
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">B. Tambahan Unit Armada Perbantuan:</div>
+              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">B. Trip yang Dibutuhkan (Beban Sama Seperti Hari Biasa):</div>
               <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-indigo-600 dark:text-indigo-400 font-semibold text-sm">
-                $$A_{\\text{tambah}} = \\left\\lceil A_{\\text{puncak}} \\times \\left( \\frac{\\%\\text{ Tambah}}{100} \\right) \\right\\rceil$$
+                $$A_{\\text{butuh}} = \\left\\lfloor \\frac{P_{\\text{puncak}}}{P_{\\text{biasa}}} \\times A_{\\text{biasa}} \\right\\rfloor = \\left\\lfloor \\frac{P_{\\text{puncak}}}{LF_{\\text{biasa}}} \\right\\rfloor$$
               </div>
             </div>
             <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">C. Total Armada Beroperasi Puncak:</div>
+              <div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">C. Kekurangan Trip & Persentase Tambahan:</div>
               <div class="text-center py-2 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 font-semibold text-sm">
-                $$A_{\\text{total}} = A_{\\text{puncak}} + A_{\\text{tambah}}$$
+                $$A_{\\text{tambah}} = \\max(0, A_{\\text{butuh}} - A_{\\text{puncak}}), \\quad \\%\\text{ Tambah} = \\frac{A_{\\text{tambah}}}{A_{\\text{puncak}}} \\times 100\\%$$
               </div>
             </div>
           </div>

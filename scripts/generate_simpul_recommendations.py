@@ -109,23 +109,31 @@ def generate_recommendations():
         # Penentuan Persentase Kebutuhan Tambahan Armada Berbasis Persentil Lonjakan Load Factor (TCQSM & TRB Standard)
         # Simpul perintis sangat kecil (pp < 100) diklasifikasikan ke Terkendali karena tidak memicu defisit kapasitas nasional
         if ratio >= p90 and pp >= 100:
-            pct = 20
             status_text = 'Sangat Kritis'
             status_badge = 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300'
         elif ratio >= p75 and pp >= 100:
-            pct = 15
             status_text = 'Tinggi / Kritis'
             status_badge = 'bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300'
         elif ratio >= p50 and pp >= 100:
-            pct = 10
             status_text = 'Padat'
             status_badge = 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300'
         else:
-            pct = 5
             status_text = 'Terkendali'
             status_badge = 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300'
-        add_arm = int(round(ap * (pct / 100.0)))
-        total_arm = ap + add_arm
+
+        # Logika Kebutuhan Trip Armada Saat Lonjakan
+        # Agar beban per trip (penumpang per armada) tetap sama seperti hari biasa:
+        # Trip yang dibutuhkan = (Penumpang lonjakan / Penumpang hari biasa) * Trip hari biasa
+        if pb > 0 and ab > 0 and ap > 0:
+            needed = int((pp / pb) * ab)
+            add_arm = max(0, needed - ap)
+            total_arm = ap + add_arm
+            pct = int(round((add_arm / ap) * 100))
+        else:
+            needed = ap
+            add_arm = 0
+            total_arm = ap
+            pct = 0
 
         # Label & Moda configuration
         if moda == 'UDARA':

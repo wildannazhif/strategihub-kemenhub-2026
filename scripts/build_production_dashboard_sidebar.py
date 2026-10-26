@@ -4126,10 +4126,10 @@ function renderDynamicSimpulSummary(filteredData) {{
   const totalCur = filteredData.reduce((acc, c) => acc + (c.armPuncak || 0), 0);
   const nationalAvgPct = totalCur > 0 ? (totalAdd / totalCur * 100).toFixed(1) : '0';
 
-  const criticalCount = filteredData.filter(d => d.pctTambah === 20).length;
-  const highCount = filteredData.filter(d => d.pctTambah === 15).length;
-  const medCount = filteredData.filter(d => d.pctTambah === 10).length;
-  const lowCount = filteredData.filter(d => d.pctTambah === 5).length;
+  const criticalCount = filteredData.filter(d => d.statusText === 'Sangat Kritis' || d.pctTambah === 20).length;
+  const highCount = filteredData.filter(d => d.statusText === 'Tinggi / Kritis' || d.pctTambah === 15).length;
+  const medCount = filteredData.filter(d => (d.statusText && d.statusText.includes('Padat')) || d.pctTambah === 10).length;
+  const lowCount = filteredData.filter(d => d.statusText === 'Terkendali' || d.pctTambah === 5).length;
 
   elSum.innerHTML = `
     <div class="flex items-start gap-2.5">
@@ -4144,10 +4144,10 @@ function renderDynamicSimpulSummary(filteredData) {{
           </div>
           <div>
             • <strong>Distribusi Tingkat Urgensi:</strong> 
-            <span class="font-semibold text-rose-600 dark:text-rose-400">${{criticalCount}} Simpul Sangat Kritis (+20%)</span>, 
-            <span class="font-semibold text-orange-600 dark:text-orange-400">${{highCount}} Simpul Tinggi (+15%)</span>, 
-            <span class="font-semibold text-amber-600 dark:text-amber-400">${{medCount}} Simpul Padat (+10%)</span>, dan 
-            <span class="font-semibold text-emerald-600 dark:text-emerald-400">${{lowCount}} Simpul Terkendali/Siaga (+5%)</span>.
+            <span class="font-semibold text-rose-600 dark:text-rose-400">${{criticalCount}} Simpul Sangat Kritis</span>, 
+            <span class="font-semibold text-orange-600 dark:text-orange-400">${{highCount}} Simpul Tinggi</span>, 
+            <span class="font-semibold text-amber-600 dark:text-amber-400">${{medCount}} Simpul Padat</span>, dan 
+            <span class="font-semibold text-emerald-600 dark:text-emerald-400">${{lowCount}} Simpul Terkendali/Siaga</span>.
           </div>
           <div>
             • <strong>Instruksi Utama Lapangan:</strong> Prioritaskan rekayasa *Tiba Bongkar Berangkat* di Pelabuhan Merak-Bakauheni & Ketapang-Gilimanuk, izin slot *extra flight* malam di CGK Soetta & DPS Bali, serta rangkaian Kereta Api Tambahan (KLB) di Pasar Senen & Gambir.
@@ -4167,7 +4167,13 @@ function renderSimpulSimulation() {{
   // 1. Filter
   let filtered = allData.filter(s => {{
     const matchModa = (simpulModaFilter === 'ALL' || s.moda === simpulModaFilter);
-    const matchStatus = (simpulStatusFilter === 'ALL' || String(s.pctTambah) === String(simpulStatusFilter));
+    const matchStatus = (simpulStatusFilter === 'ALL' ||
+      (simpulStatusFilter === '20' && (s.statusText === 'Sangat Kritis' || s.pctTambah === 20)) ||
+      (simpulStatusFilter === '15' && (s.statusText === 'Tinggi / Kritis' || s.pctTambah === 15)) ||
+      (simpulStatusFilter === '10' && ((s.statusText && s.statusText.includes('Padat')) || s.pctTambah === 10)) ||
+      (simpulStatusFilter === '5' && (s.statusText === 'Terkendali' || s.pctTambah === 5)) ||
+      String(s.pctTambah) === String(simpulStatusFilter)
+    );
     const matchSearch = !simpulSearchQuery || 
       (s.name && s.name.toLowerCase().includes(simpulSearchQuery)) ||
       (s.prov && s.prov.toLowerCase().includes(simpulSearchQuery)) ||
