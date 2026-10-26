@@ -2081,7 +2081,7 @@
           </div>
 
           <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-            Sesuai standar internasional <em>Transit Capacity and Quality of Service Manual (TCQSM, TCRP Report 165)</em> dan <em>Ceder (2015)</em>, kebutuhan armada tambahan dihitung dari rasio lonjakan kepadatan per armada (Load Factor Puncak terhadap Load Factor Biasa) dengan ambang persentil empiris $P_{50}, P_{75}, P_{90}$ dari 1.010 simpul nasional.
+            Sesuai standar internasional <em>Transit Capacity and Quality of Service Manual (TCQSM, TCRP Report 165)</em> dan <em>Ceder (2015)</em>, kebutuhan armada tambahan dihitung dari rasio lonjakan kepadatan per armada (Load Factor Puncak terhadap Load Factor Biasa) agar beban per trip pada periode lonjakan tetap setara dengan kondisi normal hari biasa, dengan klasifikasi urgensi simpul berbasis ambang batas empiris nasional.
           </p>
 
           <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
@@ -2106,46 +2106,53 @@
             </div>
           </div>
 
-          <!-- Matriks Persentil Table -->
+          <!-- Matriks Klasifikasi Status Table -->
           <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
             <table class="w-full text-left text-xs font-sans">
               <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-300">
                 <tr>
                   <th class="p-2.5">Klasifikasi Status</th>
-                  <th class="p-2.5">Kriteria Persentil Empiris</th>
-                  <th class="p-2.5 text-center">Rekomendasi Tambah</th>
-                  <th class="p-2.5">Jumlah Simpul</th>
-                  <th class="p-2.5">Contoh Simpul Riil Lapangan</th>
+                  <th class="p-2.5">Kriteria Lonjakan Beban</th>
+                  <th class="p-2.5 text-center">Jumlah Simpul</th>
+                  <th class="p-2.5">Contoh Perhitungan Riil Lapangan (Kebutuhan & Tambahan Trip)</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-[11px]">
                 <tr>
                   <td class="p-2.5 font-bold text-rose-600 dark:text-rose-400">🔴 Sangat Kritis</td>
-                  <td class="p-2.5 font-mono">$$\text{Rasio} \ge P_{90} = 3{,}43\times$$ (Top 10%)</td>
-                  <td class="p-2.5 font-mono font-bold text-center text-indigo-600 dark:text-indigo-400">+20%</td>
-                  <td class="p-2.5 font-bold">87 Simpul</td>
-                  <td class="p-2.5">Bakauheni (4,3x), Gilimanuk (4,2x), Merak (3,8x), Giwangan (3,6x)</td>
+                  <td class="p-2.5 font-mono">$$\text{Rasio} \ge 3{,}0\times$$ (atau $$\ge 2{,}0\times$$ &amp; $$P \ge 20\text{k}$$)</td>
+                  <td class="p-2.5 font-bold text-center">204 Simpul</td>
+                  <td class="p-2.5 leading-relaxed">
+                    <strong>Bakauheni:</strong> LF 4,16x $\rightarrow$ butuh 570 trip (<strong>+433 trip / +316%</strong>)<br>
+                    <strong>Merak:</strong> LF 3,76x $\rightarrow$ butuh 489 trip (<strong>+359 trip / +276%</strong>)<br>
+                    <strong>Gilimanuk:</strong> LF 3,85x $\rightarrow$ butuh 965 trip (<strong>+714 trip / +284%</strong>)
+                  </td>
                 </tr>
                 <tr>
                   <td class="p-2.5 font-bold text-orange-600 dark:text-orange-400">🟠 Tinggi / Kritis</td>
-                  <td class="p-2.5 font-mono">$$P_{75} \le \text{Rasio} < P_{90}$$ ($$2{,}33\times - 3{,}42\times$$)</td>
-                  <td class="p-2.5 font-mono font-bold text-center text-indigo-600 dark:text-indigo-400">+15%</td>
-                  <td class="p-2.5 font-bold">122 Simpul</td>
-                  <td class="p-2.5">Pasar Senen (2,8x), Ketapang (2,6x), Poto Tano (2,5x)</td>
+                  <td class="p-2.5 font-mono">$$1{,}8\times \le \text{Rasio} < 3{,}0\times$$ (atau $$\ge 1{,}4\times$$ &amp; $$P \ge 10\text{k}$$)</td>
+                  <td class="p-2.5 font-bold text-center">245 Simpul</td>
+                  <td class="p-2.5 leading-relaxed">
+                    <strong>Purabaya:</strong> LF 1,44x $\rightarrow$ butuh 1.365 trip (<strong>+419 trip / +44%</strong>)<br>
+                    <strong>Purboyo:</strong> LF 1,83x $\rightarrow$ butuh 1.778 trip (<strong>+810 trip / +84%</strong>)<br>
+                    <strong>Kertonegoro:</strong> LF 1,78x $\rightarrow$ butuh 1.704 trip (<strong>+752 trip / +79%</strong>)
+                  </td>
                 </tr>
                 <tr>
                   <td class="p-2.5 font-bold text-amber-600 dark:text-amber-400">🟡 Padat</td>
-                  <td class="p-2.5 font-mono">$$P_{50} \le \text{Rasio} < P_{75}$$ ($$1{,}54\times - 2{,}32\times$$)</td>
-                  <td class="p-2.5 font-mono font-bold text-center text-indigo-600 dark:text-indigo-400">+10%</td>
-                  <td class="p-2.5 font-bold">211 Simpul</td>
-                  <td class="p-2.5">Juanda (1,9x), Gambir (1,8x), DPS Bali (1,6x), Soetta (1,5x)</td>
+                  <td class="p-2.5 font-mono">$$1{,}2\times \le \text{Rasio} < 1{,}8\times$$ (atau $$P \ge 5\text{k}$$)</td>
+                  <td class="p-2.5 font-bold text-center">445 Simpul</td>
+                  <td class="p-2.5 leading-relaxed">
+                    <strong>Soekarno-Hatta:</strong> LF 1,22x $\rightarrow$ butuh 746 penerbangan (<strong>+132 unit / +21%</strong>)<br>
+                    <strong>Juanda:</strong> LF 1,26x $\rightarrow$ butuh 199 penerbangan (<strong>+40 unit / +25%</strong>)<br>
+                    <strong>DPS Bali:</strong> LF 1,12x $\rightarrow$ butuh 240 penerbangan (<strong>+25 unit / +12%</strong>)
+                  </td>
                 </tr>
                 <tr>
                   <td class="p-2.5 font-bold text-emerald-600 dark:text-emerald-400">🟢 Terkendali</td>
-                  <td class="p-2.5 font-mono">$$\text{Rasio} < P_{50} = 1{,}54\times$$ (atau $$P < 100$$)</td>
-                  <td class="p-2.5 font-mono font-bold text-center text-indigo-600 dark:text-indigo-400">+5%</td>
-                  <td class="p-2.5 font-bold">590 Simpul</td>
-                  <td class="p-2.5">Simpul perintis lokal & rute reguler dengan armada memadai</td>
+                  <td class="p-2.5 font-mono">$$\text{Rasio} < 1{,}2\times$$ dan $$P < 5\text{k}$$</td>
+                  <td class="p-2.5 font-bold text-center">116 Simpul</td>
+                  <td class="p-2.5 leading-relaxed">Simpul perintis lokal & rute reguler dengan armada memadai (penambahan armada <strong>0 s.d. moderat</strong> karena beban puncak telah terlayani seimbang dengan armada yang ada)</td>
                 </tr>
               </tbody>
             </table>

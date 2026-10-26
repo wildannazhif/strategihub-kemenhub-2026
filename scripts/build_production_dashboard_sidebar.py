@@ -484,38 +484,37 @@ def generate_dashboard():
               <thead class="bg-slate-100 dark:bg-slate-800 font-bold text-slate-600 dark:text-slate-400">
                 <tr>
                   <th class="p-1.5">Klasifikasi Beban</th>
-                  <th class="p-1.5">Kriteria Persentil Empiris</th>
-                  <th class="p-1.5">Rekomendasi Tambahan (%)</th>
-                  <th class="p-1.5">Cakupan Simpul Nasional</th>
+                  <th class="p-1.5">Kriteria Lonjakan LF</th>
+                  <th class="p-1.5 text-center">Jumlah Simpul</th>
+                  <th class="p-1.5">Contoh Perhitungan Lapangan (Kebutuhan & Tambahan Trip)</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
                 <tr>
                   <td class="p-1.5 font-bold text-rose-600 dark:text-rose-400">🔴 Sangat Kritis</td>
-                  <td class="p-1.5 font-mono">Top 10% Terparah (&ge; P90 = 3,43x lipat)</td>
-                  <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+20%</td>
-                  <td class="p-1.5">87 Simpul (Bakauheni 4,3x, Gilimanuk 4,2x, Merak 3,8x, Giwangan 3,6x)</td>
+                  <td class="p-1.5 font-mono">Rasio &ge; 3,0x (atau &ge; 2,0x & P &ge; 20k)</td>
+                  <td class="p-1.5 font-bold text-center">204 Simpul</td>
+                  <td class="p-1.5">Bakauheni (4,16x &rarr; butuh 570 trip, +433 trip / +316%), Merak (3,76x &rarr; butuh 489 trip, +359 trip / +276%)</td>
                 </tr>
                 <tr>
                   <td class="p-1.5 font-bold text-orange-600 dark:text-orange-400">🟠 Tinggi / Kritis</td>
-                  <td class="p-1.5 font-mono">P75 s.d. P90 (2,33x &ndash; 3,42x lipat)</td>
-                  <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+15%</td>
-                  <td class="p-1.5">122 Simpul (Pasar Senen 2,8x, Ketapang 2,6x, Poto Tano 2,5x)</td>
+                  <td class="p-1.5 font-mono">1,8x s.d. 3,0x (atau &ge; 1,4x & P &ge; 10k)</td>
+                  <td class="p-1.5 font-bold text-center">245 Simpul</td>
+                  <td class="p-1.5">Purabaya (1,44x &rarr; butuh 1.365 trip, +419 trip / +44%), Purboyo (1,83x &rarr; butuh 1.778 trip, +810 trip / +84%)</td>
                 </tr>
                 <tr>
                   <td class="p-1.5 font-bold text-amber-600 dark:text-amber-400">🟡 Padat</td>
-                  <td class="p-1.5 font-mono">P50 s.d. P75 (1,54x &ndash; 2,32x lipat)</td>
-                  <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+10%</td>
-                  <td class="p-1.5">211 Simpul (Juanda 1,9x, Gambir 1,8x, DPS Bali 1,6x, Soetta 1,5x)</td>
+                  <td class="p-1.5 font-mono">1,2x s.d. 1,8x (atau P &ge; 5k)</td>
+                  <td class="p-1.5 font-bold text-center">445 Simpul</td>
+                  <td class="p-1.5">Soetta (1,22x &rarr; butuh 746 trip, +132 unit / +21%), Juanda (1,26x &rarr; butuh 199 trip, +40 unit / +25%)</td>
                 </tr>
                 <tr>
                   <td class="p-1.5 font-bold text-emerald-600 dark:text-emerald-400">🟢 Terkendali</td>
-                  <td class="p-1.5 font-mono">&lt; P50 (&lt; 1,54x lipat / armada mencukupi)</td>
-                  <td class="p-1.5 font-mono font-bold text-indigo-600 dark:text-indigo-400">+5%</td>
-                  <td class="p-1.5">590 Simpul (Simpul perintis & rute reguler stabil)</td>
+                  <td class="p-1.5 font-mono">&lt; 1,2x & P &lt; 5k (armada mencukupi)</td>
+                  <td class="p-1.5 font-bold text-center">116 Simpul</td>
+                  <td class="p-1.5">Simpul perintis & rute reguler stabil (penambahan armada 0 s.d. moderat sesuai rasio normal)</td>
                 </tr>
               </tbody>
-            </table>
           </div>
         </div>
 
